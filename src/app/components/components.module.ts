@@ -9,6 +9,7 @@ import { CheckboxWrapperComponent } from './checkbox-wrapper/checkbox-wrapper.co
 import { ShowHidePasswordComponent } from './show-hide-password/show-hide-password.component';
 import { CountdownTimerComponent } from './countdown-timer/countdown-timer.component';
 import { CounterInputComponent } from './counter-input/counter-input.component';
+import { CounterInputComponentMinutes } from './counter-input-minutes/counter-input.component';																							   
 import { RatingInputComponent } from './rating-input/rating-input.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 
@@ -24,6 +25,7 @@ import { GoogleMapComponent } from './google-map/google-map.component';
     ShowHidePasswordComponent,
     CountdownTimerComponent,
     CounterInputComponent,
+	CounterInputComponentMinutes,							 
     RatingInputComponent,
     GoogleMapComponent
   ],
@@ -33,6 +35,7 @@ import { GoogleMapComponent } from './google-map/google-map.component';
     ShowHidePasswordComponent,
     CountdownTimerComponent,
     CounterInputComponent,
+	CounterInputComponentMinutes,							 
     RatingInputComponent,
     GoogleMapComponent
   ]

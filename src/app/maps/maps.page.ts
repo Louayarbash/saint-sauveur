@@ -1,8 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
-import { Plugins } from '@capacitor/core';
-const { Geolocation } = Plugins;
+//import { Plugins } from '@capacitor/core';
+//const { Geolocation } = Plugins;
 
 import { GoogleMapComponent } from '../components/google-map/google-map.component';
 
@@ -52,7 +52,7 @@ export class MapsPage implements OnInit {
 
   geolocateMe() {
 
-    this.presentLoader();
+  /*   this.presentLoader();
     Geolocation.getCurrentPosition().then(position => {
 
       const current_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -71,6 +71,6 @@ export class MapsPage implements OnInit {
     }).catch((error) => {
       console.log('Error getting current location', error);
 
-    }).finally(() => this.dismissLoader());
-  }
+    }).finally(() => this.dismissLoader());*/
+  } 
 }

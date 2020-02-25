@@ -64,11 +64,15 @@ export class CounterInputComponent implements ControlValueAccessor, OnChanges {
   registerOnTouched() {}
 
   increase() {
+    if(this.counterValue!=5){
     this.counterValue++;
+  }
   }
 
   decrease() {
-    this.counterValue--;
+    if(this.counterValue!=1){
+      this.counterValue--;
+    }
   }
 
   validate(c: FormControl) {

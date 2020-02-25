@@ -2,8 +2,8 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { VideoPlaylistModel } from './video-playlist.model';
 import { VgAPI } from 'videogular2/core';
 import { ActivatedRoute } from '@angular/router';
-import { Plugins } from '@capacitor/core';
-const { Share } = Plugins;
+//import { Plugins } from '@capacitor/core';
+//const { Share } = Plugins;
 
 @Component({
   selector: 'app-video-playlist',
@@ -65,7 +65,7 @@ export class VideoPlaylistPage implements OnInit {
   }
 
   shareMedia() {
-    const selectedVideo = this.video_playlist_model.selected_video;
+/*     const selectedVideo = this.video_playlist_model.selected_video;
     Share.share({
       title: selectedVideo.title,
       text: selectedVideo.description,
@@ -73,6 +73,6 @@ export class VideoPlaylistPage implements OnInit {
       dialogTitle: 'Share Media'
     })
     .then(() => console.log('Successful share'))
-    .catch((error) => console.log('Error sharing', error));
+    .catch((error) => console.log('Error sharing', error)); */
   }
 }
