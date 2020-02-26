@@ -25,7 +25,7 @@ import { GoogleMapComponent } from './google-map/google-map.component';
     ShowHidePasswordComponent,
     CountdownTimerComponent,
     CounterInputComponent,
-	CounterInputComponentMinutes,							 
+	  CounterInputComponentMinutes,							 
     RatingInputComponent,
     GoogleMapComponent
   ],
@@ -35,7 +35,7 @@ import { GoogleMapComponent } from './google-map/google-map.component';
     ShowHidePasswordComponent,
     CountdownTimerComponent,
     CounterInputComponent,
-	CounterInputComponentMinutes,							 
+	  CounterInputComponentMinutes,							 
     RatingInputComponent,
     GoogleMapComponent
   ]

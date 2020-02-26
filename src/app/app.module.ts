@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +28,8 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 //import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { FCM } from '@ionic-native/fcm/ngx';
+import { LanguageService } from './language/language.service';
+
 //import { FcmService } from 'src/app/services/fcm/fcm.service';
 
 
@@ -49,13 +50,13 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-	    AngularFireModule.initializeApp(environment.firebase),
+	  AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
     //AngularFireMessagingModule,	 
     ReactiveFormsModule,
     AppRoutingModule,
-    ComponentsModule,
+    ComponentsModule,    
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
     TranslateModule.forRoot({
@@ -76,6 +77,7 @@ export function createTranslateLoader(http: HttpClient) {
 	    File,
     DocumentViewer,
     FileOpener,
+    LanguageService,
     //FcmService,
     /*FcmService,*/
     //Firebase

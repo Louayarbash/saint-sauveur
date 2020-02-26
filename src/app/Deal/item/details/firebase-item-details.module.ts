@@ -31,7 +31,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule,
     PipesModule
-  ],
+  ],  
   declarations: [FirebaseItemDetailsPage],
   providers: [
     FirebaseService,

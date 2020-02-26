@@ -32,4 +32,7 @@ public _uid : string;
     //console.log("get login id" , { aaa: this._angularFireAuth.auth.currentUser.uid, bbb  : this._uid});
     return "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this._angularFireAuth.auth.currentUser.uid;
   }
+  getUserLanguage() : string{
+    return "fr";
+  }
 }

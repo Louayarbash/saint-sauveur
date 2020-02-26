@@ -9,6 +9,7 @@ import { ComponentsModule } from '../../components/components.module';
 import { FirebaseListingPage } from './firebase-listing.page';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {

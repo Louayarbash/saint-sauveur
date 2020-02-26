@@ -13,6 +13,8 @@ import { environment } from '../../environments/environment';
 
 import { FirebaseCreateItemModal } from './item/create/firebase-create-item.modal';
 import { FirebaseUpdateItemModal } from './item/update/firebase-update-item.modal';
+import { TranslateModule } from '@ngx-translate/core';
+//import { TranslateModule } from '@ngx-translate/core';
 //import { SelectItemImageModal } from './item/select-image/select-item-image.modal';
 
 
@@ -34,7 +36,7 @@ const firebaseRoutes: Routes = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ComponentsModule,
+    ComponentsModule,    
     RouterModule.forChild(firebaseRoutes),
     //AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

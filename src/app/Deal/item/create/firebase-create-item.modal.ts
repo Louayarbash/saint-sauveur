@@ -1,4 +1,4 @@
-import { Component, OnInit/*, ChangeDetectorRef */} from '@angular/core';
+import { NgModule, Component, OnInit/*, ChangeDetectorRef */} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -9,6 +9,8 @@ import { FirebaseItemModel} from '../firebase-item.model';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 //import { Date } from 'core-js';
+import { LoginService } from '../../../services/login/login.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -19,6 +21,8 @@ import { counterRangeValidatorMinutes } from '../../../components/counter-input-
   ],
 })
 export class FirebaseCreateItemModal implements OnInit {
+  userLanguage;
+  translations; 
   //isLoading = false;
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
@@ -36,10 +40,29 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,    
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loginService : LoginService,
+    public translateService : TranslateService
   ) {}
 
-  ngOnInit() {
+  ngOnInit() {    
+
+     this.userLanguage = this.loginService.getUserLanguage();
+     console.log("1", this.userLanguage);
+     //this.getTranslations();
+     this.translateService.use(this.userLanguage);
+     this.translateService.onLangChange.subscribe(() => {
+       console.log("here",this.translateService.currentLang);
+      this.getTranslations();
+      console.log("onLangChange",this.translations);
+    });
+     console.log("2", this.translateService.currentLang);
+
+     console.log("3",this.translateService);
+     console.log("4",this.translations);
+     //this.getTranslations();
+
+
      this.resetDate();
      // default image     
      this.createItemForm = new FormGroup({
@@ -227,5 +250,13 @@ export class FirebaseCreateItemModal implements OnInit {
     })
     alert.present();
   } */
+  getTranslations() {
+    // get translations for this page to use in the Language Chooser Alert
+    this.translateService.getTranslation(this.translateService.currentLang)
+    .subscribe((translations) => {
+      this.translations = translations;
+      console.log("inside getTranslations",this.translations);
+    });
+  }
   }
   //END
