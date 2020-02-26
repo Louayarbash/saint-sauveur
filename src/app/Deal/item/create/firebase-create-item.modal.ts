@@ -1,5 +1,5 @@
 import { Component, OnInit/*, ChangeDetectorRef */} from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
@@ -36,7 +36,7 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,    
-    /*private _alertController: AlertController*/
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -138,7 +138,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
     createItem() {
-    const loading = this.firebaseService.presentLoadingWithOptions();
+    // const loading = this.firebaseService.presentLoadingWithOptions();
 
     this.itemData.date = this.createItemForm.get('date').value;//this.createItemForm.value.date;
     this.itemData.startDate = this.createItemForm.get('startDate').value;//this.createItemForm.value.startDate;
@@ -147,7 +147,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.count = this.createItemForm.value.count;
     this.itemData.createDate = new Date().toISOString();
     this.itemData.createdBy = this.firebaseService.auth.getLoginID();
-    
+    this.confirm();
     //dayjs(this.createUserForm.value.birthdate).unix(); // save it in timestamp
 
 /*  this.userData.languages.spanish = this.createUserForm.value.spanish;
@@ -165,12 +165,52 @@ export class FirebaseCreateItemModal implements OnInit {
     });
     this.userData.skills = selectedSkills; */
     
-    this.firebaseService.createItem(this.itemData)
+/*     this.firebaseService.createItem(this.itemData)
     .then(() => {
       this.dismissModal();
       this.firebaseService.presentToast("Request added successfully",2000);
       loading.then(res=>res.dismiss());
-    });     
+    });   */   
+  }
+  async confirm(){
+    let date = dayjs(this.itemData.date).format("dddd, MMM, YYYY");
+    let endDate = dayjs(this.itemData.endDate).format("dddd, MMM, YYYY");
+    let message = "";
+    if(date == endDate){
+      message = "New parking request on " + date + " from " + dayjs(this.itemData.startDate).format("HH:mm") + " until " + dayjs(this.itemData.endDate).format("HH:mm");
+    }
+    else{
+      message = "New parking request on " + date+ " from " + dayjs(this.itemData.startDate).format("HH:mm") + " to " + endDate + " at " + dayjs(this.itemData.endDate).format("HH:mm");
+    }
+    
+    const alert = await this.alertController.create({
+      header: "Please confirm the below request details:",
+      message: message,
+      buttons: [
+         {
+          text: "OKAY",
+          handler: ()=> {
+            const loading = this.firebaseService.presentLoadingWithOptions();
+            this.firebaseService.createItem(this.itemData)
+            .then(() => {
+              this.dismissModal();
+              this.firebaseService.presentToast("Request added successfully",2000);
+              loading.then(res=>res.dismiss());
+            });  
+            
+          }
+        },
+        {
+          text: "Cancel",
+           handler: ()=> {
+          
+            }, 
+            
+          }
+      ]
+    });
+    await alert.present();
+
   }
 /*   async showAlert(title,msg,task){
     const alert = await this._alertController.create({
