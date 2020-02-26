@@ -96,7 +96,7 @@ exports.newRequestNotification = functions.firestore
     const payload = {
       notification: {
           title: '',
-          body: `${createdBy} - your building asking for parking check to see if you can help!!`,
+          body: `${createdBy} - (ionic 5) your building asking for parking check to see if you can help Louay!`,
           icon: 'https://goo.gl/Fz9nrQ',
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
