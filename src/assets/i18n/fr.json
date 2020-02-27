@@ -11,6 +11,7 @@
   "OK": "OK",
   "CANCEL": "Annuler",
   "SELECT_LANGUAGE": "Choisissez votre langue",
-  "SELECT_LANGUAGE1": "Nouvelle demande",
-  "SELECT_LANGUAGE2": "Détail de la demande"
+  "Parking_requests": "Demande de stationnement",
+  "Request_details": "Détail de la demande",
+  "New_parking_request" : "Nouvelle demande de stationnement"
 }

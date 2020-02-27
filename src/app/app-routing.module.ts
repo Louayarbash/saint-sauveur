@@ -24,7 +24,12 @@ const routes: Routes = [
   { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																															  
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
   { path: 'video-playlist', loadChildren: () => import('./video-playlist/video-playlist.module').then(m => m.VideoPlaylistPageModule) },
-  { path: '**', redirectTo: 'page-not-found' }
+  { path: '**', redirectTo: 'page-not-found' },
+/*   {
+    path: 'test',
+    loadChildren: () => import('./Deal/item/test/test.module').then( m => m.TestPageModule)
+  } */
+
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

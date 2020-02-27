@@ -11,6 +11,8 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemDetailsResolver } from './firebase-item-details.resolver';
 
 import { PipesModule } from '../../../pipes/pipes.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../../language/language.service';
 
 const routes: Routes = [
   {
@@ -29,13 +31,15 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule,
+    TranslateModule,
+    ComponentsModule,    
     PipesModule
   ],
   declarations: [FirebaseItemDetailsPage],
   providers: [
     FirebaseService,
-    FirebaseItemDetailsResolver
+    FirebaseItemDetailsResolver,
+    LanguageService
   ]
 })
 export class FirebaseItemDetailsPageModule {}

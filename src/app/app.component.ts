@@ -1,4 +1,4 @@
-import { Component,NgZone  } from '@angular/core';
+import { Component } from '@angular/core';
 /*import { Plugins } from '@capacitor/core';
 const { SplashScreen } = Plugins;*/
 /*LA_ add for cordova*/
@@ -31,49 +31,49 @@ export class AppComponent {
     {
       title: 'Categories',
       url: '/app/categories',
-      icon: './assets/sample-icons/side-menu/categories.svg'
+      ionicIcon: 'list-outline'
     },
     {
       title: 'Profile',
       url: '/app/user',
-      icon: './assets/sample-icons/side-menu/profile.svg'
+      ionicIcon: 'person-outline'
     },
     {
       title: 'Contact Card',
       url: '/contact-card',
-      icon: './assets/sample-icons/side-menu/contact-card.svg'
+      customIcon: './assets/custom-icons/side-menu/contact-card.svg'
     },
     {
       title: 'Notifications',
       url: '/app/notifications',
-      icon: './assets/sample-icons/side-menu/notifications.svg'
+      ionicIcon: 'notifications-outline'
     }
   ];
   accountPages = [
     {
       title: 'Log In',
       url: '/auth/login',
-      icon: './assets/sample-icons/side-menu/login.svg'
+      ionicIcon: 'log-in-outline'
     },
     {
       title: 'Sign Up',
       url: '/auth/signup',
-      icon: './assets/sample-icons/side-menu/signup.svg'
+      ionicIcon: 'person-add-outline'
     },
     {
       title: 'Tutorial',
       url: '/walkthrough',
-      icon: './assets/sample-icons/side-menu/tutorial.svg'
+      ionicIcon: 'school-outline'
     },
     {
       title: 'Getting Started',
       url: '/getting-started',
-      icon: './assets/sample-icons/side-menu/getting-started.svg'
+      ionicIcon: 'rocket-outline'
     },
     {
       title: '404 page',
       url: '/page-not-found',
-      icon: './assets/sample-icons/side-menu/warning.svg'
+      ionicIcon: 'alert-circle-outline'
     }
   ];
 
@@ -88,7 +88,7 @@ export class AppComponent {
     private toastCtrl : ToastController,
     private fcmService : FcmService,
     private router :Router,
-    private ngZone : NgZone,
+    //private ngZone : NgZone,
     private fcm : FCM
     ) {
 
@@ -106,7 +106,7 @@ export class AppComponent {
 
 );
 }
-  initializeApp() {
+  async initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

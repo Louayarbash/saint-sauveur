@@ -29,6 +29,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 //import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LanguageService } from './language/language.service';
+//import { TestPageModule } from "../app/Deal/item/test/test.module";
 
 //import { FcmService } from 'src/app/services/fcm/fcm.service';
 
@@ -59,7 +60,8 @@ export function createTranslateLoader(http: HttpClient) {
     ComponentsModule,    
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
-     TranslateModule.forRoot({
+    
+     TranslateModule.forRoot({      
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
@@ -77,8 +79,8 @@ export function createTranslateLoader(http: HttpClient) {
 	    File,
     DocumentViewer,
     FileOpener,
-    LanguageService,
-    TranslateService,
+    //LanguageService,
+    //TranslateService,
     //FcmService,
     /*FcmService,*/
     //Firebase

@@ -14,6 +14,8 @@ import { DateService } from '../../../../app/services/date/date.service';
 import * as dayjs from 'dayjs';
 //import * as moment from 'moment';
 import { timer } from 'rxjs';
+import { LoginService } from '../../../services/login/login.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -29,6 +31,8 @@ import { timer } from 'rxjs';
 
 
 export class FirebaseItemDetailsPage implements OnInit {
+  userLanguage;
+  translations; 
   item: FirebaseItemModel;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
@@ -56,13 +60,32 @@ export class FirebaseItemDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private alertController : AlertController,
     private FCM : FcmService,
-    private dateService: DateService
+    private dateService: DateService,
+    private loginService : LoginService,
+    public translate : TranslateService
   ) { 
     this.AuthId = this.firebaseService.auth.getLoginID();
      console.log("AuthId",this.AuthId);
     }
 
   ngOnInit() {
+
+    this.userLanguage = this.loginService.getUserLanguage();
+    console.log("1", this.userLanguage);
+    //this.getTranslations();
+    this.translate.use(this.userLanguage);
+    this.translate.onLangChange.subscribe(() => {
+      console.log("here",this.translate.currentLang);
+     this.getTranslations();
+     console.log("onLangChange",this.translations);
+   });
+    console.log("2", this.translate.currentLang);
+
+    console.log("3",this.translate);
+    console.log("4",this.translations);
+    //this.getTranslations();
+
+
     this.FCM.getToken();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
@@ -166,6 +189,14 @@ export class FirebaseItemDetailsPage implements OnInit {
       if(this.subscribeTimer == 50){
         abc.unsubscribe();
       }
+    });
+  }
+  getTranslations() {
+    // get translations for this page to use in the Language Chooser Alert
+    this.translate.getTranslation(this.translate.currentLang)
+    .subscribe((translations) => {
+      this.translations = translations;
+      console.log("inside getTranslations",this.translations);
     });
   }
   

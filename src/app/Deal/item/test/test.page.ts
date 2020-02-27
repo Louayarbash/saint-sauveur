@@ -10,26 +10,16 @@ import { counterRangeValidator } from '../../../components/counter-input/counter
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 //import { Date } from 'core-js';
 import { LoginService } from '../../../services/login/login.service';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
 
-
-/* @NgModule({
-  imports: [
-    FirebaseListingPageModule,
- TranslateModule
-
-  ]
-}) */ 
 @Component({
-  selector: 'app-firebase-create-item',
-  templateUrl: './firebase-create-item.modal.html',
-  styleUrls: [
-    './styles/firebase-create-item.modal.scss',
-    './styles/firebase-create-item.shell.scss'
-  ],
+  selector: 'app-test',
+  templateUrl: './test.page.html',
+  styleUrls: ['./test.page.scss'],
 })
-export class FirebaseCreateItemModal implements OnInit {
+
+export class TestPage implements OnInit {
   userLanguage;
   translations; 
   translateParams;
