@@ -182,7 +182,7 @@ export class AppComponent {
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     this.translate.use('en');
-
+    console.log("current lang",this.translate.currentLang);
     // this is to determine the text direction depending on the selected language
     // for the purpose of this example we determine that only arabic and hebrew are RTL.
     // this.translate.onLangChange.subscribe((event: LangChangeEvent) => {

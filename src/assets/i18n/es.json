@@ -10,5 +10,7 @@
   "SEE_ALL": "Ver mas",
   "OK": "OK",
   "CANCEL": "Cancelar",
-  "SELECT_LANGUAGE": "Selecciona tu idioma"
+  "SELECT_LANGUAGE": "Selecciona tu idioma",
+  "SELECT_LANGUAGE1": "Nouvelle demande",
+  "SELECT_LANGUAGE2": "Détail de la demande"
 }

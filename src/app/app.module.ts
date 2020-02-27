@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 /*LA_ add for cordova */
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -59,7 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
     ComponentsModule,    
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
-    TranslateModule.forRoot({
+     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
@@ -78,6 +78,7 @@ export function createTranslateLoader(http: HttpClient) {
     DocumentViewer,
     FileOpener,
     LanguageService,
+    TranslateService,
     //FcmService,
     /*FcmService,*/
     //Firebase
