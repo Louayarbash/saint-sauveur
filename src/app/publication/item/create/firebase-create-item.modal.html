@@ -8,18 +8,11 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>New Item for sale</ion-title>
+      <ion-title>New pulication</ion-title>
     </ion-toolbar>
   </ion-header>
   
   <ion-content class="create-item-content">
-<!--     <ion-row>
-      <ion-col size="5">
-        <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-          <app-image-shell [mode]="'cover'" animation="spinner" [src]="selectedPhoto" ></app-image-shell>
-        </app-aspect-ratio>
-      </ion-col>
-    </ion-row> -->
     
     <section class="item-details-fields fields-section">
       
@@ -45,39 +38,7 @@
             <ion-icon class="btn-icon" slot="icon-only" name="add-circle-outline"></ion-icon>
           </ion-button>
         </ion-item>
-<!--         <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">img</ion-label>
-          <ion-input type="text" formControlName="hidden">aaa</ion-input>
-        </ion-item> -->
       </ion-list> 
-<!--       <h5 *ngIf="croppedImagepath.length">Cropped Image</h5>
- 
-  <p *ngIf="isLoading">Loading ...</p>
- 
-  <img [src]="croppedImagepath" /> -->
-         
-<!--   <ion-row class="select-item-image-row">
-    <ion-col class="item-image-col" size="12">      --> 
-<!--   <ion-list *ngFor="let image of postsImages">    
-    <ion-item>
-      <ion-row class="range-item-row">
-      <ion-col size="6">
-      <ion-img role="button" [src]="image"></ion-img>
-      <ion-button class="change-image-btn" color="secondary" (click)="deletephoto(image)">
-      <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
-      </ion-button>    
-      </ion-col>
-      <ion-col size="6" style="align-items: center; vertical-align: middle;">
-      <ion-label>Main photo</ion-label>
-      <ion-radio slot="start"></ion-radio>
-      </ion-col>
-      </ion-row>    
-    </ion-item>  
-  
-  </ion-list> -->
-
-<!-- </ion-col>
-</ion-row> -->
 
     </section>
     <section>
@@ -85,12 +46,6 @@
          
       <ion-col size="8" class="" >
         <ion-img role="button" [src]="image.photo"></ion-img>
-<!--         <app-image-shell [mode]="'cover'" class="" animation="spinner" [src]="image" [alt]="'image'">
-          <app-aspect-ratio [ratio]="{w:64, h:50}">
-          </app-aspect-ratio>
-          
-        </app-image-shell> -->
-   
       </ion-col>
       <ion-col size="4" >
        
@@ -104,53 +59,6 @@
       </ion-col>
     </ion-row>
 </section>
-
-<!--     <section class="user-experience-fields fields-section">
-      <h5 class="section-header">Experience in</h5>
-      <ion-row class="checkbox-tags rounded-checkbox-tags">
-        <ion-item formArrayName="skills" lines="none" class="checkbox-tag rounded-tag" *ngFor="let skill of skillsFormArray.controls; let i = index;">
-          <ion-label class="tag-label">{{skills[i].name}}</ion-label>
-          <ion-checkbox [formControlName]="i"></ion-checkbox>
-        </ion-item>
-      </ion-row>
-    </section> -->
-
-    <!-- <section class="user-languages-fields fields-section">
-      <h5 class="section-header">Languages</h5>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">English</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.english.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="english" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">Spanish</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.spanish.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="spanish" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">French</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.french.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="french" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-    </section> -->
   </ion-content>
 
   <ion-footer>

@@ -169,147 +169,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
   //LA_2019_11
    async selectImageSource(){ 
-    const cameraOptions : CameraOptions = {
-      quality:100,
-      destinationType: this._camera.DestinationType.DATA_URL,
-      encodingType: this._camera.EncodingType.JPEG,
-      mediaType: this._camera.MediaType.PICTURE,
-      targetHeight:200,
-      correctOrientation:true,
-      sourceType:this._camera.PictureSourceType.CAMERA
-    };
-    const optionsPicker : ImagePickerOptions = {
-      maximumImagesCount: 3 - this.postImages.length,
-      //maximumImagesCount: 1,
-      outputType:0,
-      quality:100,
-      width:300,
-      disable_popover:false
-    }; 
-    const galleryOptions : CameraOptions = {
-      quality:100,
-      destinationType: this._camera.DestinationType.DATA_URL,
-      encodingType: this._camera.EncodingType.JPEG,
-      mediaType: this._camera.MediaType.PICTURE,
-      targetHeight:200,
-      correctOrientation:true,
-      sourceType:this._camera.PictureSourceType.PHOTOLIBRARY
-    };
-    /* this.ImagePicker.getPictures(optionsPicker).then(async (results : string[]) => { 
-      for (var i = 0; i < results.length; i++) {
-         let filename = results[i].substring(results[i].lastIndexOf('/')+1);
-         let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
-         console.log(filename);
-         console.log(path);
-         console.log(results[i]);
-         await this._file.readAsDataURL(path,filename).then((base64string)=> {
-           this.postsImages.push(base64string);
-         }
-       )
-     } 
-   } */
-    const alert = await this._alertController.create({
-      header: "Select Source",
-      message: "Pick a source for your image",
-      buttons: [
-         {
-          text: "Camera",
-          handler: ()=> {
-            this._camera.getPicture(cameraOptions).then((imageData)=> {
-              //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
-              let photos : PhotosArray = {isCover:false,photo:"",photoStoragePath:""};
-              
-              const image = "data:image/jpeg;base64," + imageData;
-              photos.isCover = false;
-              photos.photo = image;
-              this.postImages[this.postImages.length] = photos;
-              //this.selectedPhoto = image;
-              this.changeRef.detectChanges();
-              //this.createItemForm.controls['hidden'].setValue("fixissue");/*this code to fix the not refreshing*/
-            });
-          }
-        },
-/*         {
-          text: "Gallery multiPhotos",
-          handler: ()=> {
-            console.log(optionsPicker.maximumImagesCount);
-             this.ImagePicker.getPictures(optionsPicker).then(async (results : string[]) => { 
-               for (var i = 0; i < results.length; i++) {
-                  let filename = results[i].substring(results[i].lastIndexOf('/')+1);
-                  let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
-                  console.log(filename);
-                  console.log(path);
-                  console.log(results[i]);
-                  await this._file.readAsDataURL(path,filename).then((base64string)=> {
-                    this.postsImages.push(base64string);
-                  }
-                )
-                console.log(this.postsImages);
-              } 
-            }, (err) => { console.log('Error get pics');}); 
-          }
-        } */
-        {
-          text: "Gallery multiPhotos",
-           handler: ()=> {
-            
-            console.log("max", optionsPicker.maximumImagesCount);
-            if((3 - this.postImages.length) != 1){
-            
-            //this.ImagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
-            console.log("not 1");
-             this.ImagePicker.getPictures(optionsPicker).then(/*async*/ (results : string[]) => { 
-              const loading = this.firebaseService.presentLoadingWithOptions();
-               for (var i = 0; i < results.length; i++) {
-                  let filename = results[i].substring(results[i].lastIndexOf('/')+1);
-                  let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
-                  console.log(filename); 
-                  console.log(path);
-                  console.log(results[i]);
-                  /*await*/ this._file.readAsDataURL(path,filename).then((base64string)=> {
-                    let photos : PhotosArray = {isCover:false,photo:"",photoStoragePath:""};
-                    
-                    photos.isCover = false;
-                    photos.photo = base64string;
-                    this.postImages[this.postImages.length] = photos;
-                    //this.selectedPhoto = base64string;
-                    
-                    //this.createItemForm.controls['hidden'].setValue("fixissue not 1");/*this code to fix the not refreshing*/
-                    
-                  }
-                )
-                console.log(this.postImages);
-              }
-            this.changeRef.detectChanges(); 
-            loading.then(res=>res.dismiss());
-            }, (err) => { console.log('Error get pics');}); 
-            
-          }
-            else if((3 - this.postImages.length) == 1)
-            {
-              console.log("It is 1");
-              this._camera.getPicture(galleryOptions).then((imageData)=> {
-                const image = "data:image/jpeg;base64," + imageData;
-                let photos : PhotosArray = {isCover:false,photo:"",photoStoragePath:""};    
-                photos.isCover = false;
-                photos.photo = image;
-                this.postImages[this.postImages.length] = photos;
-                //this.selectedPhoto = image;
-                this.changeRef.detectChanges();
-                //this.createItemForm.controls['hidden'].setValue("fixissue It is 1");/*this code to fix the not refreshing*/
-                //aaa.then(bbb=> bbb.dismiss());
-              });
-            }
-            //
-            }
-          }      
-      ]
-    });
 
-    await alert.present();
-    //this.createItemForm.controls['hidden'].setValue("fixissue");
   }
       deletephoto(doc){
       console.log("postsImages",this.postImages);
@@ -323,20 +183,6 @@ export class FirebaseCreateItemModal implements OnInit {
         }
       });
   }
-  makeCover(doc){
-    console.log("postsImages",this.postImages);
-    console.log("doc",doc);
-     this.postImages.forEach( (item, index) => {
-      if(item.photo === doc) {
-        item.isCover = true;
-        this.changeRef.detectChanges();
-        this.firebaseService.presentToast("Photo successfully used as cover photo");
-      }
-      else{
-        item.isCover = false;
-      }
-    });
-}
 
 
   //END
@@ -352,34 +198,6 @@ export class FirebaseCreateItemModal implements OnInit {
       
     }    
   );
-}
-
-cropImage(fileUrl) {
-  this._crop.crop(fileUrl, { quality: 50 })
-    .then(
-      newPath => {
-        this.showCroppedImage(newPath.split('?')[0])
-      },
-      error => {
-        alert('Error cropping image' + error);
-      }
-    );
-}
-
-showCroppedImage(ImagePath) {
-  this.isLoading = true;
-  var copyPath = ImagePath;
-  var splitPath = copyPath.split('/');
-  var imageName = splitPath[splitPath.length - 1];
-  var filePath = ImagePath.split(imageName)[0];
-
-  this._file.readAsDataURL(filePath, imageName).then(base64 => {
-    this.croppedImagepath = base64;
-    this.isLoading = false;
-  }, error => {
-    alert('Error in showing image' + error);
-    this.isLoading = false;
-  });
 }
 
 }
