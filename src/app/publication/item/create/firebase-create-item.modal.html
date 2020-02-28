@@ -26,35 +26,33 @@
           <ion-input type="text" formControlName="description"></ion-input>
         </ion-item>
         <ion-item class="input-item">
-            <ion-label color="secondary" position="floating">Price</ion-label>
-            <ion-input type="text" formControlName="price"></ion-input>
-          </ion-item>
-        <ion-item class="input-item">
           <ion-label color="secondary" position="floating">Gategory</ion-label>
           <ion-input type="text" formControlName="category"></ion-input>
         </ion-item>
-        <ion-item class="input-item">
-          <ion-button class="change-image-btn" color="secondary" (click)="selectImageSource()" [disabled]="postImages.length >= 3">
-            <ion-icon class="btn-icon" slot="icon-only" name="add-circle-outline"></ion-icon>
+        <ion-item class="input-item">          
+          <!-- <ion-button class="change-image-btn" color="secondary" (click)="selectFile()" [disabled]="files.length >= 3"> -->
+          <ion-button class="change-image-btn" color="secondary" (click)="selectFile()" [disabled]="files.length >= 5">
+          <ion-icon class="btn-icon" slot="icon-only" name="add-circle-outline"></ion-icon>
           </ion-button>
         </ion-item>
       </ion-list> 
 
     </section>
     <section>
-    <ion-row class="" *ngFor="let image of postImages">
+    <ion-row class="" *ngFor="let file of files">
          
-      <ion-col size="8" class="" >
-        <ion-img role="button" [src]="image.photo"></ion-img>
+      <ion-col size="8" class="" >        
+        <ion-label color="secondary" position="floating">Chane name</ion-label>
+          <ion-input type="text" [(ngModel)]="newName" [value]="file.fileName"></ion-input>
       </ion-col>
       <ion-col size="4" >
        
-        <ion-label>Main photo</ion-label>
-        <ion-button class="change-image-btn" color="secondary" (click)="deletephoto(image)">          
+        <ion-label>Delete file</ion-label>
+        <ion-button class="change-image-btn" color="secondary" (click)="deleteFile(file)">          
           <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
         </ion-button> 
-        <ion-button class="change-image-btn" color="secondary" (click)="makeCover(image.photo)" [disabled]="image.isCover">          
-          <ion-icon class="btn-icon" slot="icon-only" name="open"></ion-icon>      
+        <ion-button class="change-image-btn" color="secondary" (click)="changeFileName(file)">          
+          <ion-icon class="btn-icon" slot="icon-only" name="" title="Modify file name" ></ion-icon>
         </ion-button> 
       </ion-col>
     </ion-row>

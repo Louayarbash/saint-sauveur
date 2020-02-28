@@ -32,6 +32,7 @@ import { LanguageService } from './language/language.service';
 //import { TestPageModule } from "../app/Deal/item/test/test.module";
 
 //import { FcmService } from 'src/app/services/fcm/fcm.service';
+import { Chooser } from '@ionic-native/chooser/ngx';
 
 
 /*LA_ end */
@@ -79,6 +80,7 @@ export function createTranslateLoader(http: HttpClient) {
 	    File,
     DocumentViewer,
     FileOpener,
+    Chooser,
     //LanguageService,
     //TranslateService,
     //FcmService,

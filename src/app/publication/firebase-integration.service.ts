@@ -112,10 +112,10 @@ export class FirebaseService {
       concatMap(item => {
         console.log("getItem",item);
         //item.imagesFullPath = [""];
-        if (item && !(item.imagesFullPath.length == 0)) {
+        if (item && !(item.fileFullPath.length == 0)) {
           console.log("getItem",item);
           // Map each skill id and get the skill data as an Observable
-          const itemPhotosObservables: Array<Observable<FirebasePhotoModel>> = item.imagesFullPath.map(photoPath => {
+          const itemPhotosObservables: Array<Observable<FirebasePhotoModel>> = item.fileFullPath.map(photoPath => {
             return this.getPic(photoPath).pipe(first());
           });
 
@@ -134,7 +134,7 @@ export class FirebaseService {
             })
           );
         }
-         else if (item && (item.imagesFullPath.length == 0)){
+         else if (item && (item.fileFullPath.length == 0)){
            return combineLatest([
             of(item)
           ]).pipe(
@@ -245,30 +245,16 @@ export class FirebaseService {
     this.afs.collection('posts').add({...itemData}).then(async (res)=>{
       console.log("post id :",res.id);
       let imagesFullPath = [];
-      for (var i = 0; i < postImages.length; i++) {
+       for (var i = 0; i < postImages.length; i++) {
         await this.uploadToStorage(postImages[i].photo,res.id).then(res => {
          imagesFullPath.push(res.metadata.fullPath);
-         if(postImages[i].isCover == true){
-         itemData.coverPhoto = res.metadata.fullPath;
-         }
+
       } 
       ).catch(err=> {console.log("Error uploading photo: ",err)}); 
-  }
+  } 
   
-  if (imagesFullPath.length != 0){
-    if(!itemData.coverPhoto){
-      itemData.coverPhoto = imagesFullPath[0];
-      }
-    itemData.imagesFullPath = imagesFullPath;  
-  }
-    else{
-      itemData.coverPhoto = "images/no_image.jpeg";
-    } 
-    return this.afs.collection('posts').doc(res.id).set({...itemData});
-    } 
-    );
-    return;
-    } 
+    });
+  } 
    private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
         console.log("Uploaded",itemDataPhoto);
         let newName = `${new Date().getTime()}.jpeg`;
@@ -347,7 +333,7 @@ export class FirebaseService {
   }
 
   public async updateItem(itemData: FirebaseItemModel, postImages : PhotosArray[]): Promise<void> {
-    itemData.coverPhoto = "images/no_image.jpeg";
+    
     console.log("111",postImages);
     console.log("222",itemData);
     //this.afs.collection('posts').add({...itemData}).then(async (res)=>{
@@ -359,22 +345,18 @@ export class FirebaseService {
         if (postImages[i].photoStoragePath == "") {
          await this.uploadToStorage(postImages[i].photo,itemData.id).then(res => {
           imagesFullPath.push(res.metadata.fullPath);
-          if(postImages[i].isCover == true){
-         itemData.coverPhoto = res.metadata.fullPath;
-         }
+
       } 
       ).catch(err=> {console.log("Error uploading photo: ",err)}); 
     }
-    if(postImages[i].isCover == true){
-      itemData.coverPhoto = postImages[i].photoStoragePath;
-      }
+
   }
   
   if (imagesFullPath.length != 0){
     //itemData.imagesFullPath = [];
     
   //for (var i = 0; i < postImages.length; i++) {    
-    itemData.imagesFullPath.push(...imagesFullPath);    
+    itemData.fileFullPath.push(...imagesFullPath);    
     /* if(!itemData.coverPhoto){
       itemData.coverPhoto = imagesFullPath[0];
       } */

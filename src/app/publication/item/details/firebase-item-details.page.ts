@@ -62,12 +62,12 @@ export class FirebaseItemDetailsPage implements OnInit {
       combinedDataStore.state.subscribe(
          async (state) => {
           this.item = state;
-            console.log("imagesFullPath.length",this.item.imagesFullPath.length);
-          if((this.item.imagesFullPath.length !== 0) && !(this.item.isShell)){
+            console.log("imagesFullPath.length",this.item.fileFullPath.length);
+          if((this.item.fileFullPath.length !== 0) && !(this.item.isShell)){
             console.log("length !== 0");
             this.photoSlider = this.item.photos;            
           }
-          else if((this.item.imagesFullPath.length == 0) && !(this.item.isShell)){
+          else if((this.item.fileFullPath.length == 0) && !(this.item.isShell)){
             this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
             console.log("length === 0", this.photoSlider[0]);
           }

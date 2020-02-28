@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="app/categories"></ion-back-button>
     </ion-buttons>
-    <ion-title>Ads</ion-title>
+    <ion-title>Publications</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -15,30 +15,9 @@
       <ion-col>
         <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="Filter by name..."></ion-searchbar>
       </ion-col>
-<!--       <ion-col class="call-to-action-col">
-        <ion-button fill="clear" color="secondary" class="filters-btn" (click)="showAgeFilter = !showAgeFilter">
-          <ion-icon slot="icon-only" name="options"></ion-icon>
-        </ion-button>
-      </ion-col> -->
     </ion-row>
-    <!-- <form [formGroup]="rangeForm" [hidden]="!showAgeFilter"> -->
-      <form [formGroup]="rangeForm" [hidden]="true">
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-value">{{ rangeForm.controls.dual.value.lower }}</span>
-            <span class="range-label">Filter by age</span>
-            <span class="range-value">{{ rangeForm.controls.dual.value.upper }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="dual" color="secondary" pin="true" dualKnobs="true" (ionChange)="searchList()" min="1" max="100" step="1" debounce="400"></ion-range>
-        </ion-col>
-      </ion-row>
-    </form>
   </ion-toolbar>
 </ion-header>
-
 <ion-content class="firebase-listing-content">
   <ion-list class="items-list" *ngIf="items?.length > 0">
      <!-- <ion-item class="list-item" *ngFor="let item of items"> -->

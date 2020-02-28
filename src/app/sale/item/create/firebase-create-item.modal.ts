@@ -311,7 +311,7 @@ export class FirebaseCreateItemModal implements OnInit {
     await alert.present();
     //this.createItemForm.controls['hidden'].setValue("fixissue");
   }
-      deletephoto(doc){
+    deletephoto(doc){
       console.log("postsImages",this.postImages);
       console.log("doc",doc);
        this.postImages.forEach( (item, index) => {

@@ -64,23 +64,21 @@ export class FirebaseUpdateItemModal implements OnInit {
       title: new FormControl(this.item.title, Validators.required),
       description: new FormControl(this.item.description),
       category: new FormControl(this.item.category),
-      price: new FormControl(this.item.price, Validators.required)
+
     });
-    if(this.item.imagesFullPath.length !==0){
+    if(this.item.fileFullPath.length !==0){
       
       //this.getPics(this.item.imagesFullPath);
       const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} ); 
       this.postImages = [{isCover:false,photo:"",photoStoragePath:""}];
-      this.item.imagesFullPath.map((res,index)=>{
+      this.item.fileFullPath.map((res,index)=>{
         this.firebaseService.afstore.ref(res).getDownloadURL().toPromise().then(DownloadURL => { 
           let photos : PhotosArray = {isCover:false,photo:"",photoStoragePath:""};
           photos.isCover = false;
           photos.photo = DownloadURL;
           photos.photoStoragePath = res;
           this.postImages[index] = photos;
-          if(res === this.item.coverPhoto){
-          this.postImages[index].isCover = true;
-          }
+
          } );
       });
       loading.then(res=>{res.dismiss();});
@@ -158,7 +156,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     //this.item.coverPhoto = this.selectedPhoto;
     this.item.title = this.updateItemForm.value.title;
     this.item.description = this.updateItemForm.value.description;
-    this.item.price = this.updateItemForm.value.price;
+
     
     //dayjs(this.updateUserForm.value.birthdate).unix(); // save it in timestamp
 
@@ -385,15 +383,8 @@ export class FirebaseUpdateItemModal implements OnInit {
         const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} );
          if(this.postImages[index].photoStoragePath !== "") {         
          this.firebaseService.deleteFromStorage(this.postImages[index].photoStoragePath).then(res=> {
-         const deletedItem = this.item.imagesFullPath.splice(index,1);
-         if(this.item.coverPhoto === deletedItem.pop()){
-          if(this.item.imagesFullPath.length != 0){
-            this.item.coverPhoto = this.item.imagesFullPath[0];
-          }
-          else{
-            this.item.coverPhoto = "";
-          }
-         }
+         const deletedItem = this.item.fileFullPath.splice(index,1);
+
          this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
           this.postImages.splice(index,1); 
           this.firebaseService.presentToast("Photo removed from storage and DB");}

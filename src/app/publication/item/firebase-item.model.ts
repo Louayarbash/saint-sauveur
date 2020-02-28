@@ -17,37 +17,15 @@ export class FirebasePhotoModel /*extends ShellModel*/ {
   }
 }
 
-export class FirebaseItemModel extends ShellModel {
-  id : string;
-  coverPhoto:string;
-  createdById: string;
-  createDate : string;
-  price : string;
+export class FirebaseItemModel extends ShellModel {  
+  id:string
   title : string;
   description : string;
+  createdById: string;
+  createDate : string;  
   category:string;
   //fullPathFromStore:string;
-  imagesFullPath: Array<string> = [];
-/*   photoslider: Array<any>= [
-    '',
-    '',
-    ''
-  ]; */
-  /*age?: number;*/
-  /*skills: Array<any> = [
-    '',
-    '',
-    ''
-  ];*/
-  /*languages: {
-    spanish: number,
-    english: number,
-    french: number
-  } = {
-    spanish: 0,
-    english: 0,
-    french: 0
-  };*/
+  fileFullPath: Array<string> = [];
 
   constructor() {
     super();
@@ -76,12 +54,3 @@ export class FirebaseCombinedItemModel extends FirebaseItemModel {
     super();
   }
 }
-
-/* export class PhotosArray1 {
-    cover: boolean;
-    photo: string;
-
-
-  constructor() {
-  }
-} */

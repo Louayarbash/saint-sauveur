@@ -9,3 +9,7 @@ export interface PhotosArray{
     photo : string;
     photoStoragePath : string;
 }
+export interface FileUpload{    
+    fileName : string;   
+    fileData:string; 
+}

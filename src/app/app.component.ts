@@ -108,7 +108,8 @@ export class AppComponent {
 }
   async initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      //this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
 
       // Get a FCM token
