@@ -1,4 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
+import { FileUpload } from '../../type'
 
 export class FirebaseSkillModel extends ShellModel {
   id: string;
@@ -18,14 +19,14 @@ export class FirebasePhotoModel /*extends ShellModel*/ {
 }
 
 export class FirebaseItemModel extends ShellModel {  
-  id:string
+  id:string;
   title : string;
   description : string;
   createdById: string;
   createDate : string;  
   category:string;
   //fullPathFromStore:string;
-  fileFullPath: Array<string> = [];
+  fileFullPath: Array<any> = [];
 
   constructor() {
     super();

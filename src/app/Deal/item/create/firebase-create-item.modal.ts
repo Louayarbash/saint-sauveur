@@ -169,7 +169,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
     createItem() {
-    const loading = this.firebaseService.presentLoadingWithOptions();
+    //const loading = this.firebaseService.presentLoadingWithOptions();
 
     this.itemData.date = this.createItemForm.get('date').value;//this.createItemForm.value.date;
     this.itemData.startDate = this.createItemForm.get('startDate').value;//this.createItemForm.value.startDate;

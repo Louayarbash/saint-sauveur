@@ -28,14 +28,26 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: [
     './styles/firebase-listing.page.scss',
     './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.shell.scss',
+    '../../user/friends/styles/user-friends.page.scss',
+    '../../user/friends/styles/user-friends.shell.scss',
+    '../../user/friends/styles/user-friends.md.scss',
+    '../../user/friends/styles/user-friends.ios.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
+  /*for segment implementation*/
+  segmentValue = 'allrequests';
+  //friendsList: Array<any>;
+  newRequestsList: Array<any>;
+  myRequestsList: Array<any>;
+  searchQuery = '';
+  showFilters = false;
+  /* end */
   userLanguage;
   translations; 
   rangeForm: FormGroup;
-  searchQuery: string;
+  //searchQuery: string;
   showAgeFilter = false;
   CoverPic:string;
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -142,6 +154,16 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         .subscribe(
          (state) => {
             this.items = state;
+
+            this.newRequestsList = this.items;
+            if(!this.items.isShell){
+              this.myRequestsList = this.filterList(this.items, "pending");
+            }
+            else this.myRequestsList = this.items;
+            
+            //this.myRequestsList = this.newRequestsList.filter(item => item.status.toLowerCase().includes("pending"));//this.items;
+
+            
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -150,7 +172,41 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       (error) => console.log(error)
     );
   }
+  segmentChanged(ev): void {
+    console.log(ev.detail.value);
+    this.segmentValue = ev.detail.value;
 
+    // Check if there's any filter and apply it
+    this.searchList();
+  }
+  searchList(): void {
+    const query = (this.searchQuery && this.searchQuery !== null) ? this.searchQuery : '';
+
+    if (this.segmentValue === 'allrequests') {
+      this.newRequestsList = this.items;//this.filterList(this.items, query);
+    } else if (this.segmentValue === 'myrequests') {
+      this.myRequestsList = this.filterList(this.items, "pending");
+  }
+      /* else if (this.segmentValue === 'following') {
+      this.followingList = this.filterList(this.data.following, query);
+    } */
+}
+
+
+  filterList(list, query): Array<any> {
+
+    //return list.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+    return list.filter(item => item.status.toLowerCase().includes(query.toLowerCase()));
+    //return list.filter(item =>  item.status == query
+/*       if(item.status)
+      { 
+        console.log("herereeee");
+        item.status == query;
+      } */
+      
+    
+    //);
+  }
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal

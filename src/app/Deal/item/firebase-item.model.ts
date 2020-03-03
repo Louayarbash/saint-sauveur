@@ -15,7 +15,7 @@ export class FirebaseItemModel extends ShellModel {
   date:string;
   startDate:string;
   endDate:string;
-  status:string;
+  status:string = "new";
   createdBy:string;
   responseBy:string;
   note:string;

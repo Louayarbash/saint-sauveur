@@ -14,8 +14,78 @@
 </ion-header>
 
 <ion-content class="firebase-listing-content">
-  <ion-list class="items-list" *ngIf="items?.length > 0">
-     <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
+  <ion-segment value="allrequests" class="user-friends-segment" (ionChange)="segmentChanged($event)">
+    <!-- <ion-segment value="friends" class="user-friends-segment" mode="md" (ionChange)="segmentChanged($event)"> -->
+      <ion-segment-button value="allrequests">
+        <ion-label>New requests</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="myrequests">
+        <ion-label>My requests</ion-label>
+      </ion-segment-button>
+<!--       <ion-segment-button value="Others">
+        <ion-label>Others</ion-label>
+      </ion-segment-button> -->
+    </ion-segment>
+
+    <section [hidden]="segmentValue !== 'allrequests'">
+      <ion-list class="items-list friends-list" *ngIf="items?.length > 0">
+        <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
+         <ion-item class="list-item friend-item" *ngFor="let item of newRequestsList" [routerLink]="['/deal/details', item.id]">
+         <ion-row class="user-row">
+           <ion-col class="user-data-wrapper">
+             <div class="user-info">
+               <h3 class="user-name">
+                 <app-text-shell animation="bouncing" [data]="item.listingDetails"></app-text-shell>
+               </h3>
+             </div>
+           </ion-col>
+         </ion-row>
+       </ion-item>
+     </ion-list>
+     <h3 *ngIf="items?.length == 0" class="empty-list-message">
+       No deals found.
+     </h3>
+<!--       <ion-list class="friends-list" *ngIf="friendsList.length > 0">
+        <ion-item class="friend-item" *ngFor="let friend of friendsList">
+          <ng-container *ngTemplateOutlet="friendItem; context: { friend: friend }"></ng-container>
+        </ion-item>
+      </ion-list>
+      <ng-container *ngIf="dealsList.length <= 0">
+        <h3 class="empty-list-message">No deals found.</h3>
+      </ng-container> -->
+    </section>
+  
+    <section [hidden]="segmentValue !== 'myrequests'">
+      <ion-list class="items-list" *ngIf="items?.length > 0">
+        <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
+         <ion-item class="list-item" *ngFor="let item of myRequestsList" [routerLink]="['/deal/details', item.id]">
+         <ion-row class="user-row">
+           <ion-col class="user-data-wrapper">
+             <div class="user-info">
+               <h3 class="user-name">
+                 <app-text-shell animation="bouncing" [data]="item.listingDetails"></app-text-shell>
+               </h3>
+             </div>
+           </ion-col>
+    
+         </ion-row>
+       </ion-item>
+     </ion-list>
+     <h3 *ngIf="items?.length == 0" class="empty-list-message">
+       No deals found.
+     </h3>
+<!--       <ion-list class="friends-list" *ngIf="followersList.length > 0">
+        <ion-item class="friend-item" *ngFor="let friend of followersList">
+          <ng-container *ngTemplateOutlet="friendItem; context: { friend: friend }"></ng-container>
+        </ion-item>
+      </ion-list>
+      <ng-container *ngIf="myDealsList.length <= 0">
+        <h3 class="empty-list-message">No deals found.</h3>
+      </ng-container> -->
+    </section>
+
+
+<!--   <ion-list class="items-list" *ngIf="items?.length > 0">
       <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/deal/details', item.id]">
       <ion-row class="user-row">
         <ion-col class="user-data-wrapper">
@@ -31,5 +101,5 @@
   </ion-list>
   <h3 *ngIf="items?.length == 0" class="empty-list-message">
     No deals found.
-  </h3>
+  </h3> -->
 </ion-content>

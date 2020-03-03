@@ -103,7 +103,6 @@ export class FirebaseItemDetailsPage implements OnInit {
   
             this.startTimeCounter = dayjs(this.item.startDate).format('MM/DD/YYYY HH:mm:ss');//this.dateService.timestampToString(this.item.startTime,'MM/DD/YYYY HH:mm:ss') as string;
             this.endTimeCounter = dayjs(this.item.endDate).format('MM/DD/YYYY HH:mm:ss');//this.dateService.timestampToString(this.item.endTime,'MM/DD/YYYY HH:mm:ss') as string;
-  
             this.dateMsg = dayjs(this.item.date).format("DD, MMM, YYYY");//this.dateService.timestampToString(this.item.date,"DD, MMM, YYYY");
             this.startTimeMsg = dayjs(this.item.startDate).format("HH:mm");//this.dateService.timestampToString(this.item.startTime,"HH:mm");
             this.endTimeMsg = dayjs(this.item.endDate).format('HH:mm');//this.dateService.timestampToString(this.item.endTime,"HH:mm");

@@ -16,7 +16,7 @@ import { UserFriendsModel } from './user-friends.model';
 export class UserFriendsPage implements OnInit {
   data: UserFriendsModel;
 
-  segmentValue = 'friends';
+  segmentValue = 'allrequests';
   friendsList: Array<any>;
   followersList: Array<any>;
   followingList: Array<any>;

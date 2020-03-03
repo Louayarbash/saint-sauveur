@@ -1,5 +1,5 @@
-<ion-row class="countdown">
-  <ion-col class="time" *ngIf="_initialUnit === 'day'">
+<ion-row class="countdown" *ngIf="_secondsLeft >=0">
+  <ion-col class="time" *ngIf="_initialUnit === 'day' && _daysLeft != 0">
     <span class="time-unit">D</span>
     <div class="inner-time">
       <span class="time-value">{{ _daysLeft }}</span>

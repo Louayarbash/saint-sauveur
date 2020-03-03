@@ -24,7 +24,7 @@ import { Crop } from "@ionic-native/crop/ngx";
 import { File } from "@ionic-native/file/ngx";
 //import { File } from "@ionic-native/file-chooser";
 import { ImagePicker } from '@ionic-native/image-picker/ngx'; 
-import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
+//import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 //import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { FCM } from '@ionic-native/fcm/ngx';
@@ -33,6 +33,8 @@ import { LanguageService } from './language/language.service';
 
 //import { FcmService } from 'src/app/services/fcm/fcm.service';
 import { Chooser } from '@ionic-native/chooser/ngx';
+import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 
 /*LA_ end */
@@ -77,9 +79,10 @@ export function createTranslateLoader(http: HttpClient) {
     ImagePicker,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-	    File,
+	  File,
     DocumentViewer,
     FileOpener,
+    FileTransfer,
     Chooser,
     //LanguageService,
     //TranslateService,

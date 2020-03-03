@@ -67,13 +67,13 @@ export class FirebaseCreateItemModal implements OnInit {
   .then(file => {
 
     console.log("this.file",file);
-    let fileUpload : FileUpload = {fileData:"",fileName:""};
+    let fileUpload : FileUpload = {fileData:"",fileName:"",filePath:""};
     let extention = file.name.slice(file.name.length-4);
     console.log("extention", extention);
-    console.log(file ? file.name.slice(file.name.length-4) : 'canceled');
+    console.log(file ? file.name.slice(0,file.name.length-4) : 'canceled');
     if(extention == ".pdf"){    
     fileUpload.fileData = file.dataURI;
-    fileUpload.fileName = file.name;
+    fileUpload.fileName = file.name.slice(0,file.name.length-4);
     this.files.push(fileUpload);        
     }
     else{
@@ -83,29 +83,45 @@ export class FirebaseCreateItemModal implements OnInit {
     console.log("this.files",this.files.length);
     }).catch((error: any) => console.error(error));
   }
-  changeFileName(file){
-    console.log("files",this.files);
-    console.log("doc",file);
-     this.files.forEach( (item, index) => {
+  confirmChanging(index,txtName,btnChange,btnConfirm){
+    console.log(txtName);
+    txtName.disabled = true;
+    btnChange.disabled = false;
+    btnConfirm.disabled = true;
+    this.files[index].fileName = txtName.value;
+    this.firebaseService.presentToast("File name changed");
+    console.log("files after delete",this.files);
+/*      this.files.forEach( (item, index) => {
       if(item === file) {
-        item.fileName = this.newName;
+        item.fileName = txtName.value
         console.log("files after delete",this.files);
         this.changeRef.detectChanges();
-        this.firebaseService.presentToast("File removed");
+        this.firebaseService.presentToast("File name changed");
       }
-    });
+    }); */
   }
-  deleteFile(file){
+  changeBtnStatus(txtName,btnChange,btnConfirm){
+    txtName.disabled = false;
+    btnChange.disabled = true;
+    btnConfirm.disabled = false;
+
+  }
+/*   nameChanged(i,btnChange){
+    console.log("changing text to", i);
+  } */
+  deleteFile(index){
     console.log("files",this.files);
-    console.log("doc",file);
-     this.files.forEach( (item, index) => {
+    console.log("doc",index);
+    this.files.splice(index,1);
+    this.firebaseService.presentToast("File removed");
+     /* this.files.forEach( (item, index) => {
       if(item === file) {
          this.files.splice(index,1);
         console.log("files after delete",this.files);
         this.changeRef.detectChanges();
         this.firebaseService.presentToast("File removed");
       }
-    });
+    }); */
 }
 
    createItem() {
@@ -115,7 +131,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createDate = Date.now().toString();
     this.itemData.createdById = this.firebaseService.auth.getLoginID();
     const loading = this.firebaseService.presentLoadingWithOptions();
-    this.firebaseService.createItem(this.itemData,null)
+    this.firebaseService.createItem(this.itemData,this.files)
     .then(() => {
       this.dismissModal();
       this.firebaseService.presentToast("post added successfully");

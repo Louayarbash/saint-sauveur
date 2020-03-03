@@ -29,10 +29,11 @@
     "@ionic-native/chooser": "^5.21.6",
     "@ionic-native/core": "^5.21.5",
     "@ionic-native/crop": "^5.19.1",
-    "@ionic-native/document-viewer": "^5.19.1",
+    "@ionic-native/document-viewer": "^5.22.0",
     "@ionic-native/fcm": "^5.20.0",
     "@ionic-native/file": "^5.19.1",
     "@ionic-native/file-opener": "^5.19.1",
+    "@ionic-native/file-transfer": "^5.22.0",
     "@ionic-native/geolocation": "^5.19.1",
     "@ionic-native/image-picker": "^5.19.1",
     "@ionic-native/onesignal": "^5.19.1",
@@ -53,6 +54,7 @@
     "cordova-plugin-fcm-with-dependecy-updated": "^4.1.1",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-opener2": "^2.2.1",
+    "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-telerik-imagepicker": "git+https://github.com/Telerik-Verified-Plugins/ImagePicker.git",
     "core-js": "^2.5.7",
@@ -126,7 +128,8 @@
       },
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-chooser": {}
+      "cordova-plugin-chooser": {},
+      "cordova-plugin-file-transfer": {}
     },
     "platforms": [
       "ios",

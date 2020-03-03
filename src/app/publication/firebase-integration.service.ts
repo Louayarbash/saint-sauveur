@@ -20,10 +20,13 @@ import { async } from '@angular/core/testing';
 import { debug } from 'console';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
 import { PhotosArray } from '../type';
+import { FileUpload } from '../type'
 //import 'firebase/<PACKAGE>';
 
 @Injectable()
 export class FirebaseService {
+  private tableName = "publication";
+  storagePath = "pdf/publications/"
   // Listing Page
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
@@ -49,7 +52,7 @@ export class FirebaseService {
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>('posts').valueChanges({  idField: 'id' });
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName).valueChanges({  idField: 'id' });
 /*        .pipe(
        map(actions => actions.map(post => {
           //const age = this.calcUserAge(post.createDate);
@@ -87,7 +90,7 @@ export class FirebaseService {
     const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
     const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
 
-    const listingCollection = this.afs.collection<FirebaseListingItemModel>('posts', ref =>
+    const listingCollection = this.afs.collection<FirebaseListingItemModel>(this.tableName, ref =>
       ref.orderBy('createDate'));
       //.startAt(minDate).endAt(maxDate));
 
@@ -116,7 +119,7 @@ export class FirebaseService {
           console.log("getItem",item);
           // Map each skill id and get the skill data as an Observable
           const itemPhotosObservables: Array<Observable<FirebasePhotoModel>> = item.fileFullPath.map(photoPath => {
-            return this.getPic(photoPath).pipe(first());
+            return this.getPic(photoPath.filePath).pipe(first());
           });
 
           // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
@@ -241,26 +244,32 @@ export class FirebaseService {
   */
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel,postImages : PhotosArray[])/* : Promise<DocumentReference>*/{    
-    this.afs.collection('posts').add({...itemData}).then(async (res)=>{
-      console.log("post id :",res.id);
-      let imagesFullPath = [];
+    public async createItem(itemData : FirebaseItemModel,postImages : FileUpload[])/* : Promise<DocumentReference>*/{    
+    this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
+      console.log("pub id :",res.id);
+      let imagesFullPath : any[] = [];
        for (var i = 0; i < postImages.length; i++) {
-        await this.uploadToStorage(postImages[i].photo,res.id).then(res => {
-         imagesFullPath.push(res.metadata.fullPath);
+        await this.uploadToStorage(postImages[i].fileData,res.id).then(res => {
+          console.log(1,postImages[i].fileName);
+          
+          console.log(2,res.metadata.fullPath);
+
+         imagesFullPath.push({ fileName: postImages[i].fileName, filePath : res.metadata.fullPath});
 
       } 
+      
       ).catch(err=> {console.log("Error uploading photo: ",err)}); 
   } 
-  
+  itemData.fileFullPath = imagesFullPath;
+  return this.afs.collection(this.tableName).doc(res.id).set({...itemData});
     });
   } 
    private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
         console.log("Uploaded",itemDataPhoto);
-        let newName = `${new Date().getTime()}.jpeg`;
+        let newName = `${new Date().getTime()}.pdf`;
         console.log("kess eiri 3arssa");        
         //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
-        return this.afstore.ref(`images/posts/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
+        return this.afstore.ref(this.storagePath+ `${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'application/pdf' });
    }
    public deleteFromStorage(itemPath : string){        
     return this.afstore.ref(`${itemPath}`).delete().toPromise();

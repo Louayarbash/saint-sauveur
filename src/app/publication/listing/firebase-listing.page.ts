@@ -15,6 +15,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 
 
@@ -28,6 +29,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
+  filePath222:string;
   rangeForm: FormGroup;
   searchQuery: string;
   showAgeFilter = false;
@@ -52,7 +54,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private document: DocumentViewer,
     private file:File,
-    private fileOpener:FileOpener
+    private fileOpener:FileOpener,
+    private transfer : FileTransfer
   ) { }
 
 
@@ -122,10 +125,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             this.items = state;
             console.log(this.items);
             //let itemWithProfile = [];
-            for (let index = 0; index < this.items.length; index++) {
-              let PhotoFromUrl = await this.getProfilePic(this.items[index].coverPhoto);/*.then(res => {console.log("res",res); return res});*/
+/*             for (let index = 0; index < this.items.length; index++) {
+              let PhotoFromUrl = await this.getProfilePic(this.items[index].coverPhoto);
               this.items[index].coverPhotoData = PhotoFromUrl; 
-            }
+            } */
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -174,7 +177,34 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     for (let index = 0; index < imagesFullPath.length; index++) {
      this.firebaseService.afstore.ref(imagesFullPath[index]).getDownloadURL().toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
     } */
-  
+    async DownloadAndOpenPDF(item: FirebaseListingItemModel ){
+      const options: DocumentViewerOptions = {
+        title: 'My PDF'
+      }
+      let filePath : string;
+      await this.firebaseService.afstore.ref(item.fileFullPath[0].filePath).getDownloadURL()
+      .toPromise()
+      .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
+      console.log("filePath",filePath);
+      //this.document.viewDocument(filePath, 'application/pdf', options);
+
+/*       let fakeName = Date.now();
+      this.file.copyFile(filePath,item.fileFullPath[0].fileName+".pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
+      this.fileOpener.open(result.nativeURL,'application/pdf');
+    }); */
+    const fileTransfer = this.transfer.create();
+    fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entry) => {
+      console.log('download complete: ' + entry.toURL());
+      let url = entry.toURL();
+      //this.document.viewDocument(url, 'application/pdf', {});
+      this.fileOpener.open(url,'application/pdf');
+    }, (error) => {
+      // handle error
+      console.log('error: ' + error);
+
+    });
+
+    }
   
   
 

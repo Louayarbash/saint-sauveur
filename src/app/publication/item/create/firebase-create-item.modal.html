@@ -39,20 +39,22 @@
 
     </section>
     <section>
-    <ion-row class="" *ngFor="let file of files">
+    <ion-row class="" *ngFor="let file of files; let i = index;">
          
       <ion-col size="8" class="" >        
         <ion-label color="secondary" position="floating">Chane name</ion-label>
-          <ion-input type="text" [(ngModel)]="newName" [value]="file.fileName"></ion-input>
+          <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
       </ion-col>
       <ion-col size="4" >
-       
-        <ion-label>Delete file</ion-label>
-        <ion-button class="change-image-btn" color="secondary" (click)="deleteFile(file)">          
+        <ion-label> Delete file</ion-label>
+        <ion-button class="change-image-btn" color="secondary" (click)="deleteFile(i)">          
           <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
         </ion-button> 
-        <ion-button class="change-image-btn" color="secondary" (click)="changeFileName(file)">          
-          <ion-icon class="btn-icon" slot="icon-only" name="" title="Modify file name" ></ion-icon>
+        <ion-button  class="change-image-btn" color="secondary" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+          Modify file name
+        </ion-button> 
+        <ion-button  class="change-image-btn" color="secondary" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+          Confirm
         </ion-button> 
       </ion-col>
     </ion-row>
