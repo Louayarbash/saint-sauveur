@@ -403,7 +403,7 @@ export class FirebaseService {
   } */
   public proposeParking(itemData: FirebaseItemModel) {
     
-    itemData.status = "Pending";
+    itemData.status = "Accepted";
     itemData.responseBy = this.auth.getLoginID();
     console.log("itemData",itemData);
     
@@ -417,6 +417,7 @@ export class FirebaseService {
   public cancelDeal(itemData: FirebaseItemModel) {
     
     itemData.status = "Canceled";
+    //let status =  "Canceledddd";
     //itemData.responseBy = this.auth.getLoginID();
     console.log("itemData",itemData);
     

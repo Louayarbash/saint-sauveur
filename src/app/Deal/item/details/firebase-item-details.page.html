@@ -92,8 +92,11 @@
         <ion-label color="secondary" position="floating">Status</ion-label>
         <app-text-shell animation="bouncing" [data]="item.status"></app-text-shell>
       </h2>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()">Propose my parking</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()">Cancel deal</ion-button>
+      {{"  ddsfdfsdf " +  this.loginID}}<br>
+      {{item.createdBy}}<br>
+      {{loginID == item.createdBy}}<br>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [disabled]="item.status =='Accepted'">Propose my parking</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="(loginID == item.createdBy)">Cancel deal</ion-button>
       <p (click)="oberserableTimer()">Start Observable timer</p> {{subscribeTimer}}
     It is good to help for freee :)
     </ion-col>

@@ -64,7 +64,7 @@ export class CounterInputComponentMinutes implements ControlValueAccessor, OnCha
   registerOnTouched() {}
 
   increase() {
-    if(this.counterValue<90){
+    if(this.counterValue<720){
     this.counterValue = this.counterValue + 15;
   }
   }

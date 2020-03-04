@@ -30,6 +30,7 @@ import { FirebaseListingPageModule } from "../../listing/firebase-listing.module
   ],
 })
 export class FirebaseCreateItemModal implements OnInit {
+  loginID = this.loginService.getLoginID();
   userLanguage;
   translations; 
   translateParams;
@@ -97,7 +98,11 @@ export class FirebaseCreateItemModal implements OnInit {
         
         this.today = new Date().toISOString();
         this.minDate = this.today;
-        this.maxDate = new Date().getFullYear() + 1;
+        let maxDate = new Date();// max in 1 month
+        this.maxDate = new Date(maxDate.getFullYear(),maxDate.getMonth()+1,maxDate.getDate());
+        this.maxDate = dayjs(this.maxDate).format("YYYY-MM-DD");
+
+
         this.createItemForm.get('startDate').setValue(this.today);
         this.minStartDate = dayjs(this.today).format("HH:mm");
         this.createItemForm.get('endDate').setValue(this.today);
@@ -146,13 +151,20 @@ export class FirebaseCreateItemModal implements OnInit {
 
   }
   initValues(){
+  
   console.log("resetDate");
   this.today = new Date().toISOString();
   this.minDate = this.today;
-  this.maxDate = new Date().getFullYear() + 1;
+  let maxDate = new Date();
+  console.log(maxDate.getFullYear());
+  console.log(maxDate.getMonth());
+  console.log(maxDate.getDate());
+  this.maxDate = new Date(maxDate.getFullYear(),maxDate.getMonth()+1,maxDate.getDate());
+  this.maxDate = dayjs(this.maxDate).format("YYYY-MM-DD");
   this.minStartDate = dayjs(this.today).format("HH:mm");
   this.duration = 0;
   this.previousCounterValue = 0;  
+  console.log(this.maxDate);
   }
 
   private calculateEndDate(){
