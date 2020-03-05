@@ -31,6 +31,9 @@ import { TranslateService } from '@ngx-translate/core';
 
 
 export class FirebaseItemDetailsPage implements OnInit {
+  proposeButtonHidden;
+  cancelButtonHidden;
+  loginID;
   userLanguage;
   translations; 
   item: FirebaseItemModel;
@@ -64,13 +67,15 @@ export class FirebaseItemDetailsPage implements OnInit {
     private loginService : LoginService,
     public translate : TranslateService
   ) { 
-    this.AuthId = this.firebaseService.auth.getLoginID();
-     console.log("AuthId",this.AuthId);
+    this.loginID = this.loginService.getLoginID();
+    this.userLanguage = this.loginService.getUserLanguage();
+    this.cancelButtonHidden = true;
+    this.proposeButtonHidden = true;
+     console.log("loginID",this.loginID);
     }
 
   ngOnInit() {
 
-    this.userLanguage = this.loginService.getUserLanguage();
     console.log("1", this.userLanguage);
     //this.getTranslations();
     this.translate.use(this.userLanguage);
@@ -97,7 +102,7 @@ export class FirebaseItemDetailsPage implements OnInit {
 
           if (this.item.date){
             this.dateTimeString = this.item.date.slice(0,10);//this.dateService.timestampToISOString(this.item.date).slice(0,10);
-          
+            
             this.startTimeString = this.item.startDate;//this.dateService.timestampToISOString(this.item.startTime);
             this.endTimeString = this.item.endDate;//this.dateService.timestampToISOString(this.item.endTime);
   
@@ -106,6 +111,8 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.dateMsg = dayjs(this.item.date).format("DD, MMM, YYYY");//this.dateService.timestampToString(this.item.date,"DD, MMM, YYYY");
             this.startTimeMsg = dayjs(this.item.startDate).format("HH:mm");//this.dateService.timestampToString(this.item.startTime,"HH:mm");
             this.endTimeMsg = dayjs(this.item.endDate).format('HH:mm');//this.dateService.timestampToString(this.item.endTime,"HH:mm");
+            this.cancelButtonHidden = !(this.loginID == this.item.createdBy) || this.item.status == "Canceled";
+            this.proposeButtonHidden = (this.loginID == this.item.createdBy) || this.item.status == "Accepted" || !(this.item.status == "new");
           }
           
 

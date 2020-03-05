@@ -24,16 +24,15 @@
   {{ startTimeCounter | appTimeDifference }}<br>
   {{ startTimeCounter | appTimeDifference }}<br>
   {{ startTimeCounter | appTimeAgo}}
-  <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell)">
-  <span class="expiration-cta"> 
-    DEAL {{ ((endTimeCounter | appTimeDifference) < 0) ? 'EXPIRED' : 'EXPIRES IN' }}:
+<ion-row class="expiration-countdown" *ngIf="((endTimeCounter | appTimeDifference) < 0 || (endTimeCounter | appTimeDifference) > 2000) && (!item.isShell)">
 
-  </span>
-  <ng-container *ngIf="((endTimeCounter | appTimeDifference) < 0 || (endTimeCounter | appTimeDifference) > 2000)">
+    <span class="expiration-cta"> 
+      DEAL {{ ((endTimeCounter | appTimeDifference) < 0) ? 'EXPIRED' : 'EXPIRES IN' }}:
+    </span>
     <span class="item-time-left">
       <app-text-shell [data]="(endTimeCounter | appTimeAgo)"></app-text-shell>
     </span>
-  </ng-container>
+
 </ion-row>
   <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell)">
     <span class="expiration-lead">Deal starts in:</span>
@@ -92,11 +91,8 @@
         <ion-label color="secondary" position="floating">Status</ion-label>
         <app-text-shell animation="bouncing" [data]="item.status"></app-text-shell>
       </h2>
-      {{"  ddsfdfsdf " +  this.loginID}}<br>
-      {{item.createdBy}}<br>
-      {{loginID == item.createdBy}}<br>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [disabled]="item.status =='Accepted'">Propose my parking</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="(loginID == item.createdBy)">Cancel deal</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">Propose my parking</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="cancelButtonHidden">Cancel deal</ion-button>
       <p (click)="oberserableTimer()">Start Observable timer</p> {{subscribeTimer}}
     It is good to help for freee :)
     </ion-col>
