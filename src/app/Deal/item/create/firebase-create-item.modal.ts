@@ -80,7 +80,7 @@ export class FirebaseCreateItemModal implements OnInit {
      this.createItemForm = new FormGroup({
       date: new FormControl(this.today, Validators.required),
       startDate : new FormControl(this.today ,Validators.required),
-      duration : new FormControl(0, counterRangeValidatorMinutes(15, 90)),
+      duration : new FormControl(0, counterRangeValidatorMinutes(15, 720)),
       endDate : new FormControl({value : this.today, disabled : true}, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
       note : new FormControl('') 
@@ -224,8 +224,7 @@ export class FirebaseCreateItemModal implements OnInit {
     }
     else{
       message = "New parking request on " + date+ " from " + dayjs(this.itemData.startDate).format("HH:mm") + " to " + endDate + " at " + dayjs(this.itemData.endDate).format("HH:mm");
-    }
-    
+    }    
     const alert = await this.alertController.create({
       header: "Please confirm the below request details:",
       message: message,
@@ -239,16 +238,17 @@ export class FirebaseCreateItemModal implements OnInit {
               this.dismissModal();
               this.firebaseService.presentToast("Request added successfully",2000);
               loading.then(res=>res.dismiss());
-            });  
-            
+            }).catch(err => {
+              console.log(err)
+              this.firebaseService.presentToast("connection error!",2000);
+              loading.then(res=>res.dismiss());
+            });              
           }
         },
         {
           text: "Cancel",
-           handler: ()=> {
-          
-            }, 
-            
+           handler: ()=> {          
+            },             
           }
       ]
     });

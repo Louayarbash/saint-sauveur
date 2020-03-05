@@ -198,9 +198,9 @@ export class FirebaseService {
   */
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel)/* : Promise<DocumentReference>*/{     
+    public createItem(itemData : FirebaseItemModel) : Promise<DocumentReference>{     
       console.log(itemData);
-      this.afs.collection(this.tableName).add({...itemData}).then(res => {console.log(res)}).catch(err=>{console.log(err)});
+      return this.afs.collection(this.tableName).add({...itemData});
      //const count =  +itemData.count;
 /*     for (let index = 1; index <= count ; index++) {
       itemData.count = index + "/" + count;
@@ -402,17 +402,48 @@ export class FirebaseService {
     return this.afstore.ref(`files/${newName}`).putString(information);
   } */
   public proposeParking(itemData: FirebaseItemModel) {
+    console.log("booo1111",itemData);
+/*     this.getItem(itemData.id).subscribe(item=>{
+      if(item.status == "new"){
+        this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
+        console.log('Transaction success!');
+        this.presentToast("You responce has been sent to the requester, Thank you!",3000);
+        this.router.navigate(['deal/listing']);
+        }).catch(err => {console.log('Transaction failure:', err);});
+      }
+      else{
+        this.presentToast("Request already respoded by another tenant, Thank you!",3000);
+        this.router.navigate(['deal/listing']);
+      }
+    }); */
+    let test = this.getItem(itemData.id).subscribe(item=>{
+      console.log("booo",item);
+      if(item.status == "new"){
+        this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
+        console.log('Transaction success!');
+        this.presentToast("You responce has been sent to the requester, Thank you!",3000);
+        this.router.navigate(['deal/listing']);
+        
+        }).catch(err => {console.log('Transaction failure:', err);});
+      }
+      else{
+        this.presentToast("Request already respoded by another tenant, Thank you!",3000);
+        this.router.navigate(['deal/listing']);
+      }
+      test.unsubscribe();
+    }); 
     
-    itemData.status = "Accepted";
+    
+/*      itemData.status = "Accepted";
     itemData.responseBy = this.auth.getLoginID();
     console.log("itemData",itemData);
     
-    this.afs.collection(this.tableName).doc(itemData.id).set({...itemData}).then(()=>{ 
+    this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
     //let loading = this.presentLoadingWithOptions().then( res => {return res;} ); 
     this.presentToast("You responce has been sent to the requester, Thank you!",3000);
     //.then(()=>{loading.then(res=>{res.dismiss();});});
     this.router.navigate(['deal/listing']);
-  });
+  });  */
   }
   public cancelDeal(itemData: FirebaseItemModel) {
     
@@ -421,7 +452,7 @@ export class FirebaseService {
     //itemData.responseBy = this.auth.getLoginID();
     console.log("itemData",itemData);
     
-    this.afs.collection(this.tableName).doc(itemData.id).set({...itemData}).then(()=>{ 
+    this.afs.collection(this.tableName).doc(itemData.id).update({status : "Canceled"}).then(()=>{ 
     //let loading = this.presentLoadingWithOptions().then( res => {return res;} ); 
     this.presentToast("Deal canceled!",3000);
     //.then(()=>{loading.then(res=>{res.dismiss();});});

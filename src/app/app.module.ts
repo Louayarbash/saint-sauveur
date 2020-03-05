@@ -37,9 +37,10 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 
+
 /*LA_ end */
 
-//import { Firebase } from '@ionic-native/firebase';
+import {  firestore } from 'firebase-admin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
