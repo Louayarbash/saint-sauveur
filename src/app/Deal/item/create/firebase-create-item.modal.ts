@@ -189,7 +189,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.note = this.createItemForm.value.note;
     this.itemData.count = this.createItemForm.value.count;
     this.itemData.createDate = new Date().toISOString();
-    this.itemData.createdBy = this.firebaseService.auth.getLoginID();
+    this.itemData.createdBy = this.loginService.getLoginID();
     this.confirm();
     //dayjs(this.createUserForm.value.birthdate).unix(); // save it in timestamp
 

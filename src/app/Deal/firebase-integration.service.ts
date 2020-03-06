@@ -20,7 +20,7 @@ import { debug } from 'console';
 import { DateService } from '../services/date/date.service'; 
 import { Router } from '@angular/router';
 
-import { AngularFireDatabase} from "@angular/fire/database";
+import { firestore} from "firebase-admin";
 
 //import { CompileShallowModuleMetadata } from '@angular/compiler';
 //import { OneSignal, OSNotification } from "@ionic-native/onesignal/ngx";
@@ -40,16 +40,13 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
-    public auth : LoginService, 
+    public loginService : LoginService, 
     //private alertCtrl : AlertController, 
     private toastController : ToastController,
     private loadingController : LoadingController,
     private dateService : DateService,
-    private router : Router,
-    private aaa : AngularFireDatabase
+    private router : Router    
     )  {
-      afs.
-      
     }
 
   /*
@@ -407,62 +404,84 @@ export class FirebaseService {
     return this.afstore.ref(`files/${newName}`).putString(information);
   } */
   public proposeParking(itemData: FirebaseItemModel) {
-    console.log("booo1111",itemData);
-/*     this.getItem(itemData.id).subscribe(item=>{
-      if(item.status == "new"){
-        this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
-        console.log('Transaction success!');
-        this.presentToast("You responce has been sent to the requester, Thank you!",3000);
-        this.router.navigate(['deal/listing']);
-        }).catch(err => {console.log('Transaction failure:', err);});
-      }
-      else{
-        this.presentToast("Request already respoded by another tenant, Thank you!",3000);
-        this.router.navigate(['deal/listing']);
-      }
-    }); */
-    let test = this.getItem(itemData.id).subscribe(item=>{
-      console.log("booo",item);
-      if(item.status == "new"){
-        this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
-        console.log('Transaction success!');
-        this.presentToast("You responce has been sent to the requester, Thank you!",3000);
-        this.router.navigate(['deal/listing']);
-        
-        }).catch(err => {console.log('Transaction failure:', err);});
-      }
-      else{
-        this.presentToast("Request already respoded by another tenant, Thank you!",3000);
-        this.router.navigate(['deal/listing']);
-      }
-      test.unsubscribe();
-    }); 
-    
-    
-/*      itemData.status = "Accepted";
-    itemData.responseBy = this.auth.getLoginID();
-    console.log("itemData",itemData);
-    
-    this.afs.collection(this.tableName).doc(itemData.id).update({status : "Accepted"}).then(()=>{ 
-    //let loading = this.presentLoadingWithOptions().then( res => {return res;} ); 
-    this.presentToast("You responce has been sent to the requester, Thank you!",3000);
-    //.then(()=>{loading.then(res=>{res.dismiss();});});
-    this.router.navigate(['deal/listing']);
-  });  */
+    let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+    this.afs.firestore.runTransaction(tran => {
+      return tran.get(itemRef)
+        .then(doc => {
+          let oldStatus = doc.data().status;
+          let newStatus = "accepted";
+          if (oldStatus == "new"){
+            tran.update(itemRef, {status: newStatus, resposeBy:this.loginService.getLoginID()});
+            console.log("changed");
+            this.presentToast("You responce has been sent to the requester, Thank you!",3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.resolve('Status changed to ' + newStatus);
+          } else {
+            this.presentToast("Request already respoded by another tenant, Thank you!",3000);
+            this.router.navigate(['deal/listing']);
+            console.log("not changed");
+            return Promise.reject('Request has already been responded or has been canceled, thank you');
+          }
+        });
+    }).then(result => {
+      console.log("Transaction success:", result);
+    }).catch(err => {
+      console.log("Transaction failure:", err);
+    });
   }
+  public cancelRequest(itemData: FirebaseItemModel) {
+    let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+    this.afs.firestore.runTransaction(tran => {
+      return tran.get(itemRef)
+        .then(doc => {          
+          let oldStatus = doc.data().status;          
+          if (oldStatus == "new"){
+            let newStatus = "new request canceled";
+            tran.update(itemRef, {status: newStatus});            
+            this.presentToast("Your new request has been canceled!",3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.resolve('New request canceled!' + newStatus);
+          }
+          else if (oldStatus == "accepted"){
+            let newStatus = "accepted request canceled";
+            tran.update(itemRef, {status: newStatus});            
+            this.presentToast("Your accepted request has been canceled!",3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.resolve('Accepted request canceled!' + newStatus);
+          }
+          
+        });
+    }).then(result => {
+      console.log("Transaction success:", result);
+    }).catch(err => {
+      console.log("Transaction failure:", err);
+    });
+  }
+
   public cancelDeal(itemData: FirebaseItemModel) {
-    
-    itemData.status = "Canceled";
-    //let status =  "Canceledddd";
-    //itemData.responseBy = this.auth.getLoginID();
-    console.log("itemData",itemData);
-    
-    this.afs.collection(this.tableName).doc(itemData.id).update({status : "Canceled"}).then(()=>{ 
-    //let loading = this.presentLoadingWithOptions().then( res => {return res;} ); 
-    this.presentToast("Deal canceled!",3000);
-    //.then(()=>{loading.then(res=>{res.dismiss();});});
-    this.router.navigate(['deal/listing']);
-  });
+    let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+    this.afs.firestore.runTransaction(tran => {
+      return tran.get(itemRef)
+        .then(doc => {          
+          let oldStatus = doc.data().status;          
+          if (oldStatus == "accepted"){ //and not started 
+            let newStatus = "new"; 
+            tran.update(itemRef, {status: newStatus});            
+            this.presentToast("You canceled your deal!",3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.resolve('Your deal is canceled!' + newStatus);
+          }
+          else {        
+            this.presentToast("Cant cancel request!",3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.reject('cant cancel this request!');
+          } 
+        });
+    }).then(result => {
+      console.log("Transaction success:", result);
+    }).catch(err => {
+      console.log("Transaction failure:", err);
+    });
   }
 
   async presentLoadingWithOptions() {

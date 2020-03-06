@@ -111,8 +111,8 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.dateMsg = dayjs(this.item.date).format("DD, MMM, YYYY");//this.dateService.timestampToString(this.item.date,"DD, MMM, YYYY");
             this.startTimeMsg = dayjs(this.item.startDate).format("HH:mm");//this.dateService.timestampToString(this.item.startTime,"HH:mm");
             this.endTimeMsg = dayjs(this.item.endDate).format('HH:mm');//this.dateService.timestampToString(this.item.endTime,"HH:mm");
-            this.cancelButtonHidden = !(this.loginID == this.item.createdBy) || this.item.status == "Canceled";
-            this.proposeButtonHidden = (this.loginID == this.item.createdBy) || this.item.status == "Accepted" || !(this.item.status == "new");
+            this.cancelButtonHidden =  this.item.status == "canceled";
+            this.proposeButtonHidden = (this.loginID == this.item.createdBy) || this.item.status == "accepted" || !(this.item.status == "new");
           }
           
 
@@ -165,27 +165,50 @@ export class FirebaseItemDetailsPage implements OnInit {
     await alert.present();
   }
   async cancelDeal(){
-    const alert = await this.alertController.create({
-      header: "Please confirm!",
-      message: "Are you sure you want to cancel this deal?",
-      buttons: [
-         {
-          text: "OKAY",
-          handler: ()=> {
-            this.firebaseService.cancelDeal(this.item);
-          }
-        },
-        {
-          text: "Cancel",
-           handler: ()=> {
-          
-            }, 
+    if (this.item.createdBy == this.loginService.getLoginID()){
+      const alert = await this.alertController.create({
+        header: "Please confirm!",
+        message: "Are you sure you want to cancel this request?",
+        buttons: [
+           {
+            text: "OKAY",
+            handler: ()=> {
+              this.firebaseService.cancelRequest(this.item);
+            }
+          },
+          {
+            text: "Cancel",
+             handler: ()=> {
             
-          }
-      ]
-    });
-    await alert.present();
-
+              }, 
+              
+            }
+        ]
+      });
+      await alert.present();
+    }
+    else if (this.item.responseBy && (this.item.responseBy == this.loginService.getLoginID())) {
+        const alert = await this.alertController.create({
+          header: "Please confirm!",
+          message: "Are you sure you want to cancel this deal?",
+          buttons: [
+             {
+              text: "OKAY",
+              handler: ()=> {
+                this.firebaseService.cancelDeal(this.item);
+              }
+            },
+            {
+              text: "Cancel",
+               handler: ()=> {
+              
+                }, 
+                
+              }
+          ]
+        });
+        await alert.present();
+    }
   }
   oberserableTimer() {
     const source = timer(0, 1000);
