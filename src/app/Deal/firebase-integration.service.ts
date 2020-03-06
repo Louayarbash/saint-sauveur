@@ -20,6 +20,8 @@ import { debug } from 'console';
 import { DateService } from '../services/date/date.service'; 
 import { Router } from '@angular/router';
 
+import { AngularFireDatabase} from "@angular/fire/database";
+
 //import { CompileShallowModuleMetadata } from '@angular/compiler';
 //import { OneSignal, OSNotification } from "@ionic-native/onesignal/ngx";
 
@@ -43,8 +45,10 @@ export class FirebaseService {
     private toastController : ToastController,
     private loadingController : LoadingController,
     private dateService : DateService,
-    private router : Router
+    private router : Router,
+    private aaa : AngularFireDatabase
     )  {
+      afs.
       
     }
 
@@ -52,6 +56,7 @@ export class FirebaseService {
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
+    
     //let CoverPic : any;
     return this.afs.collection<FirebaseListingItemModel>(this.tableName).valueChanges({  idField: 'id' })
         .pipe(

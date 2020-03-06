@@ -10,7 +10,7 @@ import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
 import { FcmService } from '../../../../app/services/fcm/fcm.service';
 import { DateService } from '../../../../app/services/date/date.service';
-//import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 import * as dayjs from 'dayjs';
 //import * as moment from 'moment';
 import { timer } from 'rxjs';
