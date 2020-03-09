@@ -12,12 +12,14 @@ import { FirebaseItemModel } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { LoginService } from "../services/login/login.service"
 //import { LoginCredential } from '../type';
-import { AlertController,ToastController,LoadingController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 //import { storage } from "firebase/app";
 //import * as firebase from 'firebase';
 import { async } from '@angular/core/testing';
 import { debug } from 'console';
-import { DateService } from '../services/date/date.service'; 
+import { DateService } from '../services/date/date.service';
+import { FeatureService } from '../services/feature/feature.service'; 
+
 import { Router } from '@angular/router';
 
 import { firestore} from "firebase-admin";
@@ -41,10 +43,7 @@ export class FirebaseService {
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
     public loginService : LoginService, 
-    //private alertCtrl : AlertController, 
-    private toastController : ToastController,
-    private loadingController : LoadingController,
-    private dateService : DateService,
+    private featueService : FeatureService,
     private router : Router    
     )  {
     }
@@ -413,11 +412,11 @@ export class FirebaseService {
           if (oldStatus == "new"){
             tran.update(itemRef, {status: newStatus, resposeBy:this.loginService.getLoginID()});
             console.log("changed");
-            this.presentToast("You responce has been sent to the requester, Thank you!",3000);
+            this.featueService.presentToast("You responce has been sent to the requester, Thank you!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
-            this.presentToast("Request already respoded by another tenant, Thank you!",3000);
+            this.featueService.presentToast("Request already respoded by another tenant, Thank you!",3000);
             this.router.navigate(['deal/listing']);
             console.log("not changed");
             return Promise.reject('Request has already been responded or has been canceled, thank you');
@@ -438,14 +437,14 @@ export class FirebaseService {
           if (oldStatus == "new"){
             let newStatus = "new request canceled";
             tran.update(itemRef, {status: newStatus});            
-            this.presentToast("Your new request has been canceled!",3000);
+            this.featueService.presentToast("Your new request has been canceled!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('New request canceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
             let newStatus = "accepted request canceled";
             tran.update(itemRef, {status: newStatus});            
-            this.presentToast("Your accepted request has been canceled!",3000);
+            this.featueService.presentToast("Your accepted request has been canceled!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
@@ -467,12 +466,12 @@ export class FirebaseService {
           if (oldStatus == "accepted"){ //and not started 
             let newStatus = "new"; 
             tran.update(itemRef, {status: newStatus});            
-            this.presentToast("You canceled your deal!",3000);
+            this.featueService.presentToast("You canceled your deal!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Your deal is canceled!' + newStatus);
           }
           else {        
-            this.presentToast("Cant cancel request!",3000);
+            this.featueService.presentToast("Cant cancel request!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.reject('cant cancel this request!');
           } 
@@ -484,7 +483,7 @@ export class FirebaseService {
     });
   }
 
-  async presentLoadingWithOptions() {
+/*   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
       spinner: "bubbles",
       duration: 5000,
@@ -501,5 +500,5 @@ export class FirebaseService {
       duration : time
     });
     await toast.present();  
-  }
+  } */
 }

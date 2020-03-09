@@ -14,7 +14,9 @@ import { tap } from 'rxjs/operators';
 import { FcmService } from '../app/services/fcm/fcm.service';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
-
+import { LanguageService } from './language/language.service';
+import { LoginService } from './services/login/login.service';
+import { FeatureService } from './services/feature/feature.service';
 
 @Component({
   selector: 'app-root',
@@ -77,37 +79,44 @@ export class AppComponent {
     }
   ];
 
+  available_languages = [];
+  translations;
   textDir = 'ltr';
   /* LA_ add for cordova platform splashScreen statusBar*/
-  constructor(public translate: TranslateService,
+  constructor(
+    private translatee: TranslateService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     //private oneSignal : OneSignal,
-    private alertCtrl :AlertController,
+    private alertController :AlertController,
     private toastCtrl : ToastController,
     private fcmService : FcmService,
     private router :Router,
     //private ngZone : NgZone,
-    private fcm : FCM
+    private fcm : FCM,
+    public languageService : LanguageService,
+    private loginService : LoginService,
+    private featureService : FeatureService
     ) {
 
     this.initializeApp();
-    this.setLanguage();
+    //this.setLanguage();
 
 /*     curl https://fcm.googleapis.com/fcm/send \
      -H "Content-Type: application/json" \
      -H "Authorization: key=your-messaging-SERVER-key" \
      -d '{ "notification": {"title": "Test title", "body": "Test Body", "click_action" : "https://angularfirebase.com"},"to" : "fcmToken_from_firebase"}' */
     
-    platform.ready().then(() => {
+/*     platform.ready().then(() => {
 
     }
 
-);
+); */
 }
   async initializeApp() {
     this.platform.ready().then(() => {
+      this.setLanguage();
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
@@ -153,8 +162,8 @@ export class AppComponent {
     this.oneSignal.endInit();
   } */
 
-  async showAlert(title,msg,task){
-    const alert = await this.alertCtrl.create({
+/*   async showAlert(title,msg,task){
+    const alert = await this.alertController.create({
       header:title,
       subHeader:msg,
       buttons:[
@@ -167,7 +176,7 @@ export class AppComponent {
       ]
     })
     alert.present();
-  }
+  } */
  /*END */
   /*async initializeApp() {
     try {
@@ -177,18 +186,73 @@ export class AppComponent {
     }
   }*/
 
-  setLanguage() {
+  async setLanguage() {
     // this language will be used as a fallback when a translation isn't found in the current language
-    this.translate.setDefaultLang('en');
 
+    //this.translate.setDefaultLang('en');
+    let currentLanguage : string;
     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    this.translate.use('en');
-    console.log("current lang",this.translate.currentLang);
+    await this.loginService.getUserLanguage().then( res => { currentLanguage = res.data().language} );
+    this.translatee.setDefaultLang(currentLanguage);
+    this.translatee.use(currentLanguage);
+    console.log(currentLanguage);
+    console.log("current lang22",this.translatee.currentLang);
     // this is to determine the text direction depending on the selected language
     // for the purpose of this example we determine that only arabic and hebrew are RTL.
     // this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     //   this.textDir = (event.lang === 'ar' || event.lang === 'iw') ? 'rtl' : 'ltr';
     // });
+    //this.getTranslations();
+    this.loginService.getUserInfo().then( a=> { return console.log("Louay from app.component111", a) } ).catch(err=>console.log(err));
+    this.translatee.onLangChange.subscribe(() => {
+      console.log("Louay from app.component222")
+      this.featureService.getTranslations();
+    });
+    console.log("2",this.translatee.currentLang);
+    console.log("3",this.translatee);
+  }
+/*   getTranslations() {
+    // get translations for this page to use in the Language Chooser Alert
+    this.translatee.getTranslation(this.translatee.currentLang)
+    .subscribe((translations) => {
+      console.log("inside getTranslationss",translations);
+      this.translations = translations;
+    });
+  } */
+  async openLanguageChooser() {
+    this.available_languages = this.languageService.getLanguages()
+    .map(item =>
+      ({
+        name: item.name,
+        type: 'radio',
+        label: item.name,
+        value: item.code,
+        checked: item.code === this.translatee.currentLang
+      })
+    );
+
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.SELECT_LANGUAGE,
+      inputs: this.available_languages,
+      cssClass: 'language-alert',
+      buttons: [
+        {
+          text: this.featureService.translations.CANCEL,
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: this.featureService.translations.OK,
+          handler: (data) => {
+            if (data) {
+              this.loginService.setUserLanguage(data).then(() => { this.translatee.use(data) });
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+
   }
 
 }

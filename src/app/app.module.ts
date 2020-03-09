@@ -85,7 +85,7 @@ export function createTranslateLoader(http: HttpClient) {
     FileOpener,
     FileTransfer,
     Chooser,
-    //LanguageService,
+    LanguageService,
     //TranslateService,
     //FcmService,
     /*FcmService,*/

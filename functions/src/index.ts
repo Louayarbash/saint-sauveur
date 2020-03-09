@@ -62,7 +62,6 @@ exports.newSubscriberNotification = functions.firestore
     const db = admin.firestore()
     const devicesRef = db.collection('devices').where('userId', '==', userId)
 
-
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
 
@@ -127,9 +126,14 @@ exports.newRequestNotification = functions.firestore
     return admin.messaging().sendToDevice(tokens, payload).then(res => {
         console.log("Sent Successfully", res);
       })
-      .catch(err => {
-        console.log(err);
+      .catch(errr => {
+        console.log(errr);
       });
 }
 return;
+});
+exports.scheduledFunction = functions.pubsub.schedule('every 1 minutes').onRun((context) => {
+  
+  console.log('This will be run every 5 minutes!');
+  return null;
 });

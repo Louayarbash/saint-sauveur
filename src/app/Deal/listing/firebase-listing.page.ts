@@ -9,7 +9,7 @@ import { Observable, ReplaySubject, Subscription/*, merge*/ } from 'rxjs';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
-import { TestPage } from '../item/test/test.page';
+//import { TestPage } from '../item/test/test.page';
 FirebaseCreateItemModal
 
 import { DataStore, ShellModel } from '../../shell/data-store';
@@ -18,7 +18,8 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 //import { File } from '@ionic-native/file/ngx';
 //import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { LoginService } from '../../services/login/login.service';
-import { TranslateService } from '@ngx-translate/core';
+import { FeatureService } from '../../services/feature/feature.service'
+//import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -69,7 +70,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public modalController: ModalController,
     private route: ActivatedRoute,
     private loginService : LoginService,
-    public translate : TranslateService
+    private featureService : FeatureService
   ) { }
 
 
@@ -79,21 +80,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userLanguage = this.loginService.getUserLanguage();
-    console.log("1", this.userLanguage);
-    //this.getTranslations();
-    this.translate.use(this.userLanguage);
-    this.translate.onLangChange.subscribe(() => {
-      console.log("here",this.translate.currentLang);
-     this.getTranslations();
-     console.log("onLangChange",this.translations);
-   });
-    console.log("2", this.translate.currentLang);
-
-    console.log("3",this.translate);
-    console.log("4",this.translations);
-    //this.getTranslations();
-
     this.searchQuery = '';
 
     this.rangeForm = new FormGroup({
@@ -221,13 +207,5 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       query: this.searchQuery
     });
   } */
-  getTranslations() {
-    // get translations for this page to use in the Language Chooser Alert
-    this.translate.getTranslation(this.translate.currentLang)
-    .subscribe((translations) => {
-      this.translations = translations;
-      console.log("inside getTranslations",this.translations);
-    });
-  }
 
 }

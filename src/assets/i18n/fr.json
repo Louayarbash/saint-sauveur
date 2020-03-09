@@ -11,7 +11,14 @@
   "OK": "OK",
   "CANCEL": "Annuler",
   "SELECT_LANGUAGE": "Choisissez votre langue",
-  "Parking_requests": "Demande de stationnement",
-  "Request_details": "Détail de la demande",
-  "New_parking_request" : "Nouvelle demande de stationnement"
+  "ParkingRequests": "Demande de stationnement",
+  "RequestDetails": "Détail de la demande",
+  "NewParkingRequest" : "Nouvelle demande de stationnement",
+  "PleaseWait" : "Veuillez patienter...",
+  "PleaseConfirm" : "Veuillez confirmer",
+  "DealCancelationConfirmation" : "vous êtes sur annulation de cette deal?",
+  "ConfirmRequestDetails" : "Veuillez confirmer les details del la demande",
+  "RequestAddedSuccessfully" : "La demande est bien ajoutée",
+  "ConnectionProblem" : "Problème de connexion!",
+  "Category" : "Catégories"
 }

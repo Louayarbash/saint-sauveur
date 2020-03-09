@@ -11,7 +11,14 @@
   "OK": "OK",
   "CANCEL": "Cancel",
   "SELECT_LANGUAGE": "Select your language",
-  "Parking_requests": "Parking requests",
-  "Request_details": "Request details",
-  "New_parking_request" : "New parking request"
+  "ParkingRequests": "Parking requests",
+  "RequestDetails": "Request details",
+  "NewParkingRequest" : "New parking request",
+  "PleaseWait" : "Please wait...",
+  "PleaseConfirm" : "Please confirm",
+  "DealCancelationConfirmation" : "Are you sure you want to cancel this deal?",
+  "ConfirmRequestDetails" : "Please confirm the below request details:",
+  "RequestAddedSuccessfully" : "Request added successfully",
+  "ConnectionProblem" : "connection problem!",
+  "Categories" : "Categories"
 }

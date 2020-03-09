@@ -10,17 +10,10 @@ import { counterRangeValidator } from '../../../components/counter-input/counter
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 //import { Date } from 'core-js';
 import { LoginService } from '../../../services/login/login.service';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { FeatureService } from '../../../services/feature/feature.service';
+//import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
 
-
-/* @NgModule({
-  imports: [
-    FirebaseListingPageModule,
- TranslateModule
-
-  ]
-}) */ 
 @Component({
   selector: 'app-firebase-create-item',
   templateUrl: './firebase-create-item.modal.html',
@@ -31,9 +24,7 @@ import { FirebaseListingPageModule } from "../../listing/firebase-listing.module
 })
 export class FirebaseCreateItemModal implements OnInit {
   loginID = this.loginService.getLoginID();
-  userLanguage;
-  translations; 
-  translateParams;
+  //translateParams;
   //isLoading = false;
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
@@ -53,28 +44,11 @@ export class FirebaseCreateItemModal implements OnInit {
     public firebaseService: FirebaseService,    
     private alertController: AlertController,
     private loginService : LoginService,
-    public translate : TranslateService
+    private featureService : FeatureService
   ) {
   }
 
   ngOnInit() {
-    this.userLanguage = this.loginService.getUserLanguage();
-    console.log("1", this.userLanguage);
-    //this.getTranslations();
-    this.translate.use(this.userLanguage);
-    this.translate.onLangChange.subscribe(() => {
-      console.log("here",this.translate.currentLang);
-     this.getTranslations();
-     console.log("onLangChange",this.translations);
-   });
-    console.log("2", this.translate.currentLang);
-
-    console.log("3",this.translate);
-    console.log("4",this.translations);
-    
-    //this.getTranslations();
-
-    
      this.initValues();
      // default image     
      this.createItemForm = new FormGroup({
@@ -226,21 +200,21 @@ export class FirebaseCreateItemModal implements OnInit {
       message = "New parking request on " + date+ " from " + dayjs(this.itemData.startDate).format("HH:mm") + " to " + endDate + " at " + dayjs(this.itemData.endDate).format("HH:mm");
     }    
     const alert = await this.alertController.create({
-      header: "Please confirm the below request details:",
+      header: this.featureService.translations.ConfirmRequestDetails,
       message: message,
       buttons: [
          {
           text: "OKAY",
           handler: ()=> {
-            const loading = this.firebaseService.presentLoadingWithOptions();
+            const loading = this.featureService.presentLoadingWithOptions(5000);
             this.firebaseService.createItem(this.itemData)
             .then(() => {
               this.dismissModal();
-              this.firebaseService.presentToast("Request added successfully",2000);
+              this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully,2000);
               loading.then(res=>res.dismiss());
             }).catch(err => {
               console.log(err)
-              this.firebaseService.presentToast("connection error!",2000);
+              this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
               loading.then(res=>res.dismiss());
             });              
           }
@@ -270,13 +244,6 @@ export class FirebaseCreateItemModal implements OnInit {
     })
     alert.present();
   } */
-  getTranslations() {
-    // get translations for this page to use in the Language Chooser Alert
-    this.translate.getTranslation(this.translate.currentLang)
-    .subscribe((translations) => {
-      this.translations = translations;
-      console.log("inside getTranslations",this.translations);
-    });
-  }
+
   }
   //END
