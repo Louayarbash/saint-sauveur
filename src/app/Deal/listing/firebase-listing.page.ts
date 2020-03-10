@@ -13,7 +13,6 @@ import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.mod
 FirebaseCreateItemModal
 
 import { DataStore, ShellModel } from '../../shell/data-store';
-//import { Toast } from '@ionic-native/toast/ngx';
 //import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 //import { File } from '@ionic-native/file/ngx';
 //import { FileOpener } from '@ionic-native/file-opener/ngx';
