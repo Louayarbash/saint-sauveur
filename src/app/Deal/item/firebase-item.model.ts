@@ -21,6 +21,10 @@ export class FirebaseItemModel extends ShellModel {
   note:string;
   createDate : string;
   count : string;
+  expiresIn:number = 60;
+  /*expiresAt:number = 1583904656000;*/
+
+
   constructor() {
     super();
   }

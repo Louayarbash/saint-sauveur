@@ -5,6 +5,9 @@ import functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 import admin = require('firebase-admin');
+
+const { CloudTasksClient } = require('@google-cloud/tasks');
+
 admin.initializeApp();
 
 // // Start writing Firebase Functions
@@ -13,6 +16,7 @@ admin.initializeApp();
 export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
  }); 
+
 
  // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
@@ -85,7 +89,7 @@ exports.newRequestNotification = functions.firestore
     .onCreate(async event => {
     console.log(event);
     const data = event.data();//.after.data();    
-    var id = event.id
+    let id = event.id
     if (data){
         //const id = data.id
         console.log("createdBy",data.createdBy);
@@ -132,8 +136,107 @@ exports.newRequestNotification = functions.firestore
 }
 return;
 });
-exports.scheduledFunction = functions.pubsub.schedule('every 1 minutes').onRun((context) => {
+/* exports.scheduledFunction = functions.pubsub.schedule('every 1 minutes').onRun((context) => {
   
   console.log('This will be run every 5 minutes!');
   return null;
-});
+}); */
+
+/******************8code for the time scheduling task************************/
+
+// Payload of JSON data to send to Cloud Tasks, will be received by the HTTP callback
+interface ExpirationTaskPayload {
+    docPath: string
+}
+
+// Description of document data that contains optional fields for expiration
+interface ExpiringDocumentData extends admin.firestore.DocumentData {
+    expiresIn?: number
+    expiresAt?: admin.firestore.Timestamp
+    expirationTask?: string
+}
+
+export const onCreatePost =
+functions.firestore.document('/deals-requests/{id}').onCreate(async snapshot => {
+    const data = snapshot.data()! as ExpiringDocumentData
+    const { expiresIn, expiresAt } = data
+
+    let expirationAtSeconds: number | undefined
+    if (expiresIn && expiresIn > 0) {
+        expirationAtSeconds = Date.now() / 1000 + expiresIn
+    }
+    else if (expiresAt) {
+        expirationAtSeconds = expiresAt.seconds
+    }
+
+    if (!expirationAtSeconds) {
+        // No expiration set on this document, nothing to do
+        return
+    }
+
+    // Get the project ID from the FIREBASE_CONFIG env var
+    const project = JSON.parse(process.env.FIREBASE_CONFIG!).projectId
+    const location = 'northamerica-northeast1'
+    const queue = 'queue-firebase'
+
+    const tasksClient = new CloudTasksClient()
+    const queuePath: string = tasksClient.queuePath(project, location, queue)
+
+    //const url = `https://${location}-${project}.cloudfunctions.net/firestoreTtlCallback`
+    const url = `https://us-central1-${project}.cloudfunctions.net/firestoreTtlCallback`
+    const docPath = snapshot.ref.path
+    const payload: ExpirationTaskPayload = { docPath }
+
+    const task = {
+        httpRequest: {
+            httpMethod: 'POST',
+            url,
+            body: Buffer.from(JSON.stringify(payload)).toString('base64'),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        },
+        scheduleTime: {
+            seconds: expirationAtSeconds
+        }
+    }
+
+    const [ response ] = await tasksClient.createTask({ parent: queuePath, task })
+
+    const expirationTask = response.name
+    const update: ExpiringDocumentData = { expirationTask }
+    await snapshot.ref.update(update)
+})
+
+
+export const firestoreTtlCallback = functions.https.onRequest(async (req, res) => {
+    const payload = req.body as ExpirationTaskPayload
+    try {
+        //res.send("Hello from Firebase!");
+        await admin.firestore().doc(payload.docPath).update({status: "started"});
+        res.send(200)
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).send(error)
+    }
+})
+
+/* 
+export const onUpdatePostCancelExpirationTask =
+functions.firestore.document('/deals-requests/{id}').onUpdate(async change => {
+    const before = change.before.data() as ExpiringDocumentData
+    const after = change.after.data() as ExpiringDocumentData
+
+    // Did the document lose its expiration?
+    const expirationTask = after.expirationTask
+    const removedExpiresAt = before.expiresAt && !after.expiresAt
+    const removedExpiresIn = before.expiresIn && !after.expiresIn
+    if (expirationTask && (removedExpiresAt || removedExpiresIn)) {
+        const tasksClient = new CloudTasksClient()
+        await tasksClient.deleteTask({ name: expirationTask })
+        await change.after.ref.update({
+            expirationTask: admin.firestore.FieldValue.delete()
+        })
+    }
+}) */
