@@ -282,21 +282,22 @@ functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
     }
     if (after.status == "accepted"){
         /* Cretate task to change status to not accepted */
-      let actionAtSeconds: number | undefined
       // Get the project ID from the FIREBASE_CONFIG env var
       const project = JSON.parse(process.env.FIREBASE_CONFIG!).projectId
       const location = 'northamerica-northeast1'
       //const location = 'us-central1'
       const queue = 'queue-firebase'
-  
+      const actionAtSecondsStarting : number | undefined = Date.now() / 1000 + 60
+      const actionAtSecondsEnded : number | undefined  = Date.now() / 1000 + 120
       
 
       const tasksClient = new CloudTasksClient()
       const queuePath: string = tasksClient.queuePath(project, location, queue)
   
       //const url = `https://${location}-${project}.cloudfunctions.net/changeRequestStatus`
-      const url1 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=ended`
-      const url2 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=started`
+      const url1 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=started`
+      const url2 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=ended`
+      
       const docPath = after.ref.path
       const payload: RequestTaskPayload = { docPath }
         
@@ -310,7 +311,7 @@ functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
               },
           },
           scheduleTime: {
-              seconds: actionAtSeconds
+              seconds: actionAtSecondsStarting//actionAtSeconds
           }
       }
       const task2 = {
@@ -323,7 +324,7 @@ functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
             },
         },
         scheduleTime: {
-            seconds: actionAtSeconds
+            seconds: actionAtSecondsEnded
         }
     }
 
