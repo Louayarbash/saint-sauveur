@@ -295,8 +295,8 @@ functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
       const queuePath: string = tasksClient.queuePath(project, location, queue)
   
       //const url = `https://${location}-${project}.cloudfunctions.net/changeRequestStatus`
-      const url1 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=started`
-      const url2 = `https://us-central1-${project}.cloudfunctions.net/changeRequest/status=ended`
+      const url1 = `https://us-central1-${project}.cloudfunctions.net/changeRequestStatus/status=started`
+      const url2 = `https://us-central1-${project}.cloudfunctions.net/changeRequestStatus/status=ended`
       
       const docPath = after.ref.path
       const payload: RequestTaskPayload = { docPath }
