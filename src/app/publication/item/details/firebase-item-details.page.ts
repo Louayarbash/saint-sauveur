@@ -27,7 +27,6 @@ export class FirebaseItemDetailsPage implements OnInit {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
-  AuthId:string;
   profileUrl: Observable<string | null>;
   sliderUrl: Observable<string | null>;
   photoSlider : any[] = [""];  
@@ -48,9 +47,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     public router: Router,
     private route: ActivatedRoute
   ) { 
-    this.AuthId = this.firebaseService.auth.getLoginID();
-     console.log("AuthId",this.AuthId) ;
-     //this.photoSlider = [""];
     }
 
   ngOnInit() {
@@ -103,7 +99,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     const ref = this.firebaseService.afstore.ref(picPath);
     return ref.getDownloadURL();
   }
-/*     getPics(imagesFullPath : string[]){
+/*  getPics(imagesFullPath : string[]){
     this.photoSlider = [""];
     for (let index = 0; index < imagesFullPath.length; index++) {
      this.firebaseService.afstore.ref(imagesFullPath[index]).getDownloadURL().toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );

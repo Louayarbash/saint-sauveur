@@ -13,7 +13,5 @@ export class FirebaseListingItemModel extends ShellModel {
   coverPhotoData :string;
   constructor() {
     super();
-
-    
   }
 }

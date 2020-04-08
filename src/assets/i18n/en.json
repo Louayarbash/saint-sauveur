@@ -13,6 +13,8 @@
   "SELECT_LANGUAGE": "Select your language",
   "ParkingRequests": "Parking requests",
   "RequestDetails": "Request details",
+  "NewRequests" : "New requests",
+  "MyRequests" : "My requests",
   "NewParkingRequest" : "New parking request",
   "PleaseWait" : "Please wait...",
   "PleaseConfirm" : "Please confirm",
@@ -20,5 +22,6 @@
   "ConfirmRequestDetails" : "Please confirm the below request details:",
   "RequestAddedSuccessfully" : "Request added successfully",
   "ConnectionProblem" : "connection problem!",
-  "Categories" : "Categories"
+  "Categories" : "Categories",
+  "NoDealsFound" : "No deals found."
 }

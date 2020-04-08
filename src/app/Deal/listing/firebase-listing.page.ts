@@ -37,16 +37,14 @@ import { FeatureService } from '../../services/feature/feature.service'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   /*for segment implementation*/
-  segmentValue = 'allrequests';
+  segmentValue = 'newRequests';
   //friendsList: Array<any>;
   newRequestsList: Array<any>;
   myRequestsList: Array<any>;
   searchQuery = '';
   showFilters = false;
   /* end */
-  userLanguage;
-  translations; 
-  rangeForm: FormGroup;
+  // rangeForm: FormGroup;
   //searchQuery: string;
   showAgeFilter = false;
   CoverPic:string;
@@ -70,20 +68,18 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private loginService : LoginService,
     private featureService : FeatureService
-  ) { }
-
-
-
+  ) {
+  }
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
   }
-
-  ngOnInit() {
+   ngOnInit() {
     this.searchQuery = '';
+    
 
-    this.rangeForm = new FormGroup({
+/*     this.rangeForm = new FormGroup({
       dual: new FormControl({lower: 1, upper: 100})
-    });
+    }); */
 
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
@@ -139,59 +135,46 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         .subscribe(
          (state) => {
             this.items = state;
-
-            this.newRequestsList = this.items;
             if(!this.items.isShell){
-              this.myRequestsList = this.filterList(this.items, "pending");
+              console.log("uid",this.loginService.uid);
+              this.myRequestsList = this.items.filter(item => item.createdBy === this.loginService.uid);
+              this.newRequestsList = this.items.filter(item => item.status === "new" && item.createdBy !== this.loginService.uid);
             }
-            else this.myRequestsList = this.items;
-            
-            //this.myRequestsList = this.newRequestsList.filter(item => item.status.toLowerCase().includes("pending"));//this.items;
-
-            
+            else {
+              this.myRequestsList = this.items;
+              this.newRequestsList = this.items;
+            }
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
         );
+/*           (error) => console.log(error),
+          () => {
+            return console.log('stateSubscription completed');
+          }
+        ); */
       },
       (error) => console.log(error)
     );
   }
-  segmentChanged(ev): void {
+  segmentChanged(ev:any) {
     console.log(ev.detail.value);
     this.segmentValue = ev.detail.value;
-
     // Check if there's any filter and apply it
-    this.searchList();
+    //this.searchList();
   }
-  searchList(): void {
+/*   searchList(): void {
     const query = (this.searchQuery && this.searchQuery !== null) ? this.searchQuery : '';
 
-    if (this.segmentValue === 'allrequests') {
-      this.newRequestsList = this.items;//this.filterList(this.items, query);
-    } else if (this.segmentValue === 'myrequests') {
-      this.myRequestsList = this.filterList(this.items, "pending");
+    if (this.segmentValue === 'myRequests') {
+      this.newRequestsList = this.items.filter(item => item.createdBy === this.loginService.getLoginID());
+    } else if (this.segmentValue === 'newRequests') {
+      this.newRequestsList = this.items.filter(item => item.status === "new");
   }
-      /* else if (this.segmentValue === 'following') {
-      this.followingList = this.filterList(this.data.following, query);
-    } */
-}
-
-
-  filterList(list, query): Array<any> {
-
-    //return list.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
-    return list.filter(item => item.status.toLowerCase().includes(query.toLowerCase()));
-    //return list.filter(item =>  item.status == query
-/*       if(item.status)
-      { 
-        console.log("herereeee");
-        item.status == query;
-      } */
-      
-    
-    //);
-  }
+} */
+/*   filterList(list : any[], query): Array<any> {
+    return list.filter(item => item.createdBy === this.loginService.getLoginID());
+  } */
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal
@@ -206,5 +189,4 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       query: this.searchQuery
     });
   } */
-
 }

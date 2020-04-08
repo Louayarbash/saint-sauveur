@@ -60,7 +60,7 @@ export class FirebaseService {
   public searchUsersByAge(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
     // we save the dateOfBirth in our DB so we need to calc the min and max dates valid for this query
     const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
-    const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
+    const maxDate = (dayjs(Date.now()).subtract(lower, 'year')).unix();
 
     const listingCollection = this.afs.collection<FirebaseListingItemModel>('users', ref =>
       ref.orderBy('birthdate').startAt(minDate).endAt(maxDate));

@@ -15,7 +15,6 @@ import { LoginService } from "../services/login/login.service"
 import { AlertController,ToastController,LoadingController } from '@ionic/angular';
 import { storage } from "firebase/app";
 import * as firebase from 'firebase';
-import { }from 'firebase';
 import { async } from '@angular/core/testing';
 import { debug } from 'console';
 import { CompileShallowModuleMetadata } from '@angular/compiler';
@@ -39,7 +38,7 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
-    public auth : LoginService, 
+    //public loginService : LoginService, 
     private alertCtrl : AlertController, 
     private toastController : ToastController,
     private loadingController : LoadingController
@@ -244,30 +243,35 @@ export class FirebaseService {
   */
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel,postImages : FileUpload[])/* : Promise<DocumentReference>*/{    
-    this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
-      console.log("pub id :",res.id);
-      let imagesFullPath : any[] = [];
-       for (var i = 0; i < postImages.length; i++) {
-        await this.uploadToStorage(postImages[i].fileData,res.id).then(res => {
-          console.log(1,postImages[i].fileName);
-          
-          console.log(2,res.metadata.fullPath);
+    public async createItem(itemData : FirebaseItemModel,postPDFs : FileUpload[])/* : Promise<DocumentReference>*/{    
+      try {
+        const res = await this.afs.collection(this.tableName).add({ ...itemData });
+        console.log("pub id :", res.id);
+        let PDFsFullPath: any[] = [];
+        for (var i = 0; i < postPDFs.length; i++) {
+          try {
+            let uploaded = await this.uploadToStorage(postPDFs[i].fileData, res.id);
+            console.log("createItem: state", uploaded.state);
+            console.log("createItem: fileName", postPDFs[i].fileName);
+            console.log("createItem: fullPath", uploaded.metadata.fullPath);
+            if( uploaded.state === "success"){
+              PDFsFullPath.push({ fileName: postPDFs[i].fileName, filePath: uploaded.metadata.fullPath });
+          }
+          }
+          catch (err) {
+            console.log("Error uploading pdf: ", err);
+          }
+        }
+        //itemData.fileFullPath = imagesFullPath;
+        return this.afs.collection(this.tableName).doc(res.id).update({ fileFullPath : PDFsFullPath });
+      } catch (err) {
+        console.log("Error creating itemData: ", err);
+      }
 
-         imagesFullPath.push({ fileName: postImages[i].fileName, filePath : res.metadata.fullPath});
-
-      } 
-      
-      ).catch(err=> {console.log("Error uploading photo: ",err)}); 
-  } 
-  itemData.fileFullPath = imagesFullPath;
-  return this.afs.collection(this.tableName).doc(res.id).set({...itemData});
-    });
   } 
    private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
         console.log("Uploaded",itemDataPhoto);
-        let newName = `${new Date().getTime()}.pdf`;
-        console.log("kess eiri 3arssa");        
+        let newName = `${new Date().getTime()}.pdf`;     
         //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
         return this.afstore.ref(this.storagePath+ `${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'application/pdf' });
    }
@@ -509,7 +513,7 @@ export class FirebaseService {
     //ref.getDownloadURL().subscribe(DownloadURL=>{console.log("DownloadURL:",DownloadURL)});
     //return this.photoSlider;
   }
-  async presentLoadingWithOptions() {
+/*   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
       spinner: "bubbles",
       duration: 5000,
@@ -526,7 +530,7 @@ export class FirebaseService {
       duration : 500
     });
     await toast.present();  
-  }
+  } */
 
 
   

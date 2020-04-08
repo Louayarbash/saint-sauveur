@@ -13,6 +13,13 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
+//import { AngularFireDatabase } from '@angular/fire/database';
+//import { Timestamp } from '@google-cloud/firestore';
+//import { FieldValue } from '@google-cloud/firestore'; FieldValue.serverTimestamp()
+import  * as firebase from 'firebase';
+//import  * as admin from 'firebase-admin';
+
+
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -44,8 +51,12 @@ export class FirebaseCreateItemModal implements OnInit {
     public firebaseService: FirebaseService,    
     private alertController: AlertController,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService//,
+    //private afs : AngularFireDatabase
   ) {
+  
+    console.log("inside create deal")
+    
   }
 
   ngOnInit() {
@@ -127,7 +138,9 @@ export class FirebaseCreateItemModal implements OnInit {
   initValues(){
   
   console.log("resetDate");
-  this.today = new Date().toISOString();
+  //this.today = new Date(Timestamp.now().seconds).toISOString();//new Date().toISOString();
+  this.today = firebase.firestore.Timestamp.now().toDate().toISOString();//new Date().toISOString();
+  //this.today = new Date(Timestamp.now().seconds).toISOString();//new Date().toISOString();
   this.minDate = this.today;
   let maxDate = new Date();
   console.log(maxDate.getFullYear());
@@ -158,12 +171,17 @@ export class FirebaseCreateItemModal implements OnInit {
     //const loading = this.firebaseService.presentLoadingWithOptions();
 
     this.itemData.date = this.createItemForm.get('date').value;//this.createItemForm.value.date;
-    this.itemData.startDate = this.createItemForm.get('startDate').value;//this.createItemForm.value.startDate;
-    this.itemData.endDate = this.createItemForm.get('endDate').value;//;this.createItemForm.get('endDate').value;//this.createItemForm.value.endDate;
+    this.itemData.startDate = this.createItemForm.get('startDate').value;
+    this.itemData.endDate = this.createItemForm.get('endDate').value;
+    this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();//this.createItemForm.get('startDate').value;//this.createItemForm.value.startDate;
+    this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();//this.createItemForm.get('endDate').value;//this.createItemForm.value.endDate;
+    this.itemData.durationSeconds = this.itemData.endDateTS - this.itemData.startDateTS;
+    this.itemData.expiresIn = this.itemData.startDateTS - dayjs(Date.now()).unix();
     this.itemData.note = this.createItemForm.value.note;
     this.itemData.count = this.createItemForm.value.count;
     this.itemData.createDate = new Date().toISOString();
     this.itemData.createdBy = this.loginService.getLoginID();
+    
     this.confirm();
     //dayjs(this.createUserForm.value.birthdate).unix(); // save it in timestamp
 

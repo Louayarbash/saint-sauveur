@@ -14,11 +14,14 @@
   "ParkingRequests": "Demande de stationnement",
   "RequestDetails": "Détail de la demande",
   "NewParkingRequest" : "Nouvelle demande de stationnement",
+  "NewRequests" : "Nouvelles demandes",
+  "MyRequests" : "Mes demandes",
   "PleaseWait" : "Veuillez patienter...",
   "PleaseConfirm" : "Veuillez confirmer",
   "DealCancelationConfirmation" : "vous êtes sur annulation de cette deal?",
   "ConfirmRequestDetails" : "Veuillez confirmer les details del la demande",
   "RequestAddedSuccessfully" : "La demande est bien ajoutée",
   "ConnectionProblem" : "Problème de connexion!",
-  "Category" : "Catégories"
+  "Category" : "Catégories",
+  "NoDealsFound" : "Pas de nouvelles demandes."
 }

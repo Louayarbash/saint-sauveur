@@ -11,12 +11,14 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
 import { SelectItemImageModal } from '../select-image/select-item-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-import { AngularFireAuth } from "@angular/fire/auth";
+//import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import {PhotosArray} from '../../../type'
+import { PhotosArray } from '../../../type'
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { File } from "@ionic-native/file/ngx";
+import { LoginService } from "../../../services/login/login.service"
+import { FeatureService } from "../../../services/feature/feature.service"
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -51,7 +53,9 @@ export class FirebaseUpdateItemModal implements OnInit {
     private _angularFireStore :AngularFirestore,
     private _file: File,
     private ImagePicker : ImagePicker,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private loginService : LoginService,
+    private featureService : FeatureService
   ) { 
     
     //this.myStoredProfileImage = _angularFireSrore.collection("users").doc(_angularFireAuth.auth.currentUser.uid).valueChanges();
@@ -69,7 +73,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     if(this.item.fileFullPath.length !==0){
       
       //this.getPics(this.item.imagesFullPath);
-      const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} ); 
+      const loading = this.featureService.presentLoadingWithOptions(2000); 
       this.postImages = [{isCover:false,photo:"",photoStoragePath:""}];
       this.item.fileFullPath.map((res,index)=>{
         this.firebaseService.afstore.ref(res).getDownloadURL().toPromise().then(DownloadURL => { 
@@ -232,7 +236,7 @@ export class FirebaseUpdateItemModal implements OnInit {
           text: "Camera",
           handler: ()=> {
             this._camera.getPicture(cameraOptions).then((imageData)=> {
-              const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} );
+              const loading = this.featureService.presentLoadingWithOptions(2000);
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
               //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
               //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
@@ -279,7 +283,7 @@ export class FirebaseUpdateItemModal implements OnInit {
             //this.ImagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
             console.log("not 1");
              this.ImagePicker.getPictures(optionsPicker).then( /*async*/ (results : string[]) => { 
-              const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} );         
+              const loading = this.featureService.presentLoadingWithOptions(2000);         
                for (var i = 0; i < results.length; i++) {
                   let filename = results[i].substring(results[i].lastIndexOf('/')+1);
                   let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
@@ -304,7 +308,7 @@ export class FirebaseUpdateItemModal implements OnInit {
             {
               console.log("It is 1");
               this._camera.getPicture(galleryOptions).then((imageData)=> {
-                const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} );
+                const loading = this.featureService.presentLoadingWithOptions(2000);
                 const image = "data:image/jpeg;base64," + imageData;
                 let photos : PhotosArray = {isCover:false,photo:"",photoStoragePath:""};
                 photos.isCover = false;
@@ -380,17 +384,17 @@ export class FirebaseUpdateItemModal implements OnInit {
   deletePhoto(index : number){
     console.log("postImages",this.postImages);
     console.log("index:",index);
-        const loading = this.firebaseService.presentLoadingWithOptions().then( res => {return res;} );
+        const loading = this.featureService.presentLoadingWithOptions(2000);
          if(this.postImages[index].photoStoragePath !== "") {         
+         
          this.firebaseService.deleteFromStorage(this.postImages[index].photoStoragePath).then(res=> {
          const deletedItem = this.item.fileFullPath.splice(index,1);
 
          this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
-          this.postImages.splice(index,1); 
-          this.firebaseService.presentToast("Photo removed from storage and DB");}
-          ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
-          }
-          ).catch(err => console.log("Error in deletePhoto DB: ",err));
+         this.postImages.splice(index,1); 
+         this.featureService.presentToast("Photo removed from storage and DB",2000);
+        }).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
+        }).catch(err => console.log("Error in deletePhoto DB: ",err));
         console.log("postImages after delete",this.postImages);
       }
       else{
@@ -417,7 +421,7 @@ makeCover(index : number){
     }
   });
   this.changeRef.detectChanges();
-  this.firebaseService.presentToast("Photo successfully used as cover photo");
+  this.featureService.presentToast("Photo successfully used as cover photo",2000);
   
 }
   //END

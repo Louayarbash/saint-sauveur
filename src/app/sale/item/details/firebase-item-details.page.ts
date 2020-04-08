@@ -48,9 +48,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     public router: Router,
     private route: ActivatedRoute
   ) { 
-    this.AuthId = this.firebaseService.auth.getLoginID();
-     console.log("AuthId",this.AuthId) ;
-     //this.photoSlider = [""];
     }
 
   ngOnInit() {

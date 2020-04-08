@@ -73,6 +73,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     }
 
   ngOnInit() {
+    console.log("Deals details inside OnInit",this.loginService.building);
     this.FCM.getToken();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];

@@ -44,6 +44,7 @@ import {  firestore } from 'firebase-admin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+//import { Timestamp } from '@google-cloud/firestore';
 //import { AngularFireMessagingModule } from '@angular/fire/messaging';											  
 
 export function createTranslateLoader(http: HttpClient) {
@@ -58,6 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
 	  AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    //Timestamp,
     //AngularFireMessagingModule,	 
     ReactiveFormsModule,
     AppRoutingModule,

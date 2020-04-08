@@ -7,7 +7,7 @@ import * as dayjs from 'dayjs';
 export class DateService {
 
   constructor() { 
-
+console.log("date constructor")
   }
   timestampToISOString(timestamp : number){
   var date = new Date(timestamp*1000);

@@ -9,40 +9,59 @@ import { DocumentSnapshot } from '@google-cloud/firestore';
   providedIn: 'root'
 })
 export class LoginService {
-public _uid : string;
+uid : string;
+building : string;
+languge : string;
   constructor(
-    private _angularFireAuth : AngularFireAuth,
+    private afAuth : AngularFireAuth,
     private afs: AngularFirestore
     ) {
-    //this._uid = _angularFireAuth.auth.currentUser.uid;
-    console.log(this._uid);
+    //this.login({ email: "louay.arbash@gmail.com", password: "Welcome123"}).then( res => { console.log("Welcome123", res) } );
+   //let promise1 = this.getUserInfo();
    }
   login(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
-      const authenticated = this._angularFireAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password);
-      this._uid = this._angularFireAuth.auth.currentUser.uid;
-      console.log(this._uid);
+      const authenticated = this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(res=> { 
+        console.log("login function inside then",res.user.uid) 
+        return res.user.uid; 
+        
+      });
+      console.log("login function",this.uid);
+      //this._uid = this._angularFireAuth.auth.currentUser.uid;
+      
       return authenticated;
       
   }
   signup(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
-      const created = this._angularFireAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password);
-      this._uid = this._angularFireAuth.auth.currentUser.uid;
-      console.log(this._uid);
+      const created = this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password);
+      this.uid = this.afAuth.auth.currentUser.uid;
+      console.log(this.uid);
       return created;
       
   }
-  getLoginID() : string{
-    //console.log("get login id" , { aaa: this._angularFireAuth.auth.currentUser.uid, bbb  : this._uid});
-    return "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this._angularFireAuth.auth.currentUser.uid;
+  getLoginID(){
+    if(!this.uid){
+      this.uid = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this.afAuth.auth.currentUser.uid;
+    }
+    return "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this.uid
   }
-  getUserInfo(){
-    return this.afs.collection("users").doc(this.getLoginID()).snapshotChanges().toPromise();
+  async getUserInfo(){
+      console.log("inside getLoginInfo 111")
+      try {
+      const res = await this.afs.firestore.collection("users").doc(this.uid).get();
+      this.building = res.data().buildingId;
+      this.languge = res.data().language;
+      console.log("inside getLoginInfo 222", this.building);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
+  
   getUserLanguage(){
     //return "fr";
-    return this.afs.firestore.collection("users").doc(this.getLoginID()).get();
+  return this.afs.firestore.collection("users").doc(this.getLoginID()).get();
   }
   setUserLanguage(language){
     return this.afs.collection("users").doc(this.getLoginID()).update({language : language});

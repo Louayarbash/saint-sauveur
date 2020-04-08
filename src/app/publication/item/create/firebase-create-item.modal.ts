@@ -1,19 +1,20 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController,AlertController,ToastController,LoadingController } from '@ionic/angular';
+import { Component, OnInit/*,ChangeDetectorRef*/ } from '@angular/core';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
-import { AngularFirestore } from '@angular/fire/firestore';
+//import { AngularFirestore } from '@angular/fire/firestore';
 import { Date } from 'core-js';
 
-import { File } from "@ionic-native/file/ngx";
+//import { File } from "@ionic-native/file/ngx";
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileUpload } from '../../../type'
-
-
+import { LoginService } from "../../../services/login/login.service"
+import { FeatureService } from "../../../services/feature/feature.service"
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 
 @Component({
@@ -34,8 +35,11 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
-    private changeRef: ChangeDetectorRef,
-    private chooser: Chooser
+    //private changeRef: ChangeDetectorRef,
+    private chooser: Chooser,
+    private loginService : LoginService,
+    private featureService : FeatureService,
+    private fileOpener : FileOpener
   ) { }
 
   ngOnInit() {
@@ -74,10 +78,11 @@ export class FirebaseCreateItemModal implements OnInit {
     if(extention == ".pdf"){    
     fileUpload.fileData = file.dataURI;
     fileUpload.fileName = file.name.slice(0,file.name.length-4);
+    fileUpload.filePath = file.uri;
     this.files.push(fileUpload);        
     }
     else{
-      this.firebaseService.presentToast("Only pdf is allowed");
+      this.featureService.presentToast("Only pdf is allowed",2000);
     }
     console.log(this.files);
     console.log("this.files",this.files.length);
@@ -89,7 +94,7 @@ export class FirebaseCreateItemModal implements OnInit {
     btnChange.disabled = false;
     btnConfirm.disabled = true;
     this.files[index].fileName = txtName.value;
-    this.firebaseService.presentToast("File name changed");
+    this.featureService.presentToast("File name changed",2000);
     console.log("files after delete",this.files);
 /*      this.files.forEach( (item, index) => {
       if(item === file) {
@@ -113,7 +118,7 @@ export class FirebaseCreateItemModal implements OnInit {
     console.log("files",this.files);
     console.log("doc",index);
     this.files.splice(index,1);
-    this.firebaseService.presentToast("File removed");
+    this.featureService.presentToast("File removed",2000);
      /* this.files.forEach( (item, index) => {
       if(item === file) {
          this.files.splice(index,1);
@@ -129,18 +134,32 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.category = this.createItemForm.value.category;
     this.itemData.createDate = Date.now().toString();
-    this.itemData.createdById = this.firebaseService.auth.getLoginID();
-    const loading = this.firebaseService.presentLoadingWithOptions();
+    this.itemData.createdById = this.loginService.getLoginID();
+    const loading = this.featureService.presentLoadingWithOptions(2000);
     this.firebaseService.createItem(this.itemData,this.files)
-    .then(() => {
+    .then(res => {
+      console.log("createItem then: ",res)
       this.dismissModal();
-      this.firebaseService.presentToast("post added successfully");
+      this.featureService.presentToast("post added successfully",2000);
       loading.then(res=>res.dismiss());  
     });     
   }
   async dismissModal() {
     await this.modalController.dismiss();
    }
+   openFile(i : number){
+     console.log("PDFs: ",this.files);
+     let url = this.files[i].filePath;
+    this.fileOpener.open(url,'application/pdf')
+    .then(() => console.log('File is opened'))
+    .catch(e => console.log('Error opening file', e));
+   }
+   openFile1(i : number){
+    console.log("PDFs: ",this.files);
+    let url = this.files[i].filePath;
+   this.fileOpener.open(url,'application/pdf')
+   .then(() => console.log('File is opened'))
+   .catch(e => console.log('Error opening file', e));
+  }
   //END
-
 }

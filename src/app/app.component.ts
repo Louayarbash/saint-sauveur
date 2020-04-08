@@ -12,11 +12,13 @@ import { tap } from 'rxjs/operators';
 
 //import { AngularFirestore } from '@angular/fire/firestore';
 import { FcmService } from '../app/services/fcm/fcm.service';
-import { Router } from '@angular/router';
-import { FCM } from '@ionic-native/fcm/ngx';
+//import { Router } from '@angular/router';
+//import { FCM } from '@ionic-native/fcm/ngx';
 import { LanguageService } from './language/language.service';
 import { LoginService } from './services/login/login.service';
 import { FeatureService } from './services/feature/feature.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+
 
 @Component({
   selector: 'app-root',
@@ -90,14 +92,15 @@ export class AppComponent {
     private statusBar: StatusBar,
     //private oneSignal : OneSignal,
     private alertController :AlertController,
-    private toastCtrl : ToastController,
+    //private toastCtrl : ToastController,
     private fcmService : FcmService,
-    private router :Router,
+    //private router :Router,
     //private ngZone : NgZone,
-    private fcm : FCM,
+    //private fcm : FCM,
     public languageService : LanguageService,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    private afs : AngularFirestore
     ) {
 
     this.initializeApp();
@@ -114,8 +117,10 @@ export class AppComponent {
 
 ); */
 }
-  async initializeApp() {
+   async initializeApp() {
+    
     this.platform.ready().then(() => {
+
       this.setLanguage();
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
@@ -190,20 +195,22 @@ export class AppComponent {
     // this language will be used as a fallback when a translation isn't found in the current language
 
     //this.translate.setDefaultLang('en');
-    let currentLanguage : string;
+    let currentLanguage,building : string;
     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    await this.loginService.getUserLanguage().then( res => { currentLanguage = res.data().language} );
+    await this.loginService.getUserLanguage().then( res => { 
+      currentLanguage = res.data().language;
+    } );
     this.translatee.setDefaultLang(currentLanguage);
     this.translatee.use(currentLanguage);
     console.log(currentLanguage);
-    console.log("current lang22",this.translatee.currentLang);
+    console.log("current lang1",this.translatee.currentLang);
     // this is to determine the text direction depending on the selected language
     // for the purpose of this example we determine that only arabic and hebrew are RTL.
     // this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     //   this.textDir = (event.lang === 'ar' || event.lang === 'iw') ? 'rtl' : 'ltr';
     // });
     //this.getTranslations();
-    this.loginService.getUserInfo().then( a=> { return console.log("Louay from app.component111", a) } ).catch(err=>console.log(err));
+    //this.loginService.getUserInfo().then( a=> { return console.log("Louay from app.component111", a) } ).catch(err=>console.log(err));
     this.translatee.onLangChange.subscribe(() => {
       console.log("Louay from app.component222")
       this.featureService.getTranslations();

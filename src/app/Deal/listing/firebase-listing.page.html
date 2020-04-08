@@ -11,26 +11,26 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
-<ion-content class="firebase-listing-content">
-  <ion-segment value="allrequests" class="user-friends-segment" (ionChange)="segmentChanged($event)">
-    <!-- <ion-segment value="friends" class="user-friends-segment" mode="md" (ionChange)="segmentChanged($event)"> -->
-      <ion-segment-button value="allrequests">
-        <ion-label>New requests</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="myrequests">
-        <ion-label>My requests</ion-label>
-      </ion-segment-button>
-<!--       <ion-segment-button value="Others">
-        <ion-label>Others</ion-label>
-      </ion-segment-button> -->
-    </ion-segment>
-
-    <section [hidden]="segmentValue !== 'allrequests'">
-      <ion-list class="items-list friends-list" *ngIf="items?.length > 0">
+  </ion-header>
+  <ion-toolbar>
+    <ion-segment value="newRequests"  (ionChange)="segmentChanged($event)">
+      <!-- <ion-segment value="friends" class="user-friends-segment" mode="md" (ionChange)="segmentChanged($event)"> -->
+        <ion-segment-button value="newRequests">
+          <ion-label>{{ 'NewRequests' | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="myRequests">
+          <ion-label>{{ 'MyRequests' | translate }}</ion-label>
+        </ion-segment-button>
+    <!--       <ion-segment-button value="Others">
+          <ion-label>Others</ion-label>
+        </ion-segment-button> -->
+      </ion-segment>
+    </ion-toolbar>
+  <ion-content class="firebase-listing-content">
+    <section [hidden]="segmentValue !== 'newRequests'">
+      <ion-list class="items-list" *ngIf="newRequestsList?.length > 0">
         <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
-         <ion-item class="list-item friend-item" *ngFor="let item of newRequestsList" [routerLink]="['/deal/details', item.id]">
+         <ion-item class="list-item" *ngFor="let item of newRequestsList" [routerLink]="['/deal/details', item.id]">
          <ion-row class="user-row">
            <ion-col class="user-data-wrapper">
              <div class="user-info">
@@ -42,8 +42,8 @@
          </ion-row>
        </ion-item>
      </ion-list>
-     <h3 *ngIf="items?.length == 0" class="empty-list-message">
-       No deals found.
+     <h3 *ngIf="newRequestsList?.length == 0" class="empty-list-message">
+       {{ 'NoDealsFound' | translate }}
      </h3>
 <!--       <ion-list class="friends-list" *ngIf="friendsList.length > 0">
         <ion-item class="friend-item" *ngFor="let friend of friendsList">
@@ -55,8 +55,8 @@
       </ng-container> -->
     </section>
   
-    <section [hidden]="segmentValue !== 'myrequests'">
-      <ion-list class="items-list" *ngIf="items?.length > 0">
+    <section [hidden]="segmentValue !== 'myRequests'">
+      <ion-list class="items-list" *ngIf="myRequestsList?.length > 0">
         <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
          <ion-item class="list-item" *ngFor="let item of myRequestsList" [routerLink]="['/deal/details', item.id]">
          <ion-row class="user-row">
@@ -71,8 +71,8 @@
          </ion-row>
        </ion-item>
      </ion-list>
-     <h3 *ngIf="items?.length == 0" class="empty-list-message">
-       No deals found.
+     <h3 *ngIf="myRequestsList?.length == 0" class="empty-list-message">
+      {{ 'NoDealsFound' | translate }}
      </h3>
 <!--       <ion-list class="friends-list" *ngIf="followersList.length > 0">
         <ion-item class="friend-item" *ngFor="let friend of followersList">
@@ -97,7 +97,7 @@
         </ion-col>
  
       </ion-row>
-    </ion-item>
+    </ion-item>s
   </ion-list>
   <h3 *ngIf="items?.length == 0" class="empty-list-message">
     No deals found.

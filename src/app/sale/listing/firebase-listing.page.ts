@@ -16,8 +16,6 @@ import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-vi
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 
-
-
 @Component({
   selector: 'app-firebase-listing',
   templateUrl: './firebase-listing.page.html',

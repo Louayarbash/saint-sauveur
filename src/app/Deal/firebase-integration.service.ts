@@ -12,17 +12,17 @@ import { FirebaseItemModel } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { LoginService } from "../services/login/login.service"
 //import { LoginCredential } from '../type';
-import { AlertController } from '@ionic/angular';
+//import { AlertController } from '@ionic/angular';
 //import { storage } from "firebase/app";
 //import * as firebase from 'firebase';
-import { async } from '@angular/core/testing';
-import { debug } from 'console';
-import { DateService } from '../services/date/date.service';
+//import { async } from '@angular/core/testing';
+//import { debug } from 'console';
+//import { DateService } from '../services/date/date.service';
 import { FeatureService } from '../services/feature/feature.service'; 
 
 import { Router } from '@angular/router';
 
-import { firestore} from "firebase-admin";
+//import { firestore} from "firebase-admin";
 
 //import { CompileShallowModuleMetadata } from '@angular/compiler';
 //import { OneSignal, OSNotification } from "@ionic-native/onesignal/ngx";
@@ -30,6 +30,7 @@ import { firestore} from "firebase-admin";
 @Injectable()
 export class FirebaseService {
   // Listing Page
+  building : string;
   private tableName = "deals-requests";
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
@@ -46,18 +47,44 @@ export class FirebaseService {
     private featueService : FeatureService,
     private router : Router    
     )  {
+
     }
 
   /*
     Firebase User Listing Page
   */
-  public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
+ /*     let citiesRef = this.afs.firestore.collection(this.tableName);
+    let query = citiesRef.where('status', '==', 'new').get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }  
     
-    //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName).valueChanges({  idField: 'id' })
-        .pipe(
-       map(actions => actions.map(item => {
-        const listingDetails = "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");
+        snapshot.forEach(doc => {
+          console.log(doc.id, '111=>', doc.data());
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+      
+      let citiesRef1 = this.afs.firestore.collection(this.tableName);
+      let query1 = citiesRef1.where('status', '==', 'new').onSnapshot(querySnapshot => {
+        console.log(`Received query snapshot of size ${querySnapshot.size}`);
+        querySnapshot.forEach(doc => {
+          console.log(doc.id, '222=>', doc.data());
+        });
+      }, err => {
+        console.log(`Encountered error: ${err}`);
+      }); */
+      
+  public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
+    //this.loginService.getUserInfo();
+    console.log("building inside deal service",this.loginService.building);
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.building)).valueChanges({  idField: 'id' })
+      .pipe(map(actions => actions.map(item => { 
+        const listingDetails = item.id + "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");
         //const listingDetails = "New parking request on " + this.dateService.timestampToString(item.date,"DD, MMM, YYYY") + " from " + this.dateService.getTime(item.startTime) + " to " + this.dateService.getTime(item.endTime);
           //const age = this.calcUserAge(post.createDate);
           // const CoverPic = this.getProfilePic(post.photo);
@@ -80,14 +107,12 @@ export class FirebaseService {
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel()
       ];
-
       this.listingDataStore = new DataStore(shellModel);
       // Trigger the loading mechanism (with shell) in the dataStore
       this.listingDataStore.load(dataSource);
     }
     return this.listingDataStore;
   }
-
   // Filter users by age
 /*   public searchUsersByAge(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
     // we save the dateOfBirth in our DB so we need to calc the min and max dates valid for this query

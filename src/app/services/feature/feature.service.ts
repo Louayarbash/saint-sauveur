@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController,LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { LoginService } from '../../services/login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,28 +13,10 @@ export class FeatureService {
   constructor(    
     private toastController : ToastController,
     private loadingController : LoadingController,
-    private translateee : TranslateService,
-    private loginService : LoginService
+    private translateee : TranslateService
+    //private loginService : LoginService
     ) {
-/*     this.userLanguage = this.loginService.getUserLanguage();
-    console.log("1servicdes", this.userLanguage);
-    //this.getTranslations();
-    //this.translate.use(this.userLanguage);
-    this.translate.onLangChange.subscribe(() => {
-    console.log("here",this.translate.currentLang);
-    this.getTranslations();
-    console.log("onLangChange",this.translations);
-   }); 
-
-    console.log("2",this.translate.currentLang);
-    console.log("3",this.translate);
-    console.log("4",this.translations); */
-    //this.getTranslations(); 
-/*     this.translate.get('RequestAddedSuccessfully', {value: 'worldssss'}).subscribe((res: string) => {
-      console.log('hello world',res);
-      //=> 'hello world'
-  }); */
-
+    console.log("constructor FeatureService", this.userLanguage);
     }
 
 async presentLoadingWithOptions(duration) {
@@ -64,5 +45,32 @@ getTranslations() {
     this.translations = translations;
   });
 } 
+/* async DownloadAndOpenPDF(item: FirebaseListingItemModel ){
+  const options: DocumentViewerOptions = {
+    title: 'My PDF'
+  }
+  let filePath : string;
+  await this.firebaseService.afstore.ref(item.fileFullPath[0].filePath).getDownloadURL()
+  .toPromise()
+  .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
+  console.log("filePath",filePath);
+  //this.document.viewDocument(filePath, 'application/pdf', options);
 
+ //let fakeName = Date.now();
+ //this.file.copyFile(filePath,item.fileFullPath[0].fileName+".pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
+ //this.fileOpener.open(result.nativeURL,'application/pdf');
+}); 
+const fileTransfer = this.transfer.create();
+fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entry) => {
+  console.log('download complete: ' + entry.toURL());
+  let url = entry.toURL();
+  //this.document.viewDocument(url, 'application/pdf', {});
+  this.fileOpener.open(url,'application/pdf');
+}, (error) => {
+  // handle error
+  console.log('error: ' + error);
+
+});
+
+} */
 }

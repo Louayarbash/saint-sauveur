@@ -10,7 +10,7 @@ import { FirebaseItemModel, FirebaseSkillModel, FirebaseCombinedItemModel,Fireba
 import { ItemImageModel } from './item/select-image/item-image.model';
 
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { LoginService } from "../services/login/login.service"
+//import { LoginService } from "../services/login/login.service"
 //import { LoginCredential } from '../type';
 import { AlertController,ToastController,LoadingController } from '@ionic/angular';
 import { storage } from "firebase/app";
@@ -36,7 +36,7 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
-    public auth : LoginService, 
+    //public auth : LoginService, 
     private alertCtrl : AlertController, 
     private toastController : ToastController,
     private loadingController : LoadingController

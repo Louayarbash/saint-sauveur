@@ -15,6 +15,7 @@ import { File } from "@ionic-native/file/ngx";
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { Observable } from "rxjs";
 import {PhotosArray} from '../../../type'
+import { LoginService } from '../../../services/login/login.service';
 //import { OneSignal } from "@ionic-native/onesignal/ngx";
 
 
@@ -53,7 +54,8 @@ export class FirebaseCreateItemModal implements OnInit {
     private _crop: Crop,
     private _file: File,
     private ImagePicker : ImagePicker,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private loginService : LoginService
     //private _oneSignal : OneSignal
   ) { }
 
@@ -102,14 +104,14 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
-
+    console.log("CreateItem LoginID",this.loginService.getLoginID())
     //this.itemData.photo = this.selectedPhoto;
     this.itemData.title = this.createItemForm.value.title;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
     this.itemData.category = this.createItemForm.value.category;
     this.itemData.createDate = Date.now().toString();
-    this.itemData.createdById = this.firebaseService.auth.getLoginID();
+    this.itemData.createdById = this.loginService.getLoginID();
     //this.itemData.photoslider = this.postsImages;
     
     //dayjs(this.createUserForm.value.birthdate).unix(); // save it in timestamp
