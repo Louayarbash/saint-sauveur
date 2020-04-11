@@ -15,6 +15,7 @@ import { FileUpload } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class FirebaseCreateItemModal implements OnInit {
     private chooser: Chooser,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private fileOpener : FileOpener
+    private fileOpener : FileOpener,
+    private filePath : FilePath
   ) { }
 
   ngOnInit() {
@@ -48,20 +50,7 @@ export class FirebaseCreateItemModal implements OnInit {
       title: new FormControl('', Validators.required),
       description : new FormControl(''),
       category : new FormControl('')   
-      
-
-      //skills: new FormArray([], CheckboxCheckedValidator.minSelectedCheckboxes(1)),
-      //spanish: new FormControl(),
-      //english: new FormControl(),
-      //french: new FormControl()
     });
-/*     this.firebaseService.getSkills().subscribe(skills => {
-      this.skills = skills;
-      // create skill checkboxes
-      this.skills.map(() => {
-        (this.createUserForm.controls.skills as FormArray).push(new FormControl());
-      });
-    }); */
   }
 
   //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
@@ -69,8 +58,6 @@ export class FirebaseCreateItemModal implements OnInit {
   selectFile(){
    this.chooser.getFile("application/pdf")
   .then(file => {
-
-    console.log("this.file",file);
     let fileUpload : FileUpload = {fileData:"",fileName:"",filePath:""};
     let extention = file.name.slice(file.name.length-4);
     console.log("extention", extention);
@@ -79,15 +66,18 @@ export class FirebaseCreateItemModal implements OnInit {
     fileUpload.fileData = file.dataURI;
     fileUpload.fileName = file.name.slice(0,file.name.length-4);
     fileUpload.filePath = file.uri;
+    console.log("file.uri",file);
+    //this.filePath.resolveNativePath("content://com.android.providers.downloads.documents/document/msf%3A25986").then(res=>{fileUpload.filePath = res; console.log("alo",res)}).catch(err=>{console.log(err)}); 
     this.files.push(fileUpload);        
     }
     else{
       this.featureService.presentToast("Only pdf is allowed",2000);
     }
     console.log(this.files);
-    console.log("this.files",this.files.length);
+    console.log("this.files.length",this.files.length);
     }).catch((error: any) => console.error(error));
   }
+  
   confirmChanging(index,txtName,btnChange,btnConfirm){
     console.log(txtName);
     txtName.disabled = true;
@@ -111,9 +101,6 @@ export class FirebaseCreateItemModal implements OnInit {
     btnConfirm.disabled = false;
 
   }
-/*   nameChanged(i,btnChange){
-    console.log("changing text to", i);
-  } */
   deleteFile(index){
     console.log("files",this.files);
     console.log("doc",index);
@@ -147,19 +134,20 @@ export class FirebaseCreateItemModal implements OnInit {
   async dismissModal() {
     await this.modalController.dismiss();
    }
-   openFile(i : number){
+  
+  async openFile(i : number){
+     let uri;
      console.log("PDFs: ",this.files);
-     let url = this.files[i].filePath;
-    this.fileOpener.open(url,'application/pdf')
+     try {
+      uri = await this.filePath.resolveNativePath(this.files[i].filePath); // only android
+      console.log(uri);
+     } catch (err) {
+      console.log(err)
+      this.featureService.presentToast("Error opening file: " + err,2000);
+     }
+    this.fileOpener.open(uri,'application/pdf')
     .then(() => console.log('File is opened'))
-    .catch(e => console.log('Error opening file', e));
+    .catch(e => {this.featureService.presentToast("Error opening file",2000); console.log('Error opening file', e)});
    }
-   openFile1(i : number){
-    console.log("PDFs: ",this.files);
-    let url = this.files[i].filePath;
-   this.fileOpener.open(url,'application/pdf')
-   .then(() => console.log('File is opened'))
-   .catch(e => console.log('Error opening file', e));
-  }
   //END
 }

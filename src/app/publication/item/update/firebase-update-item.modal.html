@@ -69,92 +69,41 @@
             <ion-label color="secondary" position="floating">Description</ion-label>
             <ion-input type="text" formControlName="description"></ion-input>
           </ion-item>
-          <ion-item class="input-item">
-              <ion-label color="secondary" position="floating">Price</ion-label>
-              <ion-input type="text" formControlName="price"></ion-input>
-            </ion-item>
             <ion-item class="input-item">
               <ion-label color="secondary" position="floating">Category</ion-label>
               <ion-input type="text" formControlName="category"></ion-input>
             </ion-item>
-            <ion-item class="input-item">
-              <ion-button class="change-image-btn" color="secondary" (click)="selectImageSource()" [disabled]="postImages.length >= 3">
-                <ion-icon class="btn-icon" slot="icon-only" name="add-circle-outline"></ion-icon>
+            <ion-item class="input-item">          
+              <ion-button class="change-image-btn" color="secondary" (click)="selectFile()" [disabled]="files.length >= 5">
+              <ion-icon class="btn-icon" slot="icon-only" name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-item>
         </ion-list>
       </section>
-<!-- 
-    <section class="user-experience-fields fields-section">
-      <h5 class="section-header">Experience in</h5>
-      <ion-row class="checkbox-tags rounded-checkbox-tags">
-        <ion-item formArrayName="skills" lines="none" class="checkbox-tag rounded-tag" *ngFor="let skill of skillsFormArray.controls; let i = index;">
-          <ion-label class="tag-label">{{skills[i].name}}</ion-label>
-          <ion-checkbox [formControlName]="i"></ion-checkbox>
-        </ion-item>
-      </ion-row>
-    </section> -->
-
-<!--     <section class="user-languages-fields fields-section">
-      <h5 class="section-header">Languages</h5>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">English</span>
-            <span class="range-value">{{ changeLangValue(updateUserForm.controls.english.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="english" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">Spanish</span>
-            <span class="range-value">{{ changeLangValue(updateUserForm.controls.spanish.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="spanish" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">French</span>
-            <span class="range-value">{{ changeLangValue(updateUserForm.controls.french.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="french" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-    </section> -->
-    <section>
-      <ion-row class="" *ngFor="let image of postImages">
-           
-        <ion-col size="8" class="" >
-          <ion-img role="button" [src]="image.photo"></ion-img>
-  <!--         <app-image-shell [mode]="'cover'" class="" animation="spinner" [src]="image" [alt]="'image'">
-            <app-aspect-ratio [ratio]="{w:64, h:50}">
-            </app-aspect-ratio>
-            
-          </app-image-shell> -->
-     
-        </ion-col>
-        <ion-col size="4" >
-         
-          <ion-label>Main photo</ion-label>
-          <ion-button class="change-image-btn" color="secondary" (click)="deletePhoto(postImages.indexOf(image))">          
-            <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
-          </ion-button> 
-          <ion-button class="change-image-btn" color="secondary" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
-            <ion-icon class="btn-icon" slot="icon-only" name="open"></ion-icon>      
-          </ion-button> 
-        </ion-col>
-      </ion-row>
-  </section>
+      <section>
+        <ion-row class="" *ngFor="let file of files; let i = index;">
+             
+          <ion-col size="8" class="" >        
+            <ion-label color="secondary" position="floating">Chane name</ion-label>
+              <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
+          </ion-col>
+          <ion-col size="4" >
+            <ion-label> Delete file</ion-label>
+            <ion-button class="change-image-btn" color="secondary" (click)="deleteFile(i)">          
+              <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
+            </ion-button> 
+            <ion-button  class="change-image-btn" color="secondary" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+              Modify file name
+            </ion-button> 
+            <ion-button  class="change-image-btn" color="secondary" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+              Confirm
+            </ion-button> 
+            <ion-button  class="change-image-btn" color="secondary" (click)="openFile(i)">          
+              Open
+            </ion-button> 
+          </ion-col>
+        </ion-row>
+    </section>
   </ion-content>
 
   <ion-footer>

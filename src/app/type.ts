@@ -12,5 +12,6 @@ export interface PhotosArray{
 export interface FileUpload{    
     fileName : string;   
     fileData:string; 
-    filePath : string;
+    filePath:string;
+    fileStoragePath : string;
 }

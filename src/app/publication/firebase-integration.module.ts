@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 
 import { FirebaseCreateItemModal } from './item/create/firebase-create-item.modal';
 import { FirebaseUpdateItemModal } from './item/update/firebase-update-item.modal';
-import { SelectItemImageModal } from './item/select-image/select-item-image.modal';
+//import { SelectItemImageModal } from './item/select-image/select-item-image.modal';
 
 
 
@@ -42,13 +42,13 @@ const firebaseRoutes: Routes = [
   ],
   entryComponents: [
     FirebaseCreateItemModal,
-    FirebaseUpdateItemModal,
-    SelectItemImageModal
+    FirebaseUpdateItemModal
+    //SelectItemImageModal
   ],
   declarations: [
     FirebaseCreateItemModal,
-    FirebaseUpdateItemModal,
-    SelectItemImageModal
+    FirebaseUpdateItemModal
+    //SelectItemImageModal
   ]
 })
 export class FirebaseIntegrationModule {}

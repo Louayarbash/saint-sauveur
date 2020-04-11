@@ -6,7 +6,7 @@ export class FirebaseListingItemModel extends ShellModel {
   createdById: string;
   createDate : number;
   title : string;
-  descriptionn : string;
+  description : string;
   category:string;
   fileFullPath:any[] = [];
   constructor() {

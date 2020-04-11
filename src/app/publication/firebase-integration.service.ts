@@ -4,15 +4,12 @@ import { Observable, of, forkJoin, throwError, combineLatest } from 'rxjs';
 import { map, concatMap, first, filter } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { DataStore, ShellModel } from '../shell/data-store';
-
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseSkillModel, FirebaseCombinedItemModel,FirebasePhotoModel } from './item/firebase-item.model';
-import { ItemImageModel } from './item/select-image/item-image.model';
-
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { LoginService } from "../services/login/login.service"
 //import { LoginCredential } from '../type';
-import { AlertController,ToastController,LoadingController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { storage } from "firebase/app";
 import * as firebase from 'firebase';
 import { async } from '@angular/core/testing';
@@ -32,16 +29,14 @@ export class FirebaseService {
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
   private relatedItemsDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // Select User Image Modal
-  private avatarsDataStore: DataStore<Array<ItemImageModel>>;
+  //private avatarsDataStore: DataStore<Array<ItemImageModel>>;
   
 
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
     //public loginService : LoginService, 
-    private alertCtrl : AlertController, 
-    private toastController : ToastController,
-    private loadingController : LoadingController
+    private alertCtrl : AlertController
     )  {
       
     }
@@ -107,59 +102,8 @@ export class FirebaseService {
   */
   // Concat the userData with the details of the userSkills (from the skills collection)
   public getCombinedItemDataSource(itemId: string): Observable<FirebaseCombinedItemModel> {
-    return this.getItem(itemId)
-    .pipe(
-      // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
-      // is merged in the output Observable
-      concatMap(item => {
-        console.log("getItem",item);
-        //item.imagesFullPath = [""];
-        if (item && !(item.fileFullPath.length == 0)) {
-          console.log("getItem",item);
-          // Map each skill id and get the skill data as an Observable
-          const itemPhotosObservables: Array<Observable<FirebasePhotoModel>> = item.fileFullPath.map(photoPath => {
-            return this.getPic(photoPath.filePath).pipe(first());
-          });
-
-          // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
-          // and transform those emitted values into one value ([userDetails, userSkills])
-          return combineLatest([
-            of(item),
-            forkJoin(itemPhotosObservables)
-          ]).pipe(
-            map(([userDetails, userPhotos]: [FirebaseItemModel, Array<FirebasePhotoModel>]) => {
-              // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
-              return {
-                ...userDetails,
-                photos: userPhotos
-              } as FirebaseCombinedItemModel;
-            })
-          );
-        }
-         else if (item && (item.fileFullPath.length == 0)){
-           return combineLatest([
-            of(item)
-          ]).pipe(
-            map(([userDetails]: [FirebaseItemModel]) => {
-              // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
-              return {
-                ...userDetails
-              } as FirebaseCombinedItemModel;
-            })
-          );
-        } 
-/*          else if(!item.imagesFullPath) {
-          return of(...item);
-        }   */
-         else {
-          // Throw error
-          return throwError('User does not have any skills.');
-        }
-      })
-    );
-  }
-
-      /*.pipe(
+    return this.getItem(itemId);
+     /*.pipe(
       // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
       // is merged in the output Observable
       concatMap(user => {
@@ -189,7 +133,7 @@ export class FirebaseService {
         }
       })
     );*/
-  
+  }
   public getCombinedItemStore(dataSource: Observable<FirebaseCombinedItemModel>): DataStore<FirebaseCombinedItemModel> {
     // Initialize the model specifying that it is a shell model
     const shellModel: FirebaseCombinedItemModel = new FirebaseCombinedItemModel();
@@ -243,19 +187,19 @@ export class FirebaseService {
   */
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel,postPDFs : FileUpload[])/* : Promise<DocumentReference>*/{    
+    public async createItem(itemData : FirebaseItemModel,files : FileUpload[])/* : Promise<DocumentReference>*/{    
       try {
         const res = await this.afs.collection(this.tableName).add({ ...itemData });
         console.log("pub id :", res.id);
-        let PDFsFullPath: any[] = [];
-        for (var i = 0; i < postPDFs.length; i++) {
+        let fileFullPath: any[] = [];
+        for (var i = 0; i < files.length; i++) {
           try {
-            let uploaded = await this.uploadToStorage(postPDFs[i].fileData, res.id);
+            let uploaded = await this.uploadToStorage(files[i].fileData, res.id);
             console.log("createItem: state", uploaded.state);
-            console.log("createItem: fileName", postPDFs[i].fileName);
+            console.log("createItem: fileName", files[i].fileName);
             console.log("createItem: fullPath", uploaded.metadata.fullPath);
             if( uploaded.state === "success"){
-              PDFsFullPath.push({ fileName: postPDFs[i].fileName, filePath: uploaded.metadata.fullPath });
+              fileFullPath.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
           }
           }
           catch (err) {
@@ -263,7 +207,7 @@ export class FirebaseService {
           }
         }
         //itemData.fileFullPath = imagesFullPath;
-        return this.afs.collection(this.tableName).doc(res.id).update({ fileFullPath : PDFsFullPath });
+        return this.afs.collection(this.tableName).doc(res.id).update({ fileFullPath : fileFullPath });
       } catch (err) {
         console.log("Error creating itemData: ", err);
       }
@@ -345,53 +289,50 @@ export class FirebaseService {
     return this.afs.collection('posts').doc(itemData.id).set(itemData);
   }
 
-  public async updateItem(itemData: FirebaseItemModel, postImages : PhotosArray[]): Promise<void> {
-    
-    console.log("111",postImages);
-    console.log("222",itemData);
-    //this.afs.collection('posts').add({...itemData}).then(async (res)=>{
-      //console.log("post id :",res.id);
-      let imagesFullPath = [];
-      //itemData.imagesFullPath = [];
-      //update DB not working without await here
-      for (var i = 0; i < postImages.length; i++) {
-        if (postImages[i].photoStoragePath == "") {
-         await this.uploadToStorage(postImages[i].photo,itemData.id).then(res => {
-          imagesFullPath.push(res.metadata.fullPath);
-
-      } 
-      ).catch(err=> {console.log("Error uploading photo: ",err)}); 
-    }
-
+  public async updateItem(itemData: FirebaseItemModel, files : FileUpload[]): Promise<void> {
+      let fileFullPath: any[] = [];
+      for (var i = 0; i < files.length; i++) {
+        
+          if (files[i].filePath != ""){
+          try {
+          let uploaded = await this.uploadToStorage(files[i].fileData, itemData.id);
+          console.log("updateItem: state", uploaded.state);
+          console.log("updateItem: fileName", files[i].fileName);
+          console.log("updateItem: fullPath", uploaded.metadata.fullPath);
+          if( uploaded.state === "success"){
+            fileFullPath.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
+          }
+        }
+        catch (err) {
+          console.log("Error uploading pdf: ", err);
+        }
+        }
+        else{
+          itemData.fileFullPath[i].fileName = files[i].fileName;
+        }
+      }
+      if ((fileFullPath.length != 0) && (itemData.fileFullPath)){ // new pdf added
+        itemData.fileFullPath.push(...fileFullPath);    
+      }
+      else if((fileFullPath.length != 0) && !(itemData.fileFullPath)){
+        itemData.fileFullPath = fileFullPath;
+      }
+      return this.afs.collection(this.tableName).doc(itemData.id).set({ ...itemData });
   }
-  
-  if (imagesFullPath.length != 0){
-    //itemData.imagesFullPath = [];
-    
-  //for (var i = 0; i < postImages.length; i++) {    
-    itemData.fileFullPath.push(...imagesFullPath);    
-    /* if(!itemData.coverPhoto){
-      itemData.coverPhoto = imagesFullPath[0];
-      } */
-  }
-
-  return this.afs.collection('posts').doc(itemData.id).set({...itemData});
-    }
 
   public deleteItem(item: FirebaseItemModel): Promise<void> {
-    //this.afstore.ref(item.imagesFullPath).delete();
-    console.log('louay',item.id);
-    return this.afs.collection('posts').doc(item.id).delete();
+    //this.afstore.ref(item.id).delete();
+    return this.afs.collection('publication').doc(item.id).delete();
   }
 
   /*
     Firebase Select User Image Modal
   */
-  public getAvatarsDataSource(): Observable<Array<ItemImageModel>> {
+/*   public getAvatarsDataSource(): Observable<Array<ItemImageModel>> {
     return this.afs.collection<ItemImageModel>('avatars').valueChanges();
-  }
+  } */
 
-  public getAvatarsStore(dataSource: Observable<Array<ItemImageModel>>): DataStore<Array<ItemImageModel>> {
+/*   public getAvatarsStore(dataSource: Observable<Array<ItemImageModel>>): DataStore<Array<ItemImageModel>> {
     // Use cache if available
     if (!this.avatarsDataStore) {
       // Initialize the model specifying that it is a shell model
@@ -408,130 +349,25 @@ export class FirebaseService {
       this.avatarsDataStore.load(dataSource);
     }
     return this.avatarsDataStore;
-  }
-
-  /*
-    FireStore utility methods
-  */
-  // Get list of all available Skills (used in the create and update modals)
-  public getSkills(): Observable<Array<FirebaseSkillModel>> {
-    return this.afs.collection<FirebaseSkillModel>('skills').valueChanges({ idField: 'id' });
-  }
-
-  // Get data of a specific Skill
-  private getSkill(skillId: string): Observable<FirebaseSkillModel> {
-    return this.afs.doc<FirebaseSkillModel>('skills/' + skillId)
+  } */
+  // Get data of a specific Item
+  private getItem(itemId: string): Observable<FirebaseCombinedItemModel> {
+    return this.afs.doc<FirebaseCombinedItemModel>('publication/' + itemId)
     .snapshotChanges()
     .pipe(
       map(a => {
-        const data = a.payload.data();
+        const itemData = a.payload.data();
         const id = a.payload.id;
-        return { id, ...data } as FirebaseSkillModel;
+        return { id, ...itemData } as FirebaseCombinedItemModel;
       })
     );
   }
 
-
-  // Get data of a specific User
-  private getItem(postId: string): Observable<FirebaseCombinedItemModel> {
-    return this.afs.doc<FirebaseCombinedItemModel>('posts/' + postId)
-    .snapshotChanges()
-    .pipe(
-      map(a => {
-        const postData = a.payload.data();
-        const id = a.payload.id;
-        return { id, ...postData } as FirebaseCombinedItemModel;
-      })
-    );
-  }
-
-  // Get all users who share at least 1 skill of the user's 'skills' list
-  /* private getUsersWithSameSkill(userId: string, skills: Array<FirebaseSkillModel>): Observable<Array<FirebaseListingItemModel>> {
-    // Get the users who have at least 1 skill in common
-    // Because firestore doesn't have a logical 'OR' operator we need to create multiple queries, one for each skill from the 'skills' list
-    const queries = skills.map(skill => {
-      return this.afs.collection('users', ref => ref
-      .where('skills', 'array-contains', skill.id))
-      .valueChanges({ idField: 'id' });
-    });
-
-    // Combine all these queries
-     return combineLatest(queries).pipe(
-      map((relatedUsers: FirebaseListingItemModel[][]) => {
-        // Flatten the array of arrays of FirebaseListingItemModel
-        const flattenedRelatedUsers = ([] as FirebaseListingItemModel[]).concat(...relatedUsers);
-
-        // Removes duplicates from the array of FirebaseListingItemModel objects.
-        // Also remove the original user (userId)
-        const filteredRelatedUsers = flattenedRelatedUsers
-        .reduce((accumulatedUsers, user) => {
-          if ((accumulatedUsers.findIndex(accumulatedUser => accumulatedUser.id === user.id) < 0) && (user.id !== userId)) {
-            return [...accumulatedUsers, user];
-          } else {
-            // If the user doesn't pass the test, then don't add it to the filtered users array
-            return accumulatedUsers;
-          }
-        }, ([] as FirebaseListingItemModel[]));
-
-        return filteredRelatedUsers;
-      })
-    ); 
-  } */
-
-  private calcUserAge(dateOfBirth: number): number {
-    return dayjs(Date.now()).diff(dayjs.unix(dateOfBirth), 'year');
-  }
-
-/*   uploadToStorage(information) : AngularFireUploadTask {
-    console.log("Uploaded");
-    let newName = `${new Date().getTime()}.txt`;
-
-    return this.afstore.ref(`files/${newName}`).putString(information);
-  } */
-
-  deleteItemTest(file){
+/*   deleteItemTest(file){
     console.log("deleted");
     let key = file;
     let storagePath = file.fullPath;
     this.afs.collection('images').doc(key).delete();
     return this.afstore.ref(storagePath).delete();
-  }
-
-  getPics(imagesFullPath : string){
-    for (let index = 0; index < imagesFullPath.length; index++) {
-     this.afstore.ref(imagesFullPath[index]).getDownloadURL();//.toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
-    }
-    //console.log('photoSlider',this.photoSlider);
-    //ref.getDownloadURL().subscribe(DownloadURL=>{console.log("DownloadURL:",DownloadURL)});
-    //return this.photoSlider;
-  }
-
-  getPic(imagesFullPath : string){
-     return this.afstore.ref(imagesFullPath).getDownloadURL();//.toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
-    
-    //console.log('photoSlider',this.photoSlider);
-    //ref.getDownloadURL().subscribe(DownloadURL=>{console.log("DownloadURL:",DownloadURL)});
-    //return this.photoSlider;
-  }
-/*   async presentLoadingWithOptions() {
-    const loading = await this.loadingController.create({
-      spinner: "bubbles",
-      duration: 5000,
-      message: 'Please wait...',
-      translucent: true,    
-      cssClass: 'custom-class custom-loading'
-    });
-    await loading.present();
-    return loading;
-  }
-  async presentToast(text : string){
-    const toast = await this.toastController.create({
-      message : text,
-      duration : 500
-    });
-    await toast.present();  
   } */
-
-
-  
 }

@@ -35,6 +35,7 @@ import { LanguageService } from './language/language.service';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
 
 
 
@@ -88,6 +89,7 @@ export function createTranslateLoader(http: HttpClient) {
     FileTransfer,
     Chooser,
     LanguageService,
+    FilePath,
     //TranslateService,
     //FcmService,
     /*FcmService,*/

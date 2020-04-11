@@ -20,32 +20,18 @@
 </ion-header>
 <ion-content class="firebase-listing-content">
   <ion-list class="items-list" *ngIf="items?.length > 0">
-     <ion-item class="list-item" *ngFor="let item of items">
-      <!-- <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/publication/details', item.id]"> -->
+     <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/publication/details', item.id]">
       <ion-row class="user-row">
-<!--         <ion-col size="3" class="user-image-wrapper">
-          <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-            <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
-          </app-aspect-ratio>
-        </ion-col> -->
         <ion-col class="user-data-wrapper"></ion-col>
           <div class="user-info">
             <h3 class="user-name">
               <app-text-shell animation="bouncing" [data]="item.title"></app-text-shell>
-              <ion-button class="change-image-btn" color="secondary" (click)="OpenLocalPDF()">
-                Open Local PDF
-              </ion-button>
-              <ion-button class="change-image-btn" color="secondary" (click)="DownloadAndOpenPDF(item)">
-                Download And Open PDF
-              </ion-button>
             </h3>
-
           </div>
- 
       </ion-row>
     </ion-item>
   </ion-list>
   <h3 *ngIf="items?.length == 0" class="empty-list-message">
-    No users found for the selected filters.
+    No publication found.
   </h3>
 </ion-content>

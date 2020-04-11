@@ -57,9 +57,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     private fileOpener:FileOpener,
     private transfer : FileTransfer
   ) { }
-
-
-
+  
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
   }
@@ -124,11 +122,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           async (state) => { /* i put async here to produce PhotoFromUrl correctly*/
             this.items = state;
             console.log(this.items);
-            //let itemWithProfile = [];
-/*             for (let index = 0; index < this.items.length; index++) {
-              let PhotoFromUrl = await this.getProfilePic(this.items[index].coverPhoto);
-              this.items[index].coverPhotoData = PhotoFromUrl; 
-            } */
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -160,52 +153,5 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.file.copyFile(filePath,"NaraMenu.pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
       this.fileOpener.open(result.nativeURL,'application/pdf');
     });
-    
-/*    const options: DocumentViewerOptions = {
-       title: 'My PDF'
-    }
-    this.document.viewDocument(filePath +"/NaraMenu.pdf", 'application/pdf', options) */
   }
-  getProfilePic(picPath){
-    console.log("picId",picPath);
-    //let aa : string
-    return this.firebaseService.afstore.ref(picPath).getDownloadURL().toPromise().then((a)=>{ console.log('getDownloadURL',a); return a;}).catch(err=>{console.log('Error:',err)});
-    //return this.afstore.ref(picPath).getDownloadURL().toPromise();
-    //return ProfilePic;
-  }
-/*   getPics(imagesFullPath){
-    for (let index = 0; index < imagesFullPath.length; index++) {
-     this.firebaseService.afstore.ref(imagesFullPath[index]).getDownloadURL().toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
-    } */
-    async DownloadAndOpenPDF(item: FirebaseListingItemModel ){
-      const options: DocumentViewerOptions = {
-        title: 'My PDF'
-      }
-      let filePath : string;
-      await this.firebaseService.afstore.ref(item.fileFullPath[0].filePath).getDownloadURL()
-      .toPromise()
-      .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
-      console.log("filePath",filePath);
-      //this.document.viewDocument(filePath, 'application/pdf', options);
-
-/*       let fakeName = Date.now();
-      this.file.copyFile(filePath,item.fileFullPath[0].fileName+".pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
-      this.fileOpener.open(result.nativeURL,'application/pdf');
-    }); */
-    const fileTransfer = this.transfer.create();
-    fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entry) => {
-      console.log('download complete: ' + entry.toURL());
-      let url = entry.toURL();
-      //this.document.viewDocument(url, 'application/pdf', {});
-      this.fileOpener.open(url,'application/pdf');
-    }, (error) => {
-      // handle error
-      console.log('error: ' + error);
-
-    });
-
-    }
-  
-  
-
 }
