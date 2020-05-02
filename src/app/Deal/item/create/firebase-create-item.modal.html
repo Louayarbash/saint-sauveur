@@ -1,6 +1,6 @@
 <!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
-<form class="create-item-form ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
+<form class="validations-form ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
   <ion-header>
     <ion-toolbar color="primary">
       <ion-buttons slot="end">
@@ -22,90 +22,42 @@
      {{this.createItemForm.get('endDate').value }} endDate<br>
      {{minStartDate}}minStartDate -->
 
-     <section class="item-details-fields fields-section">
+     <section>
        <ion-list class="inputs-list" lines="full">
         <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Date</ion-label>
+          <ion-label position="floating">Date</ion-label>
           <ion-datetime display-format="DD MMMM YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" required ></ion-datetime>          
         </ion-item>
         <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">From time</ion-label>
-          <!-- <input type="datetime-local" [(ngModel)]="date" ><input> -->
+          <ion-label position="floating">From time</ion-label>
           <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues = "0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate"  formControlName="startDate" required></ion-datetime>
         </ion-item>
-        <ion-item class="counter-item input-item">
-          <ion-label class="counter-label">Duration</ion-label>
-          <ion-label class="counter-value">{{createItemForm.controls.duration.value}}minutes</ion-label>
+        <ion-item class="input-item">
+          <ion-label>Duration (minutes)</ion-label>
+          <ion-label>{{createItemForm.controls.duration.value}}</ion-label>
           <app-counter-input-minutes formControlName="duration" basic></app-counter-input-minutes>
         </ion-item>
         <ion-item class="input-item">
-            <ion-label color="secondary" position="floating">To time</ion-label>
+            <ion-label position="floating">To time</ion-label>
             <ion-datetime display-format="DD MMMM YYYY HH:mm" formControlName="endDate" required></ion-datetime>
           </ion-item>
-          <ion-item class="counter-item input-item">
-            <ion-label class="counter-label">Number of places</ion-label>
-            <ion-label class="counter-value">{{createItemForm.controls.count.value}}</ion-label>
+          <ion-item class="input-item">
+            <ion-label>Number of places</ion-label>
+            <ion-label>{{createItemForm.controls.count.value}}</ion-label>
             <app-counter-input formControlName="count" basic></app-counter-input>
           </ion-item>
         <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Note</ion-label>
-          <ion-input type="text" formControlName="note"></ion-input>
+          <ion-label position="floating">Note</ion-label>
+          <ion-textarea rows="6" cols="20" formControlName="note"></ion-textarea>
         </ion-item>
       </ion-list> 
     </section> 
-
-<!--     <section class="user-experience-fields fields-section">
-      <h5 class="section-header">Experience in</h5>
-      <ion-row class="checkbox-tags rounded-checkbox-tags">
-        <ion-item formArrayName="skills" lines="none" class="checkbox-tag rounded-tag" *ngFor="let skill of skillsFormArray.controls; let i = index;">
-          <ion-label class="tag-label">{{skills[i].name}}</ion-label>
-          <ion-checkbox [formControlName]="i"></ion-checkbox>
-        </ion-item>
-      </ion-row>
-    </section> -->
-
-    <!-- <section class="user-languages-fields fields-section">
-      <h5 class="section-header">Languages</h5>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">English</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.english.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="english" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">Spanish</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.spanish.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="spanish" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">French</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.french.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="french" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-    </section> -->
   </ion-content>
 
   <ion-footer>
     <ion-row class="form-actions-wrapper">
       <ion-col>
-        <ion-button class="submit-btn" expand="block" color="secondary" type="submit" fill="solid" [disabled]="!createItemForm.valid">CREATE</ion-button>
+        <ion-button class="submit-btn" expand="block" color="danger" type="submit" fill="solid" [disabled]="!createItemForm.valid">CREATE</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

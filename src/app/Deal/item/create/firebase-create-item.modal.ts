@@ -2,7 +2,7 @@ import { Component, OnInit,NgModule} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
+//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
@@ -27,12 +27,12 @@ export class FirebaseCreateItemModal implements OnInit {
   loginID = this.loginService.getLoginID();
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
-  today : any;//= new Date().toISOString().slice(0,10);
-  minDate : any;// = new Date().toISOString();
-  maxDate : any;// = new Date().getFullYear();
-  startDate : any;//= new Date().toISOString();
-  endDate : any;//= this.startDate;
-  minStartDate : any;//= this.startDate;
+  today : any;
+  minDate : any;
+  maxDate : any;
+  startDate : any;
+  endDate : any;
+  minStartDate : any;
   duration : any;
   previousCounterValue : any;//= 0;
 
@@ -67,7 +67,7 @@ export class FirebaseCreateItemModal implements OnInit {
       console.log("onDateChanges",newDate);
       let today = dayjs().format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
-/*       console.log(new Date().toISOString().slice(0,10));
+/*    console.log(new Date().toISOString().slice(0,10));
       console.log(new Date().toISOString());
       console.log(new Date().getHours());
       console.log(new Date().getDay());
@@ -157,16 +157,13 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.count = this.createItemForm.value.count;
     //this.itemData.createDate = new Date().toISOString();
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
+    this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.buildingId;
-/*     this.itemData.createDate1 = firebase.firestore.Timestamp.now();
+/*  this.itemData.createDate1 = firebase.firestore.Timestamp.now();
     this.itemData.createDate2 = now;
     this.itemData.createDate3 = dayjs().toDate();
     this.itemData.createDate4 = dayjs().toISOString();
     this.itemData.createDate5 = dayjs().unix(); */
-
-    this.itemData.createdBy = this.loginService.getLoginID();
-    this.itemData.buildingId = this.loginService.buildingId;
-    
     this.confirm();
   }
   async confirm(){

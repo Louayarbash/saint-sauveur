@@ -231,11 +231,11 @@ export class FirebaseService {
   return this.afs.collection(this.tableName).doc(itemData.id).set({...itemData});
     }
 
-  public deleteItem(item: FirebaseItemModel): Promise<void> {
+/*   public deleteItem(item: FirebaseItemModel): Promise<void> {
     //this.afstore.ref(item.imagesFullPath).delete();
     console.log('deleteItem',item.id);
     return this.afs.collection(this.tableName).doc(item.id).delete();
-  }
+  } */
 
 
 
