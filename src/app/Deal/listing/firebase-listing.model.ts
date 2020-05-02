@@ -6,12 +6,17 @@ export class FirebaseListingItemModel extends ShellModel {
   date:string;
   startDate:string;
   endDate:string;
+  startDateTS:number;
+  endDateTS:number;
   status:string;
   createdBy:string;
   responseBy:string;
   note:string;
   createDate : string;
-  listingDetails : string;
+  startTimeCounter : string = "";
+  endTimeCounter : string = "";
+  startTime : string;
+  endTime : string;
   
   constructor() {
     super();

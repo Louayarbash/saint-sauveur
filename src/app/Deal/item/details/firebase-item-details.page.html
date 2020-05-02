@@ -5,63 +5,32 @@
     </ion-buttons>
     <ion-title>{{ 'RequestDetails' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseUpdateModal()" [hidden]="!(item.createdBy == AuthId)" >
-        Edit
-      </ion-button> 
+      <!-- <ion-button (click)="openFirebaseUpdateModal()" [hidden]="!(item.createdBy == AuthId)" > -->
+         <ion-button (click)="openFirebaseUpdateModal()">
+        Contact
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="deals-details-content" [ngClass]="{'ended': ((startTimeCounter | appTimeDifference) < 0), 'imminent-end': ((startTimeCounter | appTimeDifference) > 0 && (startTimeCounter | appTimeDifference) <= 60), 'ends-soon': ((startTimeCounter | appTimeDifference) > 0 && (startTimeCounter | appTimeDifference) > 60 && (startTimeCounter | appTimeDifference) < 240), 'distant-end': ((startTimeCounter | appTimeDifference) >= 1000)}">
-<!--   <ion-row class="expiration-countdown" *ngIf="((details?.expirationDate | appTimeDifference) > 0 && (details?.expirationDate | appTimeDifference) <= 2)">
-    <span class="expiration-lead">Deal expires in:</span>
-    <app-countdown-timer class="item-countdown" fill="countdown" [end]="details?.expirationDate" [units]="{from: 'hour', to: 'second'}"></app-countdown-timer>
-  </ion-row>
-
-<ion-content class="item-content"> -->
-  {{ startTimeCounter }}<br>
+<ion-content class="deals-details-content">
+<!--   {{ startTimeCounter }}<br>
   {{ endTimeCounter }}<br>
   {{ startTimeCounter | appTimeDifference }}<br>
-  {{ startTimeCounter | appTimeDifference }}<br>
-  {{ startTimeCounter | appTimeAgo}}
-<ion-row class="expiration-countdown" *ngIf="((endTimeCounter | appTimeDifference) < 0 || (endTimeCounter | appTimeDifference) > 2000) && (!item.isShell)">
-
-    <span class="expiration-cta"> 
-      DEAL {{ ((endTimeCounter | appTimeDifference) < 0) ? 'EXPIRED' : 'EXPIRES IN' }}:
-    </span>
-    <span class="item-time-left">
-      <app-text-shell [data]="(endTimeCounter | appTimeAgo)"></app-text-shell>
-    </span>
-
+  {{ startTimeCounter | appTimeAgo}} -->
+ <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'new')">
+  <span class="expiration-lead">Request expires in:</span>
+  <app-countdown-timer class="item-countdown" fill="countdown" [end]="startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
 </ion-row>
-  <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell)">
+<ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'accepted')">
     <span class="expiration-lead">Deal starts in:</span>
     <app-countdown-timer class="item-countdown" fill="countdown" [end]="startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
   </ion-row>
-  <ion-row class="expiration-countdown" *ngIf="((endTimeCounter | appTimeDifference) >= 0 ) && (!item.isShell)">
-    <span class="expiration-lead">Deal expires in:</span>
+  <ion-row class="expiration-countdown" *ngIf="((endTimeCounter | appTimeDifference) >= 0 ) && (!item.isShell) && (item.status == 'started')">
+    <span class="expiration-lead">Deal ends in:</span>
     <app-countdown-timer class="item-countdown" fill="countdown" [end]="endTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
   </ion-row>
-<!--   <span>endTimeCounter{{ (endTimeCounter | appTimeDifference) }}</span>
-  <span>startTimeCounter{{ (startTimeCounter | appTimeDifference) }}</span> -->
-<!--   <ion-content class="deals-details-content" [ngClass]="{'ended': ((details?.endTime | appTimeDifference) < 0), 'imminent-end': ((details?.endTime | appTimeDifference) > 0 && (details?.endTime | appTimeDifference) <= 2), 'ends-soon': ((details?.endTime | appTimeDifference) > 0 && (details?.endTime | appTimeDifference) > 2 && (details?.endTime | appTimeDifference) < 10), 'distant-end': ((details?.endTime | appTimeDifference) >= 10)}">
-    <ion-row class="expiration-countdown" *ngIf="((details?.endTime | appTimeDifference) > 0 && (details?.endTime | appTimeDifference) <= 2)">
-      <span class="expiration-lead">Deal expires in:</span>
-      <app-countdown-timer class="item-countdown" fill="countdown" [end]="details?.endTime" [units]="{from: 'hour', to: 'second'}"></app-countdown-timer>
-    </ion-row> -->
 
-<!--     <section class="item-details-fields fields-section">
-        <section class="content-section item-experience-wrapper">
-            <h5 class="section-header">post details</h5>
-            <ion-list class="experience-list" lines="none">
-              <ion-item class="experience-item">
-                <label class="experience-label">
-                  <app-text-shell animation="bouncing" [data]="item?.title"></app-text-shell>
-                </label>
-              </ion-item>
-            </ion-list>
-          </section>
-      </section> -->
   <ion-row class="item-info-row">
     <ion-col class="item-details-col" size="12">
       <h2 class="item-name">
@@ -85,69 +54,36 @@
       </h2>
       <h2 class="item-name">
         <ion-label color="secondary" position="floating">Note</ion-label>
-        <app-text-shell animation="bouncing" [data]="item.note"></app-text-shell>
+        <ion-item>
+          <ion-textarea [value]="item.note" readonly></ion-textarea>
+        </ion-item>
       </h2>
       <h2 class="item-name">
         <ion-label color="secondary" position="floating">Status</ion-label>
         <app-text-shell animation="bouncing" [data]="item.status"></app-text-shell>
       </h2>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">Propose my parking</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="cancelButtonHidden">Cancel deal</ion-button>
-      <p (click)="oberserableTimer()">Start Observable timer</p> {{subscribeTimer}}
-    It is good to help for freee :)
+      <h2 class="item-name">
+        <ion-label color="secondary" position="floating">created By</ion-label>
+        <app-text-shell animation="bouncing" [data]="item.userInfoRequ?.lastname"></app-text-shell>
+      </h2>
+      <h2 class="item-name">
+        <ion-label color="secondary" position="floating">response By</ion-label>
+        <app-text-shell animation="bouncing" [data]="item.userInfoResp?.lastname"></app-text-shell>
+      </h2>
+      
     </ion-col>
-    <!-- <div class="listing-item" *ngFor="let item of listing.items" [ngClass]="{'ended': ((item.expirationDate | appTimeDifference) < 0), 'imminent-end': ((item.expirationDate | appTimeDifference) > 0 && (item.expirationDate | appTimeDifference) <= 2), 'ends-soon': ((item.expirationDate | appTimeDifference) > 0 && (item.expirationDate | appTimeDifference) > 2 && (item.expirationDate | appTimeDifference) < 10), 'distant-end': ((item.expirationDate | appTimeDifference) >= 10)}">
-    <div class="listing-item" [ngClass]="{'ended': ((endTime1 | appTimeDifference) < 0), 'imminent-end': ((endTime1 | appTimeDifference) > 0 && (endTime1 | appTimeDifference) <= 2), 'ends-soon': ((endTime1 | appTimeDifference) > 0 && (endTime1 | appTimeDifference) > 2 && (endTime1 | appTimeDifference) < 10), 'distant-end': ((endTime1 | appTimeDifference) >= 10)}">
-    <ion-row class="item-info-row">       <ion-col class="code-wrapper">
-        <span class="code-cta">Use this code:</span>
-        <span class="item-code" [ngClass]="{'expired': ((item.endTime | appTimeDifference) < 0)}">
-          <app-text-shell [data]="item.code"></app-text-shell>
-        </span>
-      </ion-col>
-       <ion-col class="time-left-wrapper" [ngClass]="{'countdown-active': ((endTime1 | appTimeDifference) > 0 && (endTime1 | appTimeDifference) <= 2)}">
-        <span> {{ (endTime1 | appTimeDifference) }} appTimeDifference </span> <br>
-        <span> {{ dateTimeString }} dateTimeString</span>  <br>
-        <span> {{ startTimeString }} startTimeString</span>  <br>
-        <span> {{ endTimeString }} endTimeString</span>  <br>
-        <span> {{ endTime1 }} endTime1</span>  <br>
-        <span> {{ (endTime1 | appTimeAgo) }} appTimeAgo</span>  <br>
-        <span class="expiration-cta">DEAL {{ ((endTime1 | appTimeDifference) < 0) ? 'EXPIRED' : 'EXPIRES IN' }}:</span>
-        <ng-container *ngIf="((endTime1 | appTimeDifference) < 0 || (endTime1 | appTimeDifference) > 2)">
-          <span class="item-time-left">
-            <app-text-shell [data]="(endTime1 | appTimeAgo)"></app-text-shell>
-          </span>
-        </ng-container>
-        <ng-container *ngIf="((endTime1 | appTimeDifference) >= 0 && (endTime1 | appTimeDifference) <= 2)">
-          <ion-row class="countdown-wrapper">
-            <app-countdown-timer class="item-countdown" fill="inner-time" [end]="endTime1" [units]="{from: 'hour', to: 'second'}"></app-countdown-timer>
-          </ion-row>
-        </ng-container>
-      </ion-col> 
-    </ion-row>
-  </div>-->
-<!--     <ion-col class="actions-col" size="12">
-      <ion-row>
-        <ion-col size="3">
-          <ion-button class="action-btn" color="secondary">
-            <ion-icon class="btn-icon" slot="icon-only" name="mail"></ion-icon>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button class="action-btn" color="secondary">
-            <ion-icon class="btn-icon" slot="icon-only" name="call"></ion-icon>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button class="action-btn" color="secondary">
-            <ion-icon class="btn-icon" slot="icon-only" name="videocam"></ion-icon>
-          </ion-button>
-        </ion-col>
-        <ion-col size="3">
-          <ion-button class="action-btn" color="secondary">
-            <ion-icon class="btn-icon" slot="icon-only" name="text"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-col> -->
   </ion-row>
+  <ion-row class="expiration-countdown" *ngIf="((endTimeCounter | appTimeDifference) < 0 ) && (!item.isShell) && (item.status == 'ended')">
+    <span class="expiration-cta"> 
+      DEAL ENDED:
+    </span>
+    <span class="item-time-left">
+      <app-text-shell [data]="(endTimeCounter | appTimeAgo)"></app-text-shell>
+    </span>
+</ion-row>
+  <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">Propose my parking</ion-button>
+  <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="cancelDealButtonHidden">Cancel deal</ion-button>
+  <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequest()" [hidden]="cancelRequestButtonHidden">Cancel request</ion-button>
+  <p (click)="oberserableTimer()">Start Observable timer</p> {{subscribeTimer}}
+  It is good to help for freee :)
 </ion-content>

@@ -383,11 +383,7 @@ export class FirebaseService {
   return this.afs.collection('posts').doc(itemData.id).set({...itemData});
     }
 
-  public deleteItem(item: FirebaseItemModel): Promise<void> {
-    //this.afstore.ref(item.imagesFullPath).delete();
-    console.log('louay',item.id);
-    return this.afs.collection('posts').doc(item.id).delete();
-  }
+
 
   /*
     Firebase Select User Image Modal
@@ -494,12 +490,25 @@ export class FirebaseService {
     return this.afstore.ref(`files/${newName}`).putString(information);
   } */
 
-  deleteItemTest(file){
-    console.log("deleted");
-    let key = file;
-    let storagePath = file.fullPath;
-    this.afs.collection('images').doc(key).delete();
-    return this.afstore.ref(storagePath).delete();
+  private deleteItemStorage(storagePath : string[]) {
+    var storageRef = this.afstore.storage.ref();
+    storagePath.forEach(item => {
+      storageRef.child(item).delete().then(function() {
+    console.log(item,"success");
+    }).catch(function(error) {
+      console.log(error,"problem deleting storage" + item);
+    });
+  });
+  }
+
+  public deleteItem(item: FirebaseItemModel): Promise<void> {
+    if(item.imagesFullPath){
+      if(item.imagesFullPath.length >= 0){
+      this.deleteItemStorage(item.imagesFullPath);
+    }
+    }
+    return this.afs.collection('posts').doc(item.id).delete();
+    
   }
 
   getPics(imagesFullPath : string){

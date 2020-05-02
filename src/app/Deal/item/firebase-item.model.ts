@@ -1,9 +1,20 @@
 import { ShellModel } from '../../shell/data-store';
-//import * as admin from 'functions/node_modules/firebase-admin/lib';
+import  * as firebase from 'firebase/app';
 
-export class FirebaseSkillModel extends ShellModel {
+export class userModel extends ShellModel {
   id: string;
+  photo: string;
   name: string;
+  lastname: string;
+  building:string;
+  app:string;
+  parking:string;
+  owner:string;
+  code:string;
+  email: string;
+  phone: number;
+  birthdate: number;
+  language:string;
 
   constructor() {
     super();
@@ -19,17 +30,24 @@ export class FirebaseItemModel extends ShellModel {
   endDateTS:number;
   status:string = "new";
   createdBy:string;
-  responseBy:string = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";
+  responseBy:string;// = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";
   note:string;
-  createDate : string;
+  createDate : firebase.firestore.FieldValue;
   count : string;
   expiresIn:number;
   durationSeconds : number;
-  /*actionAt:number = 1583904656000;*/
+  buildingId : string;
+  admin : boolean = false;
   constructor() {
     super();
   }
 }
+
+export class combinedItemModel extends FirebaseItemModel {
+  userInfoRequ : userModel = new userModel();
+  userInfoResp : userModel = new userModel();
+}
+
 /* export class FirebaseCombinedSkillModel extends FirebaseItemModel {
   skills: Array<FirebaseSkillModel> = [
     new FirebaseSkillModel(),

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Validators, FormGroup, FormControl, FormArray,ValidatorFn,ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import * as dayjs from 'dayjs';
@@ -35,6 +35,7 @@ export class FirebaseUpdateItemModal implements OnInit {
   updateItemForm: FormGroup;
   files : FileUpload[] = [];
   newName : string = "";
+  nameChanging : boolean[] = [];
 
   constructor(
     private modalController: ModalController,
@@ -53,11 +54,15 @@ export class FirebaseUpdateItemModal implements OnInit {
 
   ngOnInit() {
     this.updateItemForm = new FormGroup({
-      title: new FormControl(this.item.title, Validators.required),
+      title: new FormControl(this.item.title,  [
+        Validators.required,
+        Validators.minLength(4)
+      ]),
       description: new FormControl(this.item.description),
       category: new FormControl(this.item.category),
-    });
-    //this.files = this.item.fileFullPath;
+    },
+    {validators: this.changingNameValidator}
+    );
 
     if(this.item.fileFullPath){
       if(this.item.fileFullPath.length > 0){
@@ -75,7 +80,12 @@ export class FirebaseUpdateItemModal implements OnInit {
     }
   } 
   }
+  changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    //const name = control.get('name');
+    
+    return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
 
+  };
   dismissModal() {
    this.modalController.dismiss();
   }
@@ -102,6 +112,9 @@ export class FirebaseUpdateItemModal implements OnInit {
    }
    
    confirmChanging(index,txtName,btnChange,btnConfirm){
+     this.nameChanging.shift();
+     console.log(this.nameChanging.length)
+     this.updateItemForm.updateValueAndValidity();
      console.log(txtName);
      txtName.disabled = true;
      btnChange.disabled = false;
@@ -115,7 +128,9 @@ export class FirebaseUpdateItemModal implements OnInit {
      txtName.disabled = false;
      btnChange.disabled = true;
      btnConfirm.disabled = false;
- 
+     this.nameChanging.push(true);
+     console.log(this.nameChanging.length);
+     this.updateItemForm.updateValueAndValidity();
    }
   async deleteItem() {
     const alert = await this.alertController.create({

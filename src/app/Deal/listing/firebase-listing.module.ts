@@ -12,6 +12,7 @@ import { FirebaseListingResolver } from './firebase-listing.resolver';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 //import { TestPageModule } from "../item/test/test.module";
 import { FirebaseCreateItemModal } from "../item/create/firebase-create-item.modal";
+import { PipesModule } from '../../pipes/pipes.module';
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
     IonicModule,
     ComponentsModule,
     TranslateModule,    
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    PipesModule
   ],
   declarations: [FirebaseListingPage,FirebaseCreateItemModal],
   providers: [

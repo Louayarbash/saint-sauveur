@@ -77,7 +77,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               new FirebaseListingItemModel()
             ];
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
-            const searchingDelay = 400;
+            const searchingDelay = 4000;
 
             const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
 
@@ -108,6 +108,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         ).subscribe(
           (state) => {
             this.items = state;
+            console.log("USERS",this.items)
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')

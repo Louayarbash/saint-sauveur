@@ -1,6 +1,6 @@
 import { Component, OnInit/*,ChangeDetectorRef*/ } from '@angular/core';
 import { ModalController, LoadingController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Validators, FormGroup, FormControl, FormArray,ValidatorFn,ValidationErrors } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
@@ -9,7 +9,7 @@ import { FirebaseItemModel} from '../firebase-item.model';
 //import { AngularFirestore } from '@angular/fire/firestore';
 import { Date } from 'core-js';
 
-//import { File } from "@ionic-native/file/ngx";
+import { File } from "@ionic-native/file/ngx";
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileUpload } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
@@ -28,10 +28,12 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 })
 export class FirebaseCreateItemModal implements OnInit {
 
-  createItemForm: FormGroup;
+  createItemForm : FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   files : FileUpload[] = [];
   newName : string = "";
+  nameChanging : boolean[] = [];
+
 
   constructor(
     private modalController: ModalController,
@@ -41,33 +43,46 @@ export class FirebaseCreateItemModal implements OnInit {
     private loginService : LoginService,
     private featureService : FeatureService,
     private fileOpener : FileOpener,
-    private filePath : FilePath
-  ) { }
-
-  ngOnInit() {
-
-    this.createItemForm = new FormGroup({
-      title: new FormControl('', Validators.required),
-      description : new FormControl(''),
-      category : new FormControl('')   
-    });
+    private filePath : FilePath,
+    private file : File
+  ) { 
+    
   }
 
+  ngOnInit() {
+    this.createItemForm = new FormGroup({
+      title: new FormControl('',  [
+        Validators.required,
+        Validators.minLength(4)
+      ]),
+      description : new FormControl(''),
+      category : new FormControl('')
+    },
+    {validators: this.changingNameValidator}
+    );
+  }
+
+  changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    //const name = control.get('name');
+    
+    return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
+
+  };
   //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
 
   selectFile(){
    this.chooser.getFile("application/pdf")
   .then(file => {
-    let fileUpload : FileUpload = {fileData:"",fileName:"",filePath:""};
+    let fileUpload : FileUpload = {fileData:"",fileName:"",filePath:"",fileStoragePath:""};
     let extention = file.name.slice(file.name.length-4);
     console.log("extention", extention);
     console.log(file ? file.name.slice(0,file.name.length-4) : 'canceled');
-    if(extention == ".pdf"){    
+    if(extention == ".pdf"){ 
     fileUpload.fileData = file.dataURI;
     fileUpload.fileName = file.name.slice(0,file.name.length-4);
     fileUpload.filePath = file.uri;
+    //this.createItemForm.get('name').setValue(file.name.slice(0,file.name.length-4));
     console.log("file.uri",file);
-    //this.filePath.resolveNativePath("content://com.android.providers.downloads.documents/document/msf%3A25986").then(res=>{fileUpload.filePath = res; console.log("alo",res)}).catch(err=>{console.log(err)}); 
     this.files.push(fileUpload);        
     }
     else{
@@ -79,13 +94,16 @@ export class FirebaseCreateItemModal implements OnInit {
   }
   
   confirmChanging(index,txtName,btnChange,btnConfirm){
+    this.nameChanging.shift();
+    console.log(this.nameChanging.length)
+    this.createItemForm.updateValueAndValidity();
     console.log(txtName);
     txtName.disabled = true;
     btnChange.disabled = false;
     btnConfirm.disabled = true;
     this.files[index].fileName = txtName.value;
     this.featureService.presentToast("File name changed",2000);
-    console.log("files after delete",this.files);
+    console.log("files after delete",this.files);    
 /*      this.files.forEach( (item, index) => {
       if(item === file) {
         item.fileName = txtName.value
@@ -99,8 +117,11 @@ export class FirebaseCreateItemModal implements OnInit {
     txtName.disabled = false;
     btnChange.disabled = true;
     btnConfirm.disabled = false;
-
+    this.nameChanging.push(true);
+    console.log(this.nameChanging.length);
+    this.createItemForm.updateValueAndValidity();
   }
+
   deleteFile(index){
     console.log("files",this.files);
     console.log("doc",index);
@@ -131,23 +152,26 @@ export class FirebaseCreateItemModal implements OnInit {
       loading.then(res=>res.dismiss());  
     });     
   }
+
   async dismissModal() {
     await this.modalController.dismiss();
    }
-  
+  /*
+  // cant open cloud decide not to use it
   async openFile(i : number){
      let uri;
      console.log("PDFs: ",this.files);
      try {
       uri = await this.filePath.resolveNativePath(this.files[i].filePath); // only android
-      console.log(uri);
+      console.log("uri",uri);
      } catch (err) {
-      console.log(err)
+      console.log("error",err)
       this.featureService.presentToast("Error opening file: " + err,2000);
      }
     this.fileOpener.open(uri,'application/pdf')
     .then(() => console.log('File is opened'))
     .catch(e => {this.featureService.presentToast("Error opening file",2000); console.log('Error opening file', e)});
    }
+   */
   //END
 }

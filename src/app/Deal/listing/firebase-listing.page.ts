@@ -3,7 +3,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ModalController} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, ReplaySubject, Subscription/*, merge*/ } from 'rxjs';
+import { Observable, ReplaySubject, Subscription,/*, merge*/ 
+interval} from 'rxjs';
 //import { switchMap, map } from 'rxjs/operators';
 
 import { FirebaseService } from '../firebase-integration.service';
@@ -18,6 +19,8 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 //import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { LoginService } from '../../services/login/login.service';
 import { FeatureService } from '../../services/feature/feature.service'
+import * as dayjs from 'dayjs';
+import { timeout } from 'rxjs/operators';
 //import { TranslateService } from '@ngx-translate/core';
 
 
@@ -37,10 +40,11 @@ import { FeatureService } from '../../services/feature/feature.service'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   /*for segment implementation*/
+  loginId = this.loginService.getLoginID();
   segmentValue = 'newRequests';
   //friendsList: Array<any>;
-  newRequestsList: Array<any>;
-  myRequestsList: Array<any>;
+  newRequestsList: Array<FirebaseListingItemModel>;
+  myRequestsList: Array<FirebaseListingItemModel>;
   searchQuery = '';
   showFilters = false;
   /* end */
@@ -57,6 +61,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  a:Array<FirebaseListingItemModel> ;
+  b:Array<FirebaseListingItemModel> ;
+  c:Array<FirebaseListingItemModel>;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -135,10 +142,36 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         .subscribe(
          (state) => {
             this.items = state;
-            if(!this.items.isShell){
-              console.log("uid",this.loginService.uid);
-              this.myRequestsList = this.items.filter(item => item.createdBy === this.loginService.uid);
-              this.newRequestsList = this.items.filter(item => item.status === "new" && item.createdBy !== this.loginService.uid);
+            console.log("this.item", this.items)
+          
+            if(!this.items.isShell) {
+
+/*               this.a = this.items.map(item => {item.id = "1"; return item} )
+              this.b = this.items.map(item => {item.id = "2"; return item} )
+              this.c = this.items.map(item => {item.id = "3"; item.note = "khara"; return item} )
+
+              console.log("a",this.a);
+              console.log("b",this.b);
+              console.log("c",this.c); 
+              console.log("dayjsTS",dayjs(1587782116000))
+              console.log("dayjsISO",dayjs("2020-04-24T22:35:16.138-04:00")) */
+
+              this.items.map(item => {
+                item.date = dayjs(item.date).format('DD-MMM-YYYY');
+                item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
+                item.endTimeCounter = dayjs(item.endDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
+                item.startTime = dayjs(item.startDate).format("HH:mm");
+                item.endTime = dayjs(item.endDate).format('HH:mm');
+              });
+
+              let myRequestsList = this.items;
+              let newRequestsList = this.items;
+
+              this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
+              this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || ((item.status === "expired")) || ((item.status === "accepted")) || ((item.status === "ended"))) && item.createdBy !== this.loginId);
+         
+              console.log("myRequestsList",this.myRequestsList);
+              console.log("newRequestsList",this.newRequestsList);
             }
             else {
               this.myRequestsList = this.items;

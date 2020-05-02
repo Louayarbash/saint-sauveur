@@ -343,7 +343,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
   //END
   
-  async deleteFile(file){
+/*   async deleteFile(file){
     this.firebaseService.deleteItemTest(file).subscribe(async ()=> {
       let toast = await this.toastCtrl.create({
         message : 'File removed',
@@ -354,7 +354,7 @@ export class FirebaseCreateItemModal implements OnInit {
       
     }    
   );
-}
+} */
 
 cropImage(fileUrl) {
   this._crop.crop(fileUrl, { quality: 50 })

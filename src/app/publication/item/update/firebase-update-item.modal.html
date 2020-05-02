@@ -79,6 +79,17 @@
               </ion-button>
             </ion-item>
         </ion-list>
+        <div *ngIf="updateItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
+          please confirm naming changes
+      </div> 
+      <div *ngIf="updateItemForm.get('title').invalid && (updateItemForm.dirty || updateItemForm.touched)" class="alert alert-danger">
+    <div *ngIf="updateItemForm.get('title').errors.required">
+      Name is required.
+    </div>
+    <div *ngIf="updateItemForm.get('title').errors.minlength">
+      Name must be at least 4 characters long.
+    </div>
+  </div> 
       </section>
       <section>
         <ion-row class="" *ngFor="let file of files; let i = index;">

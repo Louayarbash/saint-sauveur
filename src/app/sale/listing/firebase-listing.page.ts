@@ -116,14 +116,14 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           this.listingDataStore.state,
           updateSearchObservable
         ).subscribe(
-          async (state) => { /* i put async here to produce PhotoFromUrl correctly*/
+          (state) => {
             this.items = state;
             console.log(this.items);
-            //let itemWithProfile = [];
-            for (let index = 0; index < this.items.length; index++) {
-              let PhotoFromUrl = await this.getProfilePic(this.items[index].coverPhoto);/*.then(res => {console.log("res",res); return res});*/
-              this.items[index].coverPhotoData = PhotoFromUrl; 
+            this.items.map(item=>{ if(item.coverPhoto) {
+              //item.coverPhotoData = await this.getProfilePic(item.coverPhoto);
+              /*await*/ this.getProfilePic(item.coverPhoto).then(res => item.coverPhotoData = res).catch(err => console.log(err));
             }
+            });
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -163,10 +163,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
   getProfilePic(picPath){
     console.log("picId",picPath);
-    //let aa : string
-    return this.firebaseService.afstore.ref(picPath).getDownloadURL().toPromise().then((a)=>{ console.log('getDownloadURL',a); return a;}).catch(err=>{console.log('Error:',err)});
-    //return this.afstore.ref(picPath).getDownloadURL().toPromise();
-    //return ProfilePic;
+    return this.firebaseService.afstore.ref(picPath).getDownloadURL().toPromise();//.then((res)=>{ console.log('getDownloadURL',res);}).catch(err=>{console.log('Error:',err)});
   }
 /*   getPics(imagesFullPath){
     for (let index = 0; index < imagesFullPath.length; index++) {

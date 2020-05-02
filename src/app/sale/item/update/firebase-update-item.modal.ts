@@ -141,6 +141,7 @@ export class FirebaseUpdateItemModal implements OnInit {
             this.firebaseService.deleteItem(this.item)
             .then(
               () => {
+                console.log("deleteItem is done");
                 this.dismissModal();
                 this.router.navigate(['sale/listing']);
               },

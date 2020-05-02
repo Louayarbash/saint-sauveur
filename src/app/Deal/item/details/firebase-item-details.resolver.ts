@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel } from '../firebase-item.model';
+import { FirebaseItemModel, combinedItemModel } from '../firebase-item.model';
 import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 
 import { DataStore } from '../../../shell/data-store';
@@ -19,7 +19,7 @@ export class FirebaseItemDetailsResolver implements Resolve<any> {
     // We created a FirebaseCombinedUserModel to combine the userData with the details of the userSkills (from the skills collection).
     // They are 2 different collections and we need to combine them into 1 dataSource.
 
-    const combinedItemDataSource: Observable<FirebaseItemModel/*FirebaseCombinedUserModel*/> = this.firebaseService
+    const combinedItemDataSource: Observable<combinedItemModel/*FirebaseCombinedUserModel*/> = this.firebaseService
     .getCombinedItemDataSource(itemId);
 
      const combinedItemDataStore: DataStore<FirebaseItemModel> = this.firebaseService

@@ -16,7 +16,7 @@ export class FirebaseListingResolver implements Resolve<any> {
 
   async resolve() {
 
-    if(!this.loginService.building){
+    if(!this.loginService.buildingId){
       await this.loginService.getUserInfo();
     }
     const dataSource: Observable<Array<FirebaseListingItemModel>> = this.firebaseService.getListingDataSource();

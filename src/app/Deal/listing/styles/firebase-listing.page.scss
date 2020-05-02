@@ -1,139 +1,208 @@
+@import "../../../../theme/mixins/ion-color";
+
 // Custom variables
 // Note:  These ones were added by us and have nothing to do with Ionic CSS Custom Properties
 :host {
-  --page-margin: var(--app-fair-margin);
+/*   --page-margin: var(--app-fair-margin);
   --page-background: var(--app-background);
+  --page-expired-color: var(--ion-color-medium-tint);
+  --page-ends-soon-color: #FFAB6B;
+  --page-distant-end-color: #70DF70;
+
+  --page-deal-color: var(--ion-color-medium);
+  --page-deal-border-color: var(--ion-color-light-shade);
+
+  --page-color: #70DF70; */
+  --page-margin: var(--app-broad-margin);
+  --page-background: var(--app-background-shade);
+
+  --page-countdown-fill-shadow-color: rgba(var(--ion-color-darkest-rgb), 0.2);
+  --page-item-shadow-color: rgba(var(--ion-color-dark-rgb), .1);
+  --page-deal-code-height: 30px;
+  --page-countdown-gutter: 3px;
+
+  --page-expired-color: var(--ion-color-medium-tint);
+  --page-ends-soon-color: #FFAB6B;
+  --page-distant-end-color: #70DF70;
+
+  --page-deal-color: var(--ion-color-medium);
+  --page-deal-border-color: var(--ion-color-light-shade);
+
+  --page-color: #70DF70;
+  //Louay
+  --new-color: #FFAB6B;
+  --expired-color : var(--ion-color-medium-shade);
+  --started-color : #f4344f;
+  --ended-color : var(--ion-color-medium-shade);
+  --accepted-color: #20dc6a;
+
+
+
+  // Add custom colors to use with [color] property
+   @include ion-color('claim') {
+    --ion-color-claim: #FFAB6B;
+    --ion-color-claim-rgb: 255,171,107;
+    --ion-color-claim-contrast: #FFFFFF;
+    --ion-color-claim-contrast-rgb: 255,255,255;
+    --ion-color-claim-shade: #63C463;
+    --ion-color-claim-tint: #7EE27E;
+  }
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
-.filters-toolbar {
-  --padding-start: var(--page-margin);
-  --padding-end: var(--page-margin);
-  --padding-top: var(--page-margin);
-  --padding-bottom: var(--page-margin);
-
-  .searchbar-row {
+.deals-requests-listing-content {
+  --background: var(--page-background);
+  .listing-item {
+    &.expired {
+      --page-deal-color: var(--expired-color);
+      --page-deal-border-color: var(--expired-color);
+      border-bottom-style: none;
+    }
+    &.accepted {
+      --page-deal-color: var(--accepted-color);
+      --page-deal-border-color: var(--accepted-color)
+    }
+    &.new {
+      --page-deal-color: var(--new-color);
+      --page-deal-border-color: var(--new-color);
+    }
+    &.started {
+      --page-deal-color: var(--started-color);
+      --page-deal-border-color: var(--started-color);
+    }
+    &.ended {
+      --page-deal-color: var(--ended-color);
+      --page-deal-border-color: var(--ended-color);
+      border-bottom-style: none;
+    }
+    background-color: var(--ion-color-lightest);
+    margin: var(--page-margin);
+    border-radius: var(--app-fair-radius);
+    box-shadow: 1px 1px 4px 1px var(--page-item-shadow-color);
+    border-bottom-style: solid;
+    border-bottom-width: calc((var(--page-margin) / 2) * 3);
+    border-bottom-color: var(--page-deal-border-color);
+  
+  .top-row {
     --ion-grid-column-padding: 0px;
 
-    ion-searchbar.items-searchbar {
-      padding: 0px;
-      // override Ionic fixed height
-      height: 100%;
-      // Learn more about CSS contain property here: https://termvader.github.io/css-contain/
-      contain: content;
+    border-bottom: 2px dashed rgba(var(--ion-color-dark-rgb), .1);
+    padding: 5px;//calc(var(--page-margin) / 2);
+    justify-content: space-between;
+    align-items: center;
+    
+    .item-name {
+      margin: 0px;
+			//margin-bottom: calc(var(--page-margin) / 2);
+      color: var(--ion-color-dark-tint);
+      font-size: 16px;
     }
 
     .call-to-action-col {
-      padding-inline-start: var(--page-margin);
-      max-width: fit-content;
-      flex-shrink: 0;
       flex-grow: 0;
 
-      display: flex;
-      justify-content: flex-end;
+      .expired-cta {
+        color: var(--page-deal-color);
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
 
-      .filters-btn {
-        --padding-start: 0px;
-        --padding-end: 0px;
+      .claim-button {
+        --box-shadow: none;
+        --border-radius: var(--app-fair-radius);
+        //color: var(--new-color);
 
         margin: 0px;
-        font-size: 18px;
-        // override Ionic fixed height
-        height: initial;
-      }
-    }
-  }
 
-  .range-item-row {
-    --ion-grid-column-padding: 0px;
-
-    margin-top: var(--page-margin);
-    padding-top: var(--page-margin);
-    // box-shadow at the top
-    box-shadow: inset 0 6px 3px -8px  var(--ion-color-darkest);
-
-    .range-header {
-      display: flex;
-      justify-content: space-between;
-      padding-bottom: calc(var(--page-margin) / 2);
-
-      .range-value {
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.2px;
-        color: var(--ion-color-medium);
-      }
-
-      .range-label {
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.2px;
-        color: var(--ion-color-medium);
-      }
-    }
-
-    .range-control {
-      // override the pin color
-      --ion-text-color: var(--ion-color-medium);
-
-      padding-top: 0px;
-      padding-bottom: 0px;
-    }
-  }
-}
-
-.firebase-listing-content {
-  --background: var(--page-background);
-
-  .items-list {
-    .list-item {
-      --padding-start: var(--page-margin);
-      --padding-end: 0px;
-      --inner-padding-start: 0px;
-      --inner-padding-end: var(--page-margin);
-      --inner-padding-top: calc(var(--page-margin) / 2);
-      --inner-padding-bottom: calc(var(--page-margin) / 2);
-
-      .user-row {
-        --ion-grid-column-padding: 0px;
-
-        width: 100%;
-
-        .user-image-wrapper {
-          padding-inline-end: calc(var(--page-margin) / 2);
+        &:focus {
+          outline: none;
         }
 
-        .user-data-wrapper {
-          padding-inline-start: calc(var(--page-margin) / 2);
+        .button-cta {
+          display: block;
+          line-height: 18px;
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        ion-icon {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+  .middle-row {
+    --ion-grid-column-padding: 0px;
+
+    padding: 5px;//calc(var(--page-margin) / 2);
+
+    .item-description {
+      margin: 0px;
+      color: var(--ion-color-medium-shade);
+      font-size: 14px;       
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .time-left-wrapper {
+      flex-shrink: 0;
+      max-width: fit-content;
+      display: flex;
+      flex-direction: column;
+      //justify-content: space-between;
+      align-items: flex-end;
+
+      .expiration-cta {
+        //font-size: 12px;
+        //font-weight: 500;
+        //margin-bottom: 5px;
+        display: block;
+        text-transform: uppercase;
+        text-align: end;
+      }
+
+      &.countdown-active {
+        display: block;
+        position: relative;
+      
+        .countdown-wrapper {
+          //margin-top: 10px;
+          width: 100%;
           display: flex;
-          flex-direction: column;
-          justify-content: center;
+          justify-content: flex-end;
+          // Set position absolute so that the parent doen't count the height of this element.
+          position: absolute;
+          right: 0px;
 
-          .user-info {
-            &:not(:last-child) {
-              margin-bottom: calc(var(--page-margin) / 2);
-            }
 
-            .user-name {
-              margin: 0px;
-              margin-bottom: calc(var(--page-margin) / 4);
-              font-size: 16px;
-            }
+          app-countdown-timer.item-countdown {
+            --countdown-time-margin: 0px;
+            --countdown-time-padding: 0px;
+            --countdown-inner-time-margin: var(--page-countdown-gutter) var(--page-countdown-gutter) 0px;
+            --countdown-inner-time-padding: calc(var(--page-margin) / 2) calc(var(--page-margin) / 4);
+            --countdown-fill-border: none;
+            --countdown-fill-border-radius: var(--app-narrow-radius);
+            --countdown-fill-background: var(--ion-color-lightest);
+            --countdown-fill-shadow: 0px 0px 5px 0px var(--page-countdown-fill-shadow-color);
+            --countdown-value-color: var(--ion-color-darkest);
+            --countdown-unit-color: var(--ion-color-medium-shade);
+            --countdown-time-flex-direction: column;
 
-            .user-age {
-              margin: 0px;
-              color: rgba(var(--ion-color-dark-rgb), 0.4);
-              font-size: 14px;
-            }
+            font-weight: 500;
+            font-size: 14px;
+            margin-right: calc(var(--page-countdown-gutter) * -1);
           }
         }
       }
     }
   }
-
-  .empty-list-message {
-    margin: calc(var(--page-margin) * 3);
-    color: rgba(var(--ion-color-dark-rgb), 0.4);
-    text-align: center;
-  }
+}
+.empty-list-message {
+  margin: calc(var(--page-margin) * 3);
+  color: rgba(var(--ion-color-dark-rgb), 0.4);
+  text-align: center;
+}
 }

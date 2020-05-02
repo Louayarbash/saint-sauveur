@@ -9,15 +9,15 @@ import { DocumentSnapshot } from '@google-cloud/firestore';
   providedIn: 'root'
 })
 export class LoginService {
+
 uid : string;
-building : string;
+buildingId : string = "NJ6u68Cq68RgX9jXPuVx";
 languge : string;
+name : string;
   constructor(
     private afAuth : AngularFireAuth,
     private afs: AngularFirestore
     ) {
-    //this.login({ email: "louay.arbash@gmail.com", password: "Welcome123"}).then( res => { console.log("Welcome123", res) } );
-   //let promise1 = this.getUserInfo();
    }
   login(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
@@ -42,17 +42,18 @@ languge : string;
   }
   getLoginID(){
     if(!this.uid){
-      this.uid = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this.afAuth.auth.currentUser.uid;
+      this.uid = "QU1WaWtJoTch9NecQspR";//this.afAuth.auth.currentUser.uid;
     }
-    return "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";//this.uid
+    return "QU1WaWtJoTch9NecQspR";//this.uid
   }
   async getUserInfo(){
       console.log("inside getLoginInfo 111")
       try {
       const res = await this.afs.firestore.collection("users").doc(this.uid).get();
-      this.building = res.data().buildingId;
+      this.buildingId = res.data().buildingId;
       this.languge = res.data().language;
-      console.log("inside getLoginInfo 222", this.building);
+      this.name = res.data().name;
+      console.log("inside getLoginInfo 222", this.buildingId);
     }
     catch (err) {
       console.log(err);
