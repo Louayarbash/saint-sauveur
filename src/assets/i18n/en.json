@@ -9,7 +9,7 @@
   "PHOTOS": "Photos",
   "SEE_ALL": "See all",
   "OK": "OK",
-  "CANCEL": "Cancel",
+  "Cancel": "Cancel",
   "SELECT_LANGUAGE": "Select your language",
   "ParkingRequests": "Parking requests",
   "RequestDetails": "Request details",
@@ -18,10 +18,25 @@
   "NewParkingRequest" : "New parking request",
   "PleaseWait" : "Please wait...",
   "PleaseConfirm" : "Please confirm",
-  "DealCancelationConfirmation" : "Are you sure you want to cancel this deal?",
+  "CancelDealConfirmation" : "Are you sure you want to cancel this deal?",
+  "CancelRequestConfirmation" : "Are you sure you want to cancel this parking request?",
   "ConfirmRequestDetails" : "Please confirm the below request details:",
   "RequestAddedSuccessfully" : "Request added successfully",
   "ConnectionProblem" : "connection problem!",
   "Categories" : "Categories",
-  "NoDealsFound" : "No deals found."
+  "Edit" : "EDIT",
+  "NoDealsFound" : "No deals found.",
+  "NoPlace" : "Number of places",
+  "RequesterDetails" : "Requester details",
+  "ResponderDetails" : "Responder details",
+  "RequestExpiresIn" : "Request expires in: ",
+  "DealStartsIn" : "Deal starts in: ",
+  "DealEndsIn" : "Deal ends in: ",
+  "Call" : "CALL",
+  "ProposeParkingConfirmation" : "Are you sure you want to give your parking on {{ valueDate }} from {{ valueFrom }} to {{ valueTo }} ?",
+  "ProposeMyParking" : "Propose my parking",
+  "CancelDeal" : "Cancel deal",
+  "CancelRequest" : "Cancel request"
+
+
 }

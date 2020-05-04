@@ -42,11 +42,12 @@
    @include ion-color('claim') {
     --ion-color-claim: #FFAB6B;
     --ion-color-claim-rgb: 255,171,107;
-    --ion-color-claim-contrast: #FFFFFF;
+    --ion-color-claim-contrast: #ffffff;
     --ion-color-claim-contrast-rgb: 255,255,255;
-    --ion-color-claim-shade: #63C463;
-    --ion-color-claim-tint: #7EE27E;
+    --ion-color-claim-shade: #e0965e;
+    --ion-color-claim-tint: #ffb37a;
   }
+  
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties

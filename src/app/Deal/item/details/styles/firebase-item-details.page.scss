@@ -13,7 +13,7 @@
   --background: var(--page-background);
      .inputs-list {
       --ion-item-background: var(--page-background);
-      padding: var(--page-margin) var(--page-margin) var(--page-margin);
+      padding: 0px var(--page-margin) 0px;//var(--page-margin);
       .input-item {
         --padding-start: 0px;
         --padding-end: 0px;
@@ -114,7 +114,6 @@
   }
 
   .user-details {
-    
     background-color : var(--app-background-shade);
     margin: 0px var(--page-margin) 0px var(--page-margin);
     border-radius: var(--app-fair-radius);
@@ -132,51 +131,53 @@
       .user-image-wrapper {
         max-width: 26%;
         app-image-shell.user-image {
-          --image-shell-border-radius: 10px;//var(--page-border-radius);
+          --image-shell-border-radius: var(--app-fair-radius);//var(--page-border-radius);
         }
       }
       .user-info-wrapper {
         padding-left: var(--page-margin);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        //justify-content: space-between;
         flex-wrap: nowrap;
     
         .user-data-row {
           padding-bottom: var(--page-margin);
+          //padding-bottom: var(--page-margin);
           flex-wrap: nowrap;
-          justify-content: space-between;
+          //justify-content: space-between;
     
           .user-name {
-            margin: 0px 0px 5px;
-            font-size: 20px;
-            letter-spacing: 0.5px;
+            padding-bottom: var(--page-margin);
+            margin: 0px;
+            //font-size: 20px;
+            //letter-spacing: 0.5px;
           }
     
           .user-title {
             margin: 0px;
             color: var(--ion-color-medium);
-            font-size: 16px;
+            //font-size: 16px;
           }
         }
     
         .actions-row {
-          --ion-grid-columns: 10;
+          //--ion-grid-columns: 10;
           --ion-grid-column-padding: var(--page-actions-padding);
     
-          justify-content: space-between;
+          //justify-content: space-between;
           flex-wrap: nowrap;
-          margin-left: calc(var(--page-actions-padding) * -1);
-          margin-right: calc(var(--page-actions-padding) * -1);
+          //margin-left: calc(var(--page-actions-padding) * -1);
+          //margin-right: calc(var(--page-actions-padding) * -1);
     
           .main-actions {
             flex-grow: 0;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            margin-left: calc(var(--page-actions-padding) * -1);
-            margin-right: calc(var(--page-actions-padding) * -1);
+            margin:0px;
+            padding-bottom: 5px;
+            padding-left: 0px;
+            //margin-left: calc(var(--page-actions-padding) * -1);
+            //margin-right: calc(var(--page-actions-padding) * -1);
             display: flex;
-  
           }
         }
       }
