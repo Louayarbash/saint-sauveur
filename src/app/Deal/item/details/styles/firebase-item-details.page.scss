@@ -11,15 +11,15 @@
 
 .page-content {
   --background: var(--page-background);
-     .inputs-list {
+/*      .inputs-list {
       --ion-item-background: var(--page-background);
-      padding: 0px var(--page-margin) 0px;//var(--page-margin);
+      padding: 40px var(--page-margin) 30px;//var(--page-margin);
       .input-item {
-        --padding-start: 0px;
+        --padding-start: 40px;
         --padding-end: 0px;
         --inner-padding-end: 0px;
       }
-    } 
+    }  */
 
   &.ended {
     --page-deal-color: var(--page-expired-color);
@@ -184,9 +184,9 @@
     }
 }
 
-.delete-btn {
+/* .delete-btn {
   margin: var(--page-margin);
-}
+} */
 
 }
 

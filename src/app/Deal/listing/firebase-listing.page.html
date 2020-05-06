@@ -25,29 +25,15 @@
     <section [hidden]="segmentValue !== 'newRequests'">
       <ng-container *ngIf="newRequestsList?.length > 0">
         <div class="listing-item" *ngFor="let item of newRequestsList" [ngClass]="{'accepted': (item.status == 'accepted'), 'new': (item.status == 'new'), 'expired': (item.status == 'expired'),'ended': (item.status == 'ended')}">
-          <!-- [routerLink]="['/deal/details', item.id]" -->
-          <!-- <app-text-shell animation="bouncing" [data]="item.listingDetails"></app-text-shell> -->
           <ion-row class="top-row">
-<!--             <ion-col class="logo-col" size="6">
-              <app-aspect-ratio [ratio]="{w: 128, h: 32}">
-                <app-image-shell [src]="item.logo" [alt]="'deals logo'" class="deal-logo" animation="spinner"></app-image-shell>
-              </app-aspect-ratio>
-            </ion-col> -->
             <ion-col class="info-col" size="5">
               <h4 class="item-name">
-                <!-- <a class="name-anchor"> -->
                   <app-text-shell animation="bouncing" [data]="item.date"></app-text-shell>
-               
-                <!-- </a> -->
               </h4>
-<!--             <ion-avatar>
-              <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            </ion-avatar>
-            {{item.status}} -->
           </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="claim" [routerLink]="['/deal/details', item.id]">
-                <span class="button-cta">DETAILS</span>
+                <span class="button-cta">{{ 'Details' | translate }}</span>
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
               </ion-button>
             </ion-col>
@@ -64,16 +50,14 @@
                 <app-text-shell animation="bouncing" lines="1" [data]="'TO: ' + item.endTime"></app-text-shell>
               </span>
             </ion-col>
-            <!-- <ion-col class="time-left-wrapper" size="6" [ngClass]="{'countdown-active': ((item.startTimeCounter | appTimeDifference) > 0)}"> -->
               <ion-col class="time-left-wrapper item-description" size="6" [ngClass]="{'countdown-active': (item?.status == 'new')}">
               <ng-container *ngIf="(item?.status == 'expired')">
-                <!-- <span class="expiration-cta">REQUEST EXPIRED:</span> -->
                 <span class="item-description">
                   <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
                 </span>
               </ng-container>
               <ng-container *ngIf="(item?.status == 'new')" >
-                <span class="expiration-cta">REQUEST EXPIRES IN:</span>
+                <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
                 </ion-row>
@@ -91,24 +75,11 @@
     <section [hidden]="segmentValue !== 'myRequests'">
       <ng-container *ngIf="myRequestsList?.length > 0">
         <div class="listing-item" *ngFor="let item of myRequestsList" [ngClass]="{'accepted': (item?.status == 'accepted'), 'new': (item?.status == 'new'), 'expired': (item?.status == 'expired'),'started': (item?.status == 'started'), 'ended': (item?.status == 'ended')}">
-          <!-- [routerLink]="['/deal/details', item.id]" -->
-          <!-- <app-text-shell animation="bouncing" [data]="item.listingDetails"></app-text-shell> -->
           <ion-row class="top-row">
-<!--             <ion-col class="logo-col" size="6">
-              <app-aspect-ratio [ratio]="{w: 128, h: 32}">
-                <app-image-shell [src]="item.logo" [alt]="'deals logo'" class="deal-logo" animation="spinner"></app-image-shell>
-              </app-aspect-ratio>
-            </ion-col> -->
             <ion-col class="info-col" size="5">
               <h4 class="item-name">
-                <!-- <a class="name-anchor"> -->
                   <app-text-shell animation="bouncing" [data]="item?.date"></app-text-shell>
-                <!-- </a> -->
               </h4>
-<!--             <ion-avatar>
-              <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            </ion-avatar>
-            {{item.status}} -->
           </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="claim"  [routerLink]="['/deal/details', item.id]">
@@ -134,9 +105,6 @@
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
               </ion-button>
             </ion-col>
-<!--             <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">
-              <div class="expired-cta">{{item?.status}}</div>
-            </ion-col> -->
           </ion-row>
           <ion-row class="middle-row" size="6">
             <ion-col class="item-description">
@@ -165,19 +133,19 @@
                 </span>
               </ng-container>
               <ng-container *ngIf="(item?.status == 'new')" >
-                <span class="expiration-cta">REQUEST EXPIRES IN:</span>
+                <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
                 </ion-row>
               </ng-container>
               <ng-container *ngIf="(item?.status == 'accepted')" >
-                <span class="expiration-cta">REQUEST STARTS IN:</span>
+                <span class="expiration-cta">{{ 'DealStartsIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
                 </ion-row>
               </ng-container>
               <ng-container *ngIf="(item?.status == 'started')" >
-                <span class="expiration-cta">REQUEST ENDS IN:</span>
+                <span class="expiration-cta">{{ 'DealEndsIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.endTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
                 </ion-row>
@@ -186,7 +154,7 @@
           </ion-row>
         </div>
     </ng-container>
-     <ng-container *ngIf="newRequestsList?.length == 0">
+     <ng-container *ngIf="myRequestsList?.length == 0">
      <h3 class="empty-list-message">
        {{ 'NoDealsFound' | translate }}
      </h3>

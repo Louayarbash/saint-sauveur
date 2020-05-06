@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable, of, forkJoin, throwError, combineLatest, scheduled } from 'rxjs';
 import { map, concatMap, first, filter } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+//import * as dayjs from 'dayjs';
 import { DataStore, ShellModel } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
@@ -32,40 +32,11 @@ export class FirebaseService {
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
     public loginService : LoginService, 
-    private featueService : FeatureService,
+    private featureService : FeatureService,
     private router : Router    
     )  {
 
     }
-
-  /*
-    Firebase User Listing Page
-  */
- /*     let citiesRef = this.afs.firestore.collection(this.tableName);
-    let query = citiesRef.where('status', '==', 'new').get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          console.log('No matching documents.');
-          return;
-        }  
-    
-        snapshot.forEach(doc => {
-          console.log(doc.id, '111=>', doc.data());
-        });
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
-      });
-      
-      let citiesRef1 = this.afs.firestore.collection(this.tableName);
-      let query1 = citiesRef1.where('status', '==', 'new').onSnapshot(querySnapshot => {
-        console.log(`Received query snapshot of size ${querySnapshot.size}`);
-        querySnapshot.forEach(doc => {
-          console.log(doc.id, '222=>', doc.data());
-        });
-      }, err => {
-        console.log(`Encountered error: ${err}`);
-      }); */
       
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //this.loginService.getUserInfo();
@@ -87,8 +58,6 @@ export class FirebaseService {
     if (!this.listingDataStore) {
       // Initialize the model specifying that it is a shell model
       const shellModel: Array<FirebaseListingItemModel> = [
-        new FirebaseListingItemModel(),
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
@@ -197,23 +166,22 @@ export class FirebaseService {
   }
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public createItem(itemData : FirebaseItemModel) : Promise<DocumentReference>{     
+    public async createItem(itemData : FirebaseItemModel)/* : Promise<DocumentReference>*/{     
       console.log(itemData);
-      return this.afs.collection(this.tableName).add({...itemData});
-     //const count =  +itemData.count;
-/*     for (let index = 1; index <= count ; index++) {
+      //return this.afs.collection(this.tableName).add({...itemData});
+     const count =  +itemData.count;
+     for (let index = 1; index <= count ; index++) {
       itemData.count = index + "/" + count;
-      this.afs.collection(this.tableName).add({...itemData}); 
-    }  */
-    
-    /* .then(async (res)=>{
-      console.log("deal id :",res.id);
-  
-    return this.afs.collection(this.tableName).doc(res.id).set({...itemData});
-    } 
-    );
-    return; */
+      this.afs.firestore.collection(this.tableName).add({...itemData}).then(() => {
+      this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
+      }
+      ).catch(err => {
+        console.log(err)
+        this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+        //loading.then(res=>res.dismiss());
+      });            
     }
+  }
 
   /*
     Firebase Update User Modal
@@ -249,11 +217,11 @@ export class FirebaseService {
           if (oldStatus == "new"){
             tran.update(itemRef, {status: newStatus, responseBy:this.loginService.getLoginID()});
             console.log("changed");
-            this.featueService.presentToast("You responce has been sent to the requester, Thank you!",3000);
+            this.featureService.presentToast("You responce has been sent to the requester, Thank you!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
-            this.featueService.presentToast("Request already respoded by another tenant, Thank you!",3000);
+            this.featureService.presentToast("Request already respoded by another tenant, Thank you!",3000);
             this.router.navigate(['deal/listing']);
             console.log("not changed");
             return Promise.reject('Request has already been responded or has been canceled, thank you');
@@ -274,14 +242,14 @@ export class FirebaseService {
           if (oldStatus == "new"){
             let newStatus = "new request canceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featueService.presentToast("Your new request has been canceled!",3000);
+            this.featureService.presentToast("Your new request has been canceled!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('New request canceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
             let newStatus = "accepted request canceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featueService.presentToast("Your accepted request has been canceled!",3000);
+            this.featureService.presentToast("Your accepted request has been canceled!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
@@ -303,12 +271,12 @@ export class FirebaseService {
           if (oldStatus == "accepted"){ //and not started 
             let newStatus = "new"; 
             tran.update(itemRef, {status: newStatus, responseBy:""});            
-            this.featueService.presentToast("You canceled your deal!",3000);
+            this.featureService.presentToast("You canceled your deal!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Your deal is canceled!' + newStatus);
           }
           else {        
-            this.featueService.presentToast("Cant cancel request!",3000);
+            this.featureService.presentToast("Cant cancel request!",3000);
             this.router.navigate(['deal/listing']);
             return Promise.reject('cant cancel this request!');
           } 

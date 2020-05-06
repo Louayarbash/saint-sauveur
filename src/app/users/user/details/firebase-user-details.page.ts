@@ -6,7 +6,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
 import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
-import { ChatUserModal } from '../chat/chat.modal';
+import { ChatModal } from '../chat/chat.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
 
 @Component({
@@ -66,7 +66,7 @@ export class FirebaseUserDetailsPage implements OnInit {
 
   async openChatModal() {
     const modal = await this.modalController.create({
-      component: ChatUserModal,
+      component: ChatModal,
       componentProps: {
         'user': this.user
       }

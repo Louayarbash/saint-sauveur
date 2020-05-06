@@ -33,7 +33,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     private modalController: ModalController,
     public alertController: AlertController,
     public firebaseService: FirebaseService,
-    public router: Router,
+    public router: Router
     //private dateService : DateService
     //private _alertController: AlertController,
   ) { 
@@ -41,14 +41,13 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   ngOnInit() {
-/* 
-    console.log(this.item.date);
+  /*console.log(this.item.date);
     console.log(this.item.startDate);
     console.log(this.item.endDate); */
 
-    this.dateString = dayjs(this.item.date).format("DD-MMM-YYYY");//this.dateService.timestampToISOString(this.item.date);
-    this.startTimeString = dayjs(this.item.startDate).format("HH:MM");
-    this.endTimeString = dayjs(this.item.endDate).format("HH:MM");
+    this.dateString = dayjs(this.item.date).format("DD, MMM, YYYY");//this.dateService.timestampToISOString(this.item.date);
+    this.startTimeString = dayjs(this.item.startDate).format("HH:mm");
+    this.endTimeString = dayjs(this.item.endDate).format("HH:mm");
 
     this.updateItemForm = new FormGroup({
       date: new FormControl({value: this.dateString, disabled: true}),

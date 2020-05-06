@@ -10,7 +10,7 @@ import { DataStore, ShellModel } from '../../../shell/data-store';
 import { FcmService } from '../../../../app/services/fcm/fcm.service';
 //import { DateService } from '../../../../app/services/date/date.service';
 import * as dayjs from 'dayjs';
-import { timer } from 'rxjs';
+//import { timer } from 'rxjs';
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService } from '@ngx-translate/core';

@@ -2,16 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import * as dayjs from 'dayjs';
-
-import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
-
+//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
-import { SelectUserImageModal } from '../select-image/select-user-image.modal';
+//import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 
@@ -29,7 +25,6 @@ export class FirebaseUpdateUserModal implements OnInit {
 
   updateUserForm: FormGroup;
   selectedPhoto: string;
-  //skills = [];
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   myStoredProfileImage : Observable<any>;
   //myStoredProfileImage;
@@ -41,13 +36,9 @@ export class FirebaseUpdateUserModal implements OnInit {
     public router: Router,
     private _alertController: AlertController,
     private _camera: Camera,
-    private _angularFireAuth : AngularFireAuth,
     private _angularFireSrore :AngularFirestore
   ) { 
-    
-    //this.myStoredProfileImage = _angularFireSrore.collection("users").doc(_angularFireAuth.auth.currentUser.uid).valueChanges();
-    //this.myStoredProfileImage = _angularFireSrore.collection("users").doc(this.user.id).valueChanges();
-    //console.log("aaaa",this.myStoredProfileImage);
+    console.log("userId",this.user);
   }
 
   ngOnInit() {
@@ -67,41 +58,8 @@ export class FirebaseUpdateUserModal implements OnInit {
       building: new FormControl(this.user.building),
       code: new FormControl(this.user.code),
       parking: new FormControl(this.user.parking)
-/*       skills: new FormArray([], CheckboxCheckedValidator.minSelectedCheckboxes(1)),
-      spanish: new FormControl(this.user.languages.spanish),
-      english: new FormControl(this.user.languages.english),
-      french: new FormControl(this.user.languages.french) */
     });
-
-/*     this.firebaseService.getSkills().subscribe(skills => {
-      this.skills = skills;
-      // create skill checkboxes
-      this.skills.map((skill) => {
-        let userSkillsIds = [];
-        if (this.user.skills) {
-          userSkillsIds = this.user.skills.map(function(skillId) {
-            return skillId['id'];
-          });
-        }
-        // set the control value to 'true' if the user already has this skill
-        const control = new FormControl(userSkillsIds.includes(skill.id));
-        (this.updateUserForm.controls.skills as FormArray).push(control);
-      });
-    }); */
   }
-
-  /*get skillsFormArray() { return <FormArray>this.updateUserForm.get('skills'); }
-
-  changeLangValue(value): string {
-    switch (true) {
-      case (value <= 3 ):
-        return 'Novice';
-      case (value > 3 && value <= 6 ):
-        return 'Competent';
-      case (value > 6 ):
-        return 'Expert';
-    }
-  }*/
 
   dismissModal() {
    this.modalController.dismiss();
@@ -147,20 +105,6 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.user.code = this.updateUserForm.value.code;
     this.user.parking = this.updateUserForm.value.parking;
     this.user.app = this.updateUserForm.value.app;
-/*     this.user.languages.spanish = this.updateUserForm.value.spanish;
-    this.user.languages.english = this.updateUserForm.value.english;
-    this.user.languages.french = this.updateUserForm.value.french; */
-
-    // get the ids of the selected skills
-    //const selectedSkills = [];
-
-    /* this.updateUserForm.value.skills
-    .map((value: any, index: number) => {
-      if (value) {
-        selectedSkills.push(this.skills[index].id);
-      }
-    }); */
-    //this.user.skills = selectedSkills;
 
     const {/*age,*/ ...userData} = this.user; // we don't want to save the age in the DB because is something that changes over time
 
@@ -170,19 +114,6 @@ export class FirebaseUpdateUserModal implements OnInit {
       err => console.log(err)
     );
   }
-
-/*   async changeUserImage() {
-    const modal = await this.modalController.create({
-      component: SelectUserImageModal
-    });
-
-    modal.onDidDismiss().then(avatar => {
-      if (avatar.data != null) {
-        this.selectedPhoto = avatar.data.link;
-      }
-    });
-    await modal.present();
-  } */
   //LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {

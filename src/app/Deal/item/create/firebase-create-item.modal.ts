@@ -54,7 +54,7 @@ export class FirebaseCreateItemModal implements OnInit {
      this.createItemForm = new FormGroup({
       date: new FormControl(this.today, Validators.required),
       startDate : new FormControl(this.today ,Validators.required),
-      duration : new FormControl(0, counterRangeValidatorMinutes(15, 720)),
+      duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
       endDate : new FormControl({value : this.today, disabled : true}, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
       note : new FormControl('') 
@@ -65,7 +65,7 @@ export class FirebaseCreateItemModal implements OnInit {
   private onValueChanges(): void {
     this.createItemForm.get('date').valueChanges.subscribe(newDate=>{      
       console.log("onDateChanges",newDate);
-      let today = dayjs().format('YYYY-MM-DD');
+      let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
 /*    console.log(new Date().toISOString().slice(0,10));
       console.log(new Date().toISOString());
@@ -122,11 +122,11 @@ export class FirebaseCreateItemModal implements OnInit {
 
   }
   initValues(){
-  this.today = dayjs().toISOString(); 
+  this.today = dayjs().add(30,"minute").toISOString(); 
   //console.log("resetDate", dayjs().toISOString());
-  this.minDate = dayjs().format('YYYY-MM-DD');
+  this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
   this.maxDate = dayjs().add(1,"month").toISOString();
-  this.minStartDate = dayjs().format('HH:mm');
+  this.minStartDate = dayjs().add(30,"minute").format('HH:mm');
   //console.log("minStartDate",this.minStartDate)
   this.duration = 0;
   this.previousCounterValue = 0;  
@@ -147,6 +147,7 @@ export class FirebaseCreateItemModal implements OnInit {
     createItem() {
     //const loading = this.firebaseService.presentLoadingWithOptions();
     this.itemData.date = this.createItemForm.get('date').value;//this.createItemForm.value.date;
+    this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
     this.itemData.startDate = this.createItemForm.get('startDate').value;
     this.itemData.endDate = this.createItemForm.get('endDate').value;
     this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
@@ -167,37 +168,39 @@ export class FirebaseCreateItemModal implements OnInit {
     this.confirm();
   }
   async confirm(){
-    let date = dayjs(this.itemData.date).format("dddd, MMM, YYYY");
-    let endDate = dayjs(this.itemData.endDate).format("dddd, MMM, YYYY");
+    let date = dayjs(this.itemData.date).format("DD, MMM, YYYY");
+    let endDate = dayjs(this.itemData.endDate).format("DD, MMM, YYYY");
+    let startTime = dayjs(this.itemData.startDate).format("HH:mm");
+    let endTime = dayjs(this.itemData.endDate).format("HH:mm");
     let message = "";
     if(date == endDate){
-      message = "New parking request on " + date + " from " + dayjs(this.itemData.startDate).format("HH:mm") + " until " + dayjs(this.itemData.endDate).format("HH:mm");
+      message = this.featureService.getTranslationParams("CreateParkingRequestConfirmation",{date : date, startTime : startTime, endTime : endTime});
     }
     else{
-      message = "New parking request on " + date+ " from " + dayjs(this.itemData.startDate).format("HH:mm") + " to " + endDate + " at " + dayjs(this.itemData.endDate).format("HH:mm");
+      message = this.featureService.getTranslationParams("CreateParkingRequestConfirmation2",{date : date, startTime : startTime, endDate: endDate, endTime : endTime})
     }    
     const alert = await this.alertController.create({
       header: this.featureService.translations.ConfirmRequestDetails,
       message: message,
       buttons: [
          {
-          text: "OKAY",
+          text: this.featureService.translations.OK,
           handler: ()=> {
             const loading = this.featureService.presentLoadingWithOptions(5000);
             this.firebaseService.createItem(this.itemData)
             .then(() => {
               this.dismissModal();
-              this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully,2000);
+              //this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully,2000);
               loading.then(res=>res.dismiss());
             }).catch(err => {
               console.log(err)
-              this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+              //this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
               loading.then(res=>res.dismiss());
             });              
           }
         },
         {
-          text: "Cancel",
+          text: this.featureService.translations.Cancel,
            handler: ()=> {          
             },             
           }

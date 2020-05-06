@@ -6,7 +6,7 @@ import * as dayjs from 'dayjs';
 import { DataStore, ShellModel } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseUserModel, FirebaseSkillModel, FirebaseCombinedUserModel } from './user/firebase-user.model';
+import { FirebaseUserModel } from './user/firebase-user.model';
 import { UserImageModel } from './user/select-image/user-image.model';
 import { LoginService } from '../services/login/login.service';
 import { LoginCredential } from '../type';
@@ -28,14 +28,14 @@ export class FirebaseService {
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
-    return this.afs.collection<FirebaseListingItemModel>('users').valueChanges({ idField: 'id' })
-     .pipe(
+    return this.afs.collection<FirebaseListingItemModel>('users').valueChanges({ idField: 'id' });
+/*      .pipe(
        map(actions => actions.map(user => {
           const age = this.calcUserAge(user.birthdate);
           return { age, ...user } as FirebaseListingItemModel;
         })
       )
-    );
+    ); */
   }
 
   public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
@@ -68,12 +68,13 @@ export class FirebaseService {
       ref.orderBy('birthdate'));
       //.startAt(minDate).endAt(maxDate));
 
-    return listingCollection.valueChanges({ idField: 'id' }).pipe(
+    return listingCollection.valueChanges({ idField: 'id' });
+/*     .pipe(
       map(actions => actions.map(user => {
          const age = this.calcUserAge(user.birthdate);
          return { age, ...user } as FirebaseListingItemModel;
        })
-     ));
+     )); */
   }
 
   /*
@@ -116,7 +117,7 @@ export class FirebaseService {
   
   public getCombinedUserStore(dataSource: Observable<FirebaseUserModel>): DataStore<FirebaseUserModel> {
     // Initialize the model specifying that it is a shell model
-    const shellModel: FirebaseCombinedUserModel = new FirebaseCombinedUserModel();
+    const shellModel: FirebaseUserModel = new FirebaseUserModel();
 
     this.combinedUserDataStore = new DataStore(shellModel);
     // Trigger the loading mechanism (with shell) in the dataStore
@@ -207,27 +208,6 @@ export class FirebaseService {
     return this.avatarsDataStore;
   }
 
-  /*
-    FireStore utility methods
-  */
-  // Get list of all available Skills (used in the create and update modals)
-  public getSkills(): Observable<Array<FirebaseSkillModel>> {
-    return this.afs.collection<FirebaseSkillModel>('skills').valueChanges({ idField: 'id' });
-  }
-
-  // Get data of a specific Skill
-  private getSkill(skillId: string): Observable<FirebaseSkillModel> {
-    return this.afs.doc<FirebaseSkillModel>('skills/' + skillId)
-    .snapshotChanges()
-    .pipe(
-      map(a => {
-        const data = a.payload.data();
-        const id = a.payload.id;
-        return { id, ...data } as FirebaseSkillModel;
-      })
-    );
-  }
-
 
   // Get data of a specific User
   private getUser(userId: string): Observable<FirebaseUserModel> {
@@ -240,42 +220,5 @@ export class FirebaseService {
         return { id, ...userData } as FirebaseUserModel;
       })
     );
-  }
-
-  // Get all users who share at least 1 skill of the user's 'skills' list
-  private getUsersWithSameSkill(userId: string, skills: Array<FirebaseSkillModel>): Observable<Array<FirebaseListingItemModel>> {
-    // Get the users who have at least 1 skill in common
-    // Because firestore doesn't have a logical 'OR' operator we need to create multiple queries, one for each skill from the 'skills' list
-    const queries = skills.map(skill => {
-      return this.afs.collection('users', ref => ref
-      .where('skills', 'array-contains', skill.id))
-      .valueChanges({ idField: 'id' });
-    });
-
-    // Combine all these queries
-    return combineLatest(queries).pipe(
-      map((relatedUsers: FirebaseListingItemModel[][]) => {
-        // Flatten the array of arrays of FirebaseListingItemModel
-        const flattenedRelatedUsers = ([] as FirebaseListingItemModel[]).concat(...relatedUsers);
-
-        // Removes duplicates from the array of FirebaseListingItemModel objects.
-        // Also remove the original user (userId)
-        const filteredRelatedUsers = flattenedRelatedUsers
-        .reduce((accumulatedUsers, user) => {
-          if ((accumulatedUsers.findIndex(accumulatedUser => accumulatedUser.id === user.id) < 0) && (user.id !== userId)) {
-            return [...accumulatedUsers, user];
-          } else {
-            // If the user doesn't pass the test, then don't add it to the filtered users array
-            return accumulatedUsers;
-          }
-        }, ([] as FirebaseListingItemModel[]));
-
-        return filteredRelatedUsers;
-      })
-    );
-  }
-
-  private calcUserAge(dateOfBirth: number): number {
-    return dayjs(Date.now()).diff(dayjs.unix(dateOfBirth), 'year');
   }
 }

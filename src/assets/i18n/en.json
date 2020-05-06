@@ -16,6 +16,7 @@
   "NewRequests" : "New requests",
   "MyRequests" : "My requests",
   "NewParkingRequest" : "New parking request",
+  "UpdateParkingRequest" : "Update parking request",
   "PleaseWait" : "Please wait...",
   "PleaseConfirm" : "Please confirm",
   "CancelDealConfirmation" : "Are you sure you want to cancel this deal?",
@@ -25,6 +26,8 @@
   "ConnectionProblem" : "connection problem!",
   "Categories" : "Categories",
   "Edit" : "EDIT",
+  "FromTime" : "From",
+  "ToTime" : "To",
   "NoDealsFound" : "No deals found.",
   "NoPlace" : "Number of places",
   "RequesterDetails" : "Requester details",
@@ -32,11 +35,15 @@
   "RequestExpiresIn" : "Request expires in: ",
   "DealStartsIn" : "Deal starts in: ",
   "DealEndsIn" : "Deal ends in: ",
+  "Duration" : "Duration (minutes)",
+  "Details" : "DETAILS",
   "Call" : "CALL",
   "ProposeParkingConfirmation" : "Are you sure you want to give your parking on {{ valueDate }} from {{ valueFrom }} to {{ valueTo }} ?",
   "ProposeMyParking" : "Propose my parking",
   "CancelDeal" : "Cancel deal",
-  "CancelRequest" : "Cancel request"
-
-
+  "CancelRequest" : "Cancel request",
+  "Create" : "CREATE",
+  "Update" : "UPDATE",
+  "CreateParkingRequestConfirmation" : "New parking request on {{ date }} from {{ starTime }} until {{ endTime }}",
+  "CreateParkingRequestConfirmation2" : "New parking request on {{ date }} from {{ startTime }} to {{ endDate }} at {{ endTime }}"
 }

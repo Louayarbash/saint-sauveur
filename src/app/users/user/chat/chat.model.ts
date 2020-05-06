@@ -1,11 +1,11 @@
 import { ShellModel } from '../../../shell/data-store';
-import { timestamp } from 'rxjs/operators';
 
-export class ChatItemModel extends ShellModel {
+export class ChatModel extends ShellModel {
   text : string;
   name : string;
-  createdAt : number;
-  userId:string;
+  createdAt : firebase.firestore.FieldValue;
+  userId : string;
+  channelId : string;
   //isShell :true;
 
   constructor() {

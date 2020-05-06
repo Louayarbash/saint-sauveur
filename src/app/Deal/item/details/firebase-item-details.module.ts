@@ -13,6 +13,7 @@ import { FirebaseItemDetailsResolver } from './firebase-item-details.resolver';
 import { PipesModule } from '../../../pipes/pipes.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../language/language.service';
+import { FirebaseUpdateItemModal } from "../../item/update/firebase-update-item.modal";
 
 const routes: Routes = [
   {
@@ -35,11 +36,14 @@ const routes: Routes = [
     ComponentsModule,    
     PipesModule
   ],
-  declarations: [FirebaseItemDetailsPage],
+  declarations: [FirebaseItemDetailsPage,FirebaseUpdateItemModal],
   providers: [
     FirebaseService,
     FirebaseItemDetailsResolver,
     LanguageService
-  ]
+  ] ,
+  entryComponents: [
+    FirebaseUpdateItemModal
+  ] 
 })
 export class FirebaseItemDetailsPageModule {}

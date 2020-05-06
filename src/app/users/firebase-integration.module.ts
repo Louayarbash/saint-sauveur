@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 
 import { FirebaseCreateUserModal } from './user/create/firebase-create-user.modal';
 import { FirebaseUpdateUserModal } from './user/update/firebase-update-user.modal';
-import { ChatUserModal } from './user/chat/chat.modal';
+import { ChatModal } from './user/chat/chat.modal';
 import { SelectUserImageModal } from './user/select-image/select-user-image.modal';
 
 
@@ -42,13 +42,13 @@ const firebaseRoutes: Routes = [
     FirebaseCreateUserModal,
     FirebaseUpdateUserModal,
     SelectUserImageModal,
-    ChatUserModal
+    ChatModal
   ],
   declarations: [
     FirebaseCreateUserModal,
     FirebaseUpdateUserModal,
     SelectUserImageModal,
-    ChatUserModal
+    ChatModal
   ]
 })
 export class FirebaseIntegrationModule {}

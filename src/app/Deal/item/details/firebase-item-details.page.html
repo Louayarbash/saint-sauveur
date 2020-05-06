@@ -11,9 +11,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content class="page-content">
-<!--   {{ startTimeCounter }}<br>
+<!--{{ startTimeCounter }}<br>
   {{ endTimeCounter }}<br>
   {{ startTimeCounter | appTimeDifference }}<br>
   {{ startTimeCounter | appTimeAgo}} -->
@@ -36,11 +35,11 @@
             <ion-input class="ion-text-end" type="text" readonly [value]="dateMsg"></ion-input>
           </ion-item>
           <ion-item class="input-item">
-            <ion-label>{{ 'StartTime' | translate }}</ion-label>
+            <ion-label>{{ 'FromTime' | translate }}</ion-label>
             <ion-input class="ion-text-end" type="text" readonly [value]="startTimeMsg"></ion-input>
           </ion-item>
           <ion-item class="input-item">
-            <ion-label >{{ 'EndTime' | translate }}</ion-label>
+            <ion-label >{{ 'ToTime' | translate }}</ion-label>
             <ion-input class="ion-text-end" type="text" readonly [value]="endTimeMsg"></ion-input>
           </ion-item>
           <ion-item class="input-item">
@@ -86,8 +85,8 @@
       </div>
       <ion-list class="inputs-list" lines="full" *ngIf="userInfoRespBlock">
         <ion-item class="input-item" lines="none">
-      <ion-label>{{ 'ResponderDetails' | translate }}</ion-label>
-    </ion-item>
+        <ion-label>{{ 'ResponderDetails' | translate }}</ion-label>
+      </ion-item>
     </ion-list>
       <div class="user-details" *ngIf="userInfoRespBlock">
         <ion-row class="user-details-section ion-align-items-end">

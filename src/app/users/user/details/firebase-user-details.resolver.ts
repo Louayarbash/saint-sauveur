@@ -3,8 +3,8 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseCombinedUserModel, FirebaseUserModel } from '../firebase-user.model';
-import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
+import {  FirebaseUserModel } from '../firebase-user.model';
+//import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 
 import { DataStore } from '../../../shell/data-store';
 
@@ -25,13 +25,12 @@ export class FirebaseUserDetailsResolver implements Resolve<any> {
      const combinedUserDataStore: DataStore<FirebaseUserModel> = this.firebaseService
     .getCombinedUserStore(combinedUserDataSource);
 
-
     // The user details page has a section with related users, showing users with the same skills
     // For this we created another datastore which depends on the combinedUser data store
     // The DataStore subscribes to the DataSource, to avoid creating two subscribers to the combinedUserDataSource,
     // use the combinedUserDataStore timeline instead. (The timeline is a Subject, and is intended to have many subscribers)
     // Using, and thus subscribing to the timeline won't trigger two requests to the firebase endpoint
-/*     const relatedUsersDataSource: Observable<Array<FirebaseListingItemModel>> = this.firebaseService
+    /* const relatedUsersDataSource: Observable<Array<FirebaseListingItemModel>> = this.firebaseService
     .getRelatedUsersDataSource(combinedUserDataStore.state);
 
     const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = this.firebaseService

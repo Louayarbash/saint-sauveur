@@ -8,21 +8,18 @@ import { TranslateService } from '@ngx-translate/core';
 export class FeatureService {
   translations;
   userLanguage;
-  translate : TranslateService;
-  
+
   constructor(    
     private toastController : ToastController,
     private loadingController : LoadingController,
-    private translateee : TranslateService
+    private translate : TranslateService
     //private loginService : LoginService
     ) {
     console.log("constructor FeatureService", this.userLanguage);
-    this.translateee.get("ProposeParkingConfirmation",{valueDate : "333", valueFrom : "222", valueTo : "111"}).subscribe( res=> {console.log("alooooo",res);});
-    console.log(this.translateee.instant("ProposeParkingConfirmation",{valueDate : "333", valueFrom : "222", valueTo : "111"}));
     }
 getTranslationParams(key : string, params : Object)
 {
-  return this.translateee.instant(key,params)
+  return this.translate.instant(key,params)
 }
 async presentLoadingWithOptions(duration) {
   const loading = await this.loadingController.create({
@@ -44,7 +41,7 @@ async presentToast(message : string, duration : number){
 }
 getTranslations() {
   // get translations for this page to use in the Language Chooser Alert
-  this.translateee.getTranslation(this.translateee.currentLang)
+  this.translate.getTranslation(this.translate.currentLang)
   .subscribe((translations) => {
     console.log("inside getTranslationss",translations);
     this.translations = translations;

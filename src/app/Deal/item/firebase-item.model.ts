@@ -1,13 +1,13 @@
 import { ShellModel } from '../../shell/data-store';
-import  * as firebase from 'firebase/app';
+//import  * as firebase from 'firebase/app';
 
 export class userModel extends ShellModel {
-  id: string;
-  photo: string;
-  name: string;
-  lastname: string;
-  building:string;
-  app:string;
+  id : string;
+  photo : string;
+  name : string;
+  lastname : string;
+  building :string;
+  app : string;
   parking:string;
   owner:string;
   code:string;
@@ -23,18 +23,19 @@ export class userModel extends ShellModel {
 
 export class FirebaseItemModel extends ShellModel {
   id : string;
-  date:string;
-  startDate:string;
-  endDate:string;
-  startDateTS:number;
-  endDateTS:number;
-  status:string = "new";
-  createdBy:string;
-  responseBy:string;// = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";
-  note:string;
+  date : string;
+  dateTS : number;
+  startDate : string;
+  startDateTS : number;
+  endDate : string;
+  endDateTS : number;
+  status : string = "new";
+  createdBy : string;
+  responseBy : string;// = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";
+  note : string;
   createDate : firebase.firestore.FieldValue;
   count : string;
-  expiresIn:number;
+  expiresIn : number;
   durationSeconds : number;
   buildingId : string;
   admin : boolean = false;

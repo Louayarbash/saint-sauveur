@@ -9,9 +9,10 @@ import { ComponentsModule } from '../../components/components.module';
 import { FirebaseListingPage } from './firebase-listing.page';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule/*, TranslateService*/ } from '@ngx-translate/core';
 //import { TestPageModule } from "../item/test/test.module";
 import { FirebaseCreateItemModal } from "../item/create/firebase-create-item.modal";
+//import { FirebaseUpdateItemModal } from "../item/update/firebase-update-item.modal";
 import { PipesModule } from '../../pipes/pipes.module';
 
 const routes: Routes = [

@@ -157,7 +157,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               console.log("dayjsISO",dayjs("2020-04-24T22:35:16.138-04:00")) */
 
               this.items.map(item => {
-                item.date = dayjs(item.date).format('DD-MMM-YYYY');
+                item.date = dayjs(item.date).format('DD, MMM, YYYY');
                 item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
                 item.endTimeCounter = dayjs(item.endDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
                 item.startTime = dayjs(item.startDate).format("HH:mm");
