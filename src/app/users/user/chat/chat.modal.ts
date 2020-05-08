@@ -60,7 +60,7 @@ export class ChatModal implements OnInit {
     chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = this.loginId;
     chatMsg.text = this.msgText;
-    chatMsg.name = this.user.name;
+    //chatMsg.name = this.user.name;
     console.log(chatMsg);
     if(this.msgText != ''){
       this.afs.collection('chats').add({...chatMsg});
@@ -69,7 +69,6 @@ export class ChatModal implements OnInit {
         this.content.scrollToBottom(400);
       },400); 
     }
-
   }
   sendMessage2(){
 
@@ -78,7 +77,7 @@ export class ChatModal implements OnInit {
     chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = "AdminUserId";
     chatMsg.text = this.msgText;
-    chatMsg.name = "Admin";
+    //chatMsg.name = "Admin";
 
     if(this.msgText != ''){
       this.afs.collection('chats').add({...chatMsg});

@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel, combinedItemModel } from '../firebase-item.model';
+import { ItemModel, combinedItemModel } from '../firebase-item.model';
 import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 
 import { DataStore } from '../../../shell/data-store';
@@ -22,7 +22,7 @@ export class FirebaseItemDetailsResolver implements Resolve<any> {
     const combinedItemDataSource: Observable<combinedItemModel/*FirebaseCombinedUserModel*/> = this.firebaseService
     .getCombinedItemDataSource(itemId);
 
-     const combinedItemDataStore: DataStore<FirebaseItemModel> = this.firebaseService
+     const combinedItemDataStore: DataStore<ItemModel> = this.firebaseService
     .getCombinedItemStore(combinedItemDataSource);
 
 

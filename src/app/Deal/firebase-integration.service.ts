@@ -6,7 +6,7 @@ import { map, concatMap, first, filter } from 'rxjs/operators';
 import { DataStore, ShellModel } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseItemModel, userModel, combinedItemModel } from './item/firebase-item.model';
+import { ItemModel, userModel, combinedItemModel } from './item/firebase-item.model';
 //import { ItemImageModel } from './item/select-image/item-image.model';
 
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
@@ -26,7 +26,7 @@ export class FirebaseService {
   private tableName = "deals-requests";
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
-  private combinedItemDataStore: DataStore<FirebaseItemModel>;
+  private combinedItemDataStore: DataStore<ItemModel>;
   
   constructor(
     private afs: AngularFirestore, 
@@ -105,7 +105,7 @@ export class FirebaseService {
           userInfoRequObservable,
           userInfoRespObservable
           ]).pipe(
-          map(([userDetails, userInfoRequ, userInfoResp]: [FirebaseItemModel, userModel, userModel]) => {
+          map(([userDetails, userInfoRequ, userInfoResp]: [ItemModel, userModel, userModel]) => {
           // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
           console.log("111",userDetails);
           console.log("222",userInfoRequ);
@@ -141,22 +141,22 @@ export class FirebaseService {
         );  
     }
       // Get data of a specific User
-  private getItem(itemId: string): Observable<FirebaseItemModel> {
+  private getItem(itemId: string): Observable<ItemModel> {
     console.log("getItem", itemId);
-    return this.afs.doc<FirebaseItemModel>(this.tableName+'/' + itemId)
+    return this.afs.doc<ItemModel>(this.tableName+'/' + itemId)
     .snapshotChanges()
     .pipe(
       map(a => {
         console.log("hellogetItem",a);
         const postData = a.payload.data();
         const id = a.payload.id;
-        return { id, ...postData } as FirebaseItemModel;
+        return { id, ...postData } as ItemModel;
       })
     );
   }
-  public getCombinedItemStore(dataSource: Observable<FirebaseItemModel>): DataStore<FirebaseItemModel> {
+  public getCombinedItemStore(dataSource: Observable<ItemModel>): DataStore<ItemModel> {
     // Initialize the model specifying that it is a shell model
-    const shellModel: FirebaseItemModel = new FirebaseItemModel();
+    const shellModel: ItemModel = new ItemModel();
 
     this.combinedItemDataStore = new DataStore(shellModel);
     // Trigger the loading mechanism (with shell) in the dataStore
@@ -166,7 +166,7 @@ export class FirebaseService {
   }
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel)/* : Promise<DocumentReference>*/{     
+    public async createItem(itemData : ItemModel)/* : Promise<DocumentReference>*/{     
       console.log(itemData);
       //return this.afs.collection(this.tableName).add({...itemData});
      const count =  +itemData.count;
@@ -186,11 +186,11 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
+  public updateItemWithoutOptions(itemData: ItemModel): Promise<void> {
     return this.afs.collection(this.tableName).doc(itemData.id).set(itemData);
   }
 
-  public async updateItem(itemData: FirebaseItemModel): Promise<void> {
+  public async updateItem(itemData: ItemModel): Promise<void> {
 
     console.log("itemData",itemData);
     //this.afs.collection('posts').add({...itemData}).then(async (res)=>{
@@ -207,7 +207,7 @@ export class FirebaseService {
 
 
 
-  public proposeParking(itemData: FirebaseItemModel) {
+  public proposeParking(itemData: ItemModel) {
     let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
     this.afs.firestore.runTransaction(tran => {
       return tran.get(itemRef)
@@ -233,7 +233,7 @@ export class FirebaseService {
       console.log("Transaction failure:", err);
     });
   }
-  public cancelRequest(itemData: FirebaseItemModel) {
+  public cancelRequest(itemData: ItemModel) {
     let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
     this.afs.firestore.runTransaction(tran => {
       return tran.get(itemRef)
@@ -262,7 +262,7 @@ export class FirebaseService {
     });
   }
 
-  public cancelDeal(itemData: FirebaseItemModel) {
+  public cancelDeal(itemData: ItemModel) {
     let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
     this.afs.firestore.runTransaction(tran => {
       return tran.get(itemRef)

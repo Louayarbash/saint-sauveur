@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { ModalController} from '@ionic/angular';
+//import { FormGroup, FormControl } from '@angular/forms';
+import { ModalController, AlertController} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-
-import { Observable, ReplaySubject, Subscription,/*, merge*/ 
-interval} from 'rxjs';
+import { Observable, ReplaySubject, Subscription,/*, merge, interval*/} from 'rxjs';
 //import { switchMap, map } from 'rxjs/operators';
-
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
@@ -20,7 +17,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 import { LoginService } from '../../services/login/login.service';
 import { FeatureService } from '../../services/feature/feature.service'
 import * as dayjs from 'dayjs';
-import { timeout } from 'rxjs/operators';
+//import { timeout } from 'rxjs/operators';
 //import { TranslateService } from '@ngx-translate/core';
 
 
@@ -44,6 +41,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   segmentValue = 'newRequests';
   //friendsList: Array<any>;
   newRequestsList: Array<FirebaseListingItemModel>;
+  newOffersList: Array<FirebaseListingItemModel>;
   myRequestsList: Array<FirebaseListingItemModel>;
   searchQuery = '';
   showFilters = false;
@@ -61,9 +59,12 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
-  a:Array<FirebaseListingItemModel> ;
+
+  type : string;
+
+/*   a:Array<FirebaseListingItemModel> ;
   b:Array<FirebaseListingItemModel> ;
-  c:Array<FirebaseListingItemModel>;
+  c:Array<FirebaseListingItemModel> ; */
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -74,13 +75,15 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public modalController: ModalController,
     private route: ActivatedRoute,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    private alertController: AlertController
   ) {
   }
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
   }
    ngOnInit() {
+     
     this.searchQuery = '';
     
 
@@ -166,10 +169,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
               let myRequestsList = this.items;
               let newRequestsList = this.items;
+              let newOffersList = this.items;
 
               this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
-              this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || ((item.status === "expired")) || ((item.status === "accepted")) || ((item.status === "ended"))) && item.createdBy !== this.loginId);
-         
+              this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "request"));
+              this.newOffersList = newOffersList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "offer"));
               console.log("myRequestsList",this.myRequestsList);
               console.log("newRequestsList",this.newRequestsList);
             }
@@ -210,11 +214,41 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   } */
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateItemModal
-      //component:TestPage
+      component: FirebaseCreateItemModal,
+      componentProps: {
+        'type' : this.type
+      }
     });
     await modal.present();
   }
+
+  async chooseType(){
+      let alert = await this.alertController.create({
+        header: this.featureService.translations.ChooseType,
+        message: this.featureService.translations.ChooseTypeMsg,
+        buttons: [
+          {
+            text: this.featureService.translations.Request,
+            handler: () => {
+              this.type = 'request';
+              console.log('Request clicked');
+              this.openFirebaseCreateModal();
+            }
+          },
+          {
+            text: this.featureService.translations.Offer,
+            handler: () => {
+              this.type = 'offer';
+              console.log('Offer clicked');
+              this.openFirebaseCreateModal();
+            }
+          }
+        ]
+      });
+      await alert.present();
+    }
+  
+  
 /*   searchList() {
     this.searchSubject.next({
       lower: this.rangeForm.controls.dual.value.lower,

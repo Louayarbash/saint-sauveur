@@ -21,8 +21,9 @@ export class userModel extends ShellModel {
   }
 }
 
-export class FirebaseItemModel extends ShellModel {
+export class ItemModel extends ShellModel {
   id : string;
+  type : string;
   date : string;
   dateTS : number;
   startDate : string;
@@ -44,7 +45,7 @@ export class FirebaseItemModel extends ShellModel {
   }
 }
 
-export class combinedItemModel extends FirebaseItemModel {
+export class combinedItemModel extends ItemModel {
   userInfoRequ : userModel = new userModel();
   userInfoResp : userModel = new userModel();
 }

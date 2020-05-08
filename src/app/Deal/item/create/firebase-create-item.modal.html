@@ -8,7 +8,8 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>{{ 'NewParkingRequest' | translate }}</ion-title>
+      <ion-title *ngIf="type === 'request'" >{{ 'NewParkingRequest' | translate }}</ion-title>
+      <ion-title *ngIf="type === 'offer'">{{ 'NewParkingOffer' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -39,7 +40,7 @@
             <ion-label>{{ 'ToTime' | translate }}</ion-label>
             <ion-datetime display-format="DD MMMM YYYY HH:mm" formControlName="endDate"></ion-datetime>
           </ion-item>
-          <ion-item>
+          <ion-item *ngIf="type === 'request'">
             <ion-label>{{ 'NoPlace' | translate }}</ion-label>
             <ion-label>{{createItemForm.controls.count.value}}</ion-label>
             <app-counter-input formControlName="count" basic></app-counter-input>

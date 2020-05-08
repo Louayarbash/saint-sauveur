@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel } from '../firebase-item.model';
+import { ItemModel } from '../firebase-item.model';
 //import { Observable } from "rxjs";
 //import {PhotosArray} from '../../../type'
 import * as dayjs from 'dayjs';
@@ -22,7 +22,7 @@ import * as dayjs from 'dayjs';
 })
 export class FirebaseUpdateItemModal implements OnInit {
   // "user" is passed in firebase-details.page
-  @Input() item: FirebaseItemModel;
+  @Input() item: ItemModel;
   updateItemForm: FormGroup;
 
   dateString : string;

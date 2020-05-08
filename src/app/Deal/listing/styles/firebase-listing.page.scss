@@ -86,12 +86,25 @@
   
   .top-row {
     --ion-grid-column-padding: 0px;
-
     border-bottom: 2px dashed rgba(var(--ion-color-dark-rgb), .1);
     padding: 5px;//calc(var(--page-margin) / 2);
     justify-content: space-between;
     align-items: center;
     
+    .item-type-request {
+      margin: 0px;
+			//margin-bottom: calc(var(--page-margin) / 2);
+      color: var(--ion-color-danger);
+      font-size: 16px;
+    }
+
+    .item-type-offer {
+      margin: 0px;
+			//margin-bottom: calc(var(--page-margin) / 2);
+      color: var(--ion-color-success);
+      font-size: 16px;
+    }
+
     .item-name {
       margin: 0px;
 			//margin-bottom: calc(var(--page-margin) / 2);
@@ -147,8 +160,18 @@
       font-size: 14px;       
       padding-top: 8px;
       padding-bottom: 8px;
+      
+      .item-name {
+        margin: 0px;
+        //margin-bottom: calc(var(--page-margin) / 2);
+        color: var(--ion-color-dark-tint);
+        font-size: 16px;
+      }
+    
     }
+
     .time-left-wrapper {
+      padding-top: 25px;
       flex-shrink: 0;
       max-width: fit-content;
       display: flex;

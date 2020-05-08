@@ -1,10 +1,10 @@
-import { Component, OnInit,NgModule} from '@angular/core';
+import { Component, OnInit,NgModule, Input} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import * as dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel} from '../firebase-item.model';
+import { ItemModel} from '../firebase-item.model';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 import { LoginService } from '../../../services/login/login.service';
@@ -24,9 +24,10 @@ import  * as firebase from 'firebase/app';
   ],
 })
 export class FirebaseCreateItemModal implements OnInit {
+  @Input() type : string;
   loginID = this.loginService.getLoginID();
   createItemForm: FormGroup;
-  itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemData: ItemModel = new ItemModel();
   today : any;
   minDate : any;
   maxDate : any;
@@ -146,6 +147,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
     createItem() {
     //const loading = this.firebaseService.presentLoadingWithOptions();
+    this.itemData.type = this.type;
     this.itemData.date = this.createItemForm.get('date').value;//this.createItemForm.value.date;
     this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
     this.itemData.startDate = this.createItemForm.get('startDate').value;
@@ -155,7 +157,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.durationSeconds = this.itemData.endDateTS - this.itemData.startDateTS;
     this.itemData.expiresIn = this.itemData.startDateTS - dayjs().unix();
     this.itemData.note = this.createItemForm.value.note;
-    this.itemData.count = this.createItemForm.value.count;
+    this.itemData.count = this.type == 'request' ? this.createItemForm.value.count : '1';
     //this.itemData.createDate = new Date().toISOString();
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
@@ -173,11 +175,21 @@ export class FirebaseCreateItemModal implements OnInit {
     let startTime = dayjs(this.itemData.startDate).format("HH:mm");
     let endTime = dayjs(this.itemData.endDate).format("HH:mm");
     let message = "";
+    let messageTranslate = "";
+    let messageTranslate2 = "";
+    if (this.type == "request"){
+      messageTranslate = "CreateParkingRequestConfirmation";
+      messageTranslate2 = "CreateParkingRequestConfirmation2";
+    }
+    else {
+      messageTranslate = "CreateParkingOfferConfirmation";
+      messageTranslate2 = "CreateParkingOfferConfirmation2";
+    }
     if(date == endDate){
-      message = this.featureService.getTranslationParams("CreateParkingRequestConfirmation",{date : date, startTime : startTime, endTime : endTime});
+      message = this.featureService.getTranslationParams(messageTranslate,{date : date, startTime : startTime, endTime : endTime});
     }
     else{
-      message = this.featureService.getTranslationParams("CreateParkingRequestConfirmation2",{date : date, startTime : startTime, endDate: endDate, endTime : endTime})
+      message = this.featureService.getTranslationParams(messageTranslate2,{date : date, startTime : startTime, endDate: endDate, endTime : endTime})
     }    
     const alert = await this.alertController.create({
       header: this.featureService.translations.ConfirmRequestDetails,

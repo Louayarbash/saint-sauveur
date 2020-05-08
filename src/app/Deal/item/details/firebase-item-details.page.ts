@@ -3,7 +3,7 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel, combinedItemModel } from '../firebase-item.model';
+import { ItemModel, combinedItemModel } from '../firebase-item.model';
 //import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
@@ -125,7 +125,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     const modal = await this.modalController.create({
       component: FirebaseUpdateItemModal,
       componentProps: {
-        'item': this.item as FirebaseItemModel
+        'item': this.item as ItemModel
       }
     });
     await modal.present();
