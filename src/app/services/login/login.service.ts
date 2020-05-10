@@ -42,7 +42,7 @@ name : string;
   }
   getLoginID(){
     if(!this.uid){
-      this.uid = "QU1WaWtJoTch9NecQspR";//this.afAuth.auth.currentUser.uid;
+      this.uid = "QU1WaWtJoTch9NecQspR"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
     }
     return "QU1WaWtJoTch9NecQspR";//this.uid
   }

@@ -1,0 +1,54 @@
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>Chat</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+   <ion-grid> 
+    <ion-row *ngFor="let message of messages | async">
+      <ion-col size="9" *ngIf="currentUser !== message.userId" class="message other-message">
+      <b>{{otherUserName}}</b><br>
+      <span>{{message.text}}</span>
+      <div class="time-other" text-right><br>
+        {{message.createdAt?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+      </div>
+      <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
+      </ion-col>
+      <ion-col offset="3" size="9" *ngIf="currentUser === message.userId" class="message my-message">
+        <b>{{userName}}</b><br>
+        <span>{{message.text}}</span>
+        <div class="time-my-message" text-right><br>
+        <!-- {{message.createdAt?.seconds * 1000 | date:'short'}}<br> -->
+        {{message.createdAt?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        </div>
+        <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
+       </ion-col>
+    </ion-row>
+   </ion-grid> 
+
+  </ion-content>
+
+  <ion-footer>
+    <ion-toolbar color="light">
+      <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="10">
+          <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="msgText" class="message-input ion-no-margin"></ion-textarea>
+        </ion-col>
+        <ion-col size="2" class="msg-btn ion-text-center">
+          <ion-button (click)="sendMessage()" fill="clear" color="dark" [disabled]="msgText === ''" class="msg-btn">
+            <ion-icon name="send-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+<!--           <ion-button (click)="sendMessage2()" fill="clear" color="primary" [disabled]="msgText === ''" class="msg-btn">
+            <ion-icon name="send-outline" slot="icon-only"></ion-icon>
+          </ion-button> -->
+        </ion-col>
+      </ion-row> 
+    </ion-grid>
+    </ion-toolbar>
+  </ion-footer>

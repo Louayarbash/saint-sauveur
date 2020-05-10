@@ -13,6 +13,7 @@ import { ComponentsModule } from '../components/components.module';
 
 //import { FirebaseCreateItemModal } from './item/create/firebase-create-item.modal';
 //import { FirebaseUpdateItemModal } from './item/update/firebase-update-item.modal';
+import { ChatModal } from './item/chat/chat.modal';
 
 const firebaseRoutes: Routes = [
   {
@@ -36,6 +37,12 @@ const firebaseRoutes: Routes = [
     //AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule
+  ],  
+  entryComponents: [
+      ChatModal
+  ],
+  declarations: [
+    ChatModal
   ]/*,
   entryComponents: [
     //FirebaseCreateItemModal,

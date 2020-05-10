@@ -15,6 +15,7 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService } from '@ngx-translate/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { ChatModal } from '../chat/chat.modal';
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -33,6 +34,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   cancelRequestButtonHidden : boolean;
   userInfoRequBlock : boolean;
   userInfoRespBlock : boolean;
+  chatWithRequesterButton : boolean;
   loginID : string;
   item: combinedItemModel;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
@@ -77,6 +79,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.cancelRequestButtonHidden = true;
     this.userInfoRequBlock = false;
     this.userInfoRespBlock = false;
+    this.chatWithRequesterButton = false;
     }
 
   ngOnInit() {
@@ -108,6 +111,7 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.proposeButtonHidden = (this.loginID == this.item.createdBy) || this.item.status == "accepted" || !(this.item.status == "new");
             this.cancelRequestButtonHidden = !((this.loginID == this.item.createdBy) && this.item.status == "new");
             this.userInfoRequBlock = (this.loginID !== this.item.createdBy);
+            this.chatWithRequesterButton = (this.item.responseBy == this.loginID) ? true : false; 
             this.userInfoRespBlock = (this.loginID == this.item.createdBy) && (this.item.responseBy) ? true : false;
             //console.log("Louay", this.item.responseBy);
           }
@@ -234,6 +238,18 @@ export class FirebaseItemDetailsPage implements OnInit {
   this.callNumber.callNumber(number, true)
   .then(res => console.log('Launched dialer!', res))
   .catch(err => console.log('Error launching dialer', err));
+  }
+
+  async openChatModal() {
+    console.log("dddd",this.item);
+    const modal = await this.modalController.create({
+      component: ChatModal,
+      componentProps: {
+        'item': this.item 
+      }
+    });
+
+    await modal.present();
   }
   
 }
