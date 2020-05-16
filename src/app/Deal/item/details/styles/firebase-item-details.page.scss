@@ -141,10 +141,17 @@
         //justify-content: space-between;
         flex-wrap: nowrap;
     
-        .user-data-row {
+
+        .user-name {
           padding-bottom: var(--page-margin);
+          margin: 0px;
+          //font-size: 20px;
+          //letter-spacing: 0.5px;
+        }
+
+/*         .user-data-row {
           //padding-bottom: var(--page-margin);
-          flex-wrap: nowrap;
+          //flex-wrap: nowrap;
           //justify-content: space-between;
     
           .user-name {
@@ -154,11 +161,15 @@
             //letter-spacing: 0.5px;
           }
     
-          .user-title {
+           .user-title {
             margin: 0px;
             color: var(--ion-color-medium);
             //font-size: 16px;
-          }
+          } 
+        } */
+
+        app-rating-input {
+          --rating-color: var(--ion-color-secondary);
         }
     
         .actions-row {
@@ -181,7 +192,9 @@
           }
         }
       }
-    }
+
+     }
+
 }
 
 /* .delete-btn {

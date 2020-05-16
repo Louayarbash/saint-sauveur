@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ToastController,LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+//import { RatingUser } from 'app/deal/item/firebase-item.model';
+import { RatingUser } from '../../Deal/item/firebase-item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +15,8 @@ export class FeatureService {
   constructor(    
     private toastController : ToastController,
     private loadingController : LoadingController,
-    private translate : TranslateService
+    private translate : TranslateService,
+    private afs: AngularFirestore
     //private loginService : LoginService
     ) {
     console.log("constructor FeatureService", this.userLanguage);
@@ -75,4 +79,16 @@ fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entr
 });
 
 } */
+getUserRating(userId : string){
+  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).orderBy('createdDate'));
+  return ratingRef.valueChanges();
+}
+
+setUserRating(ratingInfo : RatingUser)
+{
+  //const rating = {ratingInfo};
+  console.log("rating object",ratingInfo);
+  const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`; //+ Date().toString();
+  return this.afs.doc(ratingPath).set({...ratingInfo});
+}
 }

@@ -15,6 +15,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../language/language.service';
 import { FirebaseUpdateItemModal } from "../../item/update/firebase-update-item.modal";
 
+import { ChatModal } from '../../item/chat/chat.modal';
+import { ReviewModal } from '../../item/review/review.modal';
+
 const routes: Routes = [
   {
     path: '',
@@ -36,14 +39,16 @@ const routes: Routes = [
     ComponentsModule,    
     PipesModule
   ],
-  declarations: [FirebaseItemDetailsPage,FirebaseUpdateItemModal],
+  declarations: [FirebaseItemDetailsPage,FirebaseUpdateItemModal,ChatModal,ReviewModal],
   providers: [
     FirebaseService,
     FirebaseItemDetailsResolver,
     LanguageService
   ] ,
   entryComponents: [
-    FirebaseUpdateItemModal
+    FirebaseUpdateItemModal,
+    ChatModal,
+    ReviewModal
   ] 
 })
 export class FirebaseItemDetailsPageModule {}

@@ -42,6 +42,7 @@
   "Duration" : "Duration (minutes)",
   "Details" : "DETAILS",
   "Call" : "CALL",
+  "Chat" : "CHAT",
   "ProposeParkingConfirmation" : "Are you sure you want to give your parking on {{ valueDate }} from {{ valueFrom }} to {{ valueTo }} ?",
   "ProposeMyParking" : "Propose my parking",
   "CancelDeal" : "Cancel deal",
@@ -60,5 +61,14 @@
   "expired" : "EXPIRED",
   "started" : "STARTED",
   "accepted" : "ACCEPTED",
-  "ended" : "ENDED"
+  "ended" : "ENDED",
+  "Review" : "Review",
+  "Stars" : "stars",
+  "Phone" : "Phone",
+  "Building" : "Building",
+  "Rating" : "Rating",
+  "ReviewExperianceWith" : "Review your deal with ",
+  "UsersRating" : "Users rating",
+  "Of" : "of",
+  "DiscussionWith" : "Discussion with"
 }

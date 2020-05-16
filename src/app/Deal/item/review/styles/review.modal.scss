@@ -1,0 +1,59 @@
+@import "../../../../../theme/mixins/inputs/checkbox-tag";
+
+:host {
+  --page-margin: var(--app-fair-margin);
+  --page-background: var(--app-background);
+
+  --page-background-shade: var(--app-background-shade);
+  --page-tags-gutter: 5px;
+}
+
+@import "../../../../../theme/mixins/inputs/checkbox-tag";
+
+:host {
+  --page-margin: var(--app-fair-margin);
+  --page-background: var(--app-background);
+
+  --page-background-shade: var(--app-background-shade);
+  --page-tags-gutter: 5px;
+}
+.header{
+  padding: 10px;
+  border-radius:10px;
+  margin-bottom :0px;
+  white-space:pre-wrap;
+  }
+
+  .message{
+    
+    border-radius:10px;
+    margin-bottom :0px;
+    white-space:pre-wrap;
+    }
+  
+  .other-message{
+  background: var(--ion-color-medium-tint);
+  color:#ffffff;
+  }
+  
+  .my-message{
+  background: var(--ion-color-light-shade);
+  //color:#ffffff;
+  }
+  
+  .time-other{
+  font-style: italic;
+  color: #ffffff;
+  font-size:small;
+  float:right;
+  }
+  .time-my-message{
+    font-style: italic;
+    //color: #ffffff;
+    font-size:small;
+    float:right;
+  }
+  app-rating-input {
+    --rating-color: var(--ion-color-secondary);
+  }
+

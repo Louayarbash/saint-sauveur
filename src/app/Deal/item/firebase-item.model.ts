@@ -15,7 +15,9 @@ export class userModel extends ShellModel {
   phone: number;
   birthdate: number;
   language:string;
-
+  rating:string;
+  numberOfOffers:string;
+  numberOfRequests:string;
   constructor() {
     super();
   }
@@ -48,6 +50,16 @@ export class ItemModel extends ShellModel {
 export class combinedItemModel extends ItemModel {
   userInfoRequ : userModel = new userModel();
   userInfoResp : userModel = new userModel();
+}
+
+export class RatingUser {     
+  dealId : string;
+  userId : string;
+  userName : string; 
+  ratedUserId : string; 
+  review : string;
+  stars : number; 
+  createdDate: firebase.firestore.FieldValue;
 }
 
 /* export class FirebaseCombinedSkillModel extends FirebaseItemModel {

@@ -42,10 +42,11 @@
   "Duration" : "Durée (minutes)",
   "Details" : "DÉTAILS",
   "Call" : "APPEL",
+  "Chat" : "MESSAGE",
   "ProposeParkingConfirmation" : "Voulez-vous vraiment donner votre parking le {{ valueDate }} de {{ valueFrom }} à {{ valueTo }} ?",
   "ProposeMyParking" : "Offrir mon parking",
   "CancelDeal" : "Annuler l'offre",
-  "CancelRequest" : "Demande d'annulation",
+  "CancelRequest" : "ANNULER",
   "Create" : "CRÉER",
   "Update" : "MODIFIER",
   "CreateParkingRequestConfirmation" : "Nouvelle demande de stationnement le {{ date }} de {{ startTime }} à {{ endTime }}",
@@ -60,5 +61,14 @@
   "expired" : "EXPIRÉE",
   "started" : "COMMENCÉE",
   "accepted" : "ACCEPTÉE",
-  "ended" : "TERMINÉE"
+  "ended" : "TERMINÉE",
+  "Review" : "Évaluer",
+  "Stars" : "étoiles",
+  "Phone" : "Tél",
+  "Building" : "Bâtiment",
+  "Rating" : "Évaluation",
+  "ReviewExperianceWith" : "Évaluer votre expérience avec ",
+  "UsersRating" : "Autres évaluations",
+  "Of" : "sur",
+  "DiscussionWith" : "Discussion avec"
 }

@@ -42,7 +42,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 
 /*LA_ end */
 
-import {  firestore } from 'firebase-admin';
+//import {  firestore } from 'firebase-admin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';

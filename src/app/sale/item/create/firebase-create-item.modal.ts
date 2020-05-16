@@ -86,18 +86,6 @@ export class FirebaseCreateItemModal implements OnInit {
     }); */
   }
 
-  //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
-
-  changeLangValue(value): string {
-    switch (true) {
-      case (value <= 3 ):
-        return 'Novice';
-      case (value > 3 && value <= 6 ):
-        return 'Competent';
-      case (value > 6 ):
-        return 'Expert';
-    }
-  }
 
   async dismissModal() {
    await this.modalController.dismiss();
@@ -112,32 +100,12 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.category = this.createItemForm.value.category;
     this.itemData.createDate = Date.now().toString();
     this.itemData.createdById = this.loginService.getLoginID();
-    //this.itemData.photoslider = this.postsImages;
-    
-    //dayjs(this.createUserForm.value.birthdate).unix(); // save it in timestamp
-
-/*  this.userData.languages.spanish = this.createUserForm.value.spanish;
-    this.userData.languages.english = this.createUserForm.value.english;
-    this.userData.languages.french = this.createUserForm.value.french; */
-
-    // get the ids of the selected skills
-/*    const selectedSkills = [];
-
-    this.createUserForm.value.skills
-    .map((value: any, index: number) => {
-      if (value) {
-        selectedSkills.push(this.skills[index].id);
-      }
-    });
-    this.userData.skills = selectedSkills; */
     const loading = this.firebaseService.presentLoadingWithOptions();
     this.firebaseService.createItem(this.itemData,this.postImages)
     .then(() => {
       this.dismissModal();
-      //this._oneSignal.postNotification({})
       this.firebaseService.presentToast("post added successfully");
-      loading.then(res=>res.dismiss());
-      //console.log("eir");      
+      loading.then(res=>res.dismiss());  
     });     
   }
   async showAlert(title,msg,task){
@@ -260,7 +228,7 @@ export class FirebaseCreateItemModal implements OnInit {
             console.log("max", optionsPicker.maximumImagesCount);
             if((3 - this.postImages.length) != 1){
             
-            //this.ImagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
+            this.ImagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
             console.log("not 1");
              this.ImagePicker.getPictures(optionsPicker).then(/*async*/ (results : string[]) => { 
               const loading = this.firebaseService.presentLoadingWithOptions();

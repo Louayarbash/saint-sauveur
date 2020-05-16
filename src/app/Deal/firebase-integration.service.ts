@@ -42,6 +42,7 @@ export class FirebaseService {
     //this.loginService.getUserInfo();
     console.log("building inside deal service",this.loginService.buildingId);
     return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.buildingId)).valueChanges({  idField: 'id' })
+    
       //.pipe(map(actions => actions.map(item => { 
         //const listingDetails = item.id + "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");
           //const age = this.calcUserAge(post.createDate);
@@ -287,4 +288,6 @@ export class FirebaseService {
       console.log("Transaction failure:", err);
     });
   }
+
+
 }

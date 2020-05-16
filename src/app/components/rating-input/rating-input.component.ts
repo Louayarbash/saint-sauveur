@@ -19,6 +19,7 @@ export class RatingInputComponent implements ControlValueAccessor, OnInit {
   propagateChange: any = () => {}; // Noop function
 
   ngOnInit() {
+    console.log("this.innerValue",this.innerValue)
     const states: Array<number> = [];
 
     for (let i = 0; i < this.max; i++) {

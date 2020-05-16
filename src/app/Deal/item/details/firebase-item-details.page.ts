@@ -15,7 +15,14 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService } from '@ngx-translate/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+
+import { FormGroup, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ChatModal } from '../chat/chat.modal';
+import { ReviewModal } from '../review/review.modal';
+//import { RealEstateListingResolver } from 'src/app/real-estate/listing/real-estate-listing.resolver';
+
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -35,6 +42,9 @@ export class FirebaseItemDetailsPage implements OnInit {
   userInfoRequBlock : boolean;
   userInfoRespBlock : boolean;
   chatWithRequesterButton : boolean;
+  ratingRequButton : boolean;
+  ratingRespButton : boolean;
+  noteSection : boolean;
   loginID : string;
   item: combinedItemModel;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
@@ -56,6 +66,13 @@ export class FirebaseItemDetailsPage implements OnInit {
   userNameResp : string;
   //userPhoneRequ : string;
   //userPhoneResp : string;
+  ratingFormCrea : FormGroup;
+  ratingFormResp : FormGroup;
+  rating : string = "1";
+  creatorRating : Observable<Array<any>>;
+  avgCreatorRating : Observable<any>;
+  respoderRating : Observable<Array<any>>;
+  avgRespoderRating : Observable<any>;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -73,6 +90,9 @@ export class FirebaseItemDetailsPage implements OnInit {
     private featureService : FeatureService,
     private callNumber: CallNumber
   ) { 
+
+
+    
     this.loginID = this.loginService.getLoginID();
     this.cancelDealButtonHidden = true;
     this.proposeButtonHidden = true;
@@ -80,10 +100,20 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.userInfoRequBlock = false;
     this.userInfoRespBlock = false;
     this.chatWithRequesterButton = false;
+    this.ratingRequButton = false;
+    this.ratingRespButton = false;
+    this.noteSection = false;
     }
 
   ngOnInit() {
-    console.log("Deals details inside OnInit",this.loginService.buildingId);
+    this.ratingFormCrea = new FormGroup({
+      rate: new FormControl(this.rating)
+    });
+    this.ratingFormResp = new FormGroup({
+      rate: new FormControl(this.rating)
+    });
+    console.log("rere1",this.rating);
+    //console.log("Deals details inside OnInit",this.loginService.buildingId);
     this.FCM.getToken();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
@@ -110,11 +140,34 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.cancelDealButtonHidden = !((this.item.status == "accepted") || ((this.loginID == this.item.createdBy) && (this.item.status == "started")));
             this.proposeButtonHidden = (this.loginID == this.item.createdBy) || this.item.status == "accepted" || !(this.item.status == "new");
             this.cancelRequestButtonHidden = !((this.loginID == this.item.createdBy) && this.item.status == "new");
-            this.userInfoRequBlock = (this.loginID !== this.item.createdBy);
-            this.chatWithRequesterButton = (this.item.responseBy == this.loginID) ? true : false; 
+            this.userInfoRequBlock = true;//(this.loginID !== this.item.createdBy);
+            this.chatWithRequesterButton = true;//(this.item.responseBy == this.loginID) ? true : false; 
+            this.ratingRequButton = (this.item.status == "ended") ? true : false;
+            this.ratingRespButton = (this.item.status == "ended") ? true : false;
             this.userInfoRespBlock = (this.loginID == this.item.createdBy) && (this.item.responseBy) ? true : false;
-            //console.log("Louay", this.item.responseBy);
+            this.ratingFormCrea.get('rate').setValue(this.rating);
+            this.ratingFormResp.get('rate').setValue(this.rating);
+            this.noteSection = this.item.note ? true : false;
+            if(this.item.createdBy){
+              this.creatorRating = this.featureService.getUserRating(this.item.createdBy);
+              this.avgCreatorRating = this.creatorRating.pipe(map( arr => { 
+                const rating = arr.map(res => {return Number(res.stars)});
+                let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
+                this.ratingFormCrea.get('rate').setValue(valueRating);
+                return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'not rated yet'
+              }));
+            }
+            if(this.item.responseBy){
+              this.respoderRating = this.featureService.getUserRating(this.item.responseBy);
+              this.avgRespoderRating = this.respoderRating.pipe(map( arr => { 
+                const rating = arr.map(res => {return Number(res.stars)});
+                let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
+                this.ratingFormResp.get('rate').setValue(valueRating);
+                return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'not rated yet'
+              }));
+            }
           }
+          console.log("rere2",this.rating);
         }
       );
         /*relatedUsersDataStore.state.subscribe(
@@ -241,9 +294,24 @@ export class FirebaseItemDetailsPage implements OnInit {
   }
 
   async openChatModal() {
-    console.log("dddd",this.item);
+    //console.log("dddd",this.item);
     const modal = await this.modalController.create({
       component: ChatModal,
+      componentProps: {
+        'item': this.item 
+      }
+    });
+
+    await modal.present();
+  }
+/*   rateUser(){
+    
+    this.featureService.setUserRating("this.item.id", "this.item.responseBy", "this.item.userInfoResp.name", this.item.createdBy , "test", this.ratingForm.get('rate').value);//.catch(err => { console.log(err)});
+
+  } */
+  async openReviewModal() {
+    const modal = await this.modalController.create({
+      component: ReviewModal,
       componentProps: {
         'item': this.item 
       }

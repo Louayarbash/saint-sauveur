@@ -14,11 +14,12 @@ import { combinedItemModel } from '../firebase-item.model';
 
 
 @Component({
-  selector: 'app-firebase-update-user',
+  //selector: 'app-firebase-chat',
+  selector: 'app-firebase-chat',
   templateUrl: './chat.modal.html',
   styleUrls: [
-    './styles/firebase-update-user.modal.scss',
-    './styles/firebase-update-user.shell.scss'
+    './styles/chat.modal.scss',
+    './styles/chat.shell.scss'
   ],
 })
 export class ChatModal implements OnInit {
@@ -46,10 +47,10 @@ export class ChatModal implements OnInit {
   }
 
   ngOnInit() {
-    this.loginService.getUserInfo();
+    //this.loginService.getUserInfo();
     this.otherUserName = this.item.createdBy == this.loginService.getLoginID() ? this.item.userInfoResp.name : this.item.userInfoRequ.name;
     this.userName = this.loginService.name;
-    this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy).orderBy('createdAt').limitToLast(10)).valueChanges();
+    this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy).orderBy('createdAt')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 
@@ -75,24 +76,6 @@ export class ChatModal implements OnInit {
         this.content.scrollToBottom(400);
       },400); 
     }
-  }
-  sendMessage2(){
-
-    let chatMsg : ChatModel = new ChatModel();
-    chatMsg.channelId = "chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy;
-    chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    chatMsg.userId = this.loginId;
-    chatMsg.text = this.msgText;
-    //chatMsg.name = "Admin";
-
-    if(this.msgText != ''){
-      this.afs.collection('chats').add({...chatMsg});
-      this.msgText = '';
-      setTimeout(() => {
-        this.content.scrollToBottom(400);
-      },400); 
-    }
-
   }
 
 }

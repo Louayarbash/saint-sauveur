@@ -9,13 +9,13 @@ import { FirebaseItemModel} from '../firebase-item.model';
 //import { AngularFirestore } from '@angular/fire/firestore';
 import { Date } from 'core-js';
 
-import { File } from "@ionic-native/file/ngx";
+//import { File } from "@ionic-native/file/ngx";
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileUpload } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FilePath } from '@ionic-native/file-path/ngx';
+//import { FileOpener } from '@ionic-native/file-opener/ngx';
+//import { FilePath } from '@ionic-native/file-path/ngx';
 
 
 @Component({
@@ -41,10 +41,10 @@ export class FirebaseCreateItemModal implements OnInit {
     //private changeRef: ChangeDetectorRef,
     private chooser: Chooser,
     private loginService : LoginService,
-    private featureService : FeatureService,
-    private fileOpener : FileOpener,
-    private filePath : FilePath,
-    private file : File
+    private featureService : FeatureService
+    //private fileOpener : FileOpener,
+    //private filePath : FilePath,
+    //private file : File
   ) { 
     
   }
