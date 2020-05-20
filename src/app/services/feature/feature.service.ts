@@ -4,6 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 //import { RatingUser } from 'app/deal/item/firebase-item.model';
 import { RatingUser } from '../../Deal/item/firebase-item.model';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -91,4 +93,21 @@ setUserRating(ratingInfo : RatingUser)
   const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`; //+ Date().toString();
   return this.afs.doc(ratingPath).set({...ratingInfo});
 }
+/* public getBuildingInfo(buildingId : string): Observable<Array<any>> {
+  return this.afs.collection<any>('building' , ref => ref.where('building')).valueChanges({ idField: 'id' });
+} */
+
+getItem(tableName : string, itemId: string): Observable<any> {
+  //console.log("getItem", itemId);
+  return this.afs.doc<any>( tableName + '/' + itemId).valueChanges();
+/*  .snapshotChanges()
+   .pipe(
+    map(a => {
+      const postData = a.payload.data();
+      const id = a.payload.id;
+      return { id, ...postData };
+    })
+  ); */
+}
+
 }

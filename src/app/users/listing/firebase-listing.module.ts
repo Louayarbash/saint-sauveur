@@ -9,6 +9,8 @@ import { ComponentsModule } from '../../components/components.module';
 import { FirebaseListingPage } from './firebase-listing.page';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
+import { TranslateModule } from '@ngx-translate/core';
+import { FirebaseCreateUserModal } from "../user/create/firebase-create-user.modal";
 
 const routes: Routes = [
   {
@@ -27,12 +29,16 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     ComponentsModule,
+    TranslateModule,    
     RouterModule.forChild(routes)
   ],
-  declarations: [FirebaseListingPage],
+  declarations: [FirebaseListingPage, FirebaseCreateUserModal],
   providers: [
     FirebaseService,
     FirebaseListingResolver
+  ],
+  entryComponents: [
+    FirebaseCreateUserModal
   ]
 })
 export class FirebaseListingPageModule {}

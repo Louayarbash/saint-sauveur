@@ -53,10 +53,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchQuery = '';
 
-    this.rangeForm = new FormGroup({
-      dual: new FormControl({lower: 1, upper: 100})
-    });
-
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
       (resolvedRouteData) => {
@@ -67,28 +63,26 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         // we ensure having just one subscription (the latest)
         const updateSearchObservable = this.searchFiltersObservable.pipe(
           switchMap((filters) => {
-            const filteredDataSource = this.firebaseService.searchUsersByAge(
-              filters.lower,
-              filters.upper
-            );
             // Send a shell until we have filtered data from Firebase
             const searchingShellModel = [
               new FirebaseListingItemModel(),
               new FirebaseListingItemModel()
             ];
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
-            const searchingDelay = 4000;
+            const searchingDelay = 400;
 
-            const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
-
+            //const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
+            const dataSourceWithShellObservable = DataStore.AppendShell(this.listingDataStore.state, searchingShellModel, searchingDelay);
+            
             return dataSourceWithShellObservable.pipe(
               map(filteredItems => {
                 // Just filter items by name if there is a search query and they are not shell values
                 if (filters.query !== '' && !filteredItems.isShell) {
                   const queryFilteredItems = filteredItems.filter(
                     item =>
-                    item.name.toLowerCase().includes(filters.query.toLowerCase()
-                  )
+                     
+                    (item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
+                    item.name.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
                   );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
@@ -127,8 +121,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   searchList() {
     this.searchSubject.next({
-      lower: this.rangeForm.controls.dual.value.lower,
-      upper: this.rangeForm.controls.dual.value.upper,
       query: this.searchQuery
     });
   }

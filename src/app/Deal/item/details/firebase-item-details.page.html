@@ -48,30 +48,30 @@
     </ion-col>
   </ion-row> -->
     <section>
-        <ion-list class="inputs-list" lines="full">
-          <ion-item class="input-item">
+        <ion-list lines="full">
+          <ion-item>
             <ion-label>Date</ion-label>
             <!-- <ion-input class="ion-text-end" type="text" readonly [value]="dateMsg"></ion-input> -->
             <app-text-shell [data]="dateMsg"></app-text-shell>
           </ion-item>
-          <ion-item class="input-item">
+          <ion-item>
             <ion-label>{{ 'FromTime' | translate }}</ion-label>
             <!-- <ion-input class="ion-text-end" type="text" readonly [value]="startTimeMsg"></ion-input> -->
             <app-text-shell [data]="startTimeMsg"></app-text-shell>
           </ion-item>
-          <ion-item class="input-item">
+          <ion-item>
             <ion-label >{{ 'ToTime' | translate }}</ion-label>
             <app-text-shell [data]="endTimeMsg"></app-text-shell>
             <!-- <ion-input class="ion-text-end" type="text" readonly [value]="endTimeMsg"></ion-input> -->
           </ion-item>
-          <ion-item class="input-item">
+          <ion-item>
             <ion-label>{{ 'NoPlace' | translate }}</ion-label>
             <ion-input class="ion-text-end" type="text" readonly [value]="1"></ion-input>
           </ion-item>
         </ion-list>
       </section>
-      <ion-list class="inputs-list" lines="full" *ngIf="userInfoRequBlock">
-        <ion-item class="input-item" lines="none">
+      <ion-list lines="full" *ngIf="userInfoRequBlock">
+        <ion-item lines="none">
       <ion-label>{{ 'RequesterDetails' | translate }}</ion-label>
     </ion-item>
     </ion-list>
@@ -170,8 +170,8 @@
            <ion-row class="actions-row">
             <ion-col class="main-actions">
              <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="call(item.userInfoResp.phone)">{{ 'Call' | translate }}<ion-icon name="call"></ion-icon></ion-button>
-              <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="openChatModal()">{{ 'Chat' | translate }}<ion-icon name="chatbubbles"></ion-icon></ion-button>
-              <ion-button *ngIf="ratingRespButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>				
+             <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="openChatModal()">{{ 'Chat' | translate }}<ion-icon name="chatbubbles"></ion-icon></ion-button>
+             <ion-button *ngIf="ratingRespButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>				
             </ion-col>
           </ion-row>
         </ion-col>
@@ -197,6 +197,7 @@
 <ion-footer>
   <ion-row>
     <ion-col>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()">{{ 'ProposeMyParking' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">{{ 'ProposeMyParking' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="cancelDealButtonHidden">{{ 'CancelDeal' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequest()" [hidden]="cancelRequestButtonHidden">{{ 'CancelRequest' | translate }}</ion-button>

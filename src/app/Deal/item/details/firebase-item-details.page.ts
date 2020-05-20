@@ -21,6 +21,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChatModal } from '../chat/chat.modal';
 import { ReviewModal } from '../review/review.modal';
+//import { FirebaseService } from '../../../users/firebase-integration.service';
+
 //import { RealEstateListingResolver } from 'src/app/real-estate/listing/real-estate-listing.resolver';
 
 
@@ -187,28 +189,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     });
     await modal.present();
   }
-  async proposeParking(){
-    const alert = await this.alertController.create({
-      header: this.featureService.translations.PleaseConfirm,
-      message: this.featureService.getTranslationParams("ProposeParkingConfirmation",{valueDate : this.dateMsg, valueFrom : this.startTimeMsg, valueTo : this.endTimeMsg}),//("ProposeParkingConfirmation",{valueDate : '111', valueFrom : '222', valueTo : '333'}),//"Are you sure you want to give your parking on " + this.dateMsg + " from " + this.startTimeMsg + " to " + this.endTimeMsg + "?",
-      buttons: [
-         {
-          text:  this.featureService.translations.OK,
-          handler: ()=> {
-            this.firebaseService.proposeParking(this.item);
-          }
-        },
-        {
-          text: this.featureService.translations.Cancel,
-           handler: ()=> {
-          
-            }, 
-            
-          }
-      ]
-    });
-    await alert.present();
-  }
+
   async cancelRequest(){
     const alert = await this.alertController.create({
       header: this.featureService.translations.PleaseConfirm,
@@ -319,5 +300,119 @@ export class FirebaseItemDetailsPage implements OnInit {
 
     await modal.present();
   }
-  
+
+  async proposeParking1(){
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.PleaseConfirm,
+      message: this.featureService.getTranslationParams("ProposeParkingConfirmation",{valueDate : this.dateMsg, valueFrom : this.startTimeMsg, valueTo : this.endTimeMsg}),//("ProposeParkingConfirmation",{valueDate : '111', valueFrom : '222', valueTo : '333'}),//"Are you sure you want to give your parking on " + this.dateMsg + " from " + this.startTimeMsg + " to " + this.endTimeMsg + "?",
+      buttons: [
+         {
+          text:  this.featureService.translations.OK,
+          handler: ()=> {
+            this.firebaseService.proposeParking(this.item);
+          }
+        },
+        {
+          text: this.featureService.translations.Cancel,
+           handler: ()=> {
+          
+            }, 
+            
+          }
+      ]
+    });
+    await alert.present();
+  }
+
+
+
+  async proposeParking() {
+    let radioObject;
+    let parking;
+    await this.loginService.getUserInfo().then(()=>{
+      parking  = this.loginService.parking
+    console.log(parking);
+    });
+
+     this.featureService.getItem('building', this.loginService.buildingId).subscribe( async item => {
+      let levels = item.parking;
+      
+      console.log("levels",levels);
+      console.log("parking",parking);
+
+        //let userParking = [];
+        if (parking) {
+          radioObject = parking.map((parking) => { 
+            
+            return { name : levels.find( level => level.id === parking.id ).desc , type : 'radio' , label : levels.find( level => level.id === parking.id ).desc , value : parking.number }
+          
+          });
+    }
+    console.log("radioObject", radioObject);
+    const louya = "";
+
+    const alert = await this.alertController.create({
+      header: 'Radio',
+      inputs:   radioObject
+        /*[ {
+          name: 'radio1',
+          type: 'radio',
+          label: parking[0].number,
+          value: parking[0].id,
+          checked: true
+        },
+        {
+          name: 'radio2',
+          type: 'radio',
+          label: 'Radio 2',
+          value: 'value2'
+        },
+        {
+          name: 'radio3',
+          type: 'radio',
+          label: 'Radio 3',
+          value: 'value3'
+        } */
+      ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  });
+    
+/* 
+     let parking;
+    console.log(this.loginService.getLoginID());
+    await this.loginService.getUserInfo().then(()=>{
+      parking  = this.loginService.parking
+    console.log(parking);
+    });
+
+    let radioObject = parking.map( parking => {
+      return { name : 'louay' , type : 'radio' , label : parking.number , value : parking.number , checked: true}
+    }) */
+
+    
+    
+
+  }
+
+
+
+
 }

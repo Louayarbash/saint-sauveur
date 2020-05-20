@@ -9,6 +9,8 @@ import { ComponentsModule } from '../../../components/components.module';
 import { FirebaseUserDetailsPage } from './firebase-user-details.page';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserDetailsResolver } from './firebase-user-details.resolver';
+import { TranslateModule } from '@ngx-translate/core';
+import { FirebaseUpdateUserModal } from "../update/firebase-update-user.modal";
 
 const routes: Routes = [
   {
@@ -27,12 +29,16 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    TranslateModule,
     ComponentsModule
   ],
-  declarations: [FirebaseUserDetailsPage],
+  declarations: [FirebaseUserDetailsPage, FirebaseUpdateUserModal],
   providers: [
     FirebaseService,
     FirebaseUserDetailsResolver
-  ]
+  ],
+  entryComponents: [
+    FirebaseUpdateUserModal
+  ] 
 })
 export class FirebaseUserDetailsPageModule {}

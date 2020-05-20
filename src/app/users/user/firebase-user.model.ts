@@ -7,8 +7,9 @@ export class FirebaseUserModel extends ShellModel {
   lastname: string;
   building:string;
   app:string;
-  parking:string;
-  owner:string;
+  parking:any[];
+  type:string;
+  role:string;
   code:string;
   email: string;
   phone: number;

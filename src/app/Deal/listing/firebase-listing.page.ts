@@ -195,8 +195,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     );
   }
   segmentChanged(ev:any) {
-    console.log(ev.detail.value);
+    //console.log(ev.detail.value);
+    //console.log(ev.target.value);
     this.segmentValue = ev.detail.value;
+
     // Check if there's any filter and apply it
     //this.searchList();
   }

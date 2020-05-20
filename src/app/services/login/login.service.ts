@@ -14,6 +14,7 @@ uid : string;
 buildingId : string = "NJ6u68Cq68RgX9jXPuVx";
 languge : string;
 name : string;
+  parking: any;
   constructor(
     private afAuth : AngularFireAuth,
     private afs: AngularFirestore
@@ -28,7 +29,7 @@ name : string;
       });
       console.log("login function",this.uid);
       //this._uid = this._angularFireAuth.auth.currentUser.uid;
-      
+      this.getUserInfo();
       return authenticated;
       
   }
@@ -42,18 +43,20 @@ name : string;
   }
   getLoginID(){
     if(!this.uid){
-      this.uid = "QU1WaWtJoTch9NecQspR"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
+      this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
     }
-    return "QU1WaWtJoTch9NecQspR";//this.uid
+    return "Ku6jzqUAjK3iLlXWSfPK";//this.uid
   }
   async getUserInfo(){
       console.log("inside getLoginInfo 111")
       try {
-      const res = await this.afs.firestore.collection("users").doc(this.uid).get();
-      this.buildingId = res.data().buildingId;
+      const res = await this.afs.firestore.collection("users").doc(this.getLoginID()).get();
+      console.log("hello",res.data());
+      this.buildingId = res.data().building;
       this.languge = res.data().language;
       this.name = res.data().name;
-      console.log("inside getLoginInfo 222", this.buildingId);
+      this.parking = res.data().parking;
+      console.log("inside getLoginInfo 222", this.parking);
     }
     catch (err) {
       console.log(err);

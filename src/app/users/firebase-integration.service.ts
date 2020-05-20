@@ -22,7 +22,7 @@ export class FirebaseService {
   private avatarsDataStore: DataStore<Array<UserImageModel>>;
   
 
-  constructor(private afs: AngularFirestore, private _loginservice: LoginService) {}
+  constructor(private afs: AngularFirestore, private loginService: LoginService) {}
 
   /*
     Firebase User Listing Page
@@ -43,8 +43,6 @@ export class FirebaseService {
     if (!this.listingDataStore) {
       // Initialize the model specifying that it is a shell model
       const shellModel: Array<FirebaseListingItemModel> = [
-        new FirebaseListingItemModel(),
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
@@ -167,7 +165,7 @@ export class FirebaseService {
     Firebase Create User Modal
   */
   public createUser(userData: FirebaseUserModel, logincredential : LoginCredential): Promise<DocumentReference>  {
-    this._loginservice.signup(logincredential);
+    this.loginService.signup(logincredential);
     return this.afs.collection('users').add({...userData});
   }
 
@@ -175,7 +173,8 @@ export class FirebaseService {
     Firebase Update User Modal
   */
   public updateUser(userData: FirebaseUserModel): Promise<void> {
-    return this.afs.collection('users').doc(userData.id).set(userData);
+    console.log("updateUser", userData);
+    return this.afs.collection('users').doc(userData.id).update({...userData});
   }
 
   public deleteUser(userKey: string): Promise<void> {
@@ -220,5 +219,18 @@ export class FirebaseService {
         return { id, ...userData } as FirebaseUserModel;
       })
     );
+  }
+
+  getItem(tableName : string, itemId: string): Observable<any> {
+    console.log("getItem", itemId);
+    return this.afs.doc<any>( tableName + '/' + itemId).valueChanges();
+  /*  .snapshotChanges()
+     .pipe(
+      map(a => {
+        const postData = a.payload.data();
+        const id = a.payload.id;
+        return { id, ...postData };
+      })
+    ); */
   }
 }

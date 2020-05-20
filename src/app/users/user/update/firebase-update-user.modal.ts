@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,6 +10,8 @@ import { FirebaseUserModel } from '../firebase-user.model';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
+import { FeatureService } from '../../../services/feature/feature.service';
+import { LoginService } from '../../../services/login/login.service';
 
 @Component({
   selector: 'app-firebase-update-user',
@@ -23,29 +25,50 @@ export class FirebaseUpdateUserModal implements OnInit {
   // "user" is passed in firebase-details.page
   @Input() user: FirebaseUserModel;
 
-  updateUserForm: FormGroup;
-  selectedPhoto: string;
+  //updateUserForm: FormGroup;
+  //selectedPhoto: string;
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   myStoredProfileImage : Observable<any>;
-  //myStoredProfileImage;
+
+  updateUserForm: FormGroup;
+  userData: FirebaseUserModel = new FirebaseUserModel();
+  levels = [];
+  selectedParking = [];
+  selectedPhoto: string;
+  showHideParking2 : boolean;
+  showHideParking3 : boolean;
+  parking1selected : boolean;
+  parking2selected : boolean;
+  parking3selected : boolean;
+  selectOptions : any;
+
+
 
   constructor(
     private modalController: ModalController,
-    public alertController: AlertController,
+    //public alertController: AlertController,
     public firebaseService: FirebaseService,
     public router: Router,
-    private _alertController: AlertController,
-    private _camera: Camera,
-    private _angularFireSrore :AngularFirestore
+    private alertController: AlertController,
+    private camera: Camera,
+    //private _angularFireSrore :AngularFirestore,
+    //private featureService : FeatureService,
+    private loginService : LoginService,
+    private changeRef: ChangeDetectorRef
   ) { 
-    console.log("userId",this.user);
+    //console.log("userId",this.user);
+    this.showHideParking2 = true;
+    this.showHideParking3 = true;
+    this.parking1selected = false;
+    this.parking2selected = false;
+    this.parking3selected = false;
   }
 
   ngOnInit() {
-    this.myStoredProfileImage = this._angularFireSrore.collection("users").doc(this.user.id).valueChanges();
+    //this.myStoredProfileImage = this._angularFireSrore.collection("users").doc(this.user.id).valueChanges();
     // this.selectedPhoto = this.user.photo;
-    this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
-    this.updateUserForm = new FormGroup({
+    //this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+/*     this.updateUserForm = new FormGroup({
       name: new FormControl(this.user.name, Validators.required),
       lastname: new FormControl(this.user.lastname, Validators.required),
       email: new FormControl(this.user.email, Validators.compose([
@@ -58,7 +81,132 @@ export class FirebaseUpdateUserModal implements OnInit {
       building: new FormControl(this.user.building),
       code: new FormControl(this.user.code),
       parking: new FormControl(this.user.parking)
+    }); */
+
+    this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+    this.updateUserForm = new FormGroup({
+      name: new FormControl(this.user.name,Validators.required),
+      lastname: new FormControl(this.user.lastname,Validators.required),
+      building: new FormControl(this.user.building,Validators.required),
+      app : new FormControl(this.user.app),
+      parking1Level : new FormControl("1000"),
+      parking1Number : new FormControl(),
+      parking2Level : new FormControl("1000"),
+      parking2Number : new FormControl(),
+      parking3Level : new FormControl("1000"),
+      parking3Number : new FormControl(),
+      code : new FormControl(this.user.code),
+      type : new FormControl(this.user.type ? this.user.type : 'owner',Validators.required),
+      role : new FormControl(this.user.role ? this.user.role : 'user',Validators.required),
+      phone: new FormControl(this.user.phone),
+      birthdate: new FormControl(dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY')),
+      language : new FormControl(this.user.language ? this.user.language : 'en',Validators.required),
+      email: new FormControl(this.user.email, Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ]))
+    }/* ,
+    {validators: this.parkingValidator} */
+    );
+
+     /* this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
+      this.levels = item.parking;
+      console.log("this.levels", this.levels);
+    }); */
+
+    this.firebaseService.getItem('building', this.loginService.buildingId).subscribe(item => {
+      this.levels = item.parking;
+      console.log("parking",this.user.parking);
+
+        let userParking = [];
+        if (this.user.parking) {
+          userParking = this.user.parking.map((parking) => { 
+            
+            return { id : parking.id ,number : parking.number , desc : this.levels.find( level => level.id === parking.id ).desc };
+          
+          });
+        }
+      
+     console.log("userParkingIds",userParking)
+     if(userParking[0]){
+      console.log(1);
+
+      this.updateUserForm.controls['parking1Level'].setValue(userParking[0].id);
+      this.updateUserForm.controls['parking1Number'].setValue(userParking[0].number);
+      this.changeRef.detectChanges();
+
+    }
+    
+    if(userParking[1]){
+      console.log(2);
+
+      this.parking2selected = true;
+
+      this.updateUserForm.controls['parking2Level'].setValue(userParking[1].id);
+      this.updateUserForm.controls['parking2Number'].setValue(userParking[1].number);
+      this.changeRef.detectChanges();
+    }
+    else{
+      this.showHideParking2 = false;
+    }
+    if(userParking[2]){
+      console.log(3);
+      
+      this.updateUserForm.controls['parking3Level'].setValue(userParking[2].id);
+      this.updateUserForm.controls['parking3Number'].setValue(userParking[2].number);
+      this.changeRef.detectChanges();
+    }
+    else{
+      this.showHideParking3 = false;
+    }
+   
     });
+
+
+  }
+
+  parking1Changed(ev:any) {
+    console.log("VALUE CHANGED",ev.detail.value);
+    if(ev.detail.value != "1000"){
+      this.updateUserForm.controls['parking1Number'].setValidators(Validators.required);
+      this.parking1selected = true;
+    }
+    else{
+      this.parking1selected = false;
+      this.updateUserForm.controls['parking1Number'].setValidators(null);
+    }
+
+    this.updateUserForm.controls['parking1Number'].updateValueAndValidity();
+
+  }
+
+  parking2Changed(ev:any) {
+    console.log("VALUE CHANGED2",ev.detail.value);
+    if(ev.detail.value != "1000"){
+      this.updateUserForm.controls['parking2Number'].setValidators(Validators.required);
+      this.parking2selected = true;
+    }
+    else{
+      this.parking2selected = false;
+      this.updateUserForm.controls['parking2Number'].setValidators(null);
+    }
+    
+    this.updateUserForm.controls['parking2Number'].updateValueAndValidity();
+    
+  }
+
+  parking3Changed(ev:any) {
+    console.log("VALUE CHANGED3",ev.detail.value);
+    if(ev.detail.value != "1000"){
+      this.updateUserForm.controls['parking3Number'].setValidators(Validators.required);
+      this.parking3selected = true;
+    }
+    else{
+      this.parking3selected = false;
+      this.updateUserForm.controls['parking3Number'].setValidators(null);
+    }
+
+    this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
   }
 
   dismissModal() {
@@ -82,7 +230,7 @@ export class FirebaseUpdateUserModal implements OnInit {
             .then(
               () => {
                 this.dismissModal();
-                this.router.navigate(['firebase/listing']);
+                this.router.navigate(['users/listing']);
               },
               err => console.log(err)
             );
@@ -95,20 +243,39 @@ export class FirebaseUpdateUserModal implements OnInit {
 
   updateUser() {
 
-    this.user.photo = this.selectedPhoto;
-    this.user.name = this.updateUserForm.value.name;
-    this.user.lastname = this.updateUserForm.value.lastname;
-    this.user.birthdate = dayjs(this.updateUserForm.value.birthdate).unix(); // save it in timestamp
-    this.user.phone = this.updateUserForm.value.phone;
-    this.user.email = this.updateUserForm.value.email;
-    this.user.building = this.updateUserForm.value.building;
-    this.user.code = this.updateUserForm.value.code;
-    this.user.parking = this.updateUserForm.value.parking;
-    this.user.app = this.updateUserForm.value.app;
+    this.userData.id = this.user.id;
+    this.userData.photo = this.selectedPhoto;
+    this.userData.name = this.updateUserForm.value.name;
+    this.userData.lastname = this.updateUserForm.value.lastname;
+    this.userData.birthdate = dayjs(this.updateUserForm.value.birthdate).unix();
+    this.userData.phone = this.updateUserForm.value.phone;
+    this.userData.email = this.updateUserForm.value.email;
+    this.userData.building = this.updateUserForm.value.building;
+    this.userData.code =this.updateUserForm.value.code;
+    this.userData.type =this.updateUserForm.value.type;
+    this.userData.role =this.updateUserForm.value.role;
+    this.userData.app =this.updateUserForm.value.app;
+    this.userData.language =this.updateUserForm.value.language;
 
-    const {/*age,*/ ...userData} = this.user; // we don't want to save the age in the DB because is something that changes over time
+    this.selectedParking = [];
+    
+    if(this.updateUserForm.controls['parking1Level'].value != "1000"){
+      this.selectedParking.push({ id: this.updateUserForm.controls['parking1Level'].value , number : this.updateUserForm.value.parking1Number});
+    }
+        
+    if(this.updateUserForm.controls['parking2Level'].value != "1000"){
+      this.selectedParking.push({ id: this.updateUserForm.controls['parking2Level'].value , number : this.updateUserForm.value.parking2Number});
+    }
+        
+    if(this.updateUserForm.controls['parking3Level'].value != "1000"){
+      this.selectedParking.push({ id: this.updateUserForm.controls['parking3Level'].value , number : this.updateUserForm.value.parking3Number});
+    }
 
-    this.firebaseService.updateUser(userData)
+    this.userData.parking = this.selectedParking.length ? this.selectedParking : null;
+    
+    console.log(this.selectedParking);
+
+    this.firebaseService.updateUser(this.userData)
     .then(
       () => this.modalController.dismiss(),
       err => console.log(err)
@@ -118,34 +285,34 @@ export class FirebaseUpdateUserModal implements OnInit {
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
       quality:100,
-      destinationType: this._camera.DestinationType.DATA_URL,
-      encodingType: this._camera.EncodingType.JPEG,
-      mediaType: this._camera.MediaType.PICTURE,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
       targetHeight:200,
       correctOrientation:true,
-      sourceType:this._camera.PictureSourceType.CAMERA
+      sourceType:this.camera.PictureSourceType.CAMERA
     };
     const galleryOptions : CameraOptions = {
       quality:100,
-      destinationType: this._camera.DestinationType.DATA_URL,
-      encodingType: this._camera.EncodingType.JPEG,
-      mediaType: this._camera.MediaType.PICTURE,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
       targetHeight:200,
       correctOrientation:true,
-      sourceType:this._camera.PictureSourceType.SAVEDPHOTOALBUM
+      sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
     };
-    const alert = await this._alertController.create({
+    const alert = await this.alertController.create({
       header: "Select Source",
       message: "Pick a source for your image",
       buttons: [
         {
           text: "Camera",
           handler: ()=> {
-            this._camera.getPicture(cameraOptions).then((imageData)=> {
+            this.camera.getPicture(cameraOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
               const image = "data:image/jpeg;base64," + imageData;
               //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
+              //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
               this.selectedPhoto = image;
             });
           }
@@ -153,11 +320,11 @@ export class FirebaseUpdateUserModal implements OnInit {
         {
           text: "Gallery",
           handler: ()=> {
-            this._camera.getPicture(galleryOptions).then((imageData)=> {
+            this.camera.getPicture(galleryOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
               const image = "data:image/jpeg;base64," + imageData;
               //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
+              //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
               this.selectedPhoto = image;
             });
           }
@@ -167,6 +334,29 @@ export class FirebaseUpdateUserModal implements OnInit {
 
     await alert.present();
   }
-  //END
+  showHideParkingValidate2(){
+    this.showHideParking2 = this.showHideParking2 ? false : true;
+    this.showHideParking3 = false;
+    if(this.showHideParking2 == false){
+     this.updateUserForm.controls['parking2Level'].setValue("1000");  
+     this.updateUserForm.controls['parking2Number'].setValue("");
+     this.updateUserForm.controls['parking2Number'].setValidators(null);
+     this.updateUserForm.controls['parking2Number'].updateValueAndValidity();
+     
+     this.updateUserForm.controls['parking3Level'].setValue("1000");
+     this.updateUserForm.controls['parking3Number'].setValue("");
+     this.updateUserForm.controls['parking3Number'].setValidators(null);
+     this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
+   }
+   }
+   showHideParkingValidate3(){
+     this.showHideParking3 = this.showHideParking3 ? false : true;
+     if(this.showHideParking3 == false){
+       this.updateUserForm.controls['parking3Level'].setValue("1000");
+       this.updateUserForm.controls['parking3Number'].setValue("");
+       this.updateUserForm.controls['parking3Number'].setValidators(null);
+       this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
+     }
+   }
 
 }

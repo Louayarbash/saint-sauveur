@@ -8,7 +8,7 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>New User - ads</ion-title>
+      <ion-title>{{ 'NewUser' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -23,102 +23,235 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
-
-    <section class="user-details-fields fields-section">
-      <ion-list class="inputs-list" lines="full">
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Name</ion-label>
-          <ion-input type="text" formControlName="name" required></ion-input>
+    <section>
+      <ion-list lines="full">
+        <ion-item >
+          <ion-label  position="floating">{{ 'Name' | translate }}</ion-label>
+          <ion-input type="text" formControlName="name"></ion-input>
         </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Last name</ion-label>
-          <ion-input type="text" formControlName="lastname" required></ion-input>
+        <ion-item >
+          <ion-label  position="floating">{{ 'LastName' | translate }}</ion-label>
+          <ion-input type="text" formControlName="lastname"></ion-input>
         </ion-item>
-        <ion-item class="input-item">
-            <ion-label color="secondary" position="floating">Email</ion-label>
-            <ion-input type="email" formControlName="email" required></ion-input>
+        <ion-item >
+            <ion-label position="floating">{{ 'Email' | translate }}</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
           </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Date of Birth</ion-label>
+        <ion-item >
+          <ion-label position="floating">{{ 'DateOfBirth' | translate }}</ion-label>
           <ion-datetime display-format="DD/MM/YYYY" picker-format="DD MMMM YYYY" formControlName="birthdate"></ion-datetime>
         </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Phone number</ion-label>
-          <ion-input type="tel" formControlName="phone"></ion-input>
+        <ion-item >
+          <ion-label  position="floating">{{ 'PhoneNumber' | translate }}</ion-label>
+          <ion-input type="text" formControlName="phone"></ion-input>
         </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Building</ion-label>
-          <ion-input type="building" formControlName="building"></ion-input>
+        <ion-item >
+          <ion-label  position="floating">{{ 'Building' | translate }}</ion-label>
+          <ion-input type="text" formControlName="building"></ion-input>
         </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Apartment</ion-label>
-          <ion-input type="app" formControlName="app"></ion-input>
-        </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Parking</ion-label>
-          <ion-input type="parking" formControlName="parking"></ion-input>
-        </ion-item>
-        <ion-item class="input-item">
-          <ion-label color="secondary" position="floating">Code</ion-label>
-          <ion-input type="code" formControlName="code"></ion-input>
-        </ion-item>
+   
+          <ion-grid class="ion-no-margin ion-no-padding">          
+          <ion-row>
+          <ion-col>
+            <ion-item> 
+          <ion-label position="floating">{{ 'Apartment' | translate }}</ion-label>
+          <ion-input type="text" formControlName="app"></ion-input>
+            </ion-item> 
+        </ion-col>
+        <ion-col>
+          <ion-item> 
+          <ion-label position="floating">{{ 'DoorCode' | translate }}</ion-label>
+          <ion-input type="text" formControlName="code"></ion-input>
+          </ion-item> 
+        </ion-col>
+        </ion-row>
+      
+      </ion-grid>
+    
+<!--         <ion-grid>
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="3">
+              <div>
+                1 of 2
+              </div>
+            </ion-col>
+            <ion-col size="3">
+              <div>
+                2 of 2
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid> -->
+
+<ion-grid class="ion-no-margin ion-no-padding">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="type" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'Owner' | translate }}</ion-label>
+              <ion-radio value="owner"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Tenant' | translate }}</ion-label>
+                <ion-radio value="tenant"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid class="ion-no-margin ion-no-padding">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="language" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'English' | translate }}</ion-label>
+              <ion-radio value="en"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Frensh' | translate }}</ion-label>
+                <ion-radio value="fr"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid class="ion-no-margin ion-no-padding">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="role" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'RegularUser' | translate }}</ion-label>
+              <ion-radio value="user"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Admin' | translate }}</ion-label>
+                <ion-radio value="admin"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-item-divider lines="none" >
+  <ion-label>{{ 'Parking' | translate }}</ion-label>
+  </ion-item-divider>
+  <ion-grid class="ion-no-margin ion-no-padding">          
+    <ion-row class="ion-align-items-center">
+<ion-col size="6">
+  <ion-item lines=“none”>
+    <ion-label position="floating">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
+    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  </ion-col>
+  <ion-col *ngIf="parking1selected" size="4">
+      <ion-item>
+      <ion-label position="floating">{{ 'Parking' | translate }} 1 #</ion-label>
+      <ion-input type="text" formControlName="parking1Number"></ion-input>
+      </ion-item>
+  </ion-col>
+  <ion-col *ngIf="parking1selected" size="2">
+      <ion-item lines="none">
+      <ion-button *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+      </ion-item>
+  </ion-col>
+   </ion-row>
+  </ion-grid>
+  <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking2">          
+      <ion-row class="ion-align-items-center">
+<ion-col size="6">
+    <ion-item>
+    <ion-label position="floating">{{ 'Parking' | translate }} 2 {{ 'level' | translate }}</ion-label>
+    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-col>
+<ion-col *ngIf="parking2selected" size="4">
+    <ion-item>
+    <ion-label position="floating">{{ 'Parking' | translate }} 2 #</ion-label>
+    <ion-input type="text" formControlName="parking2Number"></ion-input>
+  </ion-item>
+</ion-col>
+<ion-col size="auto" *ngIf="parking2selected" size="2">
+    <ion-item lines="none">
+    <ion-button  *ngIf="showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+    <ion-button *ngIf="!showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+  </ion-item>
+</ion-col>
+ </ion-row>
+  </ion-grid>
+  <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking3">          
+  <ion-row class="ion-align-items-center">
+<ion-col size="6">
+<ion-item>
+<ion-label position="floating">{{ 'Parking' | translate }} 3 {{ 'level' | translate }}</ion-label>
+    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-col>
+<ion-col *ngIf="parking3selected" size="4">
+    <ion-item>
+    <ion-label position="floating">{{ 'Parking' | translate }} 3 #</ion-label>
+    <ion-input type="text" formControlName="parking3Number"></ion-input>
+  </ion-item>
+</ion-col>
+<ion-col size="auto" *ngIf="parking3selected" size="2">
+  <ion-item lines="none">
+  <ion-button  *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+</ion-item>
+</ion-col>
+</ion-row>
+</ion-grid>
       </ion-list>
+<!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
+        please confirm naming changes
+    </div> 
+    <div *ngIf="createItemForm.get('name').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
+  <div *ngIf="createItemForm.get('name').errors.required">
+    Name is required.
+  </div>
+   <div *ngIf="createItemForm.get('title').errors.minlength">
+    Name must be at least 4 characters long.
+  </div> 
+</div> -->
     </section>
-
-<!--     <section class="user-experience-fields fields-section">
-      <h5 class="section-header">Experience in</h5>
-      <ion-row class="checkbox-tags rounded-checkbox-tags">
-        <ion-item formArrayName="skills" lines="none" class="checkbox-tag rounded-tag" *ngFor="let skill of skillsFormArray.controls; let i = index;">
-          <ion-label class="tag-label">{{skills[i].name}}</ion-label>
-          <ion-checkbox [formControlName]="i"></ion-checkbox>
-        </ion-item>
-      </ion-row>
-    </section> -->
-
-    <!-- <section class="user-languages-fields fields-section">
-      <h5 class="section-header">Languages</h5>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">English</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.english.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="english" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">Spanish</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.spanish.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="spanish" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-      <ion-row class="range-item-row">
-        <ion-col size="12">
-          <div class="range-header">
-            <span class="range-label">French</span>
-            <span class="range-value">{{ changeLangValue(createUserForm.controls.french.value) }}</span>
-          </div>
-        </ion-col>
-        <ion-col size="12">
-          <ion-range class="range-control" formControlName="french" color="secondary" min="1" max="10" step="1"></ion-range>
-        </ion-col>
-      </ion-row>
-    </section> -->
   </ion-content>
 
   <ion-footer>
-    <ion-row class="form-actions-wrapper">
+    <ion-row>
       <ion-col>
-        <ion-button class="submit-btn" expand="block" color="secondary" type="submit" fill="solid" [disabled]="!createUserForm.valid">CREATE</ion-button>
+        <ion-button expand="block" color="secondary" type="submit" fill="solid" [disabled]="!createUserForm.valid">{{ 'Create' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>
+
 </form>
