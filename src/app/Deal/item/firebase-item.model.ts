@@ -42,14 +42,15 @@ export class ItemModel extends ShellModel {
   durationSeconds : number;
   buildingId : string;
   admin : boolean = false;
+  parkingInfo : {level:string, number:string};
   constructor() {
     super();
   }
 }
 
 export class combinedItemModel extends ItemModel {
-  userInfoRequ : userModel = new userModel();
-  userInfoResp : userModel = new userModel();
+  userInfoCreator : userModel = new userModel();
+  userInfoResponder : userModel = new userModel();
 }
 
 export class RatingUser {     

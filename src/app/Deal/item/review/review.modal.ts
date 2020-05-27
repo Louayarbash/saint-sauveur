@@ -97,11 +97,11 @@ export class ReviewModal implements OnInit {
 
     if(this.loginId == this.item.responseBy){
       ratingInfo.ratedUserId = this.item.createdBy;
-      ratingInfo.userName = this.item.userInfoResp.name;
+      ratingInfo.userName = this.item.userInfoResponder.name;
     }
     else if(this.loginId == this.item.createdBy){
       ratingInfo.ratedUserId = this.item.responseBy;
-      ratingInfo.userName = this.item.userInfoRequ.name;
+      ratingInfo.userName = this.item.userInfoCreator.name;
     }
     
     console.log("item", this.item)

@@ -54,7 +54,7 @@ export class FirebaseCreateUserModal implements OnInit {
     this.createUserForm = new FormGroup({
       name: new FormControl('',Validators.required),
       lastname: new FormControl('',Validators.required),
-      building: new FormControl(this.loginService.buildingId,Validators.required),
+      building: new FormControl(this.loginService.getBuildingId(),Validators.required),
       app : new FormControl(),
       parking1Level : new FormControl("1000"),
       parking1Number : new FormControl(),

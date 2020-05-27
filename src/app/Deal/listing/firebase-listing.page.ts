@@ -228,20 +228,31 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       let alert = await this.alertController.create({
         header: this.featureService.translations.ChooseType,
         message: this.featureService.translations.ChooseTypeMsg,
+        inputs: [{
+          name : "request" , 
+          type : 'radio' , 
+          label : this.featureService.translations.Request, 
+          value : "request" ,
+          checked: true
+        },{
+          name : "offer" , 
+          type : 'radio' , 
+          label : this.featureService.translations.Offer, 
+          value : "offer" ,
+          checked: false
+        }],
         buttons: [
+         
           {
-            text: this.featureService.translations.Request,
+            text: this.featureService.translations.Cancel,
             handler: () => {
-              this.type = 'request';
-              console.log('Request clicked');
-              this.openFirebaseCreateModal();
+        
             }
           },
           {
-            text: this.featureService.translations.Offer,
-            handler: () => {
-              this.type = 'offer';
-              console.log('Offer clicked');
+            text: this.featureService.translations.OK,
+            handler : (data:any)=> {
+              this.type = data;
               this.openFirebaseCreateModal();
             }
           }

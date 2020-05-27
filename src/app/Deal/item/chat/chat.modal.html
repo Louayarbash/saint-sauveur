@@ -11,7 +11,7 @@
   <ion-content>
    <ion-grid> 
     <ion-row *ngFor="let message of messages | async">
-      <ion-col size="9" *ngIf="currentUser !== message.userId" class="message other-message">
+      <ion-col size="9" *ngIf="currentUserId !== message.userId" class="message other-message">
       <b>{{otherUserName}}</b><br>
       <span>{{message.text}}</span>
       <div class="time-other" text-right><br>
@@ -19,7 +19,7 @@
       </div>
       <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
       </ion-col>
-      <ion-col offset="3" size="9" *ngIf="currentUser === message.userId" class="message my-message">
+      <ion-col offset="3" size="9" *ngIf="currentUserId === message.userId" class="message my-message">
         <b>{{userName}}</b><br>
         <span>{{message.text}}</span>
         <div class="time-my-message" text-right><br>

@@ -37,8 +37,7 @@ import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-
-
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 /*LA_ end */
 
@@ -97,7 +96,8 @@ export function createTranslateLoader(http: HttpClient) {
     //Firebase
     //OneSignal,
     FCM	 ,
-    CallNumber
+    CallNumber,
+    SocialSharing
   ],
   bootstrap: [AppComponent]
 })

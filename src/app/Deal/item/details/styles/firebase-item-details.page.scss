@@ -127,9 +127,11 @@
       --ion-grid-column-padding: 0px;
     
       margin: var(--page-margin);
+      //margin-left: 0px;
     
       .user-image-wrapper {
-        max-width: 26%;
+        width: 25%;
+        max-width: 40%;
         app-image-shell.user-image {
           --image-shell-border-radius: var(--app-fair-radius);//var(--page-border-radius);
         }

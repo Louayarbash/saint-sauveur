@@ -28,9 +28,10 @@ export class ChatModal implements OnInit {
   @ViewChild(IonContent, {static:true}) content: IonContent;
   //@ViewChild(IonContent) content : IonContent;
   msgText : string;
-  currentUser : string;
+  currentUserId : string = this.loginService.getLoginID();
+  currentUserName : string = this.loginService.getLoginName();
   messages : any;
-  loginId = this.loginService.getLoginID(); 
+  //loginId = this.loginService.getLoginID(); 
   otherUserName : string;
   userName : string;
 
@@ -41,20 +42,16 @@ export class ChatModal implements OnInit {
     public router: Router,
     private afs :AngularFirestore,
     private loginService : LoginService
-      ) { 
-       
-      this.currentUser = this.loginService.getLoginID();
+      ) {
   }
 
   ngOnInit() {
-    //this.loginService.getUserInfo();
-    this.otherUserName = this.item.createdBy == this.loginService.getLoginID() ? this.item.userInfoResp.name : this.item.userInfoRequ.name;
-    this.userName = this.loginService.name;
+    this.otherUserName = this.item.createdBy == this.currentUserId ? this.item.userInfoResponder.name : this.item.userInfoCreator.name;
+    //this.userName = this.loginService.name;
     this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy).orderBy('createdAt')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 
-    console.log("dealId",this.item.id);
   }
 
   dismissModal() {
@@ -65,7 +62,7 @@ export class ChatModal implements OnInit {
     let chatMsg : ChatModel = new ChatModel();
     chatMsg.channelId = "chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy;
     chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    chatMsg.userId = this.loginId;
+    chatMsg.userId = this.currentUserId;
     chatMsg.text = this.msgText;
     //chatMsg.name = this.user.name;
     console.log(chatMsg);

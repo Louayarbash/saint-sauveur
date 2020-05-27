@@ -22,7 +22,7 @@
      {{minStartDate}}minStartDate -->
 
      <section>
-       <ion-list lines="full">
+      <ion-list lines="full">
         <ion-item>
           <ion-label>Date</ion-label>
           <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
@@ -39,12 +39,21 @@
         <ion-item>
             <ion-label>{{ 'ToTime' | translate }}</ion-label>
             <ion-datetime display-format="DD MMMM YYYY HH:mm" formControlName="endDate"></ion-datetime>
-          </ion-item>
-          <ion-item *ngIf="type === 'request'">
+        </ion-item>
+        <ion-item *ngIf="type === 'request'">
             <ion-label>{{ 'NoPlace' | translate }}</ion-label>
             <ion-label>{{createItemForm.controls.count.value}}</ion-label>
             <app-counter-input formControlName="count" basic></app-counter-input>
-          </ion-item>
+        </ion-item>
+        <ion-item *ngIf="type === 'offer' && (hasMultipleParking)">
+            <ion-label>{{ 'Parking' | translate }}</ion-label>
+            <ion-button (click)="chooseParkingToOffer()">{{ 'Create' | translate }}</ion-button>
+            <ion-input type="text" formControlName="parking"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="type === 'offer' && (!hasMultipleParking)">
+          <ion-label>{{ 'Parking' | translate }}</ion-label>
+          <ion-input type="text" formControlName="parking" readonly></ion-input>
+      </ion-item>
         <ion-item>
           <ion-label position="floating">Note</ion-label>
           <ion-textarea rows="6" cols="20" formControlName="note"></ion-textarea>

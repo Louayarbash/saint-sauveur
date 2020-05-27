@@ -12,11 +12,9 @@ import { ItemModel, userModel, combinedItemModel } from './item/firebase-item.mo
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { LoginService } from "../services/login/login.service"
 import { FeatureService } from '../services/feature/feature.service'; 
-
 import { Router } from '@angular/router';
 
 //import { firestore} from "firebase-admin";
-
 //import { CompileShallowModuleMetadata } from '@angular/compiler';
 //import { OneSignal, OSNotification } from "@ionic-native/onesignal/ngx";
 
@@ -27,6 +25,7 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedItemDataStore: DataStore<ItemModel>;
+  private buildingId = this.loginService.getBuildingId();
   
   constructor(
     private afs: AngularFirestore, 
@@ -40,8 +39,8 @@ export class FirebaseService {
       
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //this.loginService.getUserInfo();
-    console.log("building inside deal service",this.loginService.buildingId);
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.buildingId)).valueChanges({  idField: 'id' })
+    //console.log("building inside deal service",this.loginService.getBuildingId());
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({  idField: 'id' })
     
       //.pipe(map(actions => actions.map(item => { 
         //const listingDetails = item.id + "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");
@@ -70,33 +69,9 @@ export class FirebaseService {
     }
     return this.listingDataStore;
   }
-  // Filter users by age
-/*   public searchUsersByAge(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
-    // we save the dateOfBirth in our DB so we need to calc the min and max dates valid for this query
-    const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
-    const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
-
-    const listingCollection = this.afs.collection<FirebaseListingItemModel>('deals-requests', ref =>
-      ref.orderBy('createDate'));
-      //.startAt(minDate).endAt(maxDate));
-
-    return listingCollection.valueChanges({ idField: 'id' })
-     .pipe(
-      map(actions => actions.map(post => {
-         const age = this.calcUserAge(post.createdDate);
-         return { age, ...user } as FirebaseListingItemModel;
-       })
-     )); 
-  } */
-
-  /*
-    Firebase User Details Page
-  */
-  // Concat the userData with the details of the userSkills (from the skills collection)
+ 
    public  getCombinedItemDataSource(itemId: string): Observable<combinedItemModel> {
-    //return this.getItem(itemId);
-    let b : Observable<userModel>;
-    //let c : Observable<combinedItemModel>;
+
     return this.getItem(itemId).pipe(concatMap(deal => { 
       if (deal && deal.createdBy) {
           const userInfoRequObservable = this.getUser(deal.createdBy).pipe(first());
@@ -108,13 +83,11 @@ export class FirebaseService {
           ]).pipe(
           map(([userDetails, userInfoRequ, userInfoResp]: [ItemModel, userModel, userModel]) => {
           // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
-          console.log("111",userDetails);
-          console.log("222",userInfoRequ);
-          console.log("333",userInfoResp);
+
           return {
           ...userDetails,
-          userInfoRequ : userInfoRequ,
-          userInfoResp : userInfoResp
+          userInfoCreator : userInfoRequ,
+          userInfoResponder : userInfoResp
         } as combinedItemModel;
       })
     );
@@ -126,29 +99,25 @@ export class FirebaseService {
   )
   }   
     private getUser(userId: string): Observable<userModel>
-    {
-      console.log("hellogetUser", userId);
-      
+    { 
         return this.afs.doc<userModel>('users/'+ userId)
         .snapshotChanges()
         .pipe(
           map(a => {
-            //console.log("hello2",a);
             const data = a.payload.data();
             const id = a.payload.id;
-            console.log("LOuaydata",{ id, ...data });
             return { id, ...data } as userModel;
           })
         );  
     }
       // Get data of a specific User
   private getItem(itemId: string): Observable<ItemModel> {
-    console.log("getItem", itemId);
+
     return this.afs.doc<ItemModel>(this.tableName+'/' + itemId)
     .snapshotChanges()
     .pipe(
       map(a => {
-        console.log("hellogetItem",a);
+
         const postData = a.payload.data();
         const id = a.payload.id;
         return { id, ...postData } as ItemModel;
@@ -174,12 +143,13 @@ export class FirebaseService {
      for (let index = 1; index <= count ; index++) {
       itemData.count = index + "/" + count;
       this.afs.firestore.collection(this.tableName).add({...itemData}).then(() => {
-      this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
+      if(count == index){
+        this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
+      }
       }
       ).catch(err => {
         console.log(err)
         this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
-        //loading.then(res=>res.dismiss());
       });            
     }
   }
@@ -187,25 +157,17 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateItemWithoutOptions(itemData: ItemModel): Promise<void> {
+    public updateItemWithoutOptions(itemData: ItemModel): Promise<void> {
     return this.afs.collection(this.tableName).doc(itemData.id).set(itemData);
-  }
-
-  public async updateItem(itemData: ItemModel): Promise<void> {
-
-    console.log("itemData",itemData);
-    //this.afs.collection('posts').add({...itemData}).then(async (res)=>{
-      //console.log("post id :",res.id);
-  
-  return this.afs.collection(this.tableName).doc(itemData.id).set({...itemData});
     }
 
-/*   public deleteItem(item: FirebaseItemModel): Promise<void> {
-    //this.afstore.ref(item.imagesFullPath).delete();
-    console.log('deleteItem',item.id);
-    return this.afs.collection(this.tableName).doc(item.id).delete();
-  } */
+    public async updateItem(itemId : string, itemDataNote: string): Promise<void> {
 
+    // console.log("itemData",itemData);
+    
+    return this.afs.collection(this.tableName).doc(itemId).update({note : itemDataNote});
+    //return this.afs.collection(this.tableName).doc(itemData.id).set({...itemData});
+    }
 
 
   public proposeParking(itemData: ItemModel) {
@@ -216,16 +178,16 @@ export class FirebaseService {
           let oldStatus = doc.data().status;
           let newStatus = "accepted";
           if (oldStatus == "new"){
-            tran.update(itemRef, {status: newStatus, responseBy:this.loginService.getLoginID()});
-            console.log("changed");
-            this.featureService.presentToast("You responce has been sent to the requester, Thank you!",3000);
+            tran.update(itemRef, { parkingInfo : itemData.parkingInfo, status: newStatus, responseBy:this.loginService.getLoginID()});
+            //console.log("changed");
+            this.featureService.presentToast(this.featureService.translations.RequestResponded,3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
-            this.featureService.presentToast("Request already respoded by another tenant, Thank you!",3000);
+            this.featureService.presentToast(this.featureService.translations.RequestAlreadyResponded,3000);
             this.router.navigate(['deal/listing']);
-            console.log("not changed");
-            return Promise.reject('Request has already been responded or has been canceled, thank you');
+            //console.log("not changed");
+            return Promise.reject(this.featureService.translations.RequestRespondedOrCanceled);
           }
         });
     }).then(result => {
@@ -241,16 +203,16 @@ export class FirebaseService {
         .then(doc => {          
           let oldStatus = doc.data().status;          
           if (oldStatus == "new"){
-            let newStatus = "new request canceled";
+            let newStatus = "newRequestCanceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featureService.presentToast("Your new request has been canceled!",3000);
+            this.featureService.presentToast(this.featureService.translations.RequestCanceled,3000);
             this.router.navigate(['deal/listing']);
-            return Promise.resolve('New request canceled!' + newStatus);
+            return Promise.resolve('NewRequestCanceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
-            let newStatus = "accepted request canceled";
+            let newStatus = "acceptedRequestCanceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featureService.presentToast("Your accepted request has been canceled!",3000);
+            this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled,3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
@@ -263,7 +225,7 @@ export class FirebaseService {
     });
   }
 
-  public cancelDeal(itemData: ItemModel) {
+  public cancelRequestDeal(itemData: ItemModel) {
     let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
     this.afs.firestore.runTransaction(tran => {
       return tran.get(itemRef)
@@ -272,12 +234,12 @@ export class FirebaseService {
           if (oldStatus == "accepted"){ //and not started 
             let newStatus = "new"; 
             tran.update(itemRef, {status: newStatus, responseBy:""});            
-            this.featureService.presentToast("You canceled your deal!",3000);
+            this.featureService.presentToast(this.featureService.translations.RequestDealCanceled,3000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Your deal is canceled!' + newStatus);
           }
           else {        
-            this.featureService.presentToast("Cant cancel request!",3000);
+            this.featureService.presentToast(this.featureService.translations.RequestCantCancelDeal,3000);
             this.router.navigate(['deal/listing']);
             return Promise.reject('cant cancel this request!');
           } 
@@ -288,6 +250,88 @@ export class FirebaseService {
       console.log("Transaction failure:", err);
     });
   }
+
+  public acceptOffer(itemData: ItemModel) {
+    let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+    this.afs.firestore.runTransaction(tran => {
+      return tran.get(itemRef)
+        .then(doc => {
+          let oldStatus = doc.data().status;
+          let newStatus = "accepted";
+          if (oldStatus == "new"){
+            tran.update(itemRef, { parkingInfo : itemData.parkingInfo, status: newStatus, responseBy:this.loginService.getLoginID()});
+            //console.log("changed");
+            this.featureService.presentToast(this.featureService.translations.OfferAccepted,3000);
+            this.router.navigate(['deal/listing']);
+            return Promise.resolve('Status changed to ' + newStatus);
+          } else {
+            this.featureService.presentToast(this.featureService.translations.OfferAlreadyAccepted,3000);
+            this.router.navigate(['deal/listing']);
+            //console.log("not changed");
+            return Promise.reject(this.featureService.translations.OfferAcceptedOrCanceled);
+          }
+        });
+    }).then(result => {
+      console.log("Transaction success:", result);
+    }).catch(err => {
+      console.log("Transaction failure:", err);
+    });
+}
+
+public cancelOffer(itemData: ItemModel) {
+  let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+  this.afs.firestore.runTransaction(tran => {
+    return tran.get(itemRef)
+      .then(doc => {          
+        let oldStatus = doc.data().status;          
+        if (oldStatus == "new"){
+          let newStatus = "newOfferCanceled";
+          tran.update(itemRef, {status: newStatus});            
+          this.featureService.presentToast(this.featureService.translations.OfferCanceled,3000);
+          this.router.navigate(['deal/listing']);
+          return Promise.resolve('NewOfferCanceled!' + newStatus);
+        }
+        else if (oldStatus == "accepted"){
+          let newStatus = "acceptedOfferCanceled";
+          tran.update(itemRef, {status: newStatus});            
+          this.featureService.presentToast(this.featureService.translations.OfferAcceptedCanceled,3000);
+          this.router.navigate(['deal/listing']);
+          return Promise.resolve('Accepted offer canceled!' + newStatus);
+        }
+        
+      });
+  }).then(result => {
+    console.log("Transaction success:", result);
+  }).catch(err => {
+    console.log("Transaction failure:", err);
+  });
+}
+
+public cancelOfferDeal(itemData: ItemModel) {
+  let itemRef = this.afs.firestore.collection(this.tableName).doc(itemData.id);    
+  this.afs.firestore.runTransaction(tran => {
+    return tran.get(itemRef)
+      .then(doc => {          
+        let oldStatus = doc.data().status;          
+        if (oldStatus == "accepted"){ //and not started 
+          let newStatus = "new"; 
+          tran.update(itemRef, {status: newStatus, responseBy:""});            
+          this.featureService.presentToast(this.featureService.translations.OfferDealCanceled,3000);
+          this.router.navigate(['deal/listing']);
+          return Promise.resolve('Your deal is canceled!' + newStatus);
+        }
+        else {        
+          this.featureService.presentToast(this.featureService.translations.OfferCantCancelDeal,3000);
+          this.router.navigate(['deal/listing']);
+          return Promise.reject('cant cancel this offer!');
+        } 
+      });
+  }).then(result => {
+    console.log("Transaction success:", result);
+  }).catch(err => {
+    console.log("Transaction failure:", err);
+  });
+}
 
 
 }

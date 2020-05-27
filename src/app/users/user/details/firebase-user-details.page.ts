@@ -8,6 +8,8 @@ import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
 import { ChatModal } from '../chat/chat.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
+import * as dayjs from 'dayjs';
+import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-user-details',
@@ -22,6 +24,10 @@ export class FirebaseUserDetailsPage implements OnInit {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
+  birthdate : string;
+  role: string;
+  type: string;
+  language: string;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.user && this.user.isShell) || (this.relatedUsers && this.relatedUsers.isShell)) ? true : false;
@@ -31,7 +37,8 @@ export class FirebaseUserDetailsPage implements OnInit {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private featureService : FeatureService
   ) { }
 
   ngOnInit() {
@@ -43,6 +50,10 @@ export class FirebaseUserDetailsPage implements OnInit {
         (state) => {
           console.log(state);
           this.user = state;
+          this.birthdate = dayjs(this.user.birthdate * 1000).format("DD, MMM, YYYY");
+          this.type = this.user.type == "owner" ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
+          this.role = this.user.role == "user" ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
+          this.language = this.user.language == "fr" ? this.featureService.translations.Frensh : this.featureService.translations.English; 
         }
       );
 /*       relatedUsersDataStore.state.subscribe(

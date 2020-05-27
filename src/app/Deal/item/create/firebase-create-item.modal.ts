@@ -1,4 +1,4 @@
-import { Component, OnInit,NgModule, Input} from '@angular/core';
+import { Component, OnInit,NgModule, Input, ChangeDetectorRef} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import * as dayjs from 'dayjs';
@@ -12,8 +12,15 @@ import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService, TranslateModule } from '@ngx-translate/core';
 //import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
 import  * as firebase from 'firebase/app';
+import { ConditionalExpr } from '@angular/compiler';
+//import { stringify } from 'querystring';
 
-
+interface userParking {
+  index : number;
+  id : number;
+  level : string;
+  number : string;
+}
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -23,9 +30,13 @@ import  * as firebase from 'firebase/app';
     './styles/firebase-create-item.shell.scss'
   ],
 })
+
+
+
 export class FirebaseCreateItemModal implements OnInit {
   @Input() type : string;
   loginID = this.loginService.getLoginID();
+  userParking : userParking[];
   createItemForm: FormGroup;
   itemData: ItemModel = new ItemModel();
   today : any;
@@ -36,30 +47,36 @@ export class FirebaseCreateItemModal implements OnInit {
   minStartDate : any;
   duration : any;
   previousCounterValue : any;//= 0;
+  hasMultipleParking : boolean = false;
+  radioObjectFiltered: any[];
 
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,    
     private alertController: AlertController,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    //private changeRef : ChangeDetectorRef
+    
   ) {
   
-    console.log("inside create deal")
-    
   }
 
   ngOnInit() {
      this.initValues();
-     // default image     
      this.createItemForm = new FormGroup({
       date: new FormControl(this.today, Validators.required),
       startDate : new FormControl(this.today ,Validators.required),
       duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
       endDate : new FormControl({value : this.today, disabled : true}, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
+      parking : new FormControl(''),
       note : new FormControl('') 
     });
+    if(this.type == "offer"){
+      this.createItemForm.controls['parking'].setValidators(Validators.required);
+    }
+
     this.onValueChanges();
 
   }
@@ -123,6 +140,19 @@ export class FirebaseCreateItemModal implements OnInit {
 
   }
   initValues(){
+  
+  this.loginService.getUserInfoObservable().subscribe(user =>{
+    
+    this.userParking = user.parking;
+
+    if(this.userParking){
+      this.getUserParking(this.userParking);
+    }
+    else{
+      this.featureService.presentToast("No parking assigned to your profile, please contact your building administrator",3000);
+    }
+  })
+
   this.today = dayjs().add(30,"minute").toISOString(); 
   //console.log("resetDate", dayjs().toISOString());
   this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
@@ -162,6 +192,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.buildingId;
+    
 /*  this.itemData.createDate1 = firebase.firestore.Timestamp.now();
     this.itemData.createDate2 = now;
     this.itemData.createDate3 = dayjs().toDate();
@@ -174,14 +205,17 @@ export class FirebaseCreateItemModal implements OnInit {
     let endDate = dayjs(this.itemData.endDate).format("DD, MMM, YYYY");
     let startTime = dayjs(this.itemData.startDate).format("HH:mm");
     let endTime = dayjs(this.itemData.endDate).format("HH:mm");
+    let header = "";
     let message = "";
     let messageTranslate = "";
     let messageTranslate2 = "";
     if (this.type == "request"){
+      header = this.featureService.translations.ConfirmRequestDetails;
       messageTranslate = "CreateParkingRequestConfirmation";
       messageTranslate2 = "CreateParkingRequestConfirmation2";
     }
     else {
+      header = this.featureService.translations.ConfirmOfferDetails;
       messageTranslate = "CreateParkingOfferConfirmation";
       messageTranslate2 = "CreateParkingOfferConfirmation2";
     }
@@ -192,7 +226,7 @@ export class FirebaseCreateItemModal implements OnInit {
       message = this.featureService.getTranslationParams(messageTranslate2,{date : date, startTime : startTime, endDate: endDate, endTime : endTime})
     }    
     const alert = await this.alertController.create({
-      header: this.featureService.translations.ConfirmRequestDetails,
+      header: header,
       message: message,
       buttons: [
          {
@@ -219,7 +253,95 @@ export class FirebaseCreateItemModal implements OnInit {
       ]
     });
     await alert.present();
-
   }
+
+  getUserParking(userParking : userParking[]){
+
+  let userParkingInfo : string;
+  let radioObject: any[];
+  let correctedParking : any[];
+
+    this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe(  building => {
+    let levels = building.parking;
+    
+    console.log("levels",levels);
+    console.log("parking",userParking);
+
+    if (userParking) {
+        radioObject = userParking.map((userParking, index) => {
+          let level = levels.find( (level: { id: number; }) => level.id === userParking.id );//.desc;
+           if (level){
+             let checked = index == 0 ? true : false; 
+             level = level.desc
+             return {  index : index, id: userParking.id, number : userParking.number, name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' - ' + userParking.number , value : {index: index, level : level ,number : userParking.number} ,checked: checked}
+          } 
+        });
+  
+    
+  this.radioObjectFiltered = radioObject.filter(function (radioNotNull) {
+    return radioNotNull != null;
+  });
+
+  if(this.radioObjectFiltered.length == 1){
+    userParkingInfo = this.featureService.translations.Level + ": " + this.radioObjectFiltered[0].name + ' - ' + userParking[0].number;
+    this.createItemForm.get('parking').setValue(userParkingInfo);
+    this.itemData.parkingInfo = {level: this.radioObjectFiltered[0].name, number: userParking[0].number};
+    this.hasMultipleParking = false;
+  }
+  else if(this.radioObjectFiltered.length > 1){
+    this.hasMultipleParking = true;
+  }
+  else if(this.radioObjectFiltered.length == 0){
+    this.featureService.presentToast("No parking found!, Problem with your current parking information",3000);
+  }
+
+  if( this.radioObjectFiltered.length != radioObject.length){
+    correctedParking = this.radioObjectFiltered.map(parking => {return {id : parking.id, number : parking.number}}); 
+    this.createItemForm.get('parking').setValue(null);
+    this.featureService.presentToast("Parking info. updated",3000);
+    this.loginService.updateUserParking(correctedParking);
+  }
+}
+else{
+  this.featureService.presentToast("Problem retrieving your parking info.",3000);
+}
+
+    });
+}
+  
+  async chooseParkingToOffer() {
+
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.ChooseParkingHeader,
+      message: this.featureService.translations.ChooseParkingMessage,
+      inputs:  this.radioObjectFiltered ,
+      buttons: [
+        {
+         text:  this.featureService.translations.OK,
+         handler: (data : userParking)=> {
+          console.log("before",this.radioObjectFiltered);
+           console.log(data);
+           let selectedParkingInfo = this.featureService.translations.Level + ": " + data.level + ' - ' + data.number;
+           this.createItemForm.get('parking').setValue(selectedParkingInfo);
+           this.itemData.parkingInfo = {level: data.level, number: data.number};
+           this.radioObjectFiltered.map(radio => { 
+             radio.checked = data.index == radio.index? true : false 
+             return radio;
+          });
+          console.log("after",this.radioObjectFiltered);
+         }
+       },
+       {
+         text: this.featureService.translations.Cancel,
+          handler: ()=> {
+         
+           }, 
+           
+        }
+     ]
+    });
+    await alert.present();
+  
+}
   }
   //END

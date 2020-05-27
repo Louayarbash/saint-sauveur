@@ -28,6 +28,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   //updateUserForm: FormGroup;
   //selectedPhoto: string;
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
+  emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
   myStoredProfileImage : Observable<any>;
 
   updateUserForm: FormGroup;
@@ -65,25 +66,10 @@ export class FirebaseUpdateUserModal implements OnInit {
   }
 
   ngOnInit() {
-    //this.myStoredProfileImage = this._angularFireSrore.collection("users").doc(this.user.id).valueChanges();
     // this.selectedPhoto = this.user.photo;
     //this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
-/*     this.updateUserForm = new FormGroup({
-      name: new FormControl(this.user.name, Validators.required),
-      lastname: new FormControl(this.user.lastname, Validators.required),
-      email: new FormControl(this.user.email, Validators.compose([
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ])),
-      phone: new FormControl(this.user.phone),
-      birthdate: new FormControl(dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY')),
-      app: new FormControl(this.user.app),
-      building: new FormControl(this.user.building),
-      code: new FormControl(this.user.code),
-      parking: new FormControl(this.user.parking)
-    }); */
 
-    this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+    this.selectedPhoto = this.user.photo ? this.user.photo : this.emptyPhoto;
     this.updateUserForm = new FormGroup({
       name: new FormControl(this.user.name,Validators.required),
       lastname: new FormControl(this.user.lastname,Validators.required),
@@ -114,18 +100,36 @@ export class FirebaseUpdateUserModal implements OnInit {
       console.log("this.levels", this.levels);
     }); */
 
-    this.firebaseService.getItem('building', this.loginService.buildingId).subscribe(item => {
+
+/*     if (level){
+      //let checked = index == 0 ? true : false; 
+       level = level.desc
+       return { name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' #' + userParking.number , value : {level : level ,number : userParking.number} ,checked: false}
+
+this.radioObject = this.radioObject.filter(function (radioNotNull) {
+return radioNotNull != null;
+ */
+
+    this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
       this.levels = item.parking;
       console.log("parking",this.user.parking);
 
         let userParking = [];
         if (this.user.parking) {
-          userParking = this.user.parking.map((parking) => { 
+          userParking = this.user.parking.map((userParking) => { 
             
-            return { id : parking.id ,number : parking.number , desc : this.levels.find( level => level.id === parking.id ).desc };
+            let level = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
+            if(level){
+              level.desc;
+              return { id : userParking.id ,number : userParking.number , desc : level };
+            }
+            
           
           });
         }
+        userParking = userParking.filter(function (res) {
+          return res != null;
+        });
       
      console.log("userParkingIds",userParking)
      if(userParking[0]){
@@ -244,7 +248,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   updateUser() {
 
     this.userData.id = this.user.id;
-    this.userData.photo = this.selectedPhoto;
+    this.userData.photo = this.selectedPhoto;// == this.emptyPhoto ? "" : this.selectedPhoto;
     this.userData.name = this.updateUserForm.value.name;
     this.userData.lastname = this.updateUserForm.value.lastname;
     this.userData.birthdate = dayjs(this.updateUserForm.value.birthdate).unix();
@@ -337,6 +341,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   showHideParkingValidate2(){
     this.showHideParking2 = this.showHideParking2 ? false : true;
     this.showHideParking3 = false;
+    this.updateUserForm.markAsDirty();
     if(this.showHideParking2 == false){
      this.updateUserForm.controls['parking2Level'].setValue("1000");  
      this.updateUserForm.controls['parking2Number'].setValue("");
@@ -351,6 +356,7 @@ export class FirebaseUpdateUserModal implements OnInit {
    }
    showHideParkingValidate3(){
      this.showHideParking3 = this.showHideParking3 ? false : true;
+     this.updateUserForm.markAsDirty();
      if(this.showHideParking3 == false){
        this.updateUserForm.controls['parking3Level'].setValue("1000");
        this.updateUserForm.controls['parking3Number'].setValue("");

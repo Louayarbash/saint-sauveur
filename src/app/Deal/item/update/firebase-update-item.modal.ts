@@ -92,9 +92,9 @@ export class FirebaseUpdateItemModal implements OnInit {
   updateItem() {
 
     this.item.note = this.updateItemForm.value.note;
-    const { ...itemData} = this.item;
-
-    this.firebaseService.updateItem(itemData)
+    // const { ...itemData} = this.item;
+    
+    this.firebaseService.updateItem(this.item.id, this.item.note)
     .then(
       () => this.modalController.dismiss(),
       err => console.log(err)

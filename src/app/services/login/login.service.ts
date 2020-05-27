@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { LoginCredential } from "../../type";
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+//import { FirebaseUserModel } from 'src/app/users/user/firebase-user.model';
+import { FirebaseUserModel } from '../../users/user/firebase-user.model';
 //import { Observable } from 'rxjs';
 //import { DocumentSnapshot } from '@google-cloud/firestore';
 
@@ -14,7 +17,8 @@ uid : string;
 buildingId : string = "NJ6u68Cq68RgX9jXPuVx";
 languge : string;
 name : string;
-  parking: any;
+parking: any;
+  language: string;
   constructor(
     private afAuth : AngularFireAuth,
     private afs: AngularFirestore
@@ -41,12 +45,29 @@ name : string;
       return created;
       
   }
+  getLoginName(){
+    return "Louay";
+  }
   getLoginID(){
-    if(!this.uid){
+/*     if(!this.uid){
       this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
-    }
+    } */
     return "Ku6jzqUAjK3iLlXWSfPK";//this.uid
   }
+  getBuildingId(){
+    return "NJ6u68Cq68RgX9jXPuVx";
+  }
+
+   async getUserParking(){
+/*      if(this.parking){
+      return this.parking;
+    }
+    else{  */
+      await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
+//     }
+    
+  }
+
   async getUserInfo(){
       console.log("inside getLoginInfo 111")
       try {
@@ -62,7 +83,31 @@ name : string;
       console.log(err);
     }
   }
+
+   getUserInfoObservable() : Observable<any> {
+    
+    return this.afs.collection("users").doc(this.getLoginID()).valueChanges();
   
+}
+updateUserParking(parking : any){
+  this.afs.collection("users").doc(this.getLoginID()).update({parking : parking})
+}
+getUserInfoObservable5() //: Observable<any>
+ {
+  return this.afs.collection("users").doc<FirebaseUserModel>(this.getLoginID()).valueChanges().subscribe((user) => {
+    console.log("BINGOOO",user);
+  this.buildingId = user.building;
+  this.language = user.language;
+  this.name = user.name;
+  this.parking = user.parking; 
+  console.log(this.buildingId);
+  console.log(this.language);
+  console.log(this.name);
+  console.log(this.parking);
+  //return this.parking;
+ });
+
+} 
   getUserLanguage(){
     //return "fr";
   return this.afs.firestore.collection("users").doc(this.getLoginID()).get();

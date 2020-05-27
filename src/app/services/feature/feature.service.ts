@@ -13,6 +13,7 @@ import { map } from 'rxjs/operators';
 export class FeatureService {
   translations;
   userLanguage;
+  buildingLevels: any;
 
   constructor(    
     private toastController : ToastController,
@@ -108,6 +109,15 @@ getItem(tableName : string, itemId: string): Observable<any> {
       return { id, ...postData };
     })
   ); */
+}
+async getBuildingLevels(){
+  if (this.buildingLevels){
+    return this.getBuildingLevels
+  }
+  else{
+    //await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
+  }
+
 }
 
 }

@@ -100,7 +100,7 @@ export class AppComponent {
     public languageService : LanguageService,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private afs : AngularFirestore
+    //private afs : AngularFirestore
     ) {
 
     this.initializeApp();

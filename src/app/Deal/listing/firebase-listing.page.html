@@ -45,23 +45,23 @@
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
               </ion-button>
             </ion-col>
-            <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">
+            <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">									 
               <div class="expired-cta">{{ item?.status | translate }}</div>
             </ion-col>
           </ion-row>
-          <ion-row class="middle-row">
+          <ion-row class="middle-row ion-justify-content-between">
             <ion-col class="item-description" size="3">
               <ion-row >
-                <ion-col size="auto">
-                <h4 class="item-name ion-text-nowrap">
-                    <app-text-shell animation="bouncing" [data]="item.date"></app-text-shell>
+                <ion-col>
+                <h4 class="item-name">
+					<ion-input class="ion-no-padding" type="text" readonly [value]="item?.date"></ion-input> 
                 </h4>
                 <ion-row>
                   <ion-col>
                     <ion-label>{{ 'FromTime' | translate }}</ion-label>
                   </ion-col>
                   <ion-col class="ion-text-end">
-                    <app-text-shell animation="bouncing" lines="1" [data]="item?.startTime"></app-text-shell>
+                    <ion-input class="ion-no-padding" type="text" readonly [value]="item?.startTime"></ion-input>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -69,22 +69,22 @@
                   <ion-label>{{ 'ToTime' | translate }}</ion-label>
                 </ion-col>
                 <ion-col class="ion-text-end">
-                  <app-text-shell animation="bouncing" lines="1" [data]="item?.endTime"></app-text-shell>
+				<ion-input class="ion-no-padding" type="text" readonly [value]="item?.endTime"></ion-input>
               </ion-col>
             </ion-row>
             </ion-col>
           </ion-row>
             </ion-col>
-              <ion-col class="time-left-wrapper item-description" size="9" [ngClass]="{'countdown-active': (item?.status == 'new')}">
-              <ng-container *ngIf="(item?.status == 'expired')">
+              <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
+<!--               <ng-container *ngIf="(item?.status == 'expired')">
                 <span class="item-description">
                   <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
                 </span>
-              </ng-container>
+              </ng-container> -->
               <ng-container *ngIf="(item?.status == 'new')" >
                 <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
-                  <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
+                  <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>																											   
                 </ion-row>
               </ng-container>
             </ion-col>
@@ -119,21 +119,21 @@
             </ion-col>
             <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">
               <div class="expired-cta">{{ item?.status | translate }}</div>
-            </ion-col>
+            </ion-col>	  
           </ion-row>
-          <ion-row class="middle-row">
+          <ion-row class="middle-row ion-justify-content-between">
             <ion-col class="item-description" size="3">
               <ion-row >
-                <ion-col size="auto">
-                <h4 class="item-name ion-text-nowrap">
-                    <app-text-shell animation="bouncing" [data]="item.date"></app-text-shell>
+                <ion-col>
+                <h4 class="item-name">
+                    <ion-input class="ion-no-padding" type="text" readonly [value]="item?.date"></ion-input> 
                 </h4>
                 <ion-row>
                   <ion-col>
                     <ion-label>{{ 'FromTime' | translate }}</ion-label>
                   </ion-col>
                   <ion-col class="ion-text-end">
-                    <app-text-shell animation="bouncing" lines="1" [data]="item?.startTime"></app-text-shell>
+                    <ion-input class="ion-no-padding" type="text" readonly [value]="item?.startTime"></ion-input>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -145,21 +145,18 @@
               </ion-col>
             </ion-row>
             </ion-col>
-
           </ion-row>
-                
-           
             </ion-col>
-              <ion-col class="time-left-wrapper item-description" size="9" [ngClass]="{'countdown-active': (item?.status == 'new')}">
-              <ng-container *ngIf="(item?.status == 'expired')">
+              <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
+ <!--              <ng-container *ngIf="(item?.status == 'expired')">
                 <span class="item-description">
                   <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
                 </span>
-              </ng-container>
+              </ng-container> -->
               <ng-container *ngIf="(item?.status == 'new')" >
                 <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
-                  <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
+                  <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>																											   
                 </ion-row>
               </ng-container>
             </ion-col>
@@ -174,9 +171,9 @@
     </section>
     <section [hidden]="segmentValue !== 'myRequests'">
       <ng-container *ngIf="myRequestsList?.length > 0">
-        <div class="listing-item" *ngFor="let item of myRequestsList" [ngClass]="{'accepted': (item?.status == 'accepted'), 'new': (item?.status == 'new'), 'expired': (item?.status == 'expired'),'started': (item?.status == 'started'), 'ended': (item?.status == 'ended')}">
+        <div class="listing-item" *ngFor="let item of myRequestsList" [ngClass]="{'canceled': (item?.status == 'canceled'), 'accepted': (item?.status == 'accepted'), 'new': (item?.status == 'new'), 'expired': (item?.status == 'expired'),'started': (item?.status == 'started'), 'ended': (item?.status == 'ended')}">
           <ion-row class="top-row">
-            <ion-col class="info-col call-to-action-col" size="auto" *ngIf="item.type == 'offer'">
+            <ion-col class="info-col call-to-action-col" *ngIf="item.type == 'offer'">
               <h4 class="item-type-offer">
                 {{ 'Offer' | translate }}
               </h4>
@@ -204,26 +201,31 @@
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
               </ion-button>
             </ion-col>
-            <ion-col *ngIf="(item?.status == 'ended') || (item?.status == 'expired')" class="call-to-action-col">
+            <ion-col *ngIf="(item?.status == 'ended')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="medium"  [routerLink]="['/deal/details', item.id]">
                 <span class="button-cta">{{ item?.status | translate }}</span>
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
               </ion-button>
             </ion-col>
+            <ion-col *ngIf="(item?.status == 'expired') || (item?.status == 'canceled')" class="call-to-action-col">
+              <ion-button class="claim-button" expand="block" color="medium">
+                <span class="button-cta">{{ item?.status | translate }}</span>
+              </ion-button>
+            </ion-col>
           </ion-row>
-          <ion-row class="middle-row">
+          <ion-row class="middle-row ion-justify-content-between" >
             <ion-col class="item-description" size="3">
-              <ion-row >
-                <ion-col size="auto">
-                <h4 class="item-name ion-text-nowrap">
-                    <app-text-shell animation="bouncing" [data]="item.date"></app-text-shell>
-                </h4>
                 <ion-row>
-                  <ion-col>
+                <ion-col>
+                <h4 class="item-name" >
+                    <ion-input class="ion-no-padding" type="text" readonly [value]="item?.date"></ion-input> 
+                </h4>
+                <ion-row >
+                  <ion-col >
                     <ion-label>{{ 'FromTime' | translate }}</ion-label>
                   </ion-col>
-                  <ion-col class="ion-text-end">
-                    <app-text-shell animation="bouncing" lines="1" [data]="item?.startTime"></app-text-shell>
+                  <ion-col class="ion-text-end" >
+                    <ion-input class="ion-no-padding" type="text" readonly [value]="item?.startTime"></ion-input>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -231,32 +233,40 @@
                   <ion-label>{{ 'ToTime' | translate }}</ion-label>
                 </ion-col>
                 <ion-col class="ion-text-end">
-                  <app-text-shell animation="bouncing" lines="1" [data]="item?.endTime"></app-text-shell>
+                  <ion-input class="ion-no-padding" type="text" readonly [value]="item?.endTime"></ion-input>
               </ion-col>
             </ion-row>
             </ion-col>
-
           </ion-row>
-                
-           
-            </ion-col>
-            <!-- <ion-col class="time-left-wrapper" size="6" [ngClass]="{'countdown-active': ((item.startTimeCounter | appTimeDifference) > 0)}"> -->
-              <ion-col class="time-left-wrapper item-description" size="9" [ngClass]="{'countdown-active': ((item?.status == 'new') || (item?.status == 'started') || (item?.status == 'accepted'))}">
+          </ion-col>
+              <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': ((item?.status == 'new') || (item?.status == 'started') || (item?.status == 'accepted'))}">
 <!--                 {{item?.startTimeCounter}}<br>
                 {{item?.endTimeCounter}} -->
                 
-                <ng-container *ngIf="(item?.status == 'expired')">
-                <!-- <span class="expiration-cta">REQUEST EXPIRED:</span> -->
-                <span class="item-description">
-                  <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
+<!--                 <ng-container *ngIf="(item?.status == 'expired')">
+                <ion-row>
+                  <ion-col>
+                <span class="item-description ion-text-end">
+                  <ion-input class="ion-no-padding" type="text" readonly [value]="(item?.startTimeCounter | appTimeAgo)"></ion-input>            
                 </span>
+              </ion-col>
+              <ion-col class="item-description ion-text-end">
+                {{ 'Ago' | translate }}
+              </ion-col>
+            </ion-row>
               </ng-container>
               <ng-container *ngIf="(item?.status == 'ended')">
-                <!-- <span class="expiration-cta">REQUEST EXPIRED:</span> -->
-                <span class="item-description">
-                  <app-text-shell [data]="(item?.endTimeCounter | appTimeAgo)"></app-text-shell>
+                <ion-row>
+                  <ion-col>
+                <span class="item-description ion-text-end">
+                  <ion-input class="ion-no-padding ion-text-end" type="text" readonly [value]="(item?.endTimeCounter | appTimeAgo)"></ion-input>
                 </span>
-              </ng-container>
+              </ion-col>
+              <ion-col class="item-description ion-text-end">
+              {{ 'Ago' | translate }}
+            </ion-col>
+            </ion-row>
+              </ng-container> -->
               <ng-container *ngIf="(item?.status == 'new')" >
                 <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >

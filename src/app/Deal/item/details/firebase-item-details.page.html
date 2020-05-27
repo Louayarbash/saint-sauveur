@@ -5,22 +5,22 @@
     </ion-buttons>
     <ion-title>{{ 'RequestDetails' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseUpdateModal()" *ngIf="loginID == item.createdBy" >
+      <ion-button (click)="openFirebaseUpdateModal()" *ngIf="editDeal" >
           {{ 'Edit' | translate }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="page-content">
-<!--{{ startTimeCounter }}<br>
-  {{ endTimeCounter }}<br>
-  {{ startTimeCounter | appTimeDifference }}<br>
-  {{ startTimeCounter | appTimeAgo}} -->
- <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'new')">
+  <ion-row class="expiration-countdown" *ngIf="typeIsRequest && ((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'new')">
   <span class="expiration-lead">{{ 'RequestExpiresIn' | translate }}</span>
   <app-countdown-timer class="item-countdown" fill="countdown" [end]="startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
-</ion-row>
-<ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'accepted')">
+  </ion-row>
+  <ion-row class="expiration-countdown" *ngIf="(!typeIsRequest) && ((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'new')">
+    <span class="expiration-lead">{{ 'OfferExpiresIn' | translate }}</span>
+    <app-countdown-timer class="item-countdown" fill="countdown" [end]="startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
+    </ion-row>
+  <ion-row class="expiration-countdown" *ngIf="((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'accepted')">
     <span class="expiration-lead">{{ 'DealStartsIn' | translate }}</span>
     <app-countdown-timer class="item-countdown" fill="countdown" [end]="startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
   </ion-row>
@@ -28,35 +28,14 @@
     <span class="expiration-lead">{{ 'DealEndsIn' | translate }}</span>
     <app-countdown-timer class="item-countdown" fill="countdown" [end]="endTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
   </ion-row>
-<!--   <ion-item class="input-item">
-    <ion-label>{{ rating }}</ion-label>
-  </ion-item> -->
-  <!-- requestar rating {{ avgCreatorRating | async }} -->
-  <!-- responder rating {{ avgRespoderRating | async }} -->
-<!--   <div *ngFor= "let rating of creatorRating | async">
-    {{ rating.userId }} gave {{ rating.dealId }} and {{ rating.ratedUserId }} : {{ rating.stars }} stars
-  </div> -->
-<!--   <div *ngFor= "let rating of respoderRating | async">
-    {{ rating.userId }} gave {{ rating.dealId }} and {{ rating.ratedUserId }} : {{ rating.stars }} stars
-  </div> -->
-<!--   <ion-row >
-    <ion-col >
-      <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="rateUser()">Rate</ion-button>
-    </ion-col>
-    <ion-col >
-      <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="openReviewModal()">Review</ion-button>
-    </ion-col>
-  </ion-row> -->
     <section>
-        <ion-list lines="full">
+          <ion-grid class="ion-no-padding">
           <ion-item>
             <ion-label>Date</ion-label>
-            <!-- <ion-input class="ion-text-end" type="text" readonly [value]="dateMsg"></ion-input> -->
             <app-text-shell [data]="dateMsg"></app-text-shell>
           </ion-item>
           <ion-item>
             <ion-label>{{ 'FromTime' | translate }}</ion-label>
-            <!-- <ion-input class="ion-text-end" type="text" readonly [value]="startTimeMsg"></ion-input> -->
             <app-text-shell [data]="startTimeMsg"></app-text-shell>
           </ion-item>
           <ion-item>
@@ -64,22 +43,14 @@
             <app-text-shell [data]="endTimeMsg"></app-text-shell>
             <!-- <ion-input class="ion-text-end" type="text" readonly [value]="endTimeMsg"></ion-input> -->
           </ion-item>
-          <ion-item>
-            <ion-label>{{ 'NoPlace' | translate }}</ion-label>
-            <ion-input class="ion-text-end" type="text" readonly [value]="1"></ion-input>
-          </ion-item>
-        </ion-list>
-      </section>
-      <ion-list lines="full" *ngIf="userInfoRequBlock">
-        <ion-item lines="none">
-      <ion-label>{{ 'RequesterDetails' | translate }}</ion-label>
+        <ion-item lines="none" *ngIf="typeIsRequest && userInfoCreatorBlock">
+      <ion-label>{{ 'CreatorDetails' | translate }}</ion-label>
     </ion-item>
-    </ion-list>
-      <div class="user-details" *ngIf="userInfoRequBlock">
-        <ion-row class="user-details-section ion-align-items-end">
+      <div class="user-details" *ngIf="userInfoCreatorBlock">
+        <ion-row class="user-details-section">
           <ion-col class="user-image-wrapper">
              <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-              <app-image-shell class="user-image" animation="spinner" [src]="item.userInfoRequ?.photo"></app-image-shell>
+              <app-image-shell class="user-image" animation="spinner" [src]="item.userInfoCreator?.photo"></app-image-shell>
             </app-aspect-ratio>
           </ion-col>
           <ion-col class="user-info-wrapper">
@@ -87,52 +58,55 @@
               <ion-col>
                 <ion-row>
                 <h4 class="user-name">
-                  {{ userNameRequ }}
+                  {{ userNameCreator }}
                 </h4>
               </ion-row>
                 <ion-row>
-                <ion-label>{{ 'Building' | translate }}: {{ item.userInfoRequ?.building }}
+                <ion-label>{{ 'Building' | translate }}: {{ item.userInfoCreator?.building }}
                 </ion-label>
               </ion-row>
                 <ion-row>
                 <ion-label>
-                  {{ 'Phone' | translate }}: {{ item.userInfoRequ?.phone }}
+                  {{ 'Phone' | translate }}: {{ item.userInfoCreator?.phone }}
                 </ion-label>
               </ion-row>
               </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row *ngIf="notRatedYetCreator">
+              <ion-col>
+                <ion-label>{{ 'Rating' | translate }}: {{ 'NotRatedYet' | translate }}</ion-label>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="!notRatedYetCreator">
               <ion-col>
                 <ion-label>{{ 'Rating' | translate }}: {{ avgCreatorRating | async }} {{ 'Of' | translate }} 5</ion-label>
               </ion-col>
             </ion-row>
-            <form [formGroup]="ratingFormCrea">
+            <form [formGroup]="ratingFormCreator">
             <ion-row>
             <ion-col size="auto">
               <app-rating-input formControlName="rate" max="5" readOnly="true"></app-rating-input>
             </ion-col>
           </ion-row>
           </form>
-            <ion-row class="actions-row" *ngIf="chatWithRequesterButton">
+            <ion-row class="actions-row" *ngIf="chatWithCreatorButton">
               <ion-col class="main-actions">
-                <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="call(item.userInfoRequ.phone)">{{ 'Call' | translate }}<ion-icon name="call"></ion-icon></ion-button>
+                <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="call(item.userInfoCreator.phone)">{{ 'Call' | translate }}<ion-icon name="call"></ion-icon></ion-button>
                 <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="openChatModal()">{{ 'Chat' | translate }}<ion-icon name="chatbubbles"></ion-icon></ion-button>
-                <ion-button *ngIf="ratingRequButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>
+                <ion-button *ngIf="ratingCreatorButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>
               </ion-col>
             </ion-row>
           </ion-col>
         </ion-row>
       </div>
-      <ion-list class="inputs-list" lines="full" *ngIf="userInfoRespBlock">
-        <ion-item class="input-item" lines="none">
+        <ion-item lines="none" *ngIf="userInfoResponderBlock">
         <ion-label>{{ 'ResponderDetails' | translate }}</ion-label>
       </ion-item>
-    </ion-list>
-    <div class="user-details" *ngIf="userInfoRespBlock">
-      <ion-row class="user-details-section ion-align-items-end">
+    <div class="user-details" *ngIf="userInfoResponderBlock">
+      <ion-row class="user-details-section">
         <ion-col class="user-image-wrapper">
            <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-            <app-image-shell class="user-image" animation="spinner" [src]="item.userInfoResp?.photo"></app-image-shell>
+            <app-image-shell class="user-image" animation="spinner" [src]="item.userInfoResponder?.photo"></app-image-shell>
           </app-aspect-ratio>
         </ion-col>
         <ion-col class="user-info-wrapper">
@@ -140,16 +114,27 @@
             <ion-col>	
               <ion-row>			 
               <h4 class="user-name">
-                {{ userNameResp }}
+                {{ userNameResponder }}
               </h4>
                </ion-row>
+               <ion-row>			 
+                <h4 class="user-name">
+                  {{ 'Parking' | translate }}: {{ item.parkingInfo?.level }} #{{ item.parkingInfo?.number }}
+                </h4>
+                 </ion-row>
+                 <ion-row class="actions-row">
+                  <ion-col class="main-actions">
+                   <ion-button class="ion-no-margin" size="small" color="medium" (click)="share()">{{ 'Share' | translate }}<ion-icon name="call"></ion-icon></ion-button>
+                  </ion-col>
+                </ion-row>
               <ion-row>
-              <ion-label>{{ 'Building' | translate }}: {{ item.userInfoResp?.building }}
+              <ion-label>{{ 'Building' | translate }}: {{ item.userInfoResponder?.building }} 
               </ion-label>
             </ion-row>
+
               <ion-row>
               <ion-label>
-                {{ 'Phone' | translate }}: {{ item.userInfoResp?.phone }}
+                {{ 'Phone' | translate }}: {{ item.userInfoResponder?.phone }}
               </ion-label>
             </ion-row>
             </ion-col>
@@ -157,10 +142,10 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-label>{{ 'Rating' | translate }}: {{ avgRespoderRating | async }} {{ 'Of' | translate }} 5 </ion-label>
+              <ion-label>{{ 'Rating' | translate }}: {{ avgResponderRating | async }} {{ 'Of' | translate }} 5 </ion-label>
             </ion-col>
           </ion-row>
-          <form [formGroup]="ratingFormResp">
+          <form [formGroup]="ratingFormResponder">
           <ion-row>
           <ion-col size="auto">
             <app-rating-input formControlName="rate" max="5" readOnly="true"></app-rating-input>
@@ -169,14 +154,16 @@
         </form>
            <ion-row class="actions-row">
             <ion-col class="main-actions">
-             <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="call(item.userInfoResp.phone)">{{ 'Call' | translate }}<ion-icon name="call"></ion-icon></ion-button>
+             <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="call(item.userInfoResponder.phone)">{{ 'Call' | translate }}<ion-icon name="call"></ion-icon></ion-button>
              <ion-button class="ion-padding-end ion-no-margin" size="small" color="medium" (click)="openChatModal()">{{ 'Chat' | translate }}<ion-icon name="chatbubbles"></ion-icon></ion-button>
-             <ion-button *ngIf="ratingRespButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>				
+             <ion-button *ngIf="ratingResponderButton" class="ion-no-margin" size="small" color="medium" (click)="openReviewModal()">{{ 'Review' | translate }}<ion-icon name="star-half"></ion-icon></ion-button>				
             </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
     </div>
+  </ion-grid>
+</section>
       <section *ngIf="noteSection">
           <ion-item class="input-item" lines="none">
             <ion-label>Note</ion-label>
@@ -197,9 +184,12 @@
 <ion-footer>
   <ion-row>
     <ion-col>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()">{{ 'ProposeMyParking' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="acceptOffer()" [hidden]="acceptButtonHidden">{{ 'AcceptOffer' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelOfferDeal()" [hidden]="cancelOfferDealButtonHidden">{{ 'CancelOfferDeal' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelOffer()" [hidden]="cancelOfferButtonHidden">{{ 'CancelOffer' | translate }}</ion-button>
+
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">{{ 'ProposeMyParking' | translate }}</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelDeal()" [hidden]="cancelDealButtonHidden">{{ 'CancelDeal' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequestDeal()" [hidden]="cancelRequestDealButtonHidden">{{ 'CancelRequestDeal' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequest()" [hidden]="cancelRequestButtonHidden">{{ 'CancelRequest' | translate }}</ion-button>
     </ion-col>
   </ion-row>
