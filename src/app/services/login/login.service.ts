@@ -52,7 +52,7 @@ parking: any;
 /*     if(!this.uid){
       this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
     } */
-    return "Ku6jzqUAjK3iLlXWSfPK";//this.uid
+    return "NJ6u68Cq68RgX9jXPuVx";//this.uid
   }
   getBuildingId(){
     return "NJ6u68Cq68RgX9jXPuVx";

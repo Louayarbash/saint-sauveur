@@ -319,8 +319,7 @@ else{
         {
          text:  this.featureService.translations.OK,
          handler: (data : userParking)=> {
-          console.log("before",this.radioObjectFiltered);
-           console.log(data);
+          
            let selectedParkingInfo = this.featureService.translations.Level + ": " + data.level + ' - ' + data.number;
            this.createItemForm.get('parking').setValue(selectedParkingInfo);
            this.itemData.parkingInfo = {level: data.level, number: data.number};
@@ -328,7 +327,7 @@ else{
              radio.checked = data.index == radio.index? true : false 
              return radio;
           });
-          console.log("after",this.radioObjectFiltered);
+          
          }
        },
        {

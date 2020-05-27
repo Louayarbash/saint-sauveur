@@ -6,7 +6,7 @@
     <ion-title>{{ 'RequestDetails' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openFirebaseUpdateModal()" *ngIf="editDeal" >
-          {{ 'Edit' | translate }}
+          {{ 'Edit' | translate }}{{ 'CreatorDetails' | translate }}{{ loginID | translate }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -43,7 +43,7 @@
             <app-text-shell [data]="endTimeMsg"></app-text-shell>
             <!-- <ion-input class="ion-text-end" type="text" readonly [value]="endTimeMsg"></ion-input> -->
           </ion-item>
-        <ion-item lines="none" *ngIf="typeIsRequest && userInfoCreatorBlock">
+    <ion-item lines="none" *ngIf="typeIsRequest && userInfoCreatorBlock">
       <ion-label>{{ 'CreatorDetails' | translate }}</ion-label>
     </ion-item>
       <div class="user-details" *ngIf="userInfoCreatorBlock">
@@ -186,11 +186,11 @@
     <ion-col>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="acceptOffer()" [hidden]="acceptButtonHidden">{{ 'AcceptOffer' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelOfferDeal()" [hidden]="cancelOfferDealButtonHidden">{{ 'CancelOfferDeal' | translate }}</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelOffer()" [hidden]="cancelOfferButtonHidden">{{ 'CancelOffer' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelOffer()" [hidden]="cancelOfferButtonHidden">{{ 'CancelOffer1' | translate }}</ion-button>
 
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="proposeParking()" [hidden]="proposeButtonHidden">{{ 'ProposeMyParking' | translate }}</ion-button>
       <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequestDeal()" [hidden]="cancelRequestDealButtonHidden">{{ 'CancelRequestDeal' | translate }}</ion-button>
-      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequest()" [hidden]="cancelRequestButtonHidden">{{ 'CancelRequest' | translate }}</ion-button>
+      <ion-button class="delete-btn" expand="block" color="primary" fill="outline" (click)="cancelRequest()" [hidden]="cancelRequestButtonHidden">{{ 'CancelRequest1' | translate }}</ion-button>
     </ion-col>
   </ion-row>
 </ion-footer>

@@ -41,6 +41,8 @@ export class FirebaseItemDetailsPage implements OnInit {
   acceptButtonHidden : boolean;
   cancelOfferDealButtonHidden : boolean;
   cancelOfferButtonHidden : boolean;
+  creatorDetails : string;
+  responderDetails : string;
   userInfoCreatorBlock : boolean;
   userInfoResponderBlock : boolean;
   chatWithCreatorButton : boolean;
@@ -143,7 +145,10 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.acceptButtonHidden = !this.typeIsRequest ? ((this.loginID == this.item.createdBy) || this.item.status == "accepted" || !(this.item.status == "new")) : true;
             this.cancelOfferButtonHidden = !this.typeIsRequest ? !((this.loginID == this.item.createdBy) && this.item.status == "new") : true;
             this.cancelOfferDealButtonHidden = !this.typeIsRequest ? !((this.item.status == "accepted") || ((this.loginID == this.item.createdBy) && (this.item.status == "started"))) : true;
-          
+            //shared details
+            this.creatorDetails = this.typeIsRequest ? "" : "";
+            this.responderDetails = this.typeIsRequest ? "" : "";
+
             //this.dateTimeString = dayjs(this.item.date).format('YYYY-MM-DD');
             //this.startTimeString = dayjs(this.item.startDate).format("HH:mm");
             //this.endTimeString = dayjs(this.item.endDate).format('HH:mm');
@@ -301,7 +306,7 @@ export class FirebaseItemDetailsPage implements OnInit {
          text:  this.featureService.translations.OK,
          handler: (data:any)=> {
            this.item.parkingInfo = data;
-           console.log(data);
+           //console.log(data);
            this.firebaseService.proposeParking(this.item);
          }
        },
@@ -387,8 +392,8 @@ export class FirebaseItemDetailsPage implements OnInit {
         {
          text:  this.featureService.translations.OK,
          handler: (data:any)=> {
-           this.item.parkingInfo = data;
-           console.log(data);
+           //this.item.parkingInfo = data;
+           //console.log(data);
            this.firebaseService.acceptOffer(this.item);
          }
        },

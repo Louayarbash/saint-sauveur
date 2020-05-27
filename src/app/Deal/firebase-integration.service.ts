@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class FirebaseService {
   // Listing Page
-  private tableName = "deals-requests";
+  private tableName = "deals";
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedItemDataStore: DataStore<ItemModel>;
@@ -140,18 +140,31 @@ export class FirebaseService {
       console.log(itemData);
       //return this.afs.collection(this.tableName).add({...itemData});
      const count =  +itemData.count;
-     for (let index = 1; index <= count ; index++) {
-      itemData.count = index + "/" + count;
+     if(itemData.type == "request"){
+      for (let index = 1; index <= count ; index++) {
+        itemData.count = index + "/" + count;
+        this.afs.firestore.collection(this.tableName).add({...itemData}).then(() => {
+        if(count == index){
+          this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
+        }
+        }
+        ).catch(err => {
+          console.log(err)
+          this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+        });            
+      }  
+     }
+     else if(itemData.type == "offer"){
+      itemData.count = "1";
       this.afs.firestore.collection(this.tableName).add({...itemData}).then(() => {
-      if(count == index){
-        this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
-      }
+        this.featureService.presentToast(this.featureService.translations.OfferAddedSuccessfully,2000)
       }
       ).catch(err => {
         console.log(err)
         this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
-      });            
-    }
+      });   
+     }         
+    
   }
 
   /*
@@ -259,7 +272,7 @@ export class FirebaseService {
           let oldStatus = doc.data().status;
           let newStatus = "accepted";
           if (oldStatus == "new"){
-            tran.update(itemRef, { parkingInfo : itemData.parkingInfo, status: newStatus, responseBy:this.loginService.getLoginID()});
+            tran.update(itemRef, { /*parkingInfo : itemData.parkingInfo,*/ status: newStatus, responseBy:this.loginService.getLoginID()});
             //console.log("changed");
             this.featureService.presentToast(this.featureService.translations.OfferAccepted,3000);
             this.router.navigate(['deal/listing']);
