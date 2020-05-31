@@ -46,8 +46,8 @@ export class FirebaseItemDetailsPage implements OnInit {
   userInfoCreatorBlock : boolean;
   userInfoResponderBlock : boolean;
   chatWithCreatorButton : boolean;
-  ratingCreatorButton : boolean;
-  ratingResponderButton : boolean;
+  //ratingCreatorButton : boolean;
+  //ratingResponderButton : boolean;
   noteSection : boolean;
   loginID : string;
   item: combinedItemModel;
@@ -57,6 +57,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   endTimeCounter : string;
   startTimeCounter: string;
   dateMsg : string;
+  endDateMsg : string;
   startTimeMsg : string;
   endTimeMsg : string;
   userNameCreator : string;
@@ -72,6 +73,8 @@ export class FirebaseItemDetailsPage implements OnInit {
   notRatedYetResponder : boolean;
   editDeal: boolean;
   typeIsRequest: boolean;
+  parkingInfo: string;
+  dealDetails: string;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -103,8 +106,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.userInfoCreatorBlock = false;
     this.userInfoResponderBlock = false;
     this.chatWithCreatorButton = false;
-    this.ratingCreatorButton = false;
-    this.ratingResponderButton = false;
+    //this.ratingCreatorButton = false;
+    //this.ratingResponderButton = false;
     this.noteSection = false;
     this.notRatedYetCreator = false;
     this.notRatedYetResponder = false;
@@ -145,32 +148,39 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.acceptButtonHidden = !this.typeIsRequest ? ((this.loginID == this.item.createdBy) || this.item.status == "accepted" || !(this.item.status == "new")) : true;
             this.cancelOfferButtonHidden = !this.typeIsRequest ? !((this.loginID == this.item.createdBy) && this.item.status == "new") : true;
             this.cancelOfferDealButtonHidden = !this.typeIsRequest ? !((this.item.status == "accepted") || ((this.loginID == this.item.createdBy) && (this.item.status == "started"))) : true;
-            //shared details
-            this.creatorDetails = this.typeIsRequest ? "" : "";
-            this.responderDetails = this.typeIsRequest ? "" : "";
-
+            //shared 
+              
+            this.creatorDetails = this.typeIsRequest ? "RequestorDetails" : "OffererDetails";
+            this.responderDetails = this.typeIsRequest ? "ResponderDetails" : "AcceptorDetails";  
+            this.dealDetails = this.typeIsRequest ? "RequestDetails" : "OfferDetails";
+        
             //this.dateTimeString = dayjs(this.item.date).format('YYYY-MM-DD');
             //this.startTimeString = dayjs(this.item.startDate).format("HH:mm");
             //this.endTimeString = dayjs(this.item.endDate).format('HH:mm');
+
             this.startTimeCounter = dayjs(this.item.startDate).format('MM/DD/YYYY HH:mm:ss');
             this.endTimeCounter = dayjs(this.item.endDate).format('MM/DD/YYYY HH:mm:ss');
             this.dateMsg = dayjs(this.item.date).format("DD, MMM, YYYY");
+            this.endDateMsg = dayjs(this.item.endDate).format("DD, MMM, YYYY");
             this.startTimeMsg = dayjs(this.item.startDate).format("HH:mm");
             this.endTimeMsg = dayjs(this.item.endDate).format('HH:mm');
-            this.userNameCreator = this.item.userInfoCreator.name + " " + this.item.userInfoCreator.lastname; 
-            this.userNameResponder = this.item.userInfoResponder.name + " " + this.item.userInfoResponder.lastname;
+            this.userNameCreator = this.item.userInfoCreator.firstname + " " + this.item.userInfoCreator.lastname; 
+            this.userNameResponder = this.item.userInfoResponder.firstname + " " + this.item.userInfoResponder.lastname;
 
             this.userInfoCreatorBlock = (this.loginID !== this.item.createdBy);
             this.chatWithCreatorButton = (this.item.responseBy == this.loginID) ? true : false; 
-            this.ratingCreatorButton = (this.item.status == "ended") ? true : false;
-            this.ratingResponderButton = (this.item.status == "ended") ? true : false;
+            //this.ratingCreatorButton = (this.item.status == "ended") ? true : false;
+            //this.ratingResponderButton = (this.item.status == "ended") ? true : false;
             this.userInfoResponderBlock = (this.loginID == this.item.createdBy) && (this.item.responseBy) ? true : false;
             this.ratingFormCreator.get('rate').setValue(this.rating);
             this.ratingFormResponder.get('rate').setValue(this.rating);
             this.noteSection = this.item.note ? true : false;
             this.editDeal = (this.loginID == this.item.createdBy) ? true : false;
             if(this.item.createdBy){
-              this.creatorRating = this.featureService.getUserRating(this.item.createdBy);
+              if(!this.typeIsRequest){
+                this.parkingInfo = this.featureService.translations.level + "(" + this.item.parkingInfo.level +"), " + "#" + this.item.parkingInfo.number;
+              }
+              this.creatorRating = this.featureService.getUserRating(this.item.createdBy,this.item.type);
               this.avgCreatorRating = this.creatorRating.pipe(map( arr => { 
                 const rating = arr.map(res => {return Number(res.stars)});
                 let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
@@ -180,7 +190,10 @@ export class FirebaseItemDetailsPage implements OnInit {
               }));
             }
             if(this.item.responseBy){
-              this.responderRating = this.featureService.getUserRating(this.item.responseBy);
+              if(this.typeIsRequest){
+                this.parkingInfo = this.featureService.translations.level + "(" + this.item.parkingInfo.level +"), " + "#" + this.item.parkingInfo.number;
+              }
+              this.responderRating = this.featureService.getUserRating(this.item.responseBy,this.item.type);
               this.avgResponderRating = this.responderRating.pipe(map( arr => { 
                 const rating = arr.map(res => {return Number(res.stars)});
                 let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
@@ -247,11 +260,12 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.featureService.setUserRating("this.item.id", "this.item.responseBy", "this.item.userInfoResp.name", this.item.createdBy , "test", this.ratingForm.get('rate').value);//.catch(err => { console.log(err)});
 
   } */
-  async openReviewModal() {
+  async openReviewModal(subject : string) {
     const modal = await this.modalController.create({
       component: ReviewModal,
       componentProps: {
-        'item': this.item 
+        'item': this.item,
+        'subject' : subject
       }
     });
     await modal.present();
@@ -296,9 +310,16 @@ export class FirebaseItemDetailsPage implements OnInit {
       this.featureService.presentToast("Parking info. updated",3000)
       this.loginService.updateUserParking(correctedParking)
     }
+    let message = "";
+    if(this.dateMsg == this.endDateMsg){
+      message = this.featureService.getTranslationParams("ProposeParkingConfirmation",{date : this.dateMsg, startTime : this.startTimeMsg, endTime : this.endTimeMsg});
+    }
+    else{
+      message = this.featureService.getTranslationParams("ProposeParkingConfirmation2",{date : this.dateMsg, startTime : this.startTimeMsg, endDate : this.endDateMsg, endTime : this.endTimeMsg});
+    }
     const alert = await this.alertController.create({
       header: this.featureService.translations.PleaseConfirm,
-      message: this.featureService.getTranslationParams("ProposeParkingConfirmation",{valueDate : this.dateMsg, valueFrom : this.startTimeMsg, valueTo : this.endTimeMsg}),
+      message: message,
       //cssClass: 'alertCancel',
       inputs:  radioObjectFiltered ,
       buttons: [
@@ -385,9 +406,17 @@ export class FirebaseItemDetailsPage implements OnInit {
   }
 
   async acceptOffer(){
+    let message = "";
+    if(this.dateMsg == this.endDateMsg){
+      message = this.featureService.getTranslationParams("AcceptParkingConfirmation",{date : this.dateMsg, startTime : this.startTimeMsg, endTime : this.endTimeMsg});
+    }
+    else{
+      message = this.featureService.getTranslationParams("AcceptParkingConfirmation2",{date : this.dateMsg, startTime : this.startTimeMsg, endDate: this.endDateMsg, endTime : this.endTimeMsg});
+    }
+
     const alert = await this.alertController.create({
       header: this.featureService.translations.PleaseConfirm,
-      message: this.featureService.getTranslationParams("AcceptParkingConfirmation",{valueDate : this.dateMsg, valueFrom : this.startTimeMsg, valueTo : this.endTimeMsg}),
+      message: message,
       buttons: [
         {
          text:  this.featureService.translations.OK,
@@ -409,7 +438,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   async cancelOffer(){
     const alert = await this.alertController.create({
       header: this.featureService.translations.PleaseConfirm,
-      message: this.featureService.translations.CancelRequestConfirmation,
+      message: this.featureService.translations.CancelOfferConfirmation,
       buttons: [
          {
           text: this.featureService.translations.OK,
@@ -430,7 +459,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     if (this.item.createdBy == this.loginID){
       const alert = await this.alertController.create({
         header: this.featureService.translations.PleaseConfirm,
-        message: this.featureService.translations.CancelRequestDealConfirmation,
+        message: this.featureService.translations.CancelOfferDealConfirmation,
         buttons: [
            {
             text: this.featureService.translations.OK,
@@ -450,7 +479,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     else if (this.item.responseBy && (this.item.responseBy == this.loginID)) {
         const alert = await this.alertController.create({
           header: this.featureService.translations.PleaseConfirm,
-          message: this.featureService.translations.DealCancelationConfirmation,
+          message: this.featureService.translations.CancelOfferDealConfirmation,
           buttons: [
              {
               text: this.featureService.translations.OK,

@@ -26,9 +26,9 @@ export class ChatModal implements OnInit {
   @ViewChild(IonContent, {static:true}) content: IonContent;
   //@ViewChild(IonContent) content : IonContent;
   msgText : string;
-  currentUser : string;
   messages : any;
   loginId = this.loginService.getLoginID(); 
+  userName = this.loginService.getLoginName();
 
   constructor(
     private modalController: ModalController,
@@ -38,12 +38,10 @@ export class ChatModal implements OnInit {
     private afs :AngularFirestore,
     private loginService : LoginService
       ) { 
-       
-      this.currentUser = this.loginService.getLoginID();
   }
 
   ngOnInit() {
-    this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatUsersPage_" + this.user.id).orderBy('createdAt').limitToLast(10)).valueChanges();
+    this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatUsersPage_" + this.user.id).orderBy('createdAt')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 
@@ -70,7 +68,7 @@ export class ChatModal implements OnInit {
       },400); 
     }
   }
-  sendMessage2(){
+/*   sendMessage2(){
 
     let chatMsg : ChatModel = new ChatModel();
     chatMsg.channelId = "chatUsersPage_" + this.user.id;
@@ -87,6 +85,6 @@ export class ChatModal implements OnInit {
       },400); 
     }
 
-  }
+  } */
 
 }

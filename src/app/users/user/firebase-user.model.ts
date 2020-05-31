@@ -3,7 +3,7 @@ import { ShellModel } from '../../shell/data-store';
 export class FirebaseUserModel extends ShellModel {
   id: string;
   photo: string;
-  name: string;
+  firstname: string;
   lastname: string;
   building:string;
   app:string;

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   //{ path: '', redirectTo: '/walkthrough', pathMatch: 'full' },
-	  { path: '', redirectTo: 'deal/listing', pathMatch: 'full' },														  
+	  { path: '', redirectTo: 'Deal/listing', pathMatch: 'full' },														  
   { path: 'walkthrough', loadChildren: () => import('./walkthrough/walkthrough.module').then(m => m.WalkthroughPageModule) },
   { path: 'getting-started', loadChildren: () => import('./getting-started/getting-started.module').then(m => m.GettingStartedPageModule) },
   { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },

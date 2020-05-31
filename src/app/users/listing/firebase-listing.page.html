@@ -31,16 +31,12 @@
         <ion-col class="user-data-wrapper">
           <div class="user-info">
             <h3 class="user-name">
-              <app-text-shell animation="bouncing" [data]="item.name?.concat(' ').concat(item.lastname)"></app-text-shell>
+              <app-text-shell animation="bouncing" [data]="item.firstname?.concat(' ').concat(item.lastname)"></app-text-shell>
             </h3>
             <h5 class="user-info">
               <ion-row>
-                <ion-col size="auto">
-              #
-            </ion-col>
           <ion-col>
               <app-text-shell animation="bouncing" [data]="item.app"></app-text-shell>
-            
           </ion-col>
           </ion-row>
         </h5>

@@ -46,8 +46,8 @@ export class ChatModal implements OnInit {
   }
 
   ngOnInit() {
-    this.otherUserName = this.item.createdBy == this.currentUserId ? this.item.userInfoResponder.name : this.item.userInfoCreator.name;
-    //this.userName = this.loginService.name;
+    this.otherUserName = this.item.createdBy == this.currentUserId ? this.item.userInfoResponder.firstname : this.item.userInfoCreator.firstname;
+    this.userName = this.loginService.getLoginName();
     this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatDealPage_" + this.item.id + "*_*" + this.item.createdBy + "*_*" + this.item.responseBy).orderBy('createdAt')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);

@@ -82,16 +82,16 @@ fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entr
 });
 
 } */
-getUserRating(userId : string){
-  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).orderBy('createdDate'));
+getUserRating(userId : string, type : string){
+  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).where('dealType', '==',type).orderBy('createdDate'));
   return ratingRef.valueChanges();
 }
 
 setUserRating(ratingInfo : RatingUser)
 {
   //const rating = {ratingInfo};
-  console.log("rating object",ratingInfo);
-  const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`; //+ Date().toString();
+  //console.log("rating object",ratingInfo);
+  const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`;
   return this.afs.doc(ratingPath).set({...ratingInfo});
 }
 /* public getBuildingInfo(buildingId : string): Observable<Array<any>> {

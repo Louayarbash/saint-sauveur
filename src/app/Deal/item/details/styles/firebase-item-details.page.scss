@@ -10,6 +10,17 @@
 }
 
 .page-content {
+
+  .line-separator{
+
+    height:1px;
+    
+    //background:#717171;
+    
+    border-bottom:1px solid #313030;
+    
+    }
+
   --background: var(--page-background);
 /*      .inputs-list {
       --ion-item-background: var(--page-background);
@@ -113,6 +124,11 @@
     }
   }
 
+/*   .dealDetails1{
+    background-color : darkorange;//var(--app-background-shade);
+    border-bottom : 1px;
+    border-color : var(--app-background-shade);
+  } */
   .user-details {
     background-color : var(--app-background-shade);
     margin: 0px var(--page-margin) 0px var(--page-margin);
@@ -126,12 +142,12 @@
     .user-details-section {
       --ion-grid-column-padding: 0px;
     
-      margin: var(--page-margin);
+      //margin: var(--page-margin);
       //margin-left: 0px;
     
       .user-image-wrapper {
         width: 25%;
-        max-width: 40%;
+        max-width: 30%;
         app-image-shell.user-image {
           --image-shell-border-radius: var(--app-fair-radius);//var(--page-border-radius);
         }
@@ -174,16 +190,16 @@
           --rating-color: var(--ion-color-secondary);
         }
     
-        .actions-row {
+/*         .actions-row {
           //--ion-grid-columns: 10;
-          --ion-grid-column-padding: var(--page-actions-padding);
+          //--ion-grid-column-padding: var(--page-actions-padding);
     
           //justify-content: space-between;
-          flex-wrap: nowrap;
+          //flex-wrap: nowrap;
           //margin-left: calc(var(--page-actions-padding) * -1);
           //margin-right: calc(var(--page-actions-padding) * -1);
     
-          .main-actions {
+           .main-actions {
             flex-grow: 0;
             margin:0px;
             padding-bottom: 5px;
@@ -191,8 +207,8 @@
             //margin-left: calc(var(--page-actions-padding) * -1);
             //margin-right: calc(var(--page-actions-padding) * -1);
             display: flex;
-          }
-        }
+          } 
+        } */
       }
 
      }

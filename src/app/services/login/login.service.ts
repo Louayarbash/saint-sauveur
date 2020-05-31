@@ -16,7 +16,7 @@ export class LoginService {
 uid : string;
 buildingId : string = "NJ6u68Cq68RgX9jXPuVx";
 languge : string;
-name : string;
+firstname : string;
 parking: any;
   language: string;
   constructor(
@@ -52,7 +52,7 @@ parking: any;
 /*     if(!this.uid){
       this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
     } */
-    return "NJ6u68Cq68RgX9jXPuVx";//this.uid
+    return "Ku6jzqUAjK3iLlXWSfPK";//this.uid
   }
   getBuildingId(){
     return "NJ6u68Cq68RgX9jXPuVx";
@@ -75,7 +75,7 @@ parking: any;
       console.log("hello",res.data());
       this.buildingId = res.data().building;
       this.languge = res.data().language;
-      this.name = res.data().name;
+      this.firstname = res.data().firstname;
       this.parking = res.data().parking;
       console.log("inside getLoginInfo 222", this.parking);
     }
@@ -98,11 +98,11 @@ getUserInfoObservable5() //: Observable<any>
     console.log("BINGOOO",user);
   this.buildingId = user.building;
   this.language = user.language;
-  this.name = user.name;
+  this.firstname = user.firstname;
   this.parking = user.parking; 
   console.log(this.buildingId);
   console.log(this.language);
-  console.log(this.name);
+  console.log(this.firstname);
   console.log(this.parking);
   //return this.parking;
  });

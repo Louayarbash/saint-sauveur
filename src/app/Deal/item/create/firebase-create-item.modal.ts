@@ -12,8 +12,6 @@ import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService, TranslateModule } from '@ngx-translate/core';
 //import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
 import  * as firebase from 'firebase/app';
-import { ConditionalExpr } from '@angular/compiler';
-//import { stringify } from 'querystring';
 
 interface userParking {
   index : number;
@@ -49,6 +47,7 @@ export class FirebaseCreateItemModal implements OnInit {
   previousCounterValue : any;//= 0;
   hasMultipleParking : boolean = false;
   radioObjectFiltered: any[];
+  selectedParking : string;
 
   constructor(
     private modalController: ModalController,
@@ -273,7 +272,7 @@ export class FirebaseCreateItemModal implements OnInit {
            if (level){
              let checked = index == 0 ? true : false; 
              level = level.desc
-             return {  index : index, id: userParking.id, number : userParking.number, name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' - ' + userParking.number , value : {index: index, level : level ,number : userParking.number} ,checked: checked}
+             return {  index : index, id: userParking.id, number : userParking.number, name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' - #' + userParking.number , value : {index: index, level : level ,number : userParking.number} ,checked: checked}
           } 
         });
   
@@ -283,7 +282,7 @@ export class FirebaseCreateItemModal implements OnInit {
   });
 
   if(this.radioObjectFiltered.length == 1){
-    userParkingInfo = this.featureService.translations.Level + ": " + this.radioObjectFiltered[0].name + ' - ' + userParking[0].number;
+    userParkingInfo = this.featureService.translations.Level + ": " + this.radioObjectFiltered[0].name + ' - #' + userParking[0].number;
     this.createItemForm.get('parking').setValue(userParkingInfo);
     this.itemData.parkingInfo = {level: this.radioObjectFiltered[0].name, number: userParking[0].number};
     this.hasMultipleParking = false;
@@ -320,7 +319,7 @@ else{
          text:  this.featureService.translations.OK,
          handler: (data : userParking)=> {
           
-           let selectedParkingInfo = this.featureService.translations.Level + ": " + data.level + ' - ' + data.number;
+           let selectedParkingInfo = this.featureService.translations.Level + ": " + data.level + " - #" + data.number;
            this.createItemForm.get('parking').setValue(selectedParkingInfo);
            this.itemData.parkingInfo = {level: data.level, number: data.number};
            this.radioObjectFiltered.map(radio => { 

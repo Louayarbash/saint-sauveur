@@ -170,12 +170,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               let myRequestsList = this.items;
               let newRequestsList = this.items;
               let newOffersList = this.items;
-
+              console.log("liloooo",this.loginId)
               this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
               this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "request"));
               this.newOffersList = newOffersList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "offer"));
               console.log("myRequestsList",this.myRequestsList);
               console.log("newRequestsList",this.newRequestsList);
+              console.log("newOffersList",this.newOffersList);
             }
             else {
               this.myRequestsList = this.items;

@@ -5,14 +5,14 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>Chat</ion-title>
+      <ion-title>Chat {{ userName }} avec {{ user.firstname }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
-   <ion-grid> 
+   <ion-grid class="ion-padding"> 
     <ion-row *ngFor="let message of messages | async">
       <ion-col size="9" *ngIf="currentUser !== message.userId" class="message other-message">
-      <b>{{message.name}}</b><br>
+      <b>{{ user.firstname }}</b><br>
       <span>{{message.text}}</span>
       <div class="time-other" text-right><br>
         {{message.createdAt?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
@@ -20,7 +20,7 @@
       <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
       </ion-col>
       <ion-col offset="3" size="9" *ngIf="currentUser === message.userId" class="message my-message">
-        <b>{{message.name}}</b><br>
+        <b>{{ userName }}</b><br>
         <span>{{message.text}}</span>
         <div class="time-my-message" text-right><br>
         <!-- {{message.createdAt?.seconds * 1000 | date:'short'}}<br> -->

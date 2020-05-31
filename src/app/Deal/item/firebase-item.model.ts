@@ -4,7 +4,7 @@ import { ShellModel } from '../../shell/data-store';
 export class userModel extends ShellModel {
   id : string;
   photo : string;
-  name : string;
+  firstname : string;
   lastname : string;
   building :string;
   app : string;
@@ -53,10 +53,13 @@ export class combinedItemModel extends ItemModel {
   userInfoResponder : userModel = new userModel();
 }
 
-export class RatingUser {     
+export class RatingUser { 
+  dealType : string;    
+  ratingType: string;
   dealId : string;
   userId : string;
-  userName : string; 
+  userFirstname: any;
+  userLastname: string;
   ratedUserId : string; 
   review : string;
   stars : number; 

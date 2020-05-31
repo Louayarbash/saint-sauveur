@@ -82,7 +82,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     item =>
                      
                     (item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
-                    item.name.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
+                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
                   );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});

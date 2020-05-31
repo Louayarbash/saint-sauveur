@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { ModalController, AlertController , IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -22,15 +22,10 @@ import { LoginService } from '../../../services/login/login.service';
   ],
 })
 export class FirebaseUpdateUserModal implements OnInit {
-  // "user" is passed in firebase-details.page
   @Input() user: FirebaseUserModel;
-
-  //updateUserForm: FormGroup;
-  //selectedPhoto: string;
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
   myStoredProfileImage : Observable<any>;
-
   updateUserForm: FormGroup;
   userData: FirebaseUserModel = new FirebaseUserModel();
   levels = [];
@@ -42,8 +37,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   parking2selected : boolean;
   parking3selected : boolean;
   selectOptions : any;
-
-
+  @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
     private modalController: ModalController,
@@ -71,7 +65,7 @@ export class FirebaseUpdateUserModal implements OnInit {
 
     this.selectedPhoto = this.user.photo ? this.user.photo : this.emptyPhoto;
     this.updateUserForm = new FormGroup({
-      name: new FormControl(this.user.name,Validators.required),
+      firstname: new FormControl(this.user.firstname,Validators.required),
       lastname: new FormControl(this.user.lastname,Validators.required),
       building: new FormControl(this.user.building,Validators.required),
       app : new FormControl(this.user.app),
@@ -220,7 +214,7 @@ return radioNotNull != null;
   async deleteUser() {
     const alert = await this.alertController.create({
       header: 'Confirm',
-      message: 'Do you want to delete ' + this.user.name + '?',
+      message: 'Do you want to delete ' + this.user.firstname + '?',
       buttons: [
         {
           text: 'No',
@@ -249,7 +243,7 @@ return radioNotNull != null;
 
     this.userData.id = this.user.id;
     this.userData.photo = this.selectedPhoto;// == this.emptyPhoto ? "" : this.selectedPhoto;
-    this.userData.name = this.updateUserForm.value.name;
+    this.userData.firstname = this.updateUserForm.value.firstname;
     this.userData.lastname = this.updateUserForm.value.lastname;
     this.userData.birthdate = dayjs(this.updateUserForm.value.birthdate).unix();
     this.userData.phone = this.updateUserForm.value.phone;
@@ -352,7 +346,12 @@ return radioNotNull != null;
      this.updateUserForm.controls['parking3Number'].setValue("");
      this.updateUserForm.controls['parking3Number'].setValidators(null);
      this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
-   }
+   }else{
+    setTimeout(() => {
+      this.content.scrollToBottom(400);
+    },400); 
+  }
+   
    }
    showHideParkingValidate3(){
      this.showHideParking3 = this.showHideParking3 ? false : true;
@@ -363,6 +362,11 @@ return radioNotNull != null;
        this.updateUserForm.controls['parking3Number'].setValidators(null);
        this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
      }
+     else{
+      setTimeout(() => {
+        this.content.scrollToBottom(400);
+      },400); 
+    }
    }
 
 }

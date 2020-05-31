@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController,AlertController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController,AlertController, IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
 import * as dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
@@ -33,6 +33,7 @@ export class FirebaseCreateUserModal implements OnInit {
   parking2selected : boolean;
   parking3selected : boolean;
   selectOptions : any;
+  @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
     private modalController: ModalController,
@@ -52,7 +53,7 @@ export class FirebaseCreateUserModal implements OnInit {
   ngOnInit() {
     this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
     this.createUserForm = new FormGroup({
-      name: new FormControl('',Validators.required),
+      firstname: new FormControl('',Validators.required),
       lastname: new FormControl('',Validators.required),
       building: new FormControl(this.loginService.getBuildingId(),Validators.required),
       app : new FormControl(),
@@ -135,7 +136,7 @@ export class FirebaseCreateUserModal implements OnInit {
   createUser() {
 
     this.userData.photo = this.selectedPhoto;
-    this.userData.name = this.createUserForm.value.name;
+    this.userData.firstname = this.createUserForm.value.firstname;
     this.userData.lastname = this.createUserForm.value.lastname;
     this.userData.birthdate = this.createUserForm.value.birthdate ? dayjs(this.createUserForm.value.birthdate).unix() : null; // save it in timestamp
     this.userData.phone = this.createUserForm.value.phone;
@@ -247,15 +248,24 @@ export class FirebaseCreateUserModal implements OnInit {
     this.createUserForm.controls['parking3Number'].setValue("");
     this.createUserForm.controls['parking3Number'].setValidators(null);
     this.createUserForm.controls['parking3Number'].updateValueAndValidity();
+  } else{
+    setTimeout(() => {
+      this.content.scrollToBottom(400);
+    },400); 
   }
-  }
-  showHideParkingValidate3(){
+}
+showHideParkingValidate3(){
     this.showHideParking3 = this.showHideParking3 ? false : true;
     if(this.showHideParking3 == false){
       this.createUserForm.controls['parking3Level'].setValue("1000");
       this.createUserForm.controls['parking3Number'].setValue("");
       this.createUserForm.controls['parking3Number'].setValidators(null);
       this.createUserForm.controls['parking3Number'].updateValueAndValidity();
+    }
+    else{
+      setTimeout(() => {
+        this.content.scrollToBottom(400);
+      },400); 
     }
   }
   //END

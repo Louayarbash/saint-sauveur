@@ -8,11 +8,11 @@
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>{{ 'ReviewExperianceWith' | translate }} {{ item.userInfoRequ.name }}</ion-title>
+      <ion-title>{{ 'ReviewExperianceWith' | translate }} - {{ otherUserName }} - as {{ subject }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <section>
+    <section *ngIf="canRate">
         <ion-list lines="full">
             <ion-item>
               <ion-label>{{ 'Rating' | translate }}</ion-label>
@@ -31,10 +31,10 @@
           <ion-label color="danger">{{ 'UsersRating' | translate }}</ion-label>
            </ion-col>
           </ion-row>
-          <div *ngFor="let rating of creatorRating | async"> 
+          <div *ngFor="let rating of userRating | async"> 
           <ion-row>
             <ion-col  class="header my-message ion-padding">
-            <b>{{ rating.userName }}</b> ({{ rating.stars}} {{ 'Of' | translate }} 5 {{ 'Stars' | translate }})
+            <b>{{ rating.userFirstname }}</b> ({{ rating.stars}} {{ 'Of' | translate }} 5 {{ 'Stars' | translate }})
             <div class="time-my-message" text-right *ngIf="rating.review == ''">
               {{rating.createdDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
             </div>
