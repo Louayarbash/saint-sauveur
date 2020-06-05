@@ -7,8 +7,14 @@ export interface LoginCredential{
 export interface PhotosArray{
     isCover : boolean;
     photo : string;
-    photoStoragePath : string;
+    storagePath : string;
 }
+
+export interface Images{
+    isCover : boolean;
+    storagePath : string;
+}
+
 export interface FileUpload{    
     fileName : string;   
     fileData:string; 

@@ -12,9 +12,9 @@ import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.mod
 
 import { DataStore, ShellModel } from '../../shell/data-store';
 //import { Toast } from '@ionic-native/toast/ngx';
-import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
+//import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
+//import { File } from '@ionic-native/file/ngx';
+//import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Component({
   selector: 'app-firebase-listing',
@@ -28,7 +28,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 export class FirebaseListingPage implements OnInit, OnDestroy {
   rangeForm: FormGroup;
   searchQuery: string;
-  showAgeFilter = false;
+  //showAgeFilter = false;
   CoverPic:string;
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
@@ -48,9 +48,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    private document: DocumentViewer,
-    private file:File,
-    private fileOpener:FileOpener
+    //private document: DocumentViewer,
+    //private file:File,
+    //private fileOpener:FileOpener
   ) { }
 
 
@@ -62,10 +62,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchQuery = '';
 
-    this.rangeForm = new FormGroup({
-      dual: new FormControl({lower: 1, upper: 100})
-    });
-
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
       (resolvedRouteData) => {
@@ -76,10 +72,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         // we ensure having just one subscription (the latest)
         const updateSearchObservable = this.searchFiltersObservable.pipe(
           switchMap((filters) => {
-            const filteredDataSource = this.firebaseService.searchUsersByAge(
-              filters.lower,
-              filters.upper
-            );
             // Send a shell until we have filtered data from Firebase
             const searchingShellModel = [
               new FirebaseListingItemModel(),
@@ -88,18 +80,17 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
             const searchingDelay = 400;
 
-            const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
+            //const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
+            const dataSourceWithShellObservable = DataStore.AppendShell(this.listingDataStore.state, searchingShellModel, searchingDelay);
             
             return dataSourceWithShellObservable.pipe(
               map(filteredItems => {
-                console.log(filteredItems)        ;        
                 // Just filter items by name if there is a search query and they are not shell values
                 if (filters.query !== '' && !filteredItems.isShell) {
-                  const queryFilteredItems = filteredItems.filter(item =>
-                    
-                    item.title.toLowerCase().includes(filters.query.toLowerCase()
-                    //console.log(item.title)
-                  ));
+                  const queryFilteredItems = filteredItems.filter(
+                    item =>
+                    (item.object.toLowerCase().includes(filters.query.toLowerCase()))
+                    )
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
                 } else {
@@ -117,15 +108,23 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           updateSearchObservable
         ).subscribe(
           (state) => {
+            console.log("kikooo",this.items)
             this.items = state;
-            console.log(this.items);
-            this.items.map(item=>{ if(item.coverPhoto) {
-              //item.coverPhotoData = await this.getProfilePic(item.coverPhoto);
-              /*await*/ this.getProfilePic(item.coverPhoto).then(res => item.coverPhotoData = res).catch(err => console.log(err));
+            if(this.items.isShell == false){
+              this.items.map(item => { 
+                let cover = item.images.find( res => { return res.isCover == true });
+                console.log("cover",cover);
+                console.log("isShell",this.items.isShell);
+                if(cover) {
+                  this.getProfilePic(cover.storagePath).then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound",err)});
+                  }
+                  else {
+                  this.getProfilePic("images/no_image.jpeg").then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound",err)});
+                  }
+              });
             }
-            });
           },
-          (error) => console.log(error),
+          (error) => console.log("kikooo",error),
           () => console.log('stateSubscription completed')
         );
       },
@@ -142,13 +141,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   searchList() {
     this.searchSubject.next({
-      lower: this.rangeForm.controls.dual.value.lower,
-      upper: this.rangeForm.controls.dual.value.upper,
+/*       lower: this.rangeForm.controls.dual.value.lower,
+      upper: this.rangeForm.controls.dual.value.upper, */
       query: this.searchQuery
     });
   }
 
-  OpenLocalPDF() {
+/*   OpenLocalPDF() {
     console.log("OpenLocalPDF:",this.file.dataDirectory);
     let filePath = this.file.applicationDirectory + "www/assets/"
     let fakeName = Date.now();
@@ -156,21 +155,33 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       this.fileOpener.open(result.nativeURL,'application/pdf');
     });
     
-/*    const options: DocumentViewerOptions = {
+    const options: DocumentViewerOptions = {
        title: 'My PDF'
     }
-    this.document.viewDocument(filePath +"/NaraMenu.pdf", 'application/pdf', options) */
+    this.document.viewDocument(filePath +"/NaraMenu.pdf", 'application/pdf', options) 
+  } */
+  getProfilePic(picPath : string){
+/*     return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL().then(res =>
+      {
+        return res;
+      } 
+    ).catch((err) =>  {console.log("ProfileNotFound",err); return this.firebaseService.afstore.storage.ref("images/no_image.jpeg").getDownloadURL().then(res =>
+      {
+        return res;
+      } 
+    )}) */
+    return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL();
   }
-  getProfilePic(picPath){
-    console.log("picId",picPath);
-    return this.firebaseService.afstore.ref(picPath).getDownloadURL().toPromise();//.then((res)=>{ console.log('getDownloadURL',res);}).catch(err=>{console.log('Error:',err)});
-  }
-/*   getPics(imagesFullPath){
-    for (let index = 0; index < imagesFullPath.length; index++) {
-     this.firebaseService.afstore.ref(imagesFullPath[index]).getDownloadURL().toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
-    } */
-  
-  
-  
+
+/*   getPic(imagesFullPath : string){
+    let photo : Observable<FirebasePhotoModel>;
+     this.afstore.storage.ref(imagesFullPath).getDownloadURL().then(()=>{
+       photo = this.afstore.ref(imagesFullPath).getDownloadURL();
+     }).catch(err => {console.log(err,"LOLOOOOIOIOIOOO")
+     photo = this.afstore.ref("images/no_image.jpeg").getDownloadURL();
+   })
+ 
+   return photo;
+   }  */
 
 }

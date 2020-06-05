@@ -1,16 +1,17 @@
 import { ShellModel } from '../../shell/data-store';
+import { PhotosArray } from '../../type';
 
 export class FirebaseListingItemModel extends ShellModel {
 
   id: string;
-  coverPhoto: string;
-  createdById: string;
+  //coverPhoto: string;
+  createdBy : string;
   createDate : number;
   price : string;
-  title : string;
-  descriptionn : string;
-  category:string;
+  object : string;
+  description : string;
   coverPhotoData :string;
+  images : Array<PhotosArray> = [];
   constructor() {
     super();
   }

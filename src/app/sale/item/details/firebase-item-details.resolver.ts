@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseCombinedItemModel, FirebaseItemModel } from '../firebase-item.model';
-import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
+//import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 
 import { DataStore } from '../../../shell/data-store';
 

@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable, of, forkJoin, throwError, combineLatest } from 'rxjs';
-import { map, concatMap, first, filter } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { DataStore, ShellModel } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseItemModel, FirebaseSkillModel, FirebaseCombinedItemModel,FirebasePhotoModel } from './item/firebase-item.model';
+import { FirebaseItemModel, FirebaseCombinedItemModel } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { LoginService } from "../services/login/login.service"
+//import { LoginService } from "../services/login/login.service"
 //import { LoginCredential } from '../type';
 import { AlertController } from '@ionic/angular';
-import { storage } from "firebase/app";
-import * as firebase from 'firebase';
-import { async } from '@angular/core/testing';
-import { debug } from 'console';
-import { CompileShallowModuleMetadata } from '@angular/compiler';
-import { PhotosArray } from '../type';
+//import { storage } from "firebase/app";
+//import * as firebase from 'firebase';
+//import { async } from '@angular/core/testing';
+//import { debug } from 'console';
+//import { CompileShallowModuleMetadata } from '@angular/compiler';
+//import { PhotosArray } from '../type';
 import { FileUpload } from '../type'
 //import 'firebase/<PACKAGE>';
 
@@ -77,62 +77,12 @@ export class FirebaseService {
     }
     return this.listingDataStore;
   }
-
-  // Filter users by age
-  public searchUsersByAge(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
-    // we save the dateOfBirth in our DB so we need to calc the min and max dates valid for this query
-    const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
-    const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
-
-    const listingCollection = this.afs.collection<FirebaseListingItemModel>(this.tableName, ref =>
-      ref.orderBy('createDate'));
-      //.startAt(minDate).endAt(maxDate));
-
-    return listingCollection.valueChanges({ idField: 'id' });
-/*     .pipe(
-      map(actions => actions.map(post => {
-         const age = this.calcUserAge(post.createdDate);
-         return { age, ...user } as FirebaseListingItemModel;
-       })
-     )); */
-  }
-
   /*
     Firebase User Details Page
   */
   // Concat the userData with the details of the userSkills (from the skills collection)
   public getCombinedItemDataSource(itemId: string): Observable<FirebaseCombinedItemModel> {
     return this.getItem(itemId);
-     /*.pipe(
-      // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
-      // is merged in the output Observable
-      concatMap(user => {
-        if (user && user.skills) {
-          // Map each skill id and get the skill data as an Observable
-          const userSkillsObservables: Array<Observable<FirebaseSkillModel>> = user.skills.map(skill => {
-            return this.getSkill(skill).pipe(first());
-          });
-
-          // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
-          // and transform those emitted values into one value ([userDetails, userSkills])
-          return combineLatest([
-            of(user),
-            forkJoin(userSkillsObservables)
-          ]).pipe(
-            map(([userDetails, userSkills]: [FirebaseUserModel, Array<FirebaseSkillModel>]) => {
-              // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
-              return {
-                ...userDetails,
-                skills: userSkills
-              } as FirebaseCombinedUserModel;
-            })
-          );
-        } else {
-          // Throw error
-          return throwError('User does not have any skills.');
-        }
-      })
-    );*/
   }
   public getCombinedItemStore(dataSource: Observable<FirebaseCombinedItemModel>): DataStore<FirebaseCombinedItemModel> {
     // Initialize the model specifying that it is a shell model
@@ -144,47 +94,6 @@ export class FirebaseService {
 
     return this.combinedItemDataStore;
   }
-
-  // tslint:disable-next-line:max-line-length
-  /*
-  public getRelatedUsersDataSource(combinedUserDataSource: Observable<FirebaseCombinedUserModel & ShellModel>): Observable<Array<FirebaseListingItemModel>>  {
-    return combinedUserDataSource
-    .pipe(
-      // Filter user values that are not shells. We need to add this filter if using the combinedUserDataStore timeline
-      filter(user => !user.isShell),
-      concatMap(user => {
-        if (user && user.skills) {
-          // Get all users with at least 1 skill in common
-          const relatedUsersObservable: Observable<Array<FirebaseListingItemModel>> =
-          this.getUsersWithSameSkill(user.id, user.skills);
-
-          return relatedUsersObservable;
-        } else {
-          // Throw error
-          return throwError('Could not get related user');
-        }
-      })
-    );
-  }
-
-  public getRelatedUsersStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
-    // Initialize the model specifying that it is a shell model
-    const shellModel: Array<FirebaseListingItemModel> = [
-      new FirebaseListingItemModel(),
-      new FirebaseListingItemModel(),
-      new FirebaseListingItemModel()
-    ];
-
-    this.relatedUsersDataStore = new DataStore(shellModel);
-    // Trigger the loading mechanism (with shell) in the dataStore
-    this.relatedUsersDataStore.load(dataSource);
-
-    return this.relatedUsersDataStore;
-  }*/
-
-  /*
-    Firebase Create User Modal
-  */
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
     public async createItem(itemData : FirebaseItemModel,files : FileUpload[])/* : Promise<DocumentReference>*/{    

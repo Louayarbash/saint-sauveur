@@ -8,9 +8,9 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
 //import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-import { AngularFirestore } from "@angular/fire/firestore";
+//import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { FeatureService } from '../../../services/feature/feature.service';
+//import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 
 @Component({
@@ -114,11 +114,8 @@ return radioNotNull != null;
             
             let level = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
             if(level){
-              level.desc;
-              return { id : userParking.id ,number : userParking.number , desc : level };
+              return { id : userParking.id ,number : userParking.number , desc : level.desc };
             }
-            
-          
           });
         }
         userParking = userParking.filter(function (res) {
@@ -128,6 +125,8 @@ return radioNotNull != null;
      console.log("userParkingIds",userParking)
      if(userParking[0]){
       console.log(1);
+
+      this.parking1selected = true;
 
       this.updateUserForm.controls['parking1Level'].setValue(userParking[0].id);
       this.updateUserForm.controls['parking1Number'].setValue(userParking[0].number);
@@ -149,6 +148,8 @@ return radioNotNull != null;
     }
     if(userParking[2]){
       console.log(3);
+
+      this.parking3selected = true;
       
       this.updateUserForm.controls['parking3Level'].setValue(userParking[2].id);
       this.updateUserForm.controls['parking3Number'].setValue(userParking[2].number);

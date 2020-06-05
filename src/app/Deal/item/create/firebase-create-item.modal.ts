@@ -47,7 +47,7 @@ export class FirebaseCreateItemModal implements OnInit {
   previousCounterValue : any;//= 0;
   hasMultipleParking : boolean = false;
   radioObjectFiltered: any[];
-  selectedParking : string;
+  selectedParking : string = "";
 
   constructor(
     private modalController: ModalController,
@@ -67,7 +67,7 @@ export class FirebaseCreateItemModal implements OnInit {
       date: new FormControl(this.today, Validators.required),
       startDate : new FormControl(this.today ,Validators.required),
       duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
-      endDate : new FormControl({value : this.today, disabled : true}, Validators.required),
+      endDate : new FormControl(this.today/*{value : this.today, disabled : true}*/, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
       parking : new FormControl(''),
       note : new FormControl('') 
@@ -297,6 +297,7 @@ export class FirebaseCreateItemModal implements OnInit {
   if( this.radioObjectFiltered.length != radioObject.length){
     correctedParking = this.radioObjectFiltered.map(parking => {return {id : parking.id, number : parking.number}}); 
     this.createItemForm.get('parking').setValue(null);
+    this.selectedParking = "";
     this.featureService.presentToast("Parking info. updated",3000);
     this.loginService.updateUserParking(correctedParking);
   }
@@ -321,6 +322,7 @@ else{
           
            let selectedParkingInfo = this.featureService.translations.Level + ": " + data.level + " - #" + data.number;
            this.createItemForm.get('parking').setValue(selectedParkingInfo);
+           this.selectedParking = selectedParkingInfo;
            this.itemData.parkingInfo = {level: data.level, number: data.number};
            this.radioObjectFiltered.map(radio => { 
              radio.checked = data.index == radio.index? true : false 

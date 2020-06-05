@@ -53,7 +53,7 @@ export class FirebaseUpdateItemModal implements OnInit {
       date: new FormControl({value: this.dateString, disabled: true}),
       startDate : new FormControl({value: this.startTimeString, disabled: true}),
       endDate : new FormControl({value: this.endTimeString, disabled: true}),
-      NoPlaces : new FormControl({value: "1", disabled: true}),
+      //NoPlaces : new FormControl({value: "1", disabled: true}),
       note : new FormControl(this.item.note)
     });
   }

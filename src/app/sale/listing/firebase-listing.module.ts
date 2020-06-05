@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
 import { ComponentsModule } from '../../components/components.module';
-
 import { FirebaseListingPage } from './firebase-listing.page';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
+import { TranslateModule } from '@ngx-translate/core';
+import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
 
 const routes: Routes = [
   {
@@ -27,12 +27,16 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     ComponentsModule,
+    TranslateModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [FirebaseListingPage],
+  declarations: [FirebaseListingPage,FirebaseCreateItemModal],
   providers: [
     FirebaseService,
     FirebaseListingResolver
+  ],
+  entryComponents: [
+    FirebaseCreateItemModal
   ]
 })
 export class FirebaseListingPageModule {}

@@ -34,7 +34,7 @@
         <ion-item>
           <ion-grid class="ion-no-padding">
           <ion-row class="ion-align-items-center">
-            <ion-col>
+            <ion-col size="4">
           <ion-label>{{ 'Duration' | translate }}</ion-label>
             </ion-col>
             <ion-col class="ion-text-center">
@@ -48,12 +48,12 @@
         </ion-item>
         <ion-item>
             <ion-label>{{ 'ToTime' | translate }}</ion-label>
-            <ion-datetime display-format="DD MMMM YYYY HH:mm" formControlName="endDate"></ion-datetime>
+            <ion-datetime display-format="DD, MMMM, YYYY HH:mm" formControlName="endDate" readonly></ion-datetime>
         </ion-item>
         <ion-item *ngIf="type === 'request'">
           <ion-grid class="ion-no-padding">
             <ion-row class="ion-align-items-center">
-              <ion-col>
+              <ion-col size="4">
                 <ion-label>{{ 'NoPlace' | translate }}</ion-label>
               </ion-col>
               <ion-col class="ion-text-center">
@@ -74,16 +74,25 @@
               <ion-col class="ion-text-center">
                 <ion-button (click)="chooseParkingToOffer()">{{ 'Choose' | translate }}</ion-button>
               </ion-col>
-              <ion-col>
-                <ion-input type="text" formControlName="parking" readonly></ion-input>
-                <!-- <ion-label>{{ selectedParking }}</ion-label> -->
+              <ion-col class="ion-text-end">
+                <!-- <ion-input type="text" formControlName="parking" readonly></ion-input> -->
+                <ion-label>{{ selectedParking }}</ion-label>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
         <ion-item *ngIf="type === 'offer' && (!hasMultipleParking)">
-          <ion-label>{{ 'Parking' | translate }}</ion-label>
-          <ion-input type="text" formControlName="parking" readonly></ion-input>
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-align-items-center">
+              <ion-col>
+                <ion-label>{{ 'Parking' | translate }}</ion-label>
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <ion-label>{{ selectedParking }}</ion-label>
+                <!-- <ion-input type="text" formControlName="parking" readonly></ion-input> -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
       </ion-item>
         <ion-item>
           <ion-label position="floating">Note</ion-label>

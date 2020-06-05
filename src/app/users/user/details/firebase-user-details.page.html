@@ -62,6 +62,10 @@
               <ion-label>{{ 'Role' | translate }}</ion-label>
               <app-text-shell animation="bouncing" [data]="role"></app-text-shell>
             </ion-item>
+            <ion-item *ngFor="let parking of userParking; let index = index;">    
+              <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
+              {{ parking.desc }}/#{{ parking.number }}
+            </ion-item>
           <!-- </ion-list> -->
         </section>
 </ion-content>

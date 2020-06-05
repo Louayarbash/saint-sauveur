@@ -79,10 +79,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         // we ensure having just one subscription (the latest)
         const updateSearchObservable = this.searchFiltersObservable.pipe(
           switchMap((filters) => {
-            const filteredDataSource = this.firebaseService.searchUsersByAge(
+/*             const filteredDataSource = this.firebaseService.searchUsersByAge(
               filters.lower,
               filters.upper
-            );
+            ); */
             // Send a shell until we have filtered data from Firebase
             const searchingShellModel = [
               new FirebaseListingItemModel(),
@@ -91,7 +91,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
             const searchingDelay = 400;
 
-            const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
+            const dataSourceWithShellObservable = DataStore.AppendShell(this.listingDataStore.state, searchingShellModel, searchingDelay);
             
             return dataSourceWithShellObservable.pipe(
               map(filteredItems => {

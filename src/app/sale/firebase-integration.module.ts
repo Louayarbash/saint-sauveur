@@ -3,19 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { AngularFireModule } from '@angular/fire';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { ComponentsModule } from '../components/components.module';
-import { environment } from '../../environments/environment';
-
-import { FirebaseCreateItemModal } from './item/create/firebase-create-item.modal';
-import { FirebaseUpdateItemModal } from './item/update/firebase-update-item.modal';
-import { SelectItemImageModal } from './item/select-image/select-item-image.modal';
-
-
 
 const firebaseRoutes: Routes = [
   {
@@ -39,16 +30,15 @@ const firebaseRoutes: Routes = [
     //AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule
-  ],
+  ]/*,
   entryComponents: [
     FirebaseCreateItemModal,
     FirebaseUpdateItemModal,
     SelectItemImageModal
   ],
   declarations: [
-    FirebaseCreateItemModal,
     FirebaseUpdateItemModal,
     SelectItemImageModal
-  ]
+  ]*/
 })
 export class FirebaseIntegrationModule {}

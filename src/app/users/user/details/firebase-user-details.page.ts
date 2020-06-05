@@ -10,6 +10,7 @@ import { ChatModal } from '../chat/chat.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
 import * as dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
+import { LoginService } from '../../../services/login/login.service';
 
 @Component({
   selector: 'app-firebase-user-details',
@@ -23,14 +24,15 @@ export class FirebaseUserDetailsPage implements OnInit {
   user: FirebaseUserModel;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
-  relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
+  //relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
   birthdate : string;
   role: string;
   type: string;
   language: string;
+  userParking = [];
 
   @HostBinding('class.is-shell') get isShell() {
-    return ((this.user && this.user.isShell) || (this.relatedUsers && this.relatedUsers.isShell)) ? true : false;
+    return ((this.user && this.user.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
   }
 
   constructor(
@@ -38,10 +40,13 @@ export class FirebaseUserDetailsPage implements OnInit {
     public modalController: ModalController,
     public router: Router,
     private route: ActivatedRoute,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    private loginService : LoginService
   ) { }
 
   ngOnInit() {
+
+
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseUserModel> = resolvedDataStores.user;
@@ -53,7 +58,25 @@ export class FirebaseUserDetailsPage implements OnInit {
           this.birthdate = dayjs(this.user.birthdate * 1000).format("DD, MMM, YYYY");
           this.type = this.user.type == "owner" ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
           this.role = this.user.role == "user" ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
-          this.language = this.user.language == "fr" ? this.featureService.translations.Frensh : this.featureService.translations.English; 
+          this.language = this.user.language == "fr" ? this.featureService.translations.Frensh : this.featureService.translations.English;
+          
+          this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
+            let levels = item.parking;
+            console.log("parking",this.user.parking);
+              if (this.user.parking) {
+                this.userParking = this.user.parking.map((userParking) => { 
+                  
+                  let level = levels.find( (level: { id: number; }) => level.id === userParking.id );
+                  if(level){
+                    return { id : userParking.id ,number : userParking.number , desc : level.desc };
+                  }
+                });
+              }
+              console.log(this.userParking)
+              this.userParking = this.userParking.filter(function (res) {
+                return res != null;
+              });   
+          });
         }
       );
 /*       relatedUsersDataStore.state.subscribe(

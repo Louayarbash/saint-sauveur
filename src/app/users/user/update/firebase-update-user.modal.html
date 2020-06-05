@@ -163,7 +163,7 @@
   </ion-item-divider>
   <ion-grid class="ion-no-margin ion-no-padding">          
     <ion-row class="ion-align-items-center">
-<ion-col size="6">
+<ion-col size="5">
   <ion-item lines=“none”>
     <ion-label position="stacked">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
     <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
@@ -178,16 +178,16 @@
       <ion-input type="text" formControlName="parking1Number"></ion-input>
       </ion-item>
   </ion-col>
-  <ion-col *ngIf="parking1selected" size="2">
-      <ion-item lines="none">
-      <ion-button *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
-      </ion-item>
+  <ion-col *ngIf="parking1selected" size="3" class="ion-text-center">
+
+      <ion-button color="secondary" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-outline"></ion-icon></ion-button>
+
   </ion-col>
    </ion-row>
   </ion-grid>
   <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking2">          
       <ion-row class="ion-align-items-center">
-<ion-col size="6">
+<ion-col size="5">
     <ion-item>
     <ion-label position="floating">{{ 'Parking' | translate }} 2 {{ 'level' | translate }}</ion-label>
     <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
@@ -202,17 +202,21 @@
     <ion-input type="text" formControlName="parking2Number"></ion-input>
   </ion-item>
 </ion-col>
-<ion-col size="auto" *ngIf="parking2selected" size="2">
-    <ion-item lines="none">
-    <ion-button  *ngIf="showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
-    <ion-button *ngIf="!showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
-  </ion-item>
+<ion-col *ngIf="parking2selected" size="3">
+<ion-row class="ion-justify-content-center">
+  <ion-col *ngIf="showHideParking2" class="ion-text-center" size="6">
+    <ion-button color="secondary" (click)="showHideParkingValidate2()"><ion-icon name="remove-outline"></ion-icon></ion-button>
+</ion-col>
+<ion-col *ngIf="!showHideParking3" class="ion-text-center" size="6">
+  <ion-button color="secondary" (click)="showHideParkingValidate3()"><ion-icon name="add-outline"></ion-icon></ion-button>
+</ion-col>
+</ion-row>
 </ion-col>
  </ion-row>
   </ion-grid>
   <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking3">          
   <ion-row class="ion-align-items-center">
-<ion-col size="6">
+<ion-col size="5">
 <ion-item>
 <ion-label position="floating">{{ 'Parking' | translate }} 3 {{ 'level' | translate }}</ion-label>
     <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
@@ -227,10 +231,8 @@
     <ion-input type="text" formControlName="parking3Number"></ion-input>
   </ion-item>
 </ion-col>
-<ion-col size="auto" *ngIf="parking3selected" size="2">
-  <ion-item lines="none">
-  <ion-button  *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
-</ion-item>
+<ion-col *ngIf="parking3selected" size="3" class="ion-text-center">
+  <ion-button color="secondary" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-outline"></ion-icon></ion-button>
 </ion-col>
 </ion-row>
 </ion-grid>
