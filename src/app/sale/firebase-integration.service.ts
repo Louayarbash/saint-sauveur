@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of, forkJoin, throwError, combineLatest } from 'rxjs';
-import { map, concatMap, first, filter } from 'rxjs/operators';
-import { DataStore, ShellModel } from '../shell/data-store';
+import { map, concatMap, first } from 'rxjs/operators';
+import { DataStore } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseItemModel, FirebaseCombinedItemModel,FirebasePhotoModel } from './item/firebase-item.model';
+import { FirebaseItemModel, FirebaseCombinedItemModel/*, FirebasePhotoModel*/ } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { PhotosArray, Images} from '../type';
+import { PhotosData, Images} from '../type';
+import { FirebaseUserModel } from '../users/user/firebase-user.model';
 
 @Injectable()
 export class FirebaseService {
@@ -53,36 +54,56 @@ export class FirebaseService {
       // is merged in the output Observable
       concatMap(item => {
         //item.imagesFullPath = [""];
-        if (item && (item.images.length != 0)) {
-          const itemPhotosObservables: Array<Observable<PhotosArray>> = item.images.map( image => {
-             return this.getPic(image.storagePath).pipe(first()).pipe(map(photo => {return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } } ));
+        //let creatorDetails : FirebaseUserModel;
+        const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res}))//.toPromise()//.then(res => creatorDetails = res) 
 
-          });
+        if (item && (item.images.length != 0)) {
+/*           const itemPhotosObservables: Array<Observable<PhotosData>> = item.images.map( image => {
+             return this.getPicObservable(image.storagePath).pipe(first()).pipe(map(photo => { return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } 
+            }));
+          }); */
+
+          const itemPhotosPromise : Array<Promise<PhotosData>> = item.images.map( image => {
+            return this.getPicPromise(image.storagePath).then(photo => { 
+              return { photo : photo, storagePath : image.storagePath, isCover: image.isCover }
+         }).catch(err => {
+           return this.getPicPromise("images/no_image.jpeg").then(photo => { 
+            return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } })
+        })
+        });
+        
 
           // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
           // and transform those emitted values into one value ([userDetails, userSkills])
           return combineLatest([
             of(item),
-            forkJoin(itemPhotosObservables)
+            creatorDetails,
+            //of(itemPhotosPromise)
+            //forkJoin(itemPhotosObservables),
+            forkJoin(itemPhotosPromise),
+            
           ]).pipe(
-            map(([userDetails, userPhotos]: [FirebaseItemModel, Array<PhotosArray>]) => {
+            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<PhotosData>] ) => {
               
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
-                ...userDetails,
-                photos: userPhotos
+                ...itemDetails,
+                photos: itemPhotos,
+                creatorDetails : creatorDetails
               } as FirebaseCombinedItemModel;
             })
           );
         }
          else if (item && (item.images.length == 0)){
            return combineLatest([
-            of(item)
+            of(item),
+            creatorDetails,
           ]).pipe(
-            map(([userDetails]: [FirebaseItemModel]) => {
+            map(([userDetails, creatorDetails]: [FirebaseItemModel, FirebaseUserModel]) => {
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
-                ...userDetails
+                ...userDetails,
+                creatorDetails : creatorDetails
               } as FirebaseCombinedItemModel;
             })
           );
@@ -110,7 +131,7 @@ export class FirebaseService {
   }
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-  public createItem(itemData : FirebaseItemModel,postImages : PhotosArray[])/* : Promise<DocumentReference> */ : any {    
+  public createItem(itemData : FirebaseItemModel,postImages : PhotosData[])/* : Promise<DocumentReference> */ : any {    
     return this.afs.collection('posts').add({...itemData}).then(async (res)=>{
       console.log("post id :",res.id);
       let images : Images[] = [];
@@ -149,13 +170,12 @@ public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
     return this.afs.collection('posts').doc(itemData.id).update({...itemData});
 }
 
-public async updateItem(itemData: FirebaseItemModel, postImages : PhotosArray[]): Promise<void> {
+public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]): Promise<void> {
     
     let images : Images[] = [];
     if( postImages.length > 0 ){
     for (var i = 0; i < postImages.length; i++) {
         if (postImages[i].storagePath == "") {
-         //await this.uploadToStorage(postImages[i].photo,itemData.id).then(res => {
 
           try {
             let uploaded = await this.uploadToStorage(postImages[i].photo,itemData.id);
@@ -181,14 +201,14 @@ public async updateItem(itemData: FirebaseItemModel, postImages : PhotosArray[])
   return this.afs.collection('posts').doc(itemData.id).update({...itemData});
 }
   // Get data of a specific User
-private getItem(postId: string): Observable<FirebaseCombinedItemModel> {
-    return this.afs.doc<FirebaseCombinedItemModel>('posts/' + postId)
+private getItem(postId: string): Observable<FirebaseItemModel> {
+    return this.afs.doc<FirebaseItemModel>('posts/' + postId)
     .snapshotChanges()
     .pipe(
       map(a => {
         const postData = a.payload.data();
         const id = a.payload.id;
-        return { id, ...postData } as FirebaseCombinedItemModel;
+        return { id, ...postData } as FirebaseItemModel;
       })
     );
   }
@@ -218,9 +238,21 @@ private getItem(postId: string): Observable<FirebaseCombinedItemModel> {
     return this.afs.collection('posts').doc(item.id).delete();
   }
 
- getPic(imagesFullPath : string){
-   return  this.afstore.ref(imagesFullPath).getDownloadURL();
-  
+/*   getPicObservable(imagesFullPath : string){
+let aaa : Observable<any>;
+    try {
+      
+      aaa = this.afstore.ref(imagesFullPath).getDownloadURL(); 
+      console.log(aaa,"try")
+    } catch (error) {
+      console.log("catch",error)
+      aaa = this.afstore.ref("images/no_image.jpeg").getDownloadURL();
+      
+    }
+    return aaa;
+     
+    }  */
+  getPicPromise(imagesFullPath : string) : Promise<any> {
+        return this.afstore.storage.ref(imagesFullPath).getDownloadURL();   
   } 
-  
 }

@@ -7,7 +7,7 @@ import { DataStore, ShellModel } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseUserModel } from './user/firebase-user.model';
-import { UserImageModel } from './user/select-image/user-image.model';
+//import { UserImageModel } from './user/select-image/user-image.model';
 import { LoginService } from '../services/login/login.service';
 import { LoginCredential } from '../type';
 
@@ -19,7 +19,7 @@ export class FirebaseService {
   private combinedUserDataStore: DataStore<FirebaseUserModel>;
   private relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // Select User Image Modal
-  private avatarsDataStore: DataStore<Array<UserImageModel>>;
+  //private avatarsDataStore: DataStore<Array<UserImageModel>>;
   
 
   constructor(private afs: AngularFirestore, private loginService: LoginService) {}
@@ -184,11 +184,11 @@ export class FirebaseService {
   /*
     Firebase Select User Image Modal
   */
-  public getAvatarsDataSource(): Observable<Array<UserImageModel>> {
+/*  public getAvatarsDataSource(): Observable<Array<UserImageModel>> {
     return this.afs.collection<UserImageModel>('avatars').valueChanges();
   }
 
-  public getAvatarsStore(dataSource: Observable<Array<UserImageModel>>): DataStore<Array<UserImageModel>> {
+   public getAvatarsStore(dataSource: Observable<Array<UserImageModel>>): DataStore<Array<UserImageModel>> {
     // Use cache if available
     if (!this.avatarsDataStore) {
       // Initialize the model specifying that it is a shell model
@@ -205,7 +205,7 @@ export class FirebaseService {
       this.avatarsDataStore.load(dataSource);
     }
     return this.avatarsDataStore;
-  }
+  } */
 
 
   // Get data of a specific User

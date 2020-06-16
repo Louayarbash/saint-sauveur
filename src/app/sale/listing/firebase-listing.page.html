@@ -19,9 +19,38 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="firebase-listing-content">
-  <ion-list class="items-list" *ngIf="items?.length > 0">
-     <!-- <ion-item class="list-item" *ngFor="let item of items"> -->
+<ion-content class="card-background-page">
+  <div *ngIf="items?.length > 0">
+
+<ion-card *ngFor="let item of items" [routerLink]="['/sale/details', item.id]">
+  <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+    <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+  </app-aspect-ratio>
+  <!-- <img src="img/advance-card-bttf.png"> -->
+
+  <ion-card-content *ngIf="item.description">
+      <p>      
+      {{item.description}}
+      </p>
+  </ion-card-content>
+
+  <ion-row>
+    <ion-col class="ion-text-left ion-padding">
+        <h3>
+          <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        </h3>
+    </ion-col>
+    <ion-col  class="ion-text-right ion-padding">
+        <h3>
+          <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>
+        </h3>
+    </ion-col>
+  </ion-row>
+
+</ion-card>
+</div>
+<!--   <ion-list class="items-list" *ngIf="items?.length > 0">
+      <ion-item class="list-item" *ngFor="let item of items">
       <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/sale/details', item.id]">
       <ion-row class="user-row">
         <ion-col size="3" class="user-image-wrapper">
@@ -38,7 +67,7 @@
         </ion-col>
       </ion-row>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
   <h3 *ngIf="items?.length == 0" class="empty-list-message">
     No users found for the selected filters.
   </h3>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ModalController} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
@@ -112,15 +112,23 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             this.items = state;
             if(this.items.isShell == false){
               this.items.map(item => { 
-                let cover = item.images.find( res => { return res.isCover == true });
-                console.log("cover",cover);
-                console.log("isShell",this.items.isShell);
-                if(cover) {
-                  this.getProfilePic(cover.storagePath).then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound",err)});
-                  }
-                  else {
-                  this.getProfilePic("images/no_image.jpeg").then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound",err)});
-                  }
+                if(item.images.length > 0){
+                  let cover = item.images.find( res => { return res.isCover == true });
+                  if(cover) {
+                    this.getProfilePic(cover.storagePath).then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound1",err)});
+                    }
+                    else{
+                    this.getProfilePic(item.images[0].storagePath).then(res => item.coverPhotoData = res).catch(err => {
+                      if(err.code == "storage/object-not-found"){
+                        this.getProfilePic("images/no_image.jpeg").then(res => item.coverPhotoData = res)      
+                      }
+                      item.coverPhotoData = "" ; console.log("CoverPhotoNotFound2",err)
+                    });
+                    }
+                }
+                else {
+                  this.getProfilePic("images/no_image.jpeg").then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound3",err)});
+              } 
               });
             }
           },
@@ -141,8 +149,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   searchList() {
     this.searchSubject.next({
-/*       lower: this.rangeForm.controls.dual.value.lower,
-      upper: this.rangeForm.controls.dual.value.upper, */
       query: this.searchQuery
     });
   }
@@ -161,27 +167,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.document.viewDocument(filePath +"/NaraMenu.pdf", 'application/pdf', options) 
   } */
   getProfilePic(picPath : string){
-/*     return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL().then(res =>
-      {
-        return res;
-      } 
-    ).catch((err) =>  {console.log("ProfileNotFound",err); return this.firebaseService.afstore.storage.ref("images/no_image.jpeg").getDownloadURL().then(res =>
-      {
-        return res;
-      } 
-    )}) */
     return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL();
   }
-
-/*   getPic(imagesFullPath : string){
-    let photo : Observable<FirebasePhotoModel>;
-     this.afstore.storage.ref(imagesFullPath).getDownloadURL().then(()=>{
-       photo = this.afstore.ref(imagesFullPath).getDownloadURL();
-     }).catch(err => {console.log(err,"LOLOOOOIOIOIOOO")
-     photo = this.afstore.ref("images/no_image.jpeg").getDownloadURL();
-   })
- 
-   return photo;
-   }  */
-
 }

@@ -1,24 +1,24 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray,ValidatorFn,ValidationErrors } from '@angular/forms';
+import { Validators, FormGroup, FormControl, ValidatorFn,ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import * as dayjs from 'dayjs';
+//import * as dayjs from 'dayjs';
 
-import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
+//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
 //import { AngularFireAuth } from "@angular/fire/auth";
-import { Observable } from "rxjs";
-import { PhotosArray } from '../../../type'
+//import { Observable } from "rxjs";
+//import { PhotosData } from '../../../type'
 import { File } from "@ionic-native/file/ngx";
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
 import { FileUpload } from '../../../type'
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 @Component({
   selector: 'app-firebase-update-item',

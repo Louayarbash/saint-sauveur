@@ -12,11 +12,11 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <section>
-      <ion-list lines="full">
+    <!-- <section> -->
+      <ion-list >
        <ion-item>
          <ion-label position="floating">{{ 'Object' | translate }}</ion-label>
-         <ion-input type="text" formControlName="object" required></ion-input>
+         <ion-input type="text" formControlName="object"></ion-input>
        </ion-item>
        <ion-item>
          <ion-label position="floating">{{ 'Price' | translate }}</ion-label>
@@ -51,29 +51,63 @@
                  </ion-row>
                </ion-radio-group>
              </ion-item>
-       <ion-item>
-         <ion-button color="secondary" (click)="selectImageSource()" [disabled]="postImages.length >= 3">
-         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-         </ion-button>
-       </ion-item>
+       <ion-item-divider>
+            <!-- <ion-label>{{ 'AddPhotos' | translate }}</ion-label> -->
+           <!-- <ion-col class="ion-text-end"> -->
+            <ion-button color="secondary" (click)="selectImageSource()" [disabled]="postImages.length >= 3">
+              <!-- <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon> -->
+              <ion-icon name="images-outline"></ion-icon>
+              </ion-button>
+           <!-- </ion-col> -->
+ 
+       </ion-item-divider>
      </ion-list> 
-   </section>
-    <section>
-      <ion-row *ngFor="let image of postImages">
-        <ion-col size="8">
-          <ion-img role="button" [src]="image.photo"></ion-img>     
+   <!-- </section> -->
+    <!-- <section> -->
+      <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
+        <ion-item *ngFor="let image of postImages">
+      <!-- <ion-row  class="ion-align-items-center"> -->
+        <ion-col class="ion-padding">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="image.photo">
+            <app-aspect-ratio [ratio]="{w:64, h:50}">
+           </app-aspect-ratio> 
+         </app-image-shell>
         </ion-col>
-        <ion-col size="4" >
-          <ion-label>Main photo</ion-label>
-          <ion-button color="secondary" (click)="deletePhoto(postImages.indexOf(image))">          
+        <ion-col>
+          <ion-button color="medium" (click)="deletePhoto(postImages.indexOf(image))">          
             <ion-icon slot="icon-only" name="trash"></ion-icon>      
-          </ion-button> 
+          </ion-button>  
+        </ion-col>
+        <ion-col>
           <ion-button color="secondary" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
-            <ion-icon slot="icon-only" name="open"></ion-icon>      
+            {{ 'CoverPhoto' | translate }}
           </ion-button> 
         </ion-col>
-      </ion-row>
-  </section>
+      <!-- </ion-row> -->
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+    </ion-reorder-group>
+  <!-- </section> -->
+<!--   <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
+    <ion-item>
+      <ion-label>
+        Item 1
+      </ion-label>
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Item 2
+      </ion-label>
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Item 3
+      </ion-label>
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+  </ion-reorder-group> -->
   </ion-content>
 
   <ion-footer>

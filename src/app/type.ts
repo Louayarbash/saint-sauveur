@@ -4,7 +4,7 @@ export interface LoginCredential{
     email: string;
     password: string;
 }
-export interface PhotosArray{
+export interface PhotosData{
     isCover : boolean;
     photo : string;
     storagePath : string;

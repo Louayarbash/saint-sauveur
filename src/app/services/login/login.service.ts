@@ -26,7 +26,7 @@ parking: any;
    }
   login(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
-      const authenticated = this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password).then(res=> { 
+      const authenticated = this.afAuth.signInWithEmailAndPassword(credentials.email, credentials.password).then(res=> { 
         console.log("login function inside then",res.user.uid) 
         return res.user.uid; 
         
@@ -39,8 +39,8 @@ parking: any;
   }
   signup(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
-      const created = this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password);
-      this.uid = this.afAuth.auth.currentUser.uid;
+      const created = this.afAuth.createUserWithEmailAndPassword(credentials.email, credentials.password);
+      //this.uid = this.afAuth.currentUser.uid;
       console.log(this.uid);
       return created;
       

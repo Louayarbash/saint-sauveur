@@ -6,12 +6,16 @@ import * as dayjs from 'dayjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
-import { SelectUserImageModal } from '../select-image/select-user-image.modal';
+//import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { AngularFirestore } from '@angular/fire/firestore';
 import { LoginCredential } from '../../type';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
+
+import { Crop, CropOptions } from '@ionic-native/crop/ngx';
+//import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-firebase-create-user',
@@ -22,6 +26,10 @@ import { LoginService } from '../../../services/login/login.service';
   ],
 })
 export class FirebaseCreateUserModal implements OnInit {
+
+  croppedImagepath = "";
+  isLoading = false;
+
   createUserForm: FormGroup;
   userData: FirebaseUserModel = new FirebaseUserModel();
   levels = [];
@@ -41,7 +49,10 @@ export class FirebaseCreateUserModal implements OnInit {
     private camera: Camera,
     private alertController: AlertController,
     private featureService : FeatureService,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private crop: Crop,
+    //private imagePicker: ImagePicker,
+    private file: File
   ) { 
     this.showHideParking2 = false;
     this.showHideParking3 = false;
@@ -173,7 +184,7 @@ export class FirebaseCreateUserModal implements OnInit {
       this.dismissModal();
     }); 
   }
-
+/* 
   async changeUserImage() {
     const modal = await this.modalController.create({
       component: SelectUserImageModal
@@ -185,27 +196,30 @@ export class FirebaseCreateUserModal implements OnInit {
       }
     });
     await modal.present();
-  }
+  } */
   //LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
-      quality:100,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      quality:25,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
+      cameraDirection : this.camera.Direction.FRONT,
+      //targetHeight:200,
+      //targetWidth:200,
       correctOrientation:true,
       sourceType:this.camera.PictureSourceType.CAMERA
     };
+
     const galleryOptions : CameraOptions = {
       
       quality:100,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
+      //targetHeight:200,
+      //targetWidth:200,
+      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const alert = await this.alertController.create({
       header: "Select Source",
@@ -214,18 +228,20 @@ export class FirebaseCreateUserModal implements OnInit {
         {
           text: "Camera",
           handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageData)=> {
-              const image = "data:image/jpeg;base64," + imageData;
-              this.selectedPhoto = image;
+            this.camera.getPicture(cameraOptions).then((imageURI)=> {
+              this.cropImage(imageURI);
+              //const image = "data:image/jpeg;base64," + imageUri;
+              //this.selectedPhoto = image;
             });
           }
         },
         {
           text: "Gallery",
           handler: ()=> {
-            this.camera.getPicture(galleryOptions).then((imageData)=> {
-              const image = "data:image/jpeg;base64," + imageData;
-              this.selectedPhoto = image;
+            this.camera.getPicture(galleryOptions).then((imageURI)=> {
+              this.cropImage(imageURI);
+              //const image = "data:image/jpeg;base64," + imageData;
+              //this.selectedPhoto = image;
             });
           }
         }
@@ -256,7 +272,7 @@ export class FirebaseCreateUserModal implements OnInit {
 }
 showHideParkingValidate3(){
     this.showHideParking3 = this.showHideParking3 ? false : true;
-    if(this.showHideParking3 == false){
+    if(this.showHideParking3 === false){
       this.createUserForm.controls['parking3Level'].setValue("1000");
       this.createUserForm.controls['parking3Number'].setValue("");
       this.createUserForm.controls['parking3Number'].setValidators(null);
@@ -268,6 +284,56 @@ showHideParkingValidate3(){
       },400); 
     }
   }
-  //END
+  // END
 
+/*   pickImage() {
+    let imagePickerOptions: ImagePickerOptions = { 
+      maximumImagesCount: 3,
+      quality: 50,
+    };
+
+    this.imagePicker.getPictures(imagePickerOptions).then((results) => {
+      for (var i = 0; i < results.length; i++) {
+        this.cropImage(results[i]);
+      }
+    }, (err) => {
+      alert(err);
+    });
+  } */
+
+  cropImage(imgPath) {
+    
+    const cropOptions: CropOptions = {
+      quality: 25
+//      targetHeight: 100,
+//      targetWidth : 150
+    }
+
+    this.crop.crop(imgPath, cropOptions)
+      .then(
+        newPath => {
+          this.croppedImageToBase64(newPath.split('?')[0])
+        },
+        error => {
+          alert('Error cropping image' + error);
+        }
+      );
+  }
+
+  croppedImageToBase64(ImagePath) {
+
+    this.isLoading = true;
+    let copyPath = ImagePath;
+    let splitPath = copyPath.split('/');
+    let imageName = splitPath[splitPath.length - 1];
+    let filePath = ImagePath.split(imageName)[0];
+
+    this.file.readAsDataURL(filePath, imageName).then(base64 => {
+      //this.croppedImagepath = base64;
+      //console.log("mmmmmmmmmmmmm",base64)
+      this.selectedPhoto = base64;
+    /*} , error => {
+      alert('Error in showing image' + error); */
+    }).catch( err=> console.log(err,'Error in croppedImageToBase64'));
+  }
 }

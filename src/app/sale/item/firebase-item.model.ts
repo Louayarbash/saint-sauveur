@@ -1,5 +1,7 @@
 import { ShellModel } from '../../shell/data-store';
-import { PhotosArray, Images } from '../../type';
+import { PhotosData, Images } from '../../type';
+import { FirebaseUserModel } from '../../users/user/firebase-user.model';
+
 
 
 export class FirebaseSkillModel extends ShellModel {
@@ -49,11 +51,12 @@ export class FirebaseCombinedSkillModel extends FirebaseItemModel {
 }
 
 export class FirebaseCombinedItemModel extends FirebaseItemModel {
-  photos: Array<PhotosArray> = [
+  photos: Array<PhotosData> = [
     new FirebasePhotoModel(),
     new FirebasePhotoModel(),
     new FirebasePhotoModel()
   ];
+  creatorDetails : FirebaseUserModel;
 
   constructor() {
     super();

@@ -25,18 +25,18 @@ export class FirebaseUpdateUserModal implements OnInit {
   @Input() user: FirebaseUserModel;
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
-  myStoredProfileImage : Observable<any>;
+  myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
   userData: FirebaseUserModel = new FirebaseUserModel();
   levels = [];
   selectedParking = [];
   selectedPhoto: string;
-  showHideParking2 : boolean;
-  showHideParking3 : boolean;
-  parking1selected : boolean;
-  parking2selected : boolean;
-  parking3selected : boolean;
-  selectOptions : any;
+  showHideParking2: boolean;
+  showHideParking3: boolean;
+  parking1selected: boolean;
+  parking2selected: boolean;
+  parking3selected: boolean;
+  selectOptions: any;
   @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
@@ -200,11 +200,10 @@ return radioNotNull != null;
       this.updateUserForm.controls['parking3Number'].setValidators(Validators.required);
       this.parking3selected = true;
     }
-    else{
+    else {
       this.parking3selected = false;
       this.updateUserForm.controls['parking3Number'].setValidators(null);
     }
-
     this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
   }
 
@@ -258,16 +257,22 @@ return radioNotNull != null;
 
     this.selectedParking = [];
     
-    if(this.updateUserForm.controls['parking1Level'].value != "1000"){
-      this.selectedParking.push({ id: this.updateUserForm.controls['parking1Level'].value , number : this.updateUserForm.value.parking1Number});
+    if(this.updateUserForm.controls['parking1Level'].value !== '1000'){
+      this.selectedParking.push({ 
+      id: this.updateUserForm.controls['parking1Level'].value , 
+      number : this.updateUserForm.value.parking1Number});
     }
         
-    if(this.updateUserForm.controls['parking2Level'].value != "1000"){
-      this.selectedParking.push({ id: this.updateUserForm.controls['parking2Level'].value , number : this.updateUserForm.value.parking2Number});
+    if(this.updateUserForm.controls['parking2Level'].value !== '1000'){
+      this.selectedParking.push({ 
+        id: this.updateUserForm.controls['parking2Level'].value , 
+        number : this.updateUserForm.value.parking2Number});
     }
         
-    if(this.updateUserForm.controls['parking3Level'].value != "1000"){
-      this.selectedParking.push({ id: this.updateUserForm.controls['parking3Level'].value , number : this.updateUserForm.value.parking3Number});
+    if(this.updateUserForm.controls['parking3Level'].value !== '1000'){
+      this.selectedParking.push({ 
+        id: this.updateUserForm.controls['parking3Level'].value , 
+        number : this.updateUserForm.value.parking3Number});
     }
 
     this.userData.parking = this.selectedParking.length ? this.selectedParking : null;
@@ -282,7 +287,7 @@ return radioNotNull != null;
   }
   //LA_2019_11
   async selectImageSource(){
-    const cameraOptions : CameraOptions = {
+    const cameraOptions: CameraOptions = {
       quality:100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
@@ -301,23 +306,23 @@ return radioNotNull != null;
       sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
     };
     const alert = await this.alertController.create({
-      header: "Select Source",
-      message: "Pick a source for your image",
+      header: 'Select Source',
+      message: 'Pick a source for your image',
       buttons: [
         {
-          text: "Camera",
+          text: 'Camera',
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
-              //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              const image = "data:image/jpeg;base64," + imageData;
-              //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
+              // this.myProfileImage = "data:image/jpeg;base64," + imageData;
+              const image = 'data:image/jpeg;base64,' + imageData;
+              // this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
+              // this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
               this.selectedPhoto = image;
             });
           }
         },
         {
-          text: "Gallery",
+          text: 'Gallery',
           handler: ()=> {
             this.camera.getPicture(galleryOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
@@ -363,10 +368,10 @@ return radioNotNull != null;
        this.updateUserForm.controls['parking3Number'].setValidators(null);
        this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
      }
-     else{
+     else {
       setTimeout(() => {
         this.content.scrollToBottom(400);
-      },400); 
+      }, 400); 
     }
    }
 

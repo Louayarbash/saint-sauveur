@@ -20,7 +20,7 @@ export class FirebaseAuthService {
     public angularFire: AngularFireAuth,
     public platform: Platform
   ) {
-    this.angularFire.auth.onAuthStateChanged((user) => {
+    this.angularFire.onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
         this.currentUser = user;
@@ -32,7 +32,7 @@ export class FirebaseAuthService {
 
     if (!this.platform.is('capacitor')) {
       // when using signInWithRedirect, this listens for the redirect results
-      this.angularFire.auth.getRedirectResult()
+      this.angularFire.getRedirectResult()
       .then((result) => {
         // result.credential.accessToken gives you the Provider Access Token. You can use it to access the Provider API.
         if (result.user) {
@@ -92,16 +92,16 @@ export class FirebaseAuthService {
 /*     if (this.platform.is('capacitor')) {
       return cfaSignOut();
     } else { */
-      return from(this.angularFire.auth.signOut());
+      return from(this.angularFire.signOut());
     // }
   }
 
   signInWithEmail(email: string, password: string): Promise<auth.UserCredential> {
-    return this.angularFire.auth.signInWithEmailAndPassword(email, password);
+    return this.angularFire.signInWithEmailAndPassword(email, password);
   }
 
   signUpWithEmail(email: string, password: string): Promise<auth.UserCredential> {
-    return this.angularFire.auth.createUserWithEmailAndPassword(email, password);
+    return this.angularFire.createUserWithEmailAndPassword(email, password);
   }
 
   socialSignIn(providerName: string, scopes?: Array<string>): Observable<any> {
@@ -117,10 +117,10 @@ export class FirebaseAuthService {
       }
 
       if (this.platform.is('desktop')) {
-        return from(this.angularFire.auth.signInWithPopup(provider));
+        return from(this.angularFire.signInWithPopup(provider));
       } else {
         // web but not desktop, for example mobile PWA
-        return from(this.angularFire.auth.signInWithRedirect(provider));
+        return from(this.angularFire.signInWithRedirect(provider));
       }
     }
   

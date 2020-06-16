@@ -6,7 +6,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { Observable } from "rxjs";
-import { PhotosArray } from '../../../type'
+import { PhotosData } from '../../../type'
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
@@ -23,7 +23,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 
 export class FirebaseUpdateItemModal implements OnInit {
   @Input() item: FirebaseItemModel;
-  @Input() postImages: PhotosArray[];
+  @Input() postImages: PhotosData[];
 
   updateItemForm: FormGroup;
   //postImages : PhotosArray[] = [];
@@ -44,6 +44,9 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   ngOnInit() {
+    
+    console.log(this.item)
+    console.log(this.postImages)
     console.log("1 ya rab", this.postImages);
     this.updateItemForm = new FormGroup({
       object: new FormControl(this.item.object, Validators.required),
@@ -122,7 +125,7 @@ export class FirebaseUpdateItemModal implements OnInit {
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
               const loading = this.featureService.presentLoadingWithOptions(5000);
-              let photos : PhotosArray = {isCover:false,photo:"",storagePath :""};
+              let photos : PhotosData = {isCover:false,photo:"",storagePath :""};
               
               const image = "data:image/jpeg;base64," + imageData;
               photos.isCover = false;
@@ -144,7 +147,7 @@ export class FirebaseUpdateItemModal implements OnInit {
                   let filename = results[i].substring(results[i].lastIndexOf('/')+1);
                   let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
                    /*await*/ this.file.readAsDataURL(path,filename).then((base64string)=> {                    
-                    let photos : PhotosArray = {isCover:false,photo:"", storagePath :""};
+                    let photos : PhotosData = {isCover:false,photo:"", storagePath :""};
                     photos.isCover = false;
                     photos.photo = base64string;
                     this.postImages.push(photos);
@@ -162,7 +165,7 @@ export class FirebaseUpdateItemModal implements OnInit {
               this.camera.getPicture(galleryOptions).then((imageData)=> {
                 const loading = this.featureService.presentLoadingWithOptions(5000);
                 const image = "data:image/jpeg;base64," + imageData;
-                let photos : PhotosArray = {isCover:false, photo:"", storagePath:""};
+                let photos : PhotosData = {isCover:false, photo:"", storagePath:""};
                 photos.isCover = false;
                 photos.photo = image;    
                 this.postImages.push(photos);
@@ -181,13 +184,12 @@ export class FirebaseUpdateItemModal implements OnInit {
   deletePhoto(index : number){
         const loading = this.featureService.presentLoadingWithOptions(5000);
          if(this.postImages[index].storagePath !== "") {      
-           this.item.images.splice(index,1);    
-         this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
-          this.postImages.splice(index,1); 
+          this.item.images.splice(index,1);    
+          this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
+          let deletedimage = this.postImages.splice(index,1); 
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
-          this.firebaseService.deleteFromStorage(this.postImages[index].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
+          this.firebaseService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
         }).catch( err => console.log("Error in deletePhoto DB: ",err));  
-        //}).catch( err => console.log("Error in deletePhoto Storage: ",err));
       }
       else{
         this.postImages.splice(index,1);
@@ -198,7 +200,6 @@ export class FirebaseUpdateItemModal implements OnInit {
 
 makeCover(index : number){
   this.postImages[index].isCover = true;
-  //this.changeRef.detectChanges();
   this.postImages.forEach( (item, i) => {
     if(i === index) {
       item.isCover = true;
@@ -208,7 +209,6 @@ makeCover(index : number){
     }
   });
   this.updateItemForm.markAsDirty();
-  //this.featureService.presentToast(this.featureService.translations.PhotoAsCover,2000);
 }
 
 updateItem() {
@@ -228,6 +228,21 @@ updateItem() {
     this.modalController.dismiss();
     console.log(err)
   });
+}
+
+doReorder(ev: any) {
+  // The `from` and `to` properties contain the index of the item
+  // when the drag started and ended, respectively
+  //console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
+  //console.table(this.postImages)
+  const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
+  this.postImages.splice(ev.detail.to, 0, draggedItem);  
+  //console.table(this.postImages);  
+  this.updateItemForm.markAsDirty();
+  // Finish the reorder and position the item in the DOM based on
+  // where the gesture ended. This method can also be called directly
+  // by the reorder group
+  ev.detail.complete();
 }
 
 }

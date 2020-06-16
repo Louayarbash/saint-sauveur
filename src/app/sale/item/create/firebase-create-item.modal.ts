@@ -4,13 +4,13 @@ import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-import { Crop } from '@ionic-native/crop/ngx';
+//import { Crop } from '@ionic-native/crop/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import {PhotosArray} from '../../../type'
+import { PhotosData } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
-import  * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -22,7 +22,7 @@ import  * as firebase from 'firebase/app';
 })
 export class FirebaseCreateItemModal implements OnInit {
   croppedImagepath = "";
-  postImages : PhotosArray[] = [];
+  postImages : PhotosData[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   selectedPhoto: string;
@@ -113,7 +113,7 @@ export class FirebaseCreateItemModal implements OnInit {
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              let photos : PhotosArray = {isCover:false, photo:"", storagePath:""};
+              let photos : PhotosData = {isCover:false, photo:"", storagePath:""};
               const image = "data:image/jpeg;base64," + imageData;
               photos.isCover = false;
               photos.photo = image;
@@ -125,22 +125,20 @@ export class FirebaseCreateItemModal implements OnInit {
         {
           text: "Gallery multiPhotos",
            handler: ()=> {
-            if((3 - this.postImages.length) != 1){
-            
+            if((3 - this.postImages.length) !== 1 ){            
             this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
-             this.imagePicker.getPictures(optionsPicker).then(/*async*/ (results : string[]) => { 
+             this.imagePicker.getPictures(optionsPicker).then( /*async*/ (results : string[]) => { 
               const loading = this.featureService.presentLoadingWithOptions(5000);
-               for (var i = 0; i < results.length; i++) {
-                  let filename = results[i].substring(results[i].lastIndexOf('/')+1);
-                  let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
-                  /*await*/ this.file.readAsDataURL(path,filename).then((image)=> {
-                    let photos : PhotosArray = {isCover:false, photo:"", storagePath:""};
+               for (let i = 0; i < results.length; i++) {
+                  const filename = results[i].substring(results[i].lastIndexOf('/') + 1);
+                  const path = results[i].substring(0,results[i].lastIndexOf('/') + 1);
+                  /*await*/ this.file.readAsDataURL(path, filename).then((image)=> {
+                    const photos : PhotosData = {isCover:false, photo:"", storagePath:""};
                     photos.isCover = false;
                     photos.photo = image;
                     this.postImages[this.postImages.length] = photos;
                   }
-                )
-                console.log(this.postImages);
+                );
               }
             this.changeRef.detectChanges(); 
             loading.then(res=>res.dismiss());
@@ -152,7 +150,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
               this.camera.getPicture(galleryOptions).then((imageData)=> {
                 const image = "data:image/jpeg;base64," + imageData;
-                let photos : PhotosArray = {isCover:false, photo:"", storagePath:""};    
+                let photos : PhotosData = {isCover:false, photo:"", storagePath:""};    
                 photos.isCover = false;
                 photos.photo = image;
                 this.postImages[this.postImages.length] = photos;
@@ -190,7 +188,7 @@ export class FirebaseCreateItemModal implements OnInit {
     });
 }
 
-//END
+// END
 /* cropImage(fileUrl) {
   this._crop.crop(fileUrl, { quality: 50 })
     .then(

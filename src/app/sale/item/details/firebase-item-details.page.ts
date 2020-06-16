@@ -1,15 +1,15 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController,  IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel, FirebaseCombinedItemModel } from '../firebase-item.model';
-//import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
+// import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
 import { Observable } from 'rxjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
-import { PhotosArray } from '../../../type'
+import { PhotosData} from '../../../type'
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -23,21 +23,22 @@ import { PhotosArray } from '../../../type'
 
 
 export class FirebaseItemDetailsPage implements OnInit {
-  noImage = "images/no_image.jpeg";
+  noImage = 'images/no_image.jpeg';
   item: FirebaseCombinedItemModel;
   profileUrl: Observable<string | null>;
   sliderUrl: Observable<string | null>;
-  photoSlider : any[] = [""];  
+  photoSlider : any[] = [''];  
   
   photoSliderEmpty : any[];
   slidesOptions: any = {
+    
     zoom: {
-      toggle: false // Disable zooming to prevent weird double tap zomming on slide images
+      toggle: true // Disable zooming to prevent weird double tap zomming on slide images
     }
   };
   status : string;
   editHidden : boolean;
-  postImages : PhotosArray[] = [];
+  postImages : PhotosData[] = [];
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -49,7 +50,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private featureService : FeatureService,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private routerOutlet: IonRouterOutlet
   ) { 
     }
 
@@ -60,7 +62,8 @@ export class FirebaseItemDetailsPage implements OnInit {
       const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;
       //const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = resolvedDataStores.relatedUsers;
       combinedDataStore.state.subscribe(
-         async (state) => {
+         (state) => {
+           console.log("Liloooli", state)
           this.item = state;
             console.log("imagesFullPath.length",this.item.images.length);
           if((this.item.images.length !== 0) && !(this.item.isShell)){
@@ -108,8 +111,10 @@ export class FirebaseItemDetailsPage implements OnInit {
       component: FirebaseUpdateItemModal,
       componentProps: {
         'item': this.item as FirebaseItemModel,
-        'postImages' : this.postImages as PhotosArray[]
-      }
+        'postImages' : this.postImages as PhotosData[]
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }
@@ -126,4 +131,35 @@ export class FirebaseItemDetailsPage implements OnInit {
     //ref.getDownloadURL().subscribe(DownloadURL=>{console.log("DownloadURL:",DownloadURL)});
     //return this.photoSlider;
   } */
+
+  sendEmail(){
+    let email = {
+      to: this.item.creatorDetails.email,
+      subject: this.item.object,
+      body: 'How are you?',
+      isHtml: true
+    }
+
+    this.featureService.emailComposer.isAvailable().then((available: boolean) => {
+      if(available) {
+        this.featureService.emailComposer.open(email)
+        // Now we know we can send an email, calls hasClient and hasAccount
+        // Not specifying an app will return true if at least one email client is configured
+      }
+     });
+/* let email = {
+  to: this.'max@mustermann.de',
+  cc: 'erika@mustermann.de',
+  bcc: ['john@doe.com', 'jane@doe.com'],
+  attachments: [
+    'file://img/logo.png',
+    'res://icon.png',
+    'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
+    'file://README.pdf'
+  ],
+  subject: 'Cordova Icons',
+  body: 'How are you? Nice greetings from Leipzig',
+  isHtml: true
+} */
+  }
 }

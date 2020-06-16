@@ -5,7 +5,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 //import { RatingUser } from 'app/deal/item/firebase-item.model';
 import { RatingUser } from '../../Deal/item/firebase-item.model';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+//import { map } from 'rxjs/operators';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class FeatureService {
     private toastController : ToastController,
     private loadingController : LoadingController,
     private translate : TranslateService,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    public emailComposer: EmailComposer
     //private loginService : LoginService
     ) {
     console.log("constructor FeatureService", this.userLanguage);
@@ -118,6 +120,9 @@ async getBuildingLevels(){
     //await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
   }
 
+}
+sendEmail(email : any){
+  return this.emailComposer.open(email);
 }
 
 }

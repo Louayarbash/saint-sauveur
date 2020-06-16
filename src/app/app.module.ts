@@ -2,17 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { ComponentsModule } from './components/components.module';
-
 import { ServiceWorkerModule } from '@angular/service-worker';
-
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -22,31 +17,22 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Crop } from "@ionic-native/crop/ngx";
 import { File } from "@ionic-native/file/ngx";
-//import { File } from "@ionic-native/file-chooser";
 import { ImagePicker } from '@ionic-native/image-picker/ngx'; 
 //import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-//import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LanguageService } from './language/language.service';
-//import { TestPageModule } from "../app/Deal/item/test/test.module";
-
-//import { FcmService } from 'src/app/services/fcm/fcm.service';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
-/*LA_ end */
-
-//import {  firestore } from 'firebase-admin';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-//import { Timestamp } from '@google-cloud/firestore';
-//import { AngularFireMessagingModule } from '@angular/fire/messaging';											  
+import { AngularFirestoreModule } from '@angular/fire/firestore';									  
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -59,15 +45,12 @@ export function createTranslateLoader(http: HttpClient) {
     IonicModule.forRoot(),
 	  AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule,
-    //Timestamp,
-    //AngularFireMessagingModule,	 
+    AngularFireAuthModule,	 
     ReactiveFormsModule,
     AppRoutingModule,
     ComponentsModule,    
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
-    
      TranslateModule.forRoot({      
       loader: {
         provide: TranslateLoader,
@@ -78,25 +61,21 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     Crop,
+    ImagePicker,
+    File,
     Camera,    
     StatusBar,
-    ImagePicker,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-	  File,
     DocumentViewer,
     FileOpener,
     FileTransfer,
     Chooser,
     LanguageService,
     FilePath,
-    //TranslateService,
-    //FcmService,
-    /*FcmService,*/
-    //Firebase
-    //OneSignal,
     FCM	 ,
     CallNumber,
+    EmailComposer,
     SocialSharing
   ],
   bootstrap: [AppComponent]
