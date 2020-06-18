@@ -51,7 +51,7 @@
   }
 
   //check box
-	.checkbox-tags {
+	/* .checkbox-tags {
 		padding: calc(var(--page-margin) / 2) calc(var(--page-margin) - var(--page-tags-gutter));
 
 		@include checkbox-tag();
@@ -84,7 +84,7 @@
         --checkbox-tag-active-background: var(--ion-color-secondary);
       }
     }
-  }
+  } */
   
   //radio tag
   .radio-tags {

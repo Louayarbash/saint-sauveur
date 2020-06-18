@@ -55,20 +55,20 @@ export class FirebaseUserDetailsPage implements OnInit {
         (state) => {
           console.log(state);
           this.user = state;
-          this.birthdate = dayjs(this.user.birthdate * 1000).format("DD, MMM, YYYY");
-          this.type = this.user.type == "owner" ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
-          this.role = this.user.role == "user" ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
-          this.language = this.user.language == "fr" ? this.featureService.translations.Frensh : this.featureService.translations.English;
+          this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
+          this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
+          this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
+          this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           
           this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
-            let levels = item.parking;
-            console.log("parking",this.user.parking);
+            const levels = item.parking;
+            console.log(this.user.parking);
               if (this.user.parking) {
                 this.userParking = this.user.parking.map((userParking) => { 
                   
-                  let level = levels.find( (level: { id: number; }) => level.id === userParking.id );
-                  if(level){
-                    return { id : userParking.id ,number : userParking.number , desc : level.desc };
+                  let levelCheck = levels.find( (level: { id: number; }) => level.id === userParking.id );
+                  if(levelCheck){
+                    return { id : userParking.id ,number : userParking.number , desc : levelCheck.desc };
                   }
                 });
               }

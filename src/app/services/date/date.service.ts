@@ -19,8 +19,8 @@ console.log("date constructor")
     }
 
   getTime(timestamp : number){
-    var date = new Date(timestamp * 1000);
-    return date.getHours().toString().padStart(2,"0") + ":" + date.getMinutes().toString().padStart(2,"0");
+    let date = new Date(timestamp * 1000);
+    return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
   }
 
 /*   formatAMPM(date) {

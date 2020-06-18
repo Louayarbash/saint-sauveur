@@ -47,7 +47,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
-      price : new FormControl('',[Validators.required, Validators.pattern("^[0-9]*$")]),
+      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl('active')
     });
   }
@@ -64,39 +64,39 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(5000);
-    this.firebaseService.createItem(this.itemData,this.postImages)
+    this.firebaseService.createItem(this.itemData, this.postImages)
     .then(() => {
-      this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully,2000);
+      this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
       this.dismissModal();
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.PostAddingErrors,2000);
+      this.featureService.presentToast(this.featureService.translations.PostAddingErrors, 2000);
       this.dismissModal();
       console.log(err);
      });     
   }
 
-  //LA_2019_11
-   async selectImageSource(){ 
-    const cameraOptions : CameraOptions = {
-      quality:100,
+  // LA_2019_11
+   async selectImageSource() { 
+    const cameraOptions: CameraOptions = {
+      quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
-      correctOrientation:true,
+      targetHeight: 200,
+      correctOrientation: true,
       sourceType:this.camera.PictureSourceType.CAMERA
     };
-    const optionsPicker : ImagePickerOptions = {
+    const optionsPicker: ImagePickerOptions = {
       maximumImagesCount: 3 - this.postImages.length,
-      //maximumImagesCount: 1,
-      outputType:0,
-      quality:100,
-      width:300,
-      disable_popover:false
+      // maximumImagesCount: 1,
+      outputType: 0,
+      quality: 100,
+      width: 300,
+      disable_popover: false
     }; 
-    const galleryOptions : CameraOptions = {
-      quality:100,
+    const galleryOptions: CameraOptions = {
+      quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -113,7 +113,7 @@ export class FirebaseCreateItemModal implements OnInit {
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              let photos : PhotosData = {isCover:false, photo:"", storagePath:""};
+              const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
               const image = "data:image/jpeg;base64," + imageData;
               photos.isCover = false;
               photos.photo = image;

@@ -14,7 +14,7 @@ import { FirebaseUserModel } from '../../users/user/firebase-user.model';
 export class LoginService {
 
 uid : string;
-buildingId : string = "NJ6u68Cq68RgX9jXPuVx";
+buildingId: string = 'NJ6u68Cq68RgX9jXPuVx';
 languge : string;
 firstname : string;
 parking: any;

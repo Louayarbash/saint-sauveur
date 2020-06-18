@@ -1,7 +1,7 @@
 import { Component, OnInit,NgModule, Input, ChangeDetectorRef} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel} from '../firebase-item.model';
@@ -11,7 +11,7 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService, TranslateModule } from '@ngx-translate/core';
 //import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
-import  * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 interface userParking {
   index : number;

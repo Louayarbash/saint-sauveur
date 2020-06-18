@@ -14,8 +14,7 @@ export const environment = {
     messagingSenderId: '373200357220',
     appId: '1:373200357220:web:aaf7ddbcf978fff9b6dc71',
     measurementId: 'G-DQJTP89WRH'
-  }
-  
+  }  
  /* {
     apiKey: 'AIzaSyC5QK355uuknu0_ldVxFqqNqgp9oJi_eLc',
     authDomain: 'ion4fullpwa.firebaseapp.com',

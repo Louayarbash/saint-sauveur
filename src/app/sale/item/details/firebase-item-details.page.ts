@@ -133,7 +133,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   } */
 
   sendEmail(){
-    let email = {
+    const email = {
       to: this.item.creatorDetails.email,
       subject: this.item.object,
       body: 'How are you?',

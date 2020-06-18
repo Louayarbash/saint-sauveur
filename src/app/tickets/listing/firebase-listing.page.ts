@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ModalController} from '@ionic/angular';
+import { FormGroup, FormControl } from '@angular/forms';
+import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
@@ -8,13 +8,9 @@ import { switchMap, map } from 'rxjs/operators';
 
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
-import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
+import { CreateTicketModal } from '../ticket/create/create-ticket.modal';
 
 import { DataStore, ShellModel } from '../../shell/data-store';
-//import { Toast } from '@ionic-native/toast/ngx';
-//import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
-//import { File } from '@ionic-native/file/ngx';
-//import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Component({
   selector: 'app-firebase-listing',
@@ -28,8 +24,8 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 export class FirebaseListingPage implements OnInit, OnDestroy {
   rangeForm: FormGroup;
   searchQuery: string;
-  //showAgeFilter = false;
-  CoverPic:string;
+  showAgeFilter = false;
+
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
 
@@ -48,12 +44,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    //private document: DocumentViewer,
-    //private file:File,
-    //private fileOpener:FileOpener
+    private routerOutlet: IonRouterOutlet
   ) { }
-
-
 
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
@@ -89,8 +81,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 if (filters.query !== '' && !filteredItems.isShell) {
                   const queryFilteredItems = filteredItems.filter(
                     item =>
-                    (item.object.toLowerCase().includes(filters.query.toLowerCase()))
-                    )
+                     
+                    (/*item.app.toLowerCase().includes(filters.query.toLowerCase()) ||*/ 
+                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
+                  );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
                 } else {
@@ -108,31 +102,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           updateSearchObservable
         ).subscribe(
           (state) => {
-            console.log("kikooo",this.items)
             this.items = state;
-            if(this.items.isShell == false){
-              this.items.map(item => { 
-                if(item.images.length > 0){
-                  let cover = item.images.find( res => res.isCover == true );
-                  if(cover) {
-                    this.getProfilePic(cover.storagePath).then(res => item.coverPhotoData = res).catch(err => {item.coverPhotoData = "" ; console.log("CoverPhotoNotFound1",err)});
-                    }
-                    else{
-                    this.getProfilePic(item.images[0].storagePath).then(res => item.coverPhotoData = res).catch(err => {
-                      if(err.code === 'storage/object-not-found'){
-                        this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res)      
-                      }
-                      item.coverPhotoData = '' ;
-                    });
-                    }
-                }
-                else {
-                  this.getProfilePic('images/no_image.jpeg')
-                  .then(res => item.coverPhotoData = res)
-                  .catch(err => {item.coverPhotoData = '' ;});
-              } 
-              });
-            }
+            console.log("tickets",this.items)
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -144,7 +115,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateItemModal
+      component: CreateTicketModal,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }
@@ -153,22 +126,5 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.searchSubject.next({
       query: this.searchQuery
     });
-  }
-
-/*   OpenLocalPDF() {
-    console.log("OpenLocalPDF:",this.file.dataDirectory);
-    let filePath = this.file.applicationDirectory + "www/assets/"
-    let fakeName = Date.now();
-    this.file.copyFile(filePath,"NaraMenu.pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
-      this.fileOpener.open(result.nativeURL,'application/pdf');
-    });
-    
-    const options: DocumentViewerOptions = {
-       title: 'My PDF'
-    }
-    this.document.viewDocument(filePath +"/NaraMenu.pdf", 'application/pdf', options) 
-  } */
-  getProfilePic(picPath : string){
-    return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL();
   }
 }

@@ -3,13 +3,13 @@ import { ModalController, AlertController, IonContent } from '@ionic/angular';
 //import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseUserModel } from '../firebase-user.model';
+import { FirebaseUserModel } from '../../../users/user/firebase-user.model';
 import { AngularFirestore } from "@angular/fire/firestore";
 //import { Observable } from "rxjs";
 import { LoginService } from "../../../services/login/login.service";
 import * as firebase from 'firebase/app';
 //import { map, filter } from 'rxjs/operators';
-import { ChatModel } from '../chat/chat.model'
+import { ChatModel } from './chat.model'
 
 
 @Component({

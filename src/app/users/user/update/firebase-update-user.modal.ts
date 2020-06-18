@@ -112,9 +112,9 @@ return radioNotNull != null;
         if (this.user.parking) {
           userParking = this.user.parking.map((userParking) => { 
             
-            let level = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
-            if(level){
-              return { id : userParking.id ,number : userParking.number , desc : level.desc };
+            const levelCheck = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
+            if(levelCheck){
+              return { id : userParking.id ,number : userParking.number , desc : levelCheck.desc };
             }
           });
         }
@@ -296,7 +296,7 @@ return radioNotNull != null;
       correctOrientation:true,
       sourceType:this.camera.PictureSourceType.CAMERA
     };
-    const galleryOptions : CameraOptions = {
+    const galleryOptions: CameraOptions = {
       quality:100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
@@ -362,13 +362,13 @@ return radioNotNull != null;
    showHideParkingValidate3(){
      this.showHideParking3 = this.showHideParking3 ? false : true;
      this.updateUserForm.markAsDirty();
-     if(this.showHideParking3 == false){
-       this.updateUserForm.controls['parking3Level'].setValue("1000");
-       this.updateUserForm.controls['parking3Number'].setValue("");
+    if(this.showHideParking3 === false){
+       this.updateUserForm.controls['parking3Level'].setValue('1000');
+       this.updateUserForm.controls['parking3Number'].setValue('');
        this.updateUserForm.controls['parking3Number'].setValidators(null);
        this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
      }
-     else {
+    else {
       setTimeout(() => {
         this.content.scrollToBottom(400);
       }, 400); 

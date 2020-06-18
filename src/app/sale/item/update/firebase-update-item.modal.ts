@@ -125,7 +125,7 @@ export class FirebaseUpdateItemModal implements OnInit {
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
               const loading = this.featureService.presentLoadingWithOptions(5000);
-              let photos : PhotosData = {isCover:false,photo:"",storagePath :""};
+              let photos : PhotosData = {isCover:false,photo:'',storagePath :''};
               
               const image = "data:image/jpeg;base64," + imageData;
               photos.isCover = false;
@@ -140,32 +140,32 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.PhotoGallery,
            handler: ()=> {
-            if((3 - this.postImages.length) != 1){
+            if((3 - this.postImages.length) !== 1) {
              this.imagePicker.getPictures(optionsPicker).then( /*async*/ (results : string[]) => { 
               const loading = this.featureService.presentLoadingWithOptions(5000);         
                for (var i = 0; i < results.length; i++) {
                   let filename = results[i].substring(results[i].lastIndexOf('/')+1);
-                  let path = results[i].substring(0,results[i].lastIndexOf('/')+1);
+                  const path = results[i].substring(0,results[i].lastIndexOf('/')+1);
                    /*await*/ this.file.readAsDataURL(path,filename).then((base64string)=> {                    
-                    let photos : PhotosData = {isCover:false,photo:"", storagePath :""};
+                    const photos : PhotosData = {isCover:false,photo:'', storagePath :''};
                     photos.isCover = false;
                     photos.photo = base64string;
                     this.postImages.push(photos);
                   }
-                ).catch(err=>{console.log("readAsDataURL: ",err)})
+                ).catch(err=>{console.log(err)})
               }
             this.updateItemForm.markAsDirty();
             this.changeRef.detectChanges(); 
-            loading.then(res=>{res.dismiss();});
-            }, (err) => { console.log('Error get pics',err);}); 
+            loading.then(res=> {res.dismiss();});
+            }, (err) => { console.log(err);}); 
             
-          }
-            else if((3 - this.postImages.length) == 1)
+            }
+            else if((3 - this.postImages.length) === 1)
             {
               this.camera.getPicture(galleryOptions).then((imageData)=> {
                 const loading = this.featureService.presentLoadingWithOptions(5000);
-                const image = "data:image/jpeg;base64," + imageData;
-                let photos : PhotosData = {isCover:false, photo:"", storagePath:""};
+                const image = 'data:image/jpeg;base64,' + imageData;
+                let photos : PhotosData = {isCover:false, photo:'', storagePath:''};
                 photos.isCover = false;
                 photos.photo = image;    
                 this.postImages.push(photos);
@@ -186,7 +186,7 @@ export class FirebaseUpdateItemModal implements OnInit {
          if(this.postImages[index].storagePath !== "") {      
           this.item.images.splice(index,1);    
           this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
-          let deletedimage = this.postImages.splice(index,1); 
+          const deletedimage = this.postImages.splice(index,1); 
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
           this.firebaseService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
         }).catch( err => console.log("Error in deletePhoto DB: ",err));  
@@ -198,13 +198,13 @@ export class FirebaseUpdateItemModal implements OnInit {
       this.changeRef.detectChanges();
 }
 
-makeCover(index : number){
+makeCover(index: number){
   this.postImages[index].isCover = true;
   this.postImages.forEach( (item, i) => {
     if(i === index) {
       item.isCover = true;
     }
-    else{
+    else {
       item.isCover = false;
     }
   });

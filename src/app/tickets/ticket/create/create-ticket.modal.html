@@ -1,0 +1,122 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createTicket()">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'NewTicket' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+<!--     <ion-row class="select-user-image-row">
+      <ion-col class="user-image-col" size="5">
+        <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+          <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="selectedPhoto" [alt]="'user image'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-button class="change-image-btn" color="secondary" (click)="selectImageSource()">
+          <ion-icon class="btn-icon" slot="icon-only" name="camera"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row> -->
+      <ion-list lines="full">
+<!--         <ion-item-divider lines="none" >
+          <ion-label>{{ 'Type' | translate }}</ion-label>
+          </ion-item-divider> -->
+          <ion-grid class="ion-no-margin ion-no-padding">          
+            <ion-row class="ion-align-items-center">
+          <ion-col>
+          <ion-item lines=“none”>
+            <ion-label >{{ 'TicketType' | translate }}</ion-label>
+            <ion-select okText="OK" cancelText="Cancel" formControlName="typeId">
+              <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.type }}</ion-select-option>
+              <ion-select-option value="1000">{{ 'other' | translate }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          </ion-col>
+           </ion-row>
+          </ion-grid>
+          <ion-card *ngIf="bookingSection">
+          <ion-item>
+            <ion-label>Date</ion-label>
+            <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'FromTime' | translate }}</ion-label>
+            <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues = "0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate"  formControlName="startDate"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-grid class="ion-no-padding">
+            <ion-row class="ion-align-items-center">
+              <ion-col size="4">
+            <ion-label>{{ 'Duration' | translate }}</ion-label>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-label>{{createItemForm.controls.duration.value}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <app-counter-input-minutes formControlName="duration" basic></app-counter-input-minutes>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          </ion-item>
+          <ion-item>
+              <ion-label>{{ 'ToTime' | translate }}</ion-label>
+              <ion-datetime display-format="DD, MMMM, YYYY HH:mm" formControlName="endDate" readonly></ion-datetime>
+          </ion-item>
+        </ion-card>
+        <ion-item *ngIf="subjectSection">
+          <ion-label  position="floating">{{ 'Subject' | translate }}</ion-label>
+          <ion-input type="text" formControlName="subject"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
+          <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{ 'Status' | translate }}</ion-label>
+          <ion-radio-group formControlName="status">
+            <ion-row class="radio-tags">
+              <ion-col class="ion-margin-end">
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Active' | translate }}</ion-label>
+                <ion-radio value="active"></ion-radio>
+              </ion-item>
+            </ion-col>
+              <ion-col class="ion-margin-end">
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'InActive' | translate }}</ion-label>
+                  <ion-radio value="inactive"></ion-radio>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-radio-group>
+        </ion-item>
+      </ion-list>
+<!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
+        please confirm naming changes
+    </div> 
+    <div *ngIf="createItemForm.get('name').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
+  <div *ngIf="createItemForm.get('name').errors.required">
+    Name is required.
+  </div>
+   <div *ngIf="createItemForm.get('title').errors.minlength">
+    Name must be at least 4 characters long.
+  </div> 
+</div> -->
+
+    <!-- <img [src]="selectedPhoto" /> -->
+    
+  </ion-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="secondary" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+
+</form>

@@ -148,7 +148,7 @@ export class FirebaseService {
           console.log("Error uploading pdf: ", err);
         }
     }
-    if (images.length != 0){
+    if (images.length !== 0){
       itemData.images = images;  
     }
   }
@@ -157,7 +157,7 @@ export class FirebaseService {
   ).catch(err=> {console.log("Error insert item into DB",err)}); 
 } 
    
-private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
+private uploadToStorage(itemDataPhoto,id): AngularFireUploadTask {
         console.log("Uploaded",itemDataPhoto);
         let newName = `${new Date().getTime()}.jpeg`;
         console.log("kess eiri 3arssa");        
@@ -214,7 +214,7 @@ private getItem(postId: string): Observable<FirebaseItemModel> {
   }
 
   private async deleteItemStorage(storagePath : Images[]) {
-    var storageRef = this.afstore.storage.ref();
+    const storageRef = this.afstore.storage.ref();
     storagePath.forEach(item => {
       storageRef.child(item.storagePath).delete().then(function() {
     }).catch(function(error) {

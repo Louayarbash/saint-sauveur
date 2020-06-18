@@ -1,0 +1,35 @@
+@import "../../../../../theme/mixins/inputs/checkbox-tag";
+@import "../../../../../theme/mixins/inputs/radio-tag";
+
+:host {
+  --page-margin: var(--app-fair-margin);
+  --page-background: var(--app-background);
+  --page-background-shade: var(--app-background-shade); 
+}
+
+  //radio tag
+  .radio-tags {
+    padding: 0px calc(var(--page-margin) - var(--page-tags-gutter));
+		background-color: var(--page-background);
+    justify-content: space-between;
+
+		@include radio-tag();
+
+    // Add a deeper selector to override default colors
+    .radio-tag {
+      --radio-tag-color: var(--ion-color-secondary);
+      --radio-tag-background: var(--ion-color-lightest);
+      --radio-tag-active-color: var(--ion-color-lightest);
+      --radio-tag-active-background: var(--ion-color-secondary);
+
+      padding: 0px var(--page-tags-gutter);
+      margin: var(--page-tags-gutter) 0px;
+    }
+  }
+  
+  :host-context(.ios) {
+    .radio-tags,
+    .checkbox-tags {
+      margin-bottom: calc(var(--page-margin) * 2);
+    }
+  }

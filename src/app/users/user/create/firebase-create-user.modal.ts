@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController,AlertController, IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
 import { FirebaseService } from '../../firebase-integration.service';
@@ -35,12 +35,12 @@ export class FirebaseCreateUserModal implements OnInit {
   levels = [];
   selectedParking = [];
   selectedPhoto: string;
-  showHideParking2 : boolean;
-  showHideParking3 : boolean;
-  parking1selected : boolean;
-  parking2selected : boolean;
-  parking3selected : boolean;
-  selectOptions : any;
+  showHideParking2: boolean;
+  showHideParking3: boolean;
+  parking1selected: boolean;
+  parking2selected: boolean;
+  parking3selected: boolean;
+  selectOptions: any;
   @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
@@ -48,8 +48,8 @@ export class FirebaseCreateUserModal implements OnInit {
     public firebaseService: FirebaseService,
     private camera: Camera,
     private alertController: AlertController,
-    private featureService : FeatureService,
-    private loginService : LoginService,
+    private featureService: FeatureService,
+    private loginService: LoginService,
     private crop: Crop,
     //private imagePicker: ImagePicker,
     private file: File
@@ -68,11 +68,11 @@ export class FirebaseCreateUserModal implements OnInit {
       lastname: new FormControl('',Validators.required),
       building: new FormControl(this.loginService.getBuildingId(),Validators.required),
       app : new FormControl(),
-      parking1Level : new FormControl("1000"),
+      parking1Level : new FormControl('1000'),
       parking1Number : new FormControl(),
-      parking2Level : new FormControl("1000"),
+      parking2Level : new FormControl('1000'),
       parking2Number : new FormControl(),
-      parking3Level : new FormControl("1000"),
+      parking3Level : new FormControl('1000'),
       parking3Number : new FormControl(),
       code : new FormControl(),
       type : new FormControl('owner',Validators.required),
@@ -102,7 +102,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   parking1Changed(ev:any) {
     console.log(ev.detail.value);
-    if(ev.detail.value != "1000"){
+    if(ev.detail.value !== '1000'){
       this.createUserForm.controls['parking1Number'].setValidators(Validators.required);
 
       this.parking1selected = true;
@@ -116,7 +116,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   parking2Changed(ev:any) {
     console.log(ev.detail.value);
-    if(ev.detail.value != "1000"){
+    if(ev.detail.value !== '1000'){
       this.createUserForm.controls['parking2Number'].setValidators(Validators.required);
       this.parking2selected = true;
     }
@@ -197,7 +197,7 @@ export class FirebaseCreateUserModal implements OnInit {
     });
     await modal.present();
   } */
-  //LA_2019_11
+  // LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
       quality:25,
@@ -205,8 +205,8 @@ export class FirebaseCreateUserModal implements OnInit {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       cameraDirection : this.camera.Direction.FRONT,
-      //targetHeight:200,
-      //targetWidth:200,
+      // targetHeight:200,
+      // targetWidth:200,
       correctOrientation:true,
       sourceType:this.camera.PictureSourceType.CAMERA
     };

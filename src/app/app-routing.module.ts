@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'deal', loadChildren: () => import('./Deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'auth', loadChildren: () => import('./auth/firebase-auth.module').then(m => m.FirebaseAuthModule) },				
   { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
