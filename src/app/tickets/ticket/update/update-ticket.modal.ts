@@ -45,7 +45,7 @@ export class UpdateTicketModal implements OnInit {
     //private _angularFireSrore :AngularFirestore,
     //private featureService : FeatureService,
     private loginService : LoginService,
-    private changeRef: ChangeDetectorRef,
+    // private changeRef: ChangeDetectorRef,
     private featureService: FeatureService
   ) { 
 

@@ -1,0 +1,15 @@
+<ion-content>
+  <ion-item class="close-fake" lines="none">
+  <ion-button (click)="dismissModal()"  fill="clear" color="light">
+    <ion-icon name="close" slot="start"></ion-icon>
+    Back
+  </ion-button>
+</ion-item>
+<ion-slides pager="true" [options]="slidesOptions" #sliderRef>
+  <ion-slide *ngFor="let image of photoSlider">
+    <div class="swiper-zoom-container">
+      <img [src]="image">
+    </div>
+  </ion-slide>
+</ion-slides>
+</ion-content>

@@ -7,7 +7,7 @@ import { FirebaseUserModel } from '../../../users/user/firebase-user.model';
 import { AngularFirestore } from "@angular/fire/firestore";
 //import { Observable } from "rxjs";
 import { LoginService } from "../../../services/login/login.service";
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 //import { map, filter } from 'rxjs/operators';
 import { ChatModel } from './chat.model'
 
@@ -22,7 +22,7 @@ import { ChatModel } from './chat.model'
 })
 export class ChatModal implements OnInit {
   // "user" is passed in firebase-details.page
-  @Input() user: FirebaseUserModel;
+  @Input() item: FirebaseUserModel;
   @ViewChild(IonContent, {static:true}) content: IonContent;
   // @ViewChild(IonContent) content : IonContent;
   msgText: string;
@@ -41,11 +41,11 @@ export class ChatModal implements OnInit {
   }
 
   ngOnInit() {
-    this.messages = this.afs.collection<ChatModel>('chats',ref=> ref.where('channelId', '==' ,"chatUsersPage_" + this.user.id).orderBy('createdAt')).valueChanges();
+    this.messages = this.afs.collection<ChatModel>('chatTicket',ref=> ref.where('channelId', '==' ,"chatTicketPage_" + this.item.id).orderBy('date')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 
-    console.log("userId",this.user);
+    console.log("ticket",this.item);
   }
 
   dismissModal() {
@@ -54,37 +54,37 @@ export class ChatModal implements OnInit {
   }
   sendMessage(){
     let chatMsg : ChatModel = new ChatModel();
-    chatMsg.channelId = "chatUsersPage_" + this.user.id;
-    chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    chatMsg.channelId = "chatTicketPage_" + this.item.id;
+    chatMsg.date = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = this.loginId;
     chatMsg.text = this.msgText;
     //chatMsg.name = this.user.name;
     console.log(chatMsg);
     if(this.msgText != ''){
-      this.afs.collection('chats').add({...chatMsg});
+      this.afs.collection('chatTicket').add({...chatMsg});
       this.msgText = '';
       setTimeout(() => {
         this.content.scrollToBottom(400);
-      },400); 
+      },200); 
     }
   }
-/*   sendMessage2(){
+/*    sendMessage2(){
 
     let chatMsg : ChatModel = new ChatModel();
-    chatMsg.channelId = "chatUsersPage_" + this.user.id;
-    chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    chatMsg.channelId = "chatTicketPage_" + this.item.id;
+    chatMsg.date = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = "AdminUserId";
     chatMsg.text = this.msgText;
     //chatMsg.name = "Admin";
 
     if(this.msgText != ''){
-      this.afs.collection('chats').add({...chatMsg});
+      this.afs.collection('chatTicket').add({...chatMsg});
       this.msgText = '';
       setTimeout(() => {
         this.content.scrollToBottom(400);
       },400); 
     }
 
-  } */
+  }  */
 
 }

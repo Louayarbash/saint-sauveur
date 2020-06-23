@@ -1,6 +1,6 @@
-import { Component, OnInit, Input,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input,ChangeDetectorRef} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
@@ -22,6 +22,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 })
 
 export class FirebaseUpdateItemModal implements OnInit {
+
   @Input() item: FirebaseItemModel;
   @Input() postImages: PhotosData[];
 
@@ -44,10 +45,6 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   ngOnInit() {
-    
-    console.log(this.item)
-    console.log(this.postImages)
-    console.log("1 ya rab", this.postImages);
     this.updateItemForm = new FormGroup({
       object: new FormControl(this.item.object, Validators.required),
       description: new FormControl(this.item.description),

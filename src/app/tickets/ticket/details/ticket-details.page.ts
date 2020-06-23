@@ -69,7 +69,7 @@ export class TicketDetailsPage implements OnInit {
           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;
-            case "inactive" : this.status = this.featureService.translations.InActive;
+            case "closed" : this.status = this.featureService.translations.Closed;
             break;
             default:
               this.status = "";

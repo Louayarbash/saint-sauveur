@@ -59,7 +59,7 @@ export class CreateTicketModal implements OnInit {
 
   ngOnInit() {
     this.bookingSection = false;
-    this.subjectSection = false;
+    this.subjectSection = true;
     this.today = dayjs().add(24,"hour").toISOString(); 
     this.minDate = dayjs().add(24,"hour").format('YYYY-MM-DD');
     this.maxDate = dayjs().add(1,"month").toISOString();
@@ -71,10 +71,10 @@ export class CreateTicketModal implements OnInit {
       subject: new FormControl('',Validators.required),
       details: new FormControl('',Validators.required),
       typeId: new FormControl('1000',Validators.required),
-      status : new FormControl('active',Validators.required),
+      // status : new FormControl('active',Validators.required),
       date: new FormControl(this.today),
       startDate : new FormControl(this.today),
-      duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
+      duration : new FormControl(0),
       endDate : new FormControl(this.today),
     }/* ,
     {validators: this.parkingValidator} */
@@ -100,134 +100,22 @@ export class CreateTicketModal implements OnInit {
    this.modalController.dismiss();
   }
 
-  createTicket() {
-
-    if(this.serviceType == 'elevatorBooking'){
-      this.itemData.date = dayjs(this.createItemForm.get('date').value).unix();
-      this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
-      this.itemData.endDate = dayjs(this.createItemForm.get('endDate').value).unix();  
-    }
-    this.itemData.subject = this.createItemForm.value.subject == '' ? this.serviceType : this.createItemForm.value.subject;
-    this.itemData.details = this.createItemForm.value.details;
-    this.itemData.status = this.createItemForm.value.status;
-    this.itemData.typeId = this.createItemForm.value.typeId;
-    this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
-    this.itemData.createdBy = this.loginService.getLoginID();
-    const loading = this.featureService.presentLoadingWithOptions(5000);
-    this.firebaseService.createItem(this.itemData)
-    .then(() => {
-      this.featureService.presentToast(this.featureService.translations.TicketAddedSuccessfully, 2000);
-      this.dismissModal();
-      loading.then(res=>res.dismiss());  
-    }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.TicketAddingErrors, 2000);
-      this.dismissModal();
-      console.log(err);
-     });      
-  }
-
-/*   async selectImageSource(){
-    const cameraOptions : CameraOptions = {
-      quality:25,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      cameraDirection : this.camera.Direction.FRONT,
-      // targetHeight:200,
-      // targetWidth:200,
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.CAMERA
-    };
-
-    const galleryOptions : CameraOptions = {
-      
-      quality:100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      //targetHeight:200,
-      //targetWidth:200,
-      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
-    };
-    const alert = await this.alertController.create({
-      header: "Select Source",
-      message: "Pick a source for your image",
-      buttons: [
-        {
-          text: "Camera",
-          handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageURI)=> {
-              this.cropImage(imageURI);
-              //const image = "data:image/jpeg;base64," + imageUri;
-              //this.selectedPhoto = image;
-            });
-          }
-        },
-        {
-          text: "Gallery",
-          handler: ()=> {
-            this.camera.getPicture(galleryOptions).then((imageURI)=> {
-              this.cropImage(imageURI);
-              //const image = "data:image/jpeg;base64," + imageData;
-              //this.selectedPhoto = image;
-            });
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  } */
-/*   cropImage(imgPath) {
-    
-    const cropOptions: CropOptions = {
-      quality: 25
-
-    }
-
-    this.crop.crop(imgPath, cropOptions)
-      .then(
-        newPath => {
-          this.croppedImageToBase64(newPath.split('?')[0])
-        },
-        error => {
-          alert('Error cropping image' + error);
-        }
-      );
-  } */
-
-/*   croppedImageToBase64(ImagePath) {
-    
-    let copyPath = ImagePath;
-    let splitPath = copyPath.split('/');
-    let imageName = splitPath[splitPath.length - 1];
-    let filePath = ImagePath.split(imageName)[0];
-
-    this.file.readAsDataURL(filePath, imageName).then(base64 => {
-      //this.croppedImagepath = base64;
-      //console.log("mmmmmmmmmmmmm",base64)
-      this.selectedPhoto = base64;
-    
-    }).catch( err=> console.log(err,'Error in croppedImageToBase64'));
-  } */
   private onValueChanges(): void {
-    this.createItemForm.get('date').valueChanges.subscribe(newDate=>{      
-      console.log("onDateChanges",newDate);
+    this.createItemForm.get('date').valueChanges.subscribe(newDate=>{
       let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
       if (today == date){
         this.createItemForm.get('startDate').setValue(this.today);
         this.minStartDate = dayjs(this.today).format("HH:mm");
         this.createItemForm.get('endDate').setValue(this.today);
-        console.log("minStartDate",this.minStartDate);
-      } 
+      }
       else {
-        let newDateZeroTimeISO = dayjs(newDate).set("hour", 0).set("minute",0).set("second",0).set("millisecond",0).toISOString();
+        let newDateZeroTimeISO = dayjs(newDate).set("hour", 0).set('minute',0).set('second',0).set('millisecond',0).toISOString();
         this.createItemForm.get('startDate').setValue(newDateZeroTimeISO);
         this.createItemForm.get('endDate').setValue(newDateZeroTimeISO);
-        this.minStartDate = "00:00";
+        this.minStartDate = '00:00';
       }
-      if(this.duration > 0){
+      if(this.duration > 0) {
         this.calculateEndDate();
       }
     });
@@ -261,12 +149,14 @@ export class CreateTicketModal implements OnInit {
     });
 
     this.createItemForm.get('typeId').valueChanges.subscribe(newTypeId=>{      
+      console.log(this.createItemForm.errors);
     let typeCheck = this.ticketTypes.find((type: { id: number; }) => type.id === newTypeId );
     if(typeCheck && newTypeId != '1000'){
       this.serviceType = typeCheck.type;
       console.log(typeCheck.type);
 
-      if(typeCheck.type == "elevatorBooking"){
+      if(typeCheck.type === 'elevatorBooking'){
+        
         this.bookingSection = true;
         this.subjectSection = false;
 
@@ -284,6 +174,10 @@ export class CreateTicketModal implements OnInit {
 
         this.createItemForm.controls['endDate'].setValidators(Validators.required);
         this.createItemForm.controls['endDate'].updateValueAndValidity();
+
+        this.createItemForm.controls['duration'].setValidators(counterRangeValidatorMinutes(15, 1440));
+        this.createItemForm.controls['duration'].updateValueAndValidity();
+
 
       }
       else{
@@ -304,6 +198,9 @@ export class CreateTicketModal implements OnInit {
   
         this.createItemForm.controls['endDate'].setValidators(null);
         this.createItemForm.controls['endDate'].updateValueAndValidity();
+
+        this.createItemForm.controls['duration'].setValidators(null);
+        this.createItemForm.controls['duration'].updateValueAndValidity();
       }
     }
     else if(newTypeId == '1000'){
@@ -324,8 +221,36 @@ export class CreateTicketModal implements OnInit {
 
       this.createItemForm.controls['endDate'].setValidators(null);
       this.createItemForm.controls['endDate'].updateValueAndValidity();
+
+      this.createItemForm.controls['duration'].setValidators(null);
+      this.createItemForm.controls['duration'].updateValueAndValidity();
       
     }
     });
+  }
+  createTicket() {
+
+    if(this.serviceType == 'elevatorBooking'){
+      this.itemData.date = dayjs(this.createItemForm.get('date').value).unix();
+      this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
+      this.itemData.endDate = dayjs(this.createItemForm.get('endDate').value).unix();  
+    }
+    this.itemData.subject = this.createItemForm.value.subject == '' ? this.serviceType : this.createItemForm.value.subject;
+    this.itemData.details = this.createItemForm.value.details;
+    this.itemData.status = 'active';
+    this.itemData.typeId = this.createItemForm.value.typeId;
+    this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
+    this.itemData.createdBy = this.loginService.getLoginID();
+    const loading = this.featureService.presentLoadingWithOptions(5000);
+    this.firebaseService.createItem(this.itemData)
+    .then(() => {
+      this.featureService.presentToast(this.featureService.translations.TicketAddedSuccessfully, 2000);
+      this.dismissModal();
+      loading.then(res=>res.dismiss());  
+    }).catch((err) => { 
+      this.featureService.presentToast(this.featureService.translations.TicketAddingErrors, 2000);
+      this.dismissModal();
+      console.log(err);
+     });      
   }
 }

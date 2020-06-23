@@ -29,7 +29,8 @@ const firebaseRoutes: Routes = [
     RouterModule.forChild(firebaseRoutes),
     //AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    
   ]/*,
   entryComponents: [
     FirebaseCreateItemModal,

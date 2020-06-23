@@ -8,9 +8,6 @@
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
-      <ion-button (click)="openChatModal()">
-        {{ 'Contact' | translate }}
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -28,61 +25,65 @@
       </h2>
     </ion-col>
     </ion-row> -->
-    <ion-card >
+    <ion-card *ngIf="bookingSection">
+      <ion-item>
+        <ion-label>{{ 'BookingDate' | translate }}</ion-label>
+        <app-text-shell animation="bouncing" [data]="date"></app-text-shell>          
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'FromTime' | translate }}</ion-label>
+        <app-text-shell animation="bouncing" [data]="startTime"></app-text-shell>
+      </ion-item>
+      <ion-item>
+          <ion-label>{{ 'ToTime' | translate }}</ion-label>
+          <app-text-shell animation="bouncing" [data]="endTime"></app-text-shell>
+      </ion-item>
+      <ion-item *ngIf="item.status">
+        <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
+        <ion-text>{{status}}</ion-text> 
+      </ion-item>
+      <ion-item lines="none" *ngIf="item.createDate">    
+        <ion-label>{{ 'TicketDate' | translate }}</ion-label>
+        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
+      </ion-item>
+      </ion-card>
+      <ion-card *ngIf="!bookingSection">
       <ion-card-content class="ion-no-padding">
-        <ion-item *ngIf="item.typeId">
+        <!-- <ion-item *ngIf="item.typeId"> -->
+          <ion-row>
         <ion-label>{{ 'TicketType' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="type"></app-text-shell>                  
-        </ion-item>  
+        <!-- </ion-item>   -->
+      </ion-row>
         <ion-item *ngIf="item.subject && type == 'other'" >        
         <ion-label>{{ 'Subject' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
          </ion-item>
-         <ion-card *ngIf="bookingSection">
-          <ion-item>
-            <ion-label>Date</ion-label>
-            <app-text-shell animation="bouncing" [data]="date"></app-text-shell>          
-          </ion-item>
-          <ion-item>
-            <ion-label>{{ 'FromTime' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="startTime"></app-text-shell>
-          </ion-item>
-          <ion-item>
-              <ion-label>{{ 'ToTime' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="endTime"></app-text-shell>
-          </ion-item>
-        </ion-card>
-<!--          <ion-item-divider>
-          <ion-label>B</ion-label>
-        </ion-item-divider> -->
             <ion-item *ngIf="item.status">
-              <ion-label>{{ 'Status' | translate }}</ion-label>
+              <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
              <ion-text>{{status}}</ion-text> 
             </ion-item>
             <ion-item lines="none" *ngIf="item.createDate">    
-              <ion-label>{{ 'Date' | translate }}</ion-label>
+              <ion-label>{{ 'TicketDate' | translate }}</ion-label>
               {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
-              <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
             </ion-item>
           </ion-card-content>
           </ion-card>
           <ion-card  *ngIf="item.details">
             <ion-card-header>
-              <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle>
-              <!-- <ion-card-title>{{ 'Details' | translate }}</ion-card-title> -->
+              <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
+              <ion-card-title>{{ 'Details' | translate }}</ion-card-title>
             </ion-card-header>
-<!--             <ion-card-title>
-              <ion-label>{{ 'Details' | translate }}</ion-label>
-            </ion-card-title> -->
             <ion-card-content>
-<!--             <ion-item>
-              <ion-label>{{ 'Details' | translate }}</ion-label>
-            </ion-item> -->
-            <ion-item lines="none">
-              <ion-textarea rows="6" [value]="item.details" readonly></ion-textarea>
-              </ion-item>
+              <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>
             </ion-card-content>
           </ion-card>
+          <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+            <ion-fab-button>
+              <ion-icon name="chatbubbles-outline" (click)="openChatModal()"></ion-icon>
+            </ion-fab-button>
+          </ion-fab> 
 </ion-content>
 <!-- <ion-button> 
   <ion-spinner></ion-spinner>

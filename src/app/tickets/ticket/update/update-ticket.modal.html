@@ -17,7 +17,7 @@
           <ion-list lines="full">
             <ion-item >
               <ion-label>{{ 'Subject' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="subject"></app-text-shell>
+              <app-text-shell animation="bouncing" [data]="item.subject"></app-text-shell>
             </ion-item>
             <ion-card *ngIf="bookingSection">
               <ion-item>
@@ -49,8 +49,8 @@
                 </ion-col>
                   <ion-col class="ion-margin-end">
                     <ion-item class="radio-tag" lines="none">
-                      <ion-label class="tag-label">{{ 'InActive' | translate }}</ion-label>
-                      <ion-radio value="inactive"></ion-radio>
+                      <ion-label class="tag-label">{{ 'Close' | translate }}</ion-label>
+                      <ion-radio value="close"></ion-radio>
                     </ion-item>
                   </ion-col>
                 </ion-row>

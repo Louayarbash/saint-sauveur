@@ -175,18 +175,18 @@ public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]):
     let images : Images[] = [];
     if( postImages.length > 0 ){
     for (var i = 0; i < postImages.length; i++) {
-        if (postImages[i].storagePath == "") {
+        if (postImages[i].storagePath == '') {
 
           try {
-            let uploaded = await this.uploadToStorage(postImages[i].photo,itemData.id);
+            const uploaded = await this.uploadToStorage(postImages[i].photo, itemData.id);
   
-            if( uploaded.state === "success"){
+            if( uploaded.state === 'success'){
               
                 images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath });
             }
           }
           catch (err) {
-            console.log("Error uploading pdf: ", err);
+            console.log('Error uploading pdf: ', err);
           }
       }
       else{ //old photos

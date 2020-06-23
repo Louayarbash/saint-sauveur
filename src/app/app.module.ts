@@ -32,7 +32,8 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestoreModule } from '@angular/fire/firestore';									  
+import { AngularFirestoreModule } from '@angular/fire/firestore';					
+// import { SliderPage } from './sale/item/slider/slider.page';				  
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

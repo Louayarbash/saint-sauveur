@@ -79,6 +79,7 @@ export class FirebaseCreateItemModal implements OnInit {
   // LA_2019_11
    async selectImageSource() { 
     const cameraOptions: CameraOptions = {
+      allowEdit:true,
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
@@ -96,11 +97,12 @@ export class FirebaseCreateItemModal implements OnInit {
       disable_popover: false
     }; 
     const galleryOptions: CameraOptions = {
+      allowEdit:true,
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
+      targetHeight:500,
       correctOrientation:true,
       sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
     };

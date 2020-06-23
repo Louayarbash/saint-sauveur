@@ -41,7 +41,7 @@
           </ion-grid>
           <ion-card *ngIf="bookingSection">
           <ion-item>
-            <ion-label>Date</ion-label>
+            <ion-label>{{ 'BookingDate' | translate }}</ion-label>
             <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
           </ion-item>
           <ion-item>
@@ -76,7 +76,7 @@
           <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
           <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
         </ion-item>
-        <ion-item>
+<!--         <ion-item>
           <ion-label>{{ 'Status' | translate }}</ion-label>
           <ion-radio-group formControlName="status">
             <ion-row class="radio-tags">
@@ -94,11 +94,27 @@
               </ion-col>
             </ion-row>
           </ion-radio-group>
-        </ion-item>
+        </ion-item> -->
       </ion-list>
+<!--       <div *ngIf="createItemForm.invalid">
+        Form
+      </div>
+      <div *ngIf="createItemForm.get('duration').errors">
+        duration
+      </div>
+      <div *ngIf="createItemForm.get('subject').errors">
+        subject
+      </div>
+      <div *ngIf="createItemForm.get('details').errors">
+        details
+      </div>
+      <div *ngIf="createItemForm.get('typeId').errors">
+        typeId
+      </div> -->
+      
 <!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
         please confirm naming changes
-    </div> 
+    </div>  
     <div *ngIf="createItemForm.get('name').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
   <div *ngIf="createItemForm.get('name').errors.required">
     Name is required.

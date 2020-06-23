@@ -98,7 +98,8 @@ export class FirebaseUpdateUserModal implements OnInit {
 /*     if (level){
       //let checked = index == 0 ? true : false; 
        level = level.desc
-       return { name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' #' + userParking.number , value : {level : level ,number : userParking.number} ,checked: false}
+       return { name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' #' + 
+       userParking.number , value : {level : level ,number : userParking.number} ,checked: false}
 
 this.radioObject = this.radioObject.filter(function (radioNotNull) {
 return radioNotNull != null;
@@ -108,9 +109,9 @@ return radioNotNull != null;
       this.levels = item.parking;
       console.log("parking",this.user.parking);
 
-        let userParking = [];
+        let userParkings = [];
         if (this.user.parking) {
-          userParking = this.user.parking.map((userParking) => { 
+          userParkings = this.user.parking.map((userParking) => { 
             
             const levelCheck = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
             if(levelCheck){
@@ -118,41 +119,41 @@ return radioNotNull != null;
             }
           });
         }
-        userParking = userParking.filter(function (res) {
+        userParkings = userParkings.filter(function (res) {
           return res != null;
         });
       
-     console.log("userParkingIds",userParking)
-     if(userParking[0]){
+     console.log("userParkingIds",userParkings)
+     if(userParkings[0]){
       console.log(1);
 
       this.parking1selected = true;
 
-      this.updateUserForm.controls['parking1Level'].setValue(userParking[0].id);
-      this.updateUserForm.controls['parking1Number'].setValue(userParking[0].number);
+      this.updateUserForm.controls['parking1Level'].setValue(userParkings[0].id);
+      this.updateUserForm.controls['parking1Number'].setValue(userParkings[0].number);
       this.changeRef.detectChanges();
 
     }
     
-    if(userParking[1]){
+    if(userParkings[1]){
       console.log(2);
 
       this.parking2selected = true;
 
-      this.updateUserForm.controls['parking2Level'].setValue(userParking[1].id);
-      this.updateUserForm.controls['parking2Number'].setValue(userParking[1].number);
+      this.updateUserForm.controls['parking2Level'].setValue(userParkings[1].id);
+      this.updateUserForm.controls['parking2Number'].setValue(userParkings[1].number);
       this.changeRef.detectChanges();
     }
     else{
       this.showHideParking2 = false;
     }
-    if(userParking[2]){
+    if(userParkings[2]){
       console.log(3);
 
       this.parking3selected = true;
       
-      this.updateUserForm.controls['parking3Level'].setValue(userParking[2].id);
-      this.updateUserForm.controls['parking3Number'].setValue(userParking[2].number);
+      this.updateUserForm.controls['parking3Level'].setValue(userParkings[2].id);
+      this.updateUserForm.controls['parking3Number'].setValue(userParkings[2].number);
       this.changeRef.detectChanges();
     }
     else{
@@ -165,8 +166,7 @@ return radioNotNull != null;
   }
 
   parking1Changed(ev:any) {
-    console.log("VALUE CHANGED",ev.detail.value);
-    if(ev.detail.value != "1000"){
+    if(ev.detail.value !== '1000'){
       this.updateUserForm.controls['parking1Number'].setValidators(Validators.required);
       this.parking1selected = true;
     }
@@ -180,8 +180,7 @@ return radioNotNull != null;
   }
 
   parking2Changed(ev:any) {
-    console.log("VALUE CHANGED2",ev.detail.value);
-    if(ev.detail.value != "1000"){
+    if(ev.detail.value !== '1000'){
       this.updateUserForm.controls['parking2Number'].setValidators(Validators.required);
       this.parking2selected = true;
     }
@@ -195,8 +194,8 @@ return radioNotNull != null;
   }
 
   parking3Changed(ev:any) {
-    console.log("VALUE CHANGED3",ev.detail.value);
-    if(ev.detail.value != "1000"){
+
+    if(ev.detail.value !== '1000'){
       this.updateUserForm.controls['parking3Number'].setValidators(Validators.required);
       this.parking3selected = true;
     }
@@ -342,7 +341,7 @@ return radioNotNull != null;
     this.showHideParking2 = this.showHideParking2 ? false : true;
     this.showHideParking3 = false;
     this.updateUserForm.markAsDirty();
-    if(this.showHideParking2 == false){
+    if(this.showHideParking2 === false){
      this.updateUserForm.controls['parking2Level'].setValue("1000");  
      this.updateUserForm.controls['parking2Number'].setValue("");
      this.updateUserForm.controls['parking2Number'].setValidators(null);
@@ -352,7 +351,7 @@ return radioNotNull != null;
      this.updateUserForm.controls['parking3Number'].setValue("");
      this.updateUserForm.controls['parking3Number'].setValidators(null);
      this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
-   }else{
+   } else {
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 

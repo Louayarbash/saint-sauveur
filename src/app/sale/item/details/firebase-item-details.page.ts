@@ -5,6 +5,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel, FirebaseCombinedItemModel } from '../firebase-item.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
+import { SliderModal } from '../slider/slider.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
 import { Observable } from 'rxjs';
 import { FeatureService } from '../../../services/feature/feature.service';
@@ -30,12 +31,11 @@ export class FirebaseItemDetailsPage implements OnInit {
   photoSlider : any[] = [''];  
   
   photoSliderEmpty : any[];
-  slidesOptions: any = {
-    
-    zoom: {
+  slidesOptions = {
+      zoom: {
       toggle: true // Disable zooming to prevent weird double tap zomming on slide images
-    }
-  };
+    } 
+  }; 
   status : string;
   editHidden : boolean;
   postImages : PhotosData[] = [];
@@ -118,6 +118,20 @@ export class FirebaseItemDetailsPage implements OnInit {
     });
     await modal.present();
   }
+
+  async openSliderModal(){
+    const modal = await this.modalController.create({
+      component: SliderModal,
+      componentProps: {
+        'photoSlider' : this.photoSlider
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl 
+      // cssClass: 'modalTransparent'
+    });
+    await modal.present();
+  }
+
   getPic(picPath : string): Observable<any>{
     const ref = this.firebaseService.afstore.ref(picPath);
     return ref.getDownloadURL();

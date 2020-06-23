@@ -89,8 +89,7 @@ getUserRating(userId : string, type : string){
   return ratingRef.valueChanges();
 }
 
-setUserRating(ratingInfo : RatingUser)
-{
+setUserRating(ratingInfo : RatingUser){
   //const rating = {ratingInfo};
   //console.log("rating object",ratingInfo);
   const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`;
@@ -114,7 +113,7 @@ getItem(tableName : string, itemId: string): Observable<any> {
 }
 async getBuildingLevels(){
   if (this.buildingLevels){
-    return this.getBuildingLevels
+    return this.getBuildingLevels;
   }
   else{
     //await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));

@@ -11,16 +11,16 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="item-content">
+<ion-content>
   <ion-card>  
-      <ion-row class="slider-row">
+        <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
+  <ion-row class="slider-row">
         <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
-          <ion-slide *ngFor="let image of photoSlider">
+          <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
             <ion-row class="slide-inner-row">
-              <!-- <app-image-shell [mode]="'cover'" animation="spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
                 <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
-                 <app-aspect-ratio [ratio]="{w:64, h:50}">
-                </app-aspect-ratio> 
+                <app-aspect-ratio [ratio]="{w:64, h:50}"> 
+                </app-aspect-ratio>
               </app-image-shell>
             </ion-row>
           </ion-slide>
@@ -35,21 +35,40 @@
             <ion-label>{{ 'Price' | translate }}</ion-label>
             <app-text-shell [data]="(item.price) ? ''.concat(item.price).concat('  $') : null"></app-text-shell>    
           </ion-item>
-          <div *ngIf="item?.description != ''">
+        
+          <ion-item-divider>
+            <ion-label>{{ 'SellerInfo' | translate}}</ion-label>
+          </ion-item-divider>
+          <ion-item lines="none">    
+            <ion-label>{{ 'SellerName' | translate}}</ion-label>
+            <app-text-shell [data]="(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null"></app-text-shell>    
+          </ion-item>
             <ion-item lines="none">
-              <ion-label>{{ 'Description' | translate }}</ion-label>
+              <ion-label>{{ 'Email' | translate }}</ion-label>
+              <app-text-shell animation="bouncing" [data]="item.creatorDetails?.email"></app-text-shell>                  
             </ion-item>
+            <ion-item lines="none">
+              <ion-label >{{ 'Phone' | translate }}</ion-label>
+              <app-text-shell animation="bouncing" [data]="item.creatorDetails?.phone"></app-text-shell>                  
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>{{ 'Description' | translate }}</ion-label>
+            </ion-item-divider>
+          <div *ngIf="item?.description != ''">
+     <!--        <ion-item lines="none">
+              <ion-label>{{ 'Description' | translate }}</ion-label>
+            </ion-item> -->
             <ion-item lines="none">
               <ion-textarea rows="6" [value]="item.description" readonly class="ion-no-padding"></ion-textarea>
             </ion-item>
           </div>
         </ion-card>   
- <!--          <ion-item> 
-            <ion-label>{{ 'Status' | translate }}</ion-label>
+        <!--<ion-item> 
+          <ion-label>{{ 'Status' | translate }}</ion-label>
             <app-text-shell animation="bouncing" [data]="status"></app-text-shell>
           </ion-item> -->
         <!-- </section> -->
-       <ion-card>  
+<!--        <ion-card>  
         <ion-card-header>  
           {{ 'SellerName' | translate }} : {{ item.creatorDetails?.firstname }} {{ item.creatorDetails?.lastname }}
         </ion-card-header>  
@@ -57,20 +76,21 @@
           <ion-item>
             <ion-label>{{ 'Email' | translate }}</ion-label>
             <app-text-shell animation="bouncing" [data]="item.creatorDetails?.email"></app-text-shell>
-            <!-- <ion-input readonly>{{ item.creatorDetails?.email }}</ion-input> -->
           </ion-item>        
           <ion-item *ngIf="item.creatorDetails?.phone">
             <ion-label >{{ 'Phone' | translate }}</ion-label>
             <app-text-shell animation="bouncing" [data]="item.creatorDetails?.phone"></app-text-shell>
           </ion-item>         
         </ion-list>  
-      </ion-card>
-       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button>
+      </ion-card> -->
+       <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-fab-button color="secondary">
           <ion-icon name="chevron-back-circle-outline"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="start">
-          <ion-fab-button (click)="sendEmail()"><ion-icon name="mail"></ion-icon></ion-fab-button>
+          <ion-fab-button (click)="sendEmail()">
+            <ion-icon name="mail"></ion-icon>
+          </ion-fab-button>
           <ion-fab-button><ion-icon name="call"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab> 

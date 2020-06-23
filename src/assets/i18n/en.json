@@ -33,6 +33,7 @@
   "Status" : "Status",
   "Active" : "Active",
   "InActive" : "Inactive",
+  "Closed" : "Closed",
   "Sold" : "Sold",
   "MainPhoto" : "Main photo",
   "FOLLOW": "Follow",

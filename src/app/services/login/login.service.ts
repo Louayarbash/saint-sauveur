@@ -78,10 +78,9 @@ parking: any;
       this.firstname = res.data().firstname;
       this.parking = res.data().parking;
       console.log("inside getLoginInfo 222", this.parking);
-    }
-    catch (err) {
+      } catch (err) {
       console.log(err);
-    }
+      }
   }
 
    getUserInfoObservable() : Observable<any> {

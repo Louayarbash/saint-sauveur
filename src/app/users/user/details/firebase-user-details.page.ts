@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
@@ -41,7 +41,8 @@ export class FirebaseUserDetailsPage implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private featureService : FeatureService,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private routerOutlet: IonRouterOutlet
   ) { }
 
   ngOnInit() {
@@ -72,7 +73,6 @@ export class FirebaseUserDetailsPage implements OnInit {
                   }
                 });
               }
-              console.log(this.userParking)
               this.userParking = this.userParking.filter(function (res) {
                 return res != null;
               });   
@@ -92,9 +92,10 @@ export class FirebaseUserDetailsPage implements OnInit {
       component: FirebaseUpdateUserModal,
       componentProps: {
         'user': this.user
-      }
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
-
     await modal.present();
   }
 
@@ -103,7 +104,9 @@ export class FirebaseUserDetailsPage implements OnInit {
       component: ChatModal,
       componentProps: {
         'user': this.user
-      }
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
 
     await modal.present();

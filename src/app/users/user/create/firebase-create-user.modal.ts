@@ -119,8 +119,7 @@ export class FirebaseCreateUserModal implements OnInit {
     if(ev.detail.value !== '1000'){
       this.createUserForm.controls['parking2Number'].setValidators(Validators.required);
       this.parking2selected = true;
-    }
-    else{
+    } else {
       this.parking2selected = false;
       this.createUserForm.controls['parking2Number'].setValidators(null);
     }
@@ -129,7 +128,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   parking3Changed(ev:any) {
     console.log(ev.detail.value);
-    if(ev.detail.value != "1000"){
+    if(ev.detail.value !== "1000"){
       this.createUserForm.controls['parking3Number'].setValidators(Validators.required);
       this.parking3selected = true;
     }
@@ -162,15 +161,15 @@ export class FirebaseCreateUserModal implements OnInit {
 
     this.selectedParking = [];
     
-    if(this.createUserForm.controls['parking1Level'].value != "1000"){
+    if(this.createUserForm.controls['parking1Level'].value !== '1000'){
       this.selectedParking.push({ id: this.createUserForm.controls['parking1Level'].value , number : this.createUserForm.value.parking1Number});
     }
         
-    if(this.createUserForm.controls['parking2Level'].value != "1000"){
+    if(this.createUserForm.controls['parking2Level'].value !== '1000'){
       this.selectedParking.push({ id: this.createUserForm.controls['parking2Level'].value , number : this.createUserForm.value.parking2Number});
     }
         
-    if(this.createUserForm.controls['parking3Level'].value != "1000"){
+    if(this.createUserForm.controls['parking3Level'].value !== '1000'){
       this.selectedParking.push({ id: this.createUserForm.controls['parking3Level'].value , number : this.createUserForm.value.parking3Number});
     }
 
@@ -217,8 +216,8 @@ export class FirebaseCreateUserModal implements OnInit {
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      //targetHeight:200,
-      //targetWidth:200,
+      // targetHeight:200,
+      // targetWidth:200,
       sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const alert = await this.alertController.create({
@@ -255,13 +254,13 @@ export class FirebaseCreateUserModal implements OnInit {
    this.showHideParking2 = this.showHideParking2 ? false : true;
    this.showHideParking3 = false;
    if(this.showHideParking2 == false){
-    this.createUserForm.controls['parking2Level'].setValue("1000");  
-    this.createUserForm.controls['parking2Number'].setValue("");
+    this.createUserForm.controls['parking2Level'].setValue('1000');  
+    this.createUserForm.controls['parking2Number'].setValue('');
     this.createUserForm.controls['parking2Number'].setValidators(null);
     this.createUserForm.controls['parking2Number'].updateValueAndValidity();
     
-    this.createUserForm.controls['parking3Level'].setValue("1000");
-    this.createUserForm.controls['parking3Number'].setValue("");
+    this.createUserForm.controls['parking3Level'].setValue('1000');
+    this.createUserForm.controls['parking3Number'].setValue('');
     this.createUserForm.controls['parking3Number'].setValidators(null);
     this.createUserForm.controls['parking3Number'].updateValueAndValidity();
   } else{
@@ -273,12 +272,11 @@ export class FirebaseCreateUserModal implements OnInit {
 showHideParkingValidate3(){
     this.showHideParking3 = this.showHideParking3 ? false : true;
     if(this.showHideParking3 === false){
-      this.createUserForm.controls['parking3Level'].setValue("1000");
-      this.createUserForm.controls['parking3Number'].setValue("");
+      this.createUserForm.controls['parking3Level'].setValue('1000');
+      this.createUserForm.controls['parking3Number'].setValue('');
       this.createUserForm.controls['parking3Number'].setValidators(null);
       this.createUserForm.controls['parking3Number'].updateValueAndValidity();
-    }
-    else{
+    } else {
       setTimeout(() => {
         this.content.scrollToBottom(400);
       },400); 
@@ -324,9 +322,9 @@ showHideParkingValidate3(){
 
     this.isLoading = true;
     let copyPath = ImagePath;
-    let splitPath = copyPath.split('/');
-    let imageName = splitPath[splitPath.length - 1];
-    let filePath = ImagePath.split(imageName)[0];
+    const splitPath = copyPath.split('/');
+    const imageName = splitPath[splitPath.length - 1];
+    const filePath = ImagePath.split(imageName)[0];
 
     this.file.readAsDataURL(filePath, imageName).then(base64 => {
       //this.croppedImagepath = base64;

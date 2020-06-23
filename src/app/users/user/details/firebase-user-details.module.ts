@@ -10,7 +10,7 @@ import { FirebaseUserDetailsPage } from './firebase-user-details.page';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserDetailsResolver } from './firebase-user-details.resolver';
 import { TranslateModule } from '@ngx-translate/core';
-import { FirebaseUpdateUserModal } from "../update/firebase-update-user.modal";
+import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
 
 const routes: Routes = [
   {
