@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import dayjs from 'dayjs';
+import { Observable, of, throwError, combineLatest } from 'rxjs';
+import { map, concatMap, first } from 'rxjs/operators';
 import { DataStore, ShellModel } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { TicketModel } from './ticket/ticket.model';
+import { TicketModel, FirebaseCombinedTicketModel } from './ticket/ticket.model';
 //import { UserImageModel } from './user/select-image/user-image.model';
-import { LoginService } from '../services/login/login.service';
+//import { LoginService } from '../services/login/login.service';
+import { FirebaseUserModel } from '../users/user/firebase-user.model';
+import { LoginService } from "../services/login/login.service"
 
 @Injectable()
 export class FirebaseService {
@@ -20,21 +21,17 @@ export class FirebaseService {
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<UserImageModel>>;
   private tableName = "tickets";
+  private buildingId = this.loginService.getBuildingId();
 
-  constructor(private afs: AngularFirestore, private loginService: LoginService) {}
+  constructor(
+    private afs: AngularFirestore,
+    public loginService : LoginService) {}
 
   /*
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName).valueChanges({ idField: 'id' });
-/*      .pipe(
-       map(actions => actions.map(user => {
-          const age = this.calcUserAge(user.birthdate);
-          return { age, ...user } as FirebaseListingItemModel;
-        })
-      )
-    ); */
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
   public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
@@ -56,7 +53,30 @@ export class FirebaseService {
   }
 
   public getCombinedItemDataSource(id: string): Observable<TicketModel> {
-    return this.getItem(id);
+    return this.getItem(id) 
+    .pipe(
+      concatMap(item => {
+        const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res}))
+        if (item){
+          return combineLatest([
+           of(item),
+           creatorDetails,
+         ]).pipe(
+           map(([ticketDetails, creatorDetails]: [TicketModel, FirebaseUserModel]) => {
+             // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
+             return {
+               ...ticketDetails,
+               creatorDetails : creatorDetails
+             } as FirebaseCombinedTicketModel;
+           })
+         );
+       } 
+       else {
+        // Throw error
+        return throwError('User does not have any skills.');
+      }
+    })
+  );
     /*.pipe(
       // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
       // is merged in the output Observable

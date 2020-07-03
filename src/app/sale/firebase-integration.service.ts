@@ -8,15 +8,19 @@ import { FirebaseItemModel, FirebaseCombinedItemModel/*, FirebasePhotoModel*/ } 
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { PhotosData, Images} from '../type';
 import { FirebaseUserModel } from '../users/user/firebase-user.model';
+import { LoginService } from "../services/login/login.service"
 
 @Injectable()
 export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
+  private buildingId = this.loginService.getBuildingId();
+  private tableName = "posts";
 
   constructor(
     private afs: AngularFirestore, 
-    public afstore : AngularFireStorage
+    public afstore : AngularFireStorage,
+    private loginService : LoginService
     )  {
       
     }
@@ -26,7 +30,8 @@ export class FirebaseService {
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>('posts').valueChanges({  idField: 'id' });
+    console.log("houna");
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
   public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
@@ -50,18 +55,15 @@ export class FirebaseService {
   public getCombinedItemDataSource(itemId: string): Observable<FirebaseCombinedItemModel> {
     return this.getItem(itemId)
     .pipe(
-      // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
-      // is merged in the output Observable
+     
+    // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
+    // is merged in the output Observable
       concatMap(item => {
-        //item.imagesFullPath = [""];
-        //let creatorDetails : FirebaseUserModel;
-        const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res}))//.toPromise()//.then(res => creatorDetails = res) 
-
-        if (item && (item.images.length != 0)) {
-/*           const itemPhotosObservables: Array<Observable<PhotosData>> = item.images.map( image => {
-             return this.getPicObservable(image.storagePath).pipe(first()).pipe(map(photo => { return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } 
-            }));
-          }); */
+      if (item.createDate) {
+      const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res})); 
+      console.log("item listing ",item);
+          if (item.images.length > 0) {
+            console.log("images > 0",item)
 
           const itemPhotosPromise : Array<Promise<PhotosData>> = item.images.map( image => {
             return this.getPicPromise(image.storagePath).then(photo => { 
@@ -71,8 +73,6 @@ export class FirebaseService {
             return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } })
         })
         });
-        
-
           // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
           // and transform those emitted values into one value ([userDetails, userSkills])
           return combineLatest([
@@ -93,27 +93,27 @@ export class FirebaseService {
               } as FirebaseCombinedItemModel;
             })
           );
-        }
-         else if (item && (item.images.length == 0)){
+          }
+          else if (item.images.length == 0){
+           console.log("images == 0",item)
            return combineLatest([
             of(item),
             creatorDetails,
           ]).pipe(
-            map(([userDetails, creatorDetails]: [FirebaseItemModel, FirebaseUserModel]) => {
+            map(([itemDetails, creatorDetails]: [FirebaseItemModel, FirebaseUserModel]) => {
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
-                ...userDetails,
+                ...itemDetails,
                 creatorDetails : creatorDetails
               } as FirebaseCombinedItemModel;
             })
           );
-        } 
-/*          else if(!item.imagesFullPath) {
-          return of(...item);
-        }   */
-         else {
+          } 
+        }
+        else {
+          console.log('Item with no data')
           // Throw error
-          return throwError('User does not have any skills.');
+          return throwError('Item with no data');
         }
       })
     );

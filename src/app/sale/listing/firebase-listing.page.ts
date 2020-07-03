@@ -51,15 +51,16 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     //private document: DocumentViewer,
     //private file:File,
     //private fileOpener:FileOpener
-  ) { }
+  ) { 
 
-
+  }
 
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
   }
 
   ngOnInit() {
+
     this.searchQuery = '';
 
     // Route data is a cold subscription, no need to unsubscribe?
@@ -100,7 +101,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             );
           })
         );
-
+          
         // Keep track of the subscription to unsubscribe onDestroy
         // Merge filteredData with the original dataStore state
         this.stateSubscription = merge(
@@ -108,7 +109,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           updateSearchObservable
         ).subscribe(
           (state) => {
-            console.log("kikooo",this.items)
+            console.log("itemData listing",this.items)
             this.items = state;
             if(this.items.isShell == false){
               this.items.map(item => { 
@@ -129,7 +130,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 else {
                   this.getProfilePic('images/no_image.jpeg')
                   .then(res => item.coverPhotoData = res)
-                  .catch(err => {item.coverPhotoData = '' ;});
+                  .catch( err => { 
+                    console.log(err); 
+                    item.coverPhotoData = '' ;} 
+                    );
               } 
               });
             }

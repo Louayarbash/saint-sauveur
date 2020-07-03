@@ -48,6 +48,9 @@ parking: any;
   getLoginName(){
     return "Louay";
   }
+  getApaNumber(){
+    return "865";
+  }
   getLoginID(){
 /*     if(!this.uid){
       this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;

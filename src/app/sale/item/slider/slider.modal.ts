@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ModalController, IonSlides } from '@ionic/angular';
 
 @Component({
-  selector: 'app-slider',
+  selector: 'modal-slider',
   templateUrl: './slider.modal.html',
   styleUrls: [
     './styles/slider.modal.scss'

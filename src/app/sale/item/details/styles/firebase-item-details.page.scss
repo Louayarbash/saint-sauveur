@@ -7,6 +7,17 @@
   --page-background: var(--app-background);
 }
 
+.itemCard {
+  border-radius: 20px 20px 20px 20px;
+/*   --color: var(--ion-color-facebook);
+  --background: var(--ion-color-facebook); */
+}
+
+.divider{
+  color: white;
+  background-color: var(--ion-color-google-shade);
+}
+
 /*css for slider LA_2020_01*/
 .slider-row {
   .details-slides {
@@ -30,7 +41,7 @@
 
     &.centered-image {
       background-size: auto;
-      background-position: center;
+      background-position: center center;
     }
   }
 }

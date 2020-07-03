@@ -3,7 +3,7 @@ import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
-import { TicketModel } from '../ticket.model';
+import { TicketModel, FirebaseCombinedTicketModel} from '../ticket.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { UpdateTicketModal } from '../update/update-ticket.modal';
 import { ChatModal } from '../chat/chat.modal';
@@ -21,7 +21,7 @@ import { LoginService } from '../../../services/login/login.service';
   ],
 })
 export class TicketDetailsPage implements OnInit {
-  item: TicketModel;
+  item: FirebaseCombinedTicketModel;
   status: string;
   type = 'other';
   bookingSection = false;
@@ -49,7 +49,7 @@ export class TicketDetailsPage implements OnInit {
 
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
-      const combinedDataStore: DataStore<TicketModel> = resolvedDataStores.user;
+      const combinedDataStore: DataStore<FirebaseCombinedTicketModel> = resolvedDataStores.user;
       //const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = resolvedDataStores.relatedUsers;
       combinedDataStore.state.subscribe(
         (state) => {

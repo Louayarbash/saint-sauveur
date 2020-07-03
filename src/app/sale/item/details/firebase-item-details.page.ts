@@ -63,13 +63,11 @@ export class FirebaseItemDetailsPage implements OnInit {
       //const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = resolvedDataStores.relatedUsers;
       combinedDataStore.state.subscribe(
          (state) => {
-           console.log("Liloooli", state)
+           console.log("itemData-details", state)
           this.item = state;
-            console.log("imagesFullPath.length",this.item.images.length);
           if((this.item.images.length !== 0) && !(this.item.isShell)){
-            console.log("length !== 0");
+            console.log("length !== 0",this.item.photos.length);
             this.photoSlider = this.item.photos.map(res => {return res.photo});
-            console.log(this.item.photos.length); 
             this.postImages = this.item.photos;
           }
           else if((this.item.images.length == 0) && !(this.item.isShell)){
@@ -102,15 +100,18 @@ export class FirebaseItemDetailsPage implements OnInit {
   }
 
   async openFirebaseUpdateModal() {
+
+    const {photos, creatorDetails, ...itemData} = this.item; // Remove photos and creatorDetails from the item object
+
     //let itemToUpdate : FirebaseItemModel;
-    delete this.item.photos;
-    delete this.item.isShell;
+    // delete this.item.photos;
+    // delete this.item.isShell;
     //let itemToEdit = <FirebaseItemModel>this.item;
     //console.log("before modal, ",itemToEdit);
     const modal = await this.modalController.create({
       component: FirebaseUpdateItemModal,
       componentProps: {
-        'item': this.item as FirebaseItemModel,
+        'item': itemData as FirebaseItemModel,
         'postImages' : this.postImages as PhotosData[]
       },
       swipeToClose: true,
@@ -121,13 +122,14 @@ export class FirebaseItemDetailsPage implements OnInit {
 
   async openSliderModal(){
     const modal = await this.modalController.create({
-      component: SliderModal,
+      component: SliderModal, 
       componentProps: {
         'photoSlider' : this.photoSlider
       },
-      swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl 
-      // cssClass: 'modalTransparent'
+      swipeToClose: true, 
+      presentingElement: this.routerOutlet.nativeEl,
+      cssClass: 'sliderModal'
+      
     });
     await modal.present();
   }

@@ -81,9 +81,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 if (filters.query !== '' && !filteredItems.isShell) {
                   const queryFilteredItems = filteredItems.filter(
                     item =>
-                     
-                    (/*item.app.toLowerCase().includes(filters.query.toLowerCase()) ||*/ 
-                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
+                    (item.reference.toLowerCase().includes(filters.query.toLowerCase()))
                   );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});

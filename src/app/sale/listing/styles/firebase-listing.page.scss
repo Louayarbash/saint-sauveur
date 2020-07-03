@@ -5,6 +5,11 @@
   --page-background: var(--app-background);
 }
 
+.itemCard {
+  border-radius: 20px 20px 20px 20px;
+}
+
+
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
 .filters-toolbar {
   --padding-start: var(--page-margin);
@@ -23,25 +28,6 @@
       contain: content;
     }
 
-    .call-to-action-col {
-      padding-inline-start: var(--page-margin);
-      max-width: fit-content;
-      flex-shrink: 0;
-      flex-grow: 0;
-
-      display: flex;
-      justify-content: flex-end;
-
-      .filters-btn {
-        --padding-start: 0px;
-        --padding-end: 0px;
-
-        margin: 0px;
-        font-size: 18px;
-        // override Ionic fixed height
-        height: initial;
-      }
-    }
   }
 
 }

@@ -4,14 +4,14 @@ import { FirebaseUserModel } from '../../users/user/firebase-user.model';
 
 
 
-export class FirebaseSkillModel extends ShellModel {
+/* export class FirebaseSkillModel extends ShellModel {
   id: string;
   name: string;
 
   constructor() {
     super();
   }
-}
+} */
 
 export class FirebasePhotoModel /*extends ShellModel*/ {
   //photo: string;
@@ -28,17 +28,18 @@ export class FirebaseItemModel extends ShellModel {
   object : string;
   description : string;
   price : string;
-  coverPhoto:string;
+  //coverPhoto:string;
   createdBy : string;
   createDate : firebase.firestore.FieldValue;
   images : Array<Images> = [];
   status : string;
+  buildingId: string;
 
   constructor() {
     super();
   }
 }
-export class FirebaseCombinedSkillModel extends FirebaseItemModel {
+/* export class FirebaseCombinedSkillModel extends FirebaseItemModel {
   skills: Array<FirebaseSkillModel> = [
     new FirebaseSkillModel(),
     new FirebaseSkillModel(),
@@ -48,7 +49,7 @@ export class FirebaseCombinedSkillModel extends FirebaseItemModel {
   constructor() {
     super();
   }
-}
+} */
 
 export class FirebaseCombinedItemModel extends FirebaseItemModel {
   photos: Array<PhotosData> = [

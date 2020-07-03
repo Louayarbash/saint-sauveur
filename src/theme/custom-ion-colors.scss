@@ -33,5 +33,13 @@
     --ion-color-twitter-contrast-rgb: 255,255,255;
     --ion-color-twitter-shade: #0097d1;
     --ion-color-twitter-tint: #1ab4ef;
-  }
+}
+@include ion-color('main') {
+  --ion-color-main:#cc181e;
+  --ion-color-main-rgb: 204,24,30;
+  --ion-color-main-contrast: #ffffff;
+  --ion-color-main-contrast-rgb: 255,255,255;
+  --ion-color-main-shade: #b4151a;
+  --ion-color-main-tint: #d12f35;
+}
 }

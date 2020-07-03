@@ -1,5 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController,AlertController } from '@ionic/angular';
+import { ModalController,AlertController, ActionSheetController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
@@ -32,18 +32,17 @@ export class FirebaseCreateItemModal implements OnInit {
     private modalController: ModalController,
     public firebaseService: FirebaseService,
     private camera: Camera,    
-    private alertController: AlertController,
+    //private alertController: AlertController,
     //private _crop: Crop,
     private file: File,
     private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    private actionSheetController : ActionSheetController
   ) { }
 
   ngOnInit() {
-
-    this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
@@ -52,8 +51,8 @@ export class FirebaseCreateItemModal implements OnInit {
     });
   }
 
-  /*async*/ dismissModal() {
-   /*await*/ this.modalController.dismiss();
+  dismissModal() {
+   this.modalController.dismiss();
   }
 
    createItem() {
@@ -63,7 +62,9 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.status = this.createItemForm.value.status;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
+    this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(5000);
+    
     this.firebaseService.createItem(this.itemData, this.postImages)
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
@@ -75,144 +76,175 @@ export class FirebaseCreateItemModal implements OnInit {
       console.log(err);
      });     
   }
+  
+  deletePhoto(index : number){
+      console.log("deletephoto",this.postImages);
+          this.postImages.splice(index,1);
+          this.changeRef.detectChanges();
+  }
 
-  // LA_2019_11
-   async selectImageSource() { 
-    const cameraOptions: CameraOptions = {
-      allowEdit:true,
-      quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      targetHeight: 200,
-      correctOrientation: true,
-      sourceType:this.camera.PictureSourceType.CAMERA
-    };
-    const optionsPicker: ImagePickerOptions = {
-      maximumImagesCount: 3 - this.postImages.length,
-      // maximumImagesCount: 1,
-      outputType: 0,
-      quality: 100,
-      width: 300,
-      disable_popover: false
-    }; 
-    const galleryOptions: CameraOptions = {
-      allowEdit:true,
-      quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:500,
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
-    };
-    const alert = await this.alertController.create({
-      header: "Select Source",
-      message: this.featureService.translations.PickSourceForYourImage,
-      buttons: [
-         {
-          text: "Camera",
-          handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageData)=> {
-              //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
-              const image = "data:image/jpeg;base64," + imageData;
-              photos.isCover = false;
-              photos.photo = image;
-              this.postImages[this.postImages.length] = photos;
-              this.changeRef.detectChanges();
-            });
-          }
-        },
-        {
-          text: "Gallery multiPhotos",
-           handler: ()=> {
-            if((3 - this.postImages.length) !== 1 ){            
-            this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
-             this.imagePicker.getPictures(optionsPicker).then( /*async*/ (results : string[]) => { 
-              const loading = this.featureService.presentLoadingWithOptions(5000);
-               for (let i = 0; i < results.length; i++) {
-                  const filename = results[i].substring(results[i].lastIndexOf('/') + 1);
-                  const path = results[i].substring(0,results[i].lastIndexOf('/') + 1);
-                  /*await*/ this.file.readAsDataURL(path, filename).then((image)=> {
-                    const photos : PhotosData = {isCover:false, photo:"", storagePath:""};
-                    photos.isCover = false;
-                    photos.photo = image;
-                    this.postImages[this.postImages.length] = photos;
-                  }
-                );
-              }
-            this.changeRef.detectChanges(); 
-            loading.then(res=>res.dismiss());
-            }, (err) => { console.log('Error get pics',err);}); 
-            
-          }
-            else if((3 - this.postImages.length) == 1)
-            {
+makeCover(index: number){
+  //this.postImages[index].isCover = true;
+  this.postImages.forEach( (item, i) => {
+    if(i === index) {
+      item.isCover = true;
+      this.changeRef.detectChanges();
+      this.featureService.presentToast(this.featureService.translations.PhotoAsCover,2000);
+    }
+    else {
+      item.isCover = false;
+    }
+  });
+}
 
-              this.camera.getPicture(galleryOptions).then((imageData)=> {
-                const image = "data:image/jpeg;base64," + imageData;
-                let photos : PhotosData = {isCover:false, photo:"", storagePath:""};    
+doReorder(ev: any) {
+/*   if (ev.cancelable) {
+    ev.preventDefault();
+ }
+ else{ */
+  console.log("doReorder",this.postImages);
+  // The `from` and `to` properties contain the index of the item
+  // when the drag started and ended, respectively
+  const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
+  this.postImages.splice(ev.detail.to, 0, draggedItem);
+  this.createItemForm.markAsDirty();
+  // Finish the reorder and position the item in the DOM based on
+  // where the gesture ended. This method can also be called directly
+  // by the reorder group
+  ev.detail.complete();
+
+}
+
+async selectImageSource() {
+  const cameraOptions: CameraOptions = {
+    allowEdit:true,
+    quality: 100,
+    //targetWidth: 500,
+    //targetHeight: 600,
+    // destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.FILE_URI, 
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE,
+    correctOrientation: true,
+    sourceType:this.camera.PictureSourceType.CAMERA
+  };
+  
+  const pickerOptions: ImagePickerOptions = {
+    maximumImagesCount: 3 - this.postImages.length,
+    outputType: 0,
+    quality: 100,
+    // disable_popover: false,
+    width:500,
+    height:500,
+    message:"aywa",
+    title:"boooo"
+  };
+
+  const actionSheet = await this.actionSheetController.create({
+    header: 'Select images source',
+    cssClass: 'my-custom-class',
+    buttons: [/* {
+      text: 'Delete',
+      role: 'destructive',
+      icon: 'trash',
+      handler: () => {
+        console.log('Delete clicked');
+      }
+    }, */ {
+      text: this.featureService.translations.PhotoGallery,
+      icon: 'images',
+      handler: () => {
+        // if((3 - this.postImages.length) !== 1 ){            
+          //this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
+           this.imagePicker.getPictures(pickerOptions).then( async (imageData : string[]) => {
+             console.log(imageData) 
+            //const loading = this.featureService.presentLoadingWithOptions(5000);
+             for (let i = 0; i < imageData.length; i++) {
+                const filename = imageData[i].substring(imageData[i].lastIndexOf('/') + 1);
+                const path = imageData[i].substring(0,imageData[i].lastIndexOf('/') + 1);
+                console.log("filename",filename)
+                console.log("path",path)
+                  await this.file.readAsDataURL(path, filename).then((image)=> {
+                  const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+                  photos.isCover = false;
+                  photos.photo = image;
+                  this.postImages[this.postImages.length] = photos;
+                }
+              ).catch(err => console.log(err));
+            }
+          this.changeRef.detectChanges(); 
+          // loading.then(res=>res.dismiss());
+          }, (err) => { console.log('Error get pics',err);}
+        );  
+        // }
+/*           else if((3 - this.postImages.length) == 1)
+          {
+            cameraOptions.sourceType = 0;
+            this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
+              console.log(imageData);
+              // URI
+              const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+              const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
+              console.log("filename",filename)
+              console.log("path",path)
+              await this.file.readAsDataURL(path, filename).then((image)=> {
+                const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
                 photos.isCover = false;
                 photos.photo = image;
                 this.postImages[this.postImages.length] = photos;
                 this.changeRef.detectChanges();
-              });
-            }
-            //
-            }
-          }      
-      ]
-    });
-
-    await alert.present();
-  }
-    deletephoto(doc){
-       this.postImages.forEach( (item, index) => {
-        if(item === doc) {
-          this.postImages.splice(index,1);
-          this.changeRef.detectChanges();
-          this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
-        }
-      });
-  }
-
-  makeCover(doc){
-     this.postImages.forEach( (item, index) => {
-      if(item.photo === doc) {
-        item.isCover = true;
-        this.changeRef.detectChanges();
-        this.featureService.presentToast(this.featureService.translations.PhotoAsCover,2000);
+            // URL
+             const image = "data:image/jpeg;base64," + imageData;
+              let photos : PhotosData = {isCover:false, photo:"", storagePath:""};    
+              photos.isCover = false;
+              photos.photo = image;
+              this.postImages[this.postImages.length] = photos;
+              this.changeRef.detectChanges(); 
+            }).catch(err => console.log(err));
+          });
+      } */
+    }
+  }/* , {
+      text: 'Play (open modal)',
+      icon: 'caret-forward-circle',
+      handler: () => {
+        console.log('Play clicked');
       }
-      else{
-        item.isCover = false;
+    } */, {
+      text: 'Camera',
+      icon: 'camera',
+      handler: () => {
+        // cameraOptions.sourceType = 1;
+        this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
+          const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+          const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
+          await this.file.readAsDataURL(path, filename).then((image)=> {
+            const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+            photos.isCover = false;
+            photos.photo = image;
+            this.postImages[this.postImages.length] = photos;
+            this.changeRef.detectChanges();
+
+          /*const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+          const image = "data:image/jpeg;base64," + imageData;
+          photos.isCover = false;
+          photos.photo = image;
+          this.postImages[this.postImages.length] = photos;
+          this.changeRef.detectChanges();*/
+        }).catch(err => console.log(err));
+      })
+    }
+    }, {
+      text: 'Cancel',
+      icon: 'close',
+      role: 'cancel',
+      handler: () => {
+        console.log('Cancel clicked');
       }
-    });
+    }]
+  });
+  console.log("SelectPhotos",this.postImages);
+  await actionSheet.present();
 }
 
-// END
-/* cropImage(fileUrl) {
-  this._crop.crop(fileUrl, { quality: 50 })
-    .then(
-      newPath => {
-        this.showCroppedImage(newPath.split('?')[0])
-      },
-      error => {
-        alert('Error cropping image' + error);
-      }
-    );
-} */
-
-/* showCroppedImage(ImagePath) {
-  var copyPath = ImagePath;
-  var splitPath = copyPath.split('/');
-  var imageName = splitPath[splitPath.length - 1];
-  var filePath = ImagePath.split(imageName)[0];
-
-  this.file.readAsDataURL(filePath, imageName).then(base64 => {
-    this.croppedImagepath = base64;
-  }, error => {
-    alert('Error in showing image' + error);
-  });
-} */
 }

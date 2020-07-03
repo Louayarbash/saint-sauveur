@@ -1,4 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
+import { FirebaseUserModel } from '../../users/user/firebase-user.model';
 
 export class TicketModel extends ShellModel {
   id: string;
@@ -12,6 +13,17 @@ export class TicketModel extends ShellModel {
   date: number;
   startDate: number;
   endDate : number;
+  reference: string;
+  buildingId: string;
+
+  constructor() {
+    super();
+  }
+}
+
+export class FirebaseCombinedTicketModel extends TicketModel {
+
+  creatorDetails : FirebaseUserModel;
 
   constructor() {
     super();

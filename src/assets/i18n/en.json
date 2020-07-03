@@ -1,7 +1,9 @@
 {
+  
   "Ticket" : "Ticket",
+  "NoTicketsFound" : "No tickets found",
   "NoServiceRequestFound" : "NoServiceRequestFound",
-  "SearchBarTickets" : "SearchBarTickets",
+  "SearchBarTicketsRef" : "SearchBarTicketsRef",
   "Subject" : "Subject",
   "TicketAddedSuccessfully" : "Ticket added successfully",
   "TicketAddingErrors" : "Ticket adding errors",
@@ -10,6 +12,7 @@
   "NewTicket" : "New ticket",
   "TicketUpdatedSuccessfully" : "Ticket updated successfully",
   "TicketUpdatingErrors" : "Ticket updating errors",
+  "NoItemFound": "No item for sale found",
   "NewPostSale" : "New - object for sale",
   "UpdatePostSale" : "Update - object for sale",
   "PostDetails" : "Post details",

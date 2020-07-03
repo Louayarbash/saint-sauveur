@@ -25,7 +25,22 @@
       </h2>
     </ion-col>
     </ion-row> -->
+    
     <ion-card *ngIf="bookingSection">
+      <ion-item *ngIf="item.reference" color="primary">
+        <ion-label>{{ 'TicketReference' | translate }}</ion-label>
+       <ion-text>{{item.reference}}</ion-text> 
+      </ion-item>
+      <ion-item lines="none" *ngIf="item.createDate">    
+        <ion-label>{{ 'TicketDate' | translate }}</ion-label>
+        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
+      </ion-item>
+      <ion-item lines="none" *ngIf="item.creatorDetails">    
+        <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
+        {{item.creatorDetails.firstname.concat(" ").concat(item.creatorDetails.lastname)}}
+         <app-text-shell animation="bouncing" [data]="item.creatorDetails.firstname"></app-text-shell>
+      </ion-item>
       <ion-item>
         <ion-label>{{ 'BookingDate' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="date"></app-text-shell>          
@@ -42,20 +57,26 @@
         <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
         <ion-text>{{status}}</ion-text> 
       </ion-item>
-      <ion-item lines="none" *ngIf="item.createDate">    
-        <ion-label>{{ 'TicketDate' | translate }}</ion-label>
-        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
-        <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
-      </ion-item>
       </ion-card>
       <ion-card *ngIf="!bookingSection">
       <ion-card-content class="ion-no-padding">
-        <!-- <ion-item *ngIf="item.typeId"> -->
-          <ion-row>
+        <ion-item *ngIf="item.reference" color='primary'>
+          <ion-label>{{ 'TicketReference' | translate }}</ion-label>
+         <ion-text>{{item.reference}}</ion-text> 
+        </ion-item>
+        <ion-item lines="none" *ngIf="item.createDate">    
+          <ion-label>{{ 'TicketDate' | translate }}</ion-label>
+          {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        </ion-item>
+        <ion-item lines="none" *ngIf="item.creatorDetails">    
+          <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
+          {{item.creatorDetails.firstname}}
+          <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
+        </ion-item>
+      <ion-item *ngIf="item.typeId">
         <ion-label>{{ 'TicketType' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="type"></app-text-shell>                  
-        <!-- </ion-item>   -->
-      </ion-row>
+       </ion-item>
         <ion-item *ngIf="item.subject && type == 'other'" >        
         <ion-label>{{ 'Subject' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
@@ -64,10 +85,7 @@
               <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
              <ion-text>{{status}}</ion-text> 
             </ion-item>
-            <ion-item lines="none" *ngIf="item.createDate">    
-              <ion-label>{{ 'TicketDate' | translate }}</ion-label>
-              {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
-            </ion-item>
+
           </ion-card-content>
           </ion-card>
           <ion-card  *ngIf="item.details">

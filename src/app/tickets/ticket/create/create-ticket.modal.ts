@@ -235,6 +235,8 @@ export class CreateTicketModal implements OnInit {
       this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
       this.itemData.endDate = dayjs(this.createItemForm.get('endDate').value).unix();  
     }
+    this.itemData.reference = this.loginService.getApaNumber() + "-" + Math.round(Math.random() * 1000).toString();
+    this.itemData.buildingId = this.loginService.getBuildingId();
     this.itemData.subject = this.createItemForm.value.subject == '' ? this.serviceType : this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
     this.itemData.status = 'active';

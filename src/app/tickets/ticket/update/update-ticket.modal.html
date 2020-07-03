@@ -15,6 +15,10 @@
   <ion-content>
 
           <ion-list lines="full">
+            <ion-item>
+              <ion-label>{{ 'TicketReference' | translate }}</ion-label>
+              <app-text-shell animation="bouncing" [data]="item.reference"></app-text-shell>
+            </ion-item>
             <ion-item >
               <ion-label>{{ 'Subject' | translate }}</ion-label>
               <app-text-shell animation="bouncing" [data]="item.subject"></app-text-shell>

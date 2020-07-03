@@ -22,53 +22,32 @@
 <ion-content class="card-background-page">
   <div *ngIf="items?.length > 0">
 
-<ion-card *ngFor="let item of items" [routerLink]="['/sale/details', item.id]">
-  <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-    <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+<ion-card button="true" class="itemCard" *ngFor="let item of items" [routerLink]="['/sale/details', item.id]" color="main">
+  <app-aspect-ratio [ratio]="{w:64, h:50}">
+    <app-image-shell class="item-image" animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
-  <!-- <img src="img/advance-card-bttf.png"> -->
-
+<!--   <ion-card-header>
+    <ion-card-subtitle><app-text-shell animation="bouncing" [data]="item.object"></app-text-shell></ion-card-subtitle>
+    <ion-card-title><app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell></ion-card-title>
+  </ion-card-header> -->
   <ion-card-content *ngIf="item.description">
-      <p>      
       {{item.description}}
-      </p>
   </ion-card-content>
-
-  <ion-row>
-    <ion-col class="ion-text-left ion-padding">
+  <ion-row class="ion-align-items-center">
+    <ion-col class="ion-text-left ion-padding-horizontal ion-padding-bottom ion-text-capitalize">
         <h3>
           <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
         </h3>
     </ion-col>
-    <ion-col  class="ion-text-right ion-padding">
+    <ion-col  class="ion-text-right ion-padding-horizontal ion-padding-bottom">
         <h3>
           <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>
         </h3>
     </ion-col>
   </ion-row>
-
 </ion-card>
 </div>
-<!--   <ion-list class="items-list" *ngIf="items?.length > 0">
-      <ion-item class="list-item" *ngFor="let item of items">
-      <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/sale/details', item.id]">
-      <ion-row class="user-row">
-        <ion-col size="3" class="user-image-wrapper">
-          <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-            <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
-          </app-aspect-ratio>
-        </ion-col>
-        <ion-col class="user-data-wrapper">
-          <div class="user-info">
-            <h3 class="user-name">
-              <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
-            </h3>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-item>
-  </ion-list> -->
   <h3 *ngIf="items?.length == 0" class="empty-list-message">
-    No users found for the selected filters.
+    {{ 'NoItemFound' | translate }}
   </h3>
 </ion-content>
