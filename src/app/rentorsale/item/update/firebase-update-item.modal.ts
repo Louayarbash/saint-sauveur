@@ -10,7 +10,7 @@ import { PhotosData } from '../../../type'
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
-
+import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -47,10 +47,16 @@ export class FirebaseUpdateItemModal implements OnInit {
 
   ngOnInit() {
     this.updateItemForm = new FormGroup({
-      object: new FormControl(this.item.object, Validators.required),
-      description: new FormControl(this.item.description),
-      price: new FormControl(this.item.price, Validators.required),
-      status: new FormControl(this.item.status, Validators.required)
+
+      type : new FormControl(this.item.type, Validators.required),
+      object : new FormControl(this.item.object, Validators.required),
+      bedRooms: new FormControl(this.item.bedRooms, counterRangeValidator(0, 10)),
+      bathRooms: new FormControl(this.item.bathRooms, counterRangeValidator(0, 8)),
+      floor: new FormControl(this.item.floor, counterRangeValidator(0, 30)),
+      balcony: new FormControl(this.item.balcony),
+      description : new FormControl(this.item.description),
+      price : new FormControl(this.item.price,[Validators.required, Validators.pattern('^[0-9]*$')]),
+      status : new FormControl(this.item.status)
     }); 
   }
 
@@ -117,10 +123,17 @@ makeCover(index: number){
 }
 
 updateItem() {
-  this.item.object = this.updateItemForm.value.object;
+  if(this.item.object == 'condo'){
+    this.item.bedRooms = this.updateItemForm.value.bedRooms;
+    this.item.bathRooms = this.updateItemForm.value.bathRooms;
+    this.item.floor = this.updateItemForm.value.floor;
+    this.item.balcony = this.updateItemForm.value.balcony;
+   }
   this.item.description = this.updateItemForm.value.description;
   this.item.price = this.updateItemForm.value.price;
-  this.item.status =  this.updateItemForm.value.status;
+  this.item.status = this.updateItemForm.value.status;
+  const loading = this.featureService.presentLoadingWithOptions(2000);
+
   //const {...itemData} = this.item;
 
   this.firebaseService.updateItem(this.item,this.postImages)

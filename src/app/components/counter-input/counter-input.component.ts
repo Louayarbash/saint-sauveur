@@ -29,9 +29,9 @@ export class CounterInputComponent implements ControlValueAccessor, OnChanges {
   // tslint:disable-next-line:no-input-rename
   @Input('counterValue') _counterValue = 0;
   // tslint:disable-next-line:no-input-rename
-  @Input('max') counterRangeMax;
+  @Input('max') counterRangeMax= 10;
   // tslint:disable-next-line:no-input-rename
-  @Input('min') counterRangeMin;
+  @Input('min') counterRangeMin= 0;
 
   propagateChange: any = () => {}; // Noop function
   validateFn: any = () => {}; // Noop function
@@ -64,13 +64,15 @@ export class CounterInputComponent implements ControlValueAccessor, OnChanges {
   registerOnTouched() {}
 
   increase() {
-    if(this.counterValue!=5){
+    console.log(this.counterValue)
+    if(this.counterValue < this.counterRangeMax){
     this.counterValue++;
   }
   }
 
   decrease() {
-    if(this.counterValue!=1){
+    console.log(this.counterValue)
+    if(this.counterValue > this.counterRangeMin){
       this.counterValue--;
     }
   }

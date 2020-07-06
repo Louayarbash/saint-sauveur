@@ -15,7 +15,7 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
   private buildingId = this.loginService.getBuildingId();
-  private tableName = "posts";
+  private tableName = "rentorsale";
 
   constructor(
     private afs: AngularFirestore, 
@@ -27,8 +27,6 @@ export class FirebaseService {
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
-    //let CoverPic : any;
-    console.log("houna");
     return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
@@ -130,7 +128,7 @@ export class FirebaseService {
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
   public createItem(itemData : FirebaseItemModel,postImages : PhotosData[])/* : Promise<DocumentReference> */ : any {    
-    return this.afs.collection('posts').add({...itemData}).then(async (res)=>{
+    return this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
       console.log("post id :",res.id);
       let images : Images[] = [];
       if( postImages.length > 0 ){
@@ -150,7 +148,7 @@ export class FirebaseService {
       itemData.images = images;  
     }
   }
-    return this.afs.collection('posts').doc(res.id).update({...itemData});
+    return this.afs.collection(this.tableName).doc(res.id).update({...itemData});
   } 
   ).catch(err=> {console.log("Error insert item into DB",err)}); 
 } 
@@ -159,12 +157,12 @@ private uploadToStorage(itemDataPhoto,id): AngularFireUploadTask {
         console.log("Uploaded",itemDataPhoto);
         let newName = `${new Date().getTime()}.jpeg`;        
         //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
-        return this.afstore.ref(`images/posts/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
+        return this.afstore.ref(`images/rentorsale/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
 }
 
 
 public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
-    return this.afs.collection('posts').doc(itemData.id).update({...itemData});
+    return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
 }
 
 public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]): Promise<void> {
@@ -195,11 +193,11 @@ public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]):
       itemData.images = images;
     }
   }
-  return this.afs.collection('posts').doc(itemData.id).update({...itemData});
+  return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
 }
   // Get data of a specific User
 private getItem(postId: string): Observable<FirebaseItemModel> {
-    return this.afs.doc<FirebaseItemModel>('posts/' + postId)
+    return this.afs.doc<FirebaseItemModel>(this.tableName + '/' + postId)
     .snapshotChanges()
     .pipe(
       map(a => {
@@ -232,7 +230,7 @@ private getItem(postId: string): Observable<FirebaseItemModel> {
       this.deleteItemStorage(item.images).then(()=> console.log('success')).catch(err=> console.log(err));
     }
     }
-    return this.afs.collection('posts').doc(item.id).delete();
+    return this.afs.collection(this.tableName).doc(item.id).delete();
   }
 
   getPicPromise(imagesFullPath : string) : Promise<any> {

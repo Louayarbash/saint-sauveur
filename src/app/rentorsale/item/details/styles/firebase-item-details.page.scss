@@ -1,0 +1,47 @@
+//@import "../../../../../theme/mixins/scrollbars";
+
+// Custom variables
+// Note:  These ones were added by us and have nothing to do with Ionic CSS Custom Properties
+:host {
+  --page-margin: var(--app-fair-margin);
+  --page-background: var(--app-background);
+}
+
+.itemCard {
+  border-radius: 20px 20px 20px 20px;
+/*   --color: var(--ion-color-facebook);
+  --background: var(--ion-color-facebook); */
+}
+
+.divider{
+  color: white;
+  background-color: var(--ion-color-google-shade);
+}
+
+/*css for slider LA_2020_01*/
+.slider-row {
+  .details-slides {
+    --bullet-background: var(--ion-color-dark-tint);
+    --bullet-background-active: var(--ion-color-dark-tint);
+
+    height: 100%;
+    width: 100%;
+
+    .slide-inner-row {
+      height: 100%;
+      width: 100%;
+      padding: 0px;
+      // .swiper-pagination space
+      padding-bottom: var(--page-swiper-pagination-space);
+    }
+  }
+
+  .showcase-image {
+    width: 100%;
+
+    &.centered-image {
+      background-size: auto;
+      background-position: center center;
+    }
+  }
+}

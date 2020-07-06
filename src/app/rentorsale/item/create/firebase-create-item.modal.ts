@@ -1,5 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController,AlertController, ActionSheetController } from '@ionic/angular';
+import { ModalController, ActionSheetController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
@@ -11,9 +11,10 @@ import { PhotosData } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
+import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
 @Component({
-  selector: 'app-firebase-create-item',
+  selector: 'app-firebase-create-itemRentSale',
   templateUrl: './firebase-create-item.modal.html',
   styleUrls: [
     './styles/firebase-create-item.modal.scss',
@@ -27,6 +28,8 @@ export class FirebaseCreateItemModal implements OnInit {
   itemData: FirebaseItemModel = new FirebaseItemModel();
   selectedPhoto: string;
   uploadedImage: any;
+  typeSelected: string = 'sale';
+  objectSelected: string = 'condo';
 
   constructor(
     private modalController: ModalController,
@@ -44,7 +47,12 @@ export class FirebaseCreateItemModal implements OnInit {
 
   ngOnInit() {
     this.createItemForm = new FormGroup({
-      object: new FormControl('', Validators.required),
+      type : new FormControl('sale', Validators.required),
+      object : new FormControl('condo', Validators.required),
+      bedRooms: new FormControl(0, counterRangeValidator(0, 10)),
+      bathRooms: new FormControl(0, counterRangeValidator(0, 8)),
+      floor: new FormControl(0, counterRangeValidator(0, 30)),
+      balcony: new FormControl(false),
       description : new FormControl(''),
       price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl('active')
@@ -56,6 +64,13 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
+     if(this.objectSelected == 'condo'){
+      this.itemData.bedRooms = this.createItemForm.value.bedRooms;
+      this.itemData.bathRooms = this.createItemForm.value.bathRooms;
+      this.itemData.floor = this.createItemForm.value.floor;
+      this.itemData.balcony = this.createItemForm.value.balcony;
+     }
+    this.itemData.type = this.createItemForm.value.type;
     this.itemData.object = this.createItemForm.value.object;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
@@ -75,6 +90,29 @@ export class FirebaseCreateItemModal implements OnInit {
       this.dismissModal();
       console.log(err);
      });     
+  }
+
+  typeChanged(ev:any) {
+    console.log(ev.detail.value);
+    this.typeSelected = ev.detail.value;
+  }
+
+  objectChanged(ev:any) {
+    console.log(ev.detail.value);
+    this.objectSelected = ev.detail.value;
+    if(this.objectSelected == 'condo'){
+      this.createItemForm.controls['bedRooms'].setValidators(counterRangeValidator(0, 10));
+      this.createItemForm.controls['bathRooms'].setValidators(counterRangeValidator(0, 8));
+      this.createItemForm.controls['floor'].setValidators(counterRangeValidator(0, 30));
+    }
+    else {
+      this.createItemForm.controls['bedRooms'].setValidators(null);
+      this.createItemForm.controls['bathRooms'].setValidators(null);
+      this.createItemForm.controls['floor'].setValidators(null);
+    }
+    this.createItemForm.controls['bedRooms'].updateValueAndValidity();
+    this.createItemForm.controls['bathRooms'].updateValueAndValidity();
+    this.createItemForm.controls['floor'].updateValueAndValidity();
   }
   
   deletePhoto(index : number){
@@ -137,7 +175,7 @@ async selectImageSource() {
     width:500,
     height:500,
     message:"aywa",
-    title:"boooo"
+    title:"boo"
   };
 
   const actionSheet = await this.actionSheetController.create({
