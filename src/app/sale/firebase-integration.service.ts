@@ -6,9 +6,10 @@ import { DataStore } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseCombinedItemModel/*, FirebasePhotoModel*/ } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { PhotosData, Images} from '../type';
+import { Images} from '../type';
 import { FirebaseUserModel } from '../users/user/firebase-user.model';
 import { LoginService } from "../services/login/login.service"
+import { FeatureService } from '../services/feature/feature.service';
 
 @Injectable()
 export class FirebaseService {
@@ -20,15 +21,14 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private featureService : FeatureService
     )  {
     }
   /*
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
-    //let CoverPic : any;
-    console.log("houna");
     return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
@@ -37,7 +37,6 @@ export class FirebaseService {
     if (!this.listingDataStore) {
       // Initialize the model specifying that it is a shell model
       const shellModel: Array<FirebaseListingItemModel> = [
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel()
@@ -51,7 +50,7 @@ export class FirebaseService {
   }
 
   public getCombinedItemDataSource(itemId: string): Observable<FirebaseCombinedItemModel> {
-    return this.getItem(itemId)
+    return this.getItem(itemId, this.tableName)
     .pipe(
      
     // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
@@ -63,12 +62,12 @@ export class FirebaseService {
           if (item.images.length > 0) {
             console.log("images > 0",item)
 
-          const itemPhotosPromise : Array<Promise<PhotosData>> = item.images.map( image => {
-            return this.getPicPromise(image.storagePath).then(photo => { 
-              return { photo : photo, storagePath : image.storagePath, isCover: image.isCover }
+          const itemPhotosPromise : Array<Promise<Images>> = item.images.map( image => {
+            return this.featureService.getDownloadURL(image.storagePath).then(photo => { 
+              return { photoData: photo, storagePath : image.storagePath, isCover: image.isCover }
          }).catch(err => {
-           return this.getPicPromise("images/no_image.jpeg").then(photo => { 
-            return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } })
+           return this.featureService.getDownloadURL("images/no_image.jpeg").then(photo => { 
+            return { photoData : photo, storagePath : image.storagePath, isCover: image.isCover } })
         })
         });
           // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
@@ -81,7 +80,7 @@ export class FirebaseService {
             forkJoin(itemPhotosPromise),
             
           ]).pipe(
-            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<PhotosData>] ) => {
+            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<Images>] ) => {
               
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
@@ -128,18 +127,29 @@ export class FirebaseService {
     return this.combinedItemDataStore;
   }
 
-//LA_2019_11 I put async here.. without it the modal will not dismiss
-  public createItem(itemData : FirebaseItemModel,postImages : PhotosData[])/* : Promise<DocumentReference> */ : any {    
-    return this.afs.collection('posts').add({...itemData}).then(async (res)=>{
+  private getItem(postId: string, tableName: string): Observable<FirebaseItemModel> {
+    return this.afs.doc<FirebaseItemModel>(tableName + '/' + postId)
+    .snapshotChanges()
+    .pipe(
+      map(a => {
+        const postData = a.payload.data();
+        const id = a.payload.id;
+        return { id, ...postData } as FirebaseItemModel;
+      })
+    );
+}
+
+/*   public createItem(itemData : FirebaseItemModel,itemImages : Images[]) : Promise<DocumentReference> : any {    
+    return this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
       console.log("post id :",res.id);
-      let images : Images[] = [];
-      if( postImages.length > 0 ){
-      for (var i = 0; i < postImages.length; i++) {
+      let images : any[] = [];
+      if( itemImages.length > 0 ){
+      for (var i = 0; i < itemImages.length; i++) {
         try {
-          let uploaded = await this.uploadToStorage(postImages[i].photo,res.id);
+          let uploaded = await this.featureService.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/posts/');
 
           if( uploaded.state === "success"){
-            images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath });
+            images.push({ isCover: itemImages[i].isCover, storagePath: uploaded.metadata.fullPath });
         }
         }
         catch (err) {
@@ -149,37 +159,26 @@ export class FirebaseService {
     if (images.length !== 0){
       itemData.images = images;  
     }
+    //return this.afs.collection(this.tableName).doc(res.id).update({...itemData});
+    return this.afs.collection(this.tableName).doc(res.id).update({images: images});
   }
-    return this.afs.collection('posts').doc(res.id).update({...itemData});
   } 
   ).catch(err=> {console.log("Error insert item into DB",err)}); 
-} 
-   
-private uploadToStorage(itemDataPhoto,id): AngularFireUploadTask {
-        console.log("Uploaded",itemDataPhoto);
-        let newName = `${new Date().getTime()}.jpeg`;        
-        //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
-        return this.afstore.ref(`images/posts/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
-}
+} */
 
-
-public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
-    return this.afs.collection('posts').doc(itemData.id).update({...itemData});
-}
-
-public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]): Promise<void> {
+/* public async updateItem(itemData: FirebaseItemModel, itemImages : Images[]): Promise<void> {
     
-    let images : Images[] = [];
-    if( postImages.length > 0 ){
-    for (var i = 0; i < postImages.length; i++) {
-        if (postImages[i].storagePath == '') {
+    let images : any[] = [];
+    if( itemImages.length > 0 ){
+    for (var i = 0; i < itemImages.length; i++) {
+        if (itemImages[i].storagePath == '') {
 
           try {
-            const uploaded = await this.uploadToStorage(postImages[i].photo, itemData.id);
+            const uploaded = await this.featureService.uploadToStorage(itemImages[i].photoData, itemData.id, 'image/jpeg', '.jpeg', 'images/posts/');
   
             if( uploaded.state === 'success'){
               
-                images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath });
+                images.push({ isCover : itemImages[i].isCover, storagePath : uploaded.metadata.fullPath });
             }
           }
           catch (err) {
@@ -187,7 +186,7 @@ public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]):
           }
       }
       else{ //old photos
-        images.push({ isCover : postImages[i].isCover, storagePath : postImages[i].storagePath });
+        images.push({ isCover : itemImages[i].isCover, storagePath : itemImages[i].storagePath });
       }
     }
     if (images.length > 0){
@@ -195,22 +194,24 @@ public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]):
       itemData.images = images;
     }
   }
-  return this.afs.collection('posts').doc(itemData.id).update({...itemData});
-}
+  return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
+} */
   // Get data of a specific User
-private getItem(postId: string): Observable<FirebaseItemModel> {
-    return this.afs.doc<FirebaseItemModel>('posts/' + postId)
-    .snapshotChanges()
-    .pipe(
-      map(a => {
-        const postData = a.payload.data();
-        const id = a.payload.id;
-        return { id, ...postData } as FirebaseItemModel;
-      })
-    );
-  }
 
-  private async deleteItemStorage(storagePath : Images[]) {
+/* public updateItemWithoutOptions(itemData: any, tableName: string): Promise<void> {
+    return this.afs.collection(tableName).doc(itemData.id).update({...itemData});
+}
+
+public deleteItem(item: FirebaseItemModel): Promise<void> {
+    if(item.images){
+      if(item.images.length >= 0){
+      this.deleteItemFromStorage(item.images).then(()=> console.log('success')).catch(err=> console.log(err));
+    }
+    }
+    return this.afs.collection(this.tableName).doc(item.id).delete();
+}
+
+private async deleteItemFromStorage(storagePath : Images[]) {
     const storageRef = this.afstore.storage.ref();
     storagePath.forEach(item => {
       storageRef.child(item.storagePath).delete().then(function() {
@@ -218,24 +219,21 @@ private getItem(postId: string): Observable<FirebaseItemModel> {
       console.log(error,"problem deleting storage" + item);
     });
   });
-  }
+}
 
-  public deleteFromStorage(itemPath : string){        
+public deleteFromStorage(itemPath : string){        
     //return this.afstore.ref(`${itemPath}`).delete().toPromise();
     return this.afstore.storage.ref().child(itemPath).delete();
 }
 
+getDownloadURL(storagePath : string) : Promise<any> {
+        return this.afstore.storage.ref(storagePath).getDownloadURL();   
+}
 
-  public deleteItem(item: FirebaseItemModel): Promise<void> {
-    if(item.images){
-      if(item.images.length >= 0){
-      this.deleteItemStorage(item.images).then(()=> console.log('success')).catch(err=> console.log(err));
-    }
-    }
-    return this.afs.collection('posts').doc(item.id).delete();
-  }
-
-  getPicPromise(imagesFullPath : string) : Promise<any> {
-        return this.afstore.storage.ref(imagesFullPath).getDownloadURL();   
-  } 
+private uploadToStorage(itemDataPhoto: string, id: string, contentType: string, extention: string, storagePath: string): AngularFireUploadTask {
+    console.log("Uploaded",itemDataPhoto);
+    let name = `${new Date().getTime()}`+ extention;        
+    //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
+    return this.afstore.ref(storagePath + `${id}/${name}`).putString(itemDataPhoto, 'data_url', { contentType: contentType });
+} */
 }

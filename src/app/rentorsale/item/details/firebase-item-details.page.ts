@@ -10,7 +10,7 @@ import { DataStore, ShellModel } from '../../../shell/data-store';
 import { Observable } from 'rxjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
-import { PhotosData} from '../../../type'
+import { Images } from '../../../type'
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -38,7 +38,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   }; 
   status : string;
   editHidden : boolean;
-  postImages : PhotosData[] = [];
+  postImages : Images[] = [];
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -67,7 +67,7 @@ export class FirebaseItemDetailsPage implements OnInit {
           this.item = state;
           if((this.item.images.length !== 0) && !(this.item.isShell)){
             console.log("length !== 0",this.item.photos.length);
-            this.photoSlider = this.item.photos.map(res => {return res.photo});
+            this.photoSlider = this.item.photos.map(res => {return res.photoData});
             this.postImages = this.item.photos;
           }
           else if((this.item.images.length == 0) && !(this.item.isShell)){
@@ -112,7 +112,7 @@ export class FirebaseItemDetailsPage implements OnInit {
       component: FirebaseUpdateItemModal,
       componentProps: {
         'item': itemData as FirebaseItemModel,
-        'postImages' : this.postImages as PhotosData[]
+        'postImages' : this.postImages as Images[]
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl

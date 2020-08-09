@@ -1,10 +1,10 @@
 import { ShellModel } from '../../shell/data-store';
-import { PhotosData, Images } from '../../type';
+import { Images } from '../../type';
 import { FirebaseUserModel } from '../../users/user/firebase-user.model';
 
 export class FirebasePhotoModel /*extends ShellModel*/ {
   isCover : boolean;
-  photo : string;
+  photoData : string;
   storagePath : string;
   constructor() {
     //super();
@@ -17,7 +17,7 @@ export class FirebaseItemModel extends ShellModel {
   type: string;
   bedRooms: number;
   bathRooms: number;
-  balcony: boolean;
+  balcony: number;
   floor: number;
   description: string;
   price: string;
@@ -33,7 +33,7 @@ export class FirebaseItemModel extends ShellModel {
 }
 
 export class FirebaseCombinedItemModel extends FirebaseItemModel {
-  photos: Array<PhotosData> = [
+  photos: Array<Images> = [
     new FirebasePhotoModel(),
     new FirebasePhotoModel(),
     new FirebasePhotoModel()

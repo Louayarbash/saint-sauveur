@@ -5,3 +5,13 @@ ion-title {
 .sliderModal .modal-wrapper{
   --background: transparent !important;
 } 
+
+.itemCard {
+  border-radius: 20px 20px 20px 20px;
+}
+
+.empty-list-message {
+  margin: calc(var(--page-margin) * 3);
+  color: rgba(var(--ion-color-dark-rgb), 0.4);
+  text-align: center;
+}

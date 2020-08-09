@@ -2,22 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
 import { DataStore, ShellModel } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseCombinedItemModel } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-//import { LoginService } from "../services/login/login.service"
-//import { LoginCredential } from '../type';
-import { AlertController } from '@ionic/angular';
-//import { storage } from "firebase/app";
-//import * as firebase from 'firebase';
-//import { async } from '@angular/core/testing';
-//import { debug } from 'console';
-//import { CompileShallowModuleMetadata } from '@angular/compiler';
-//import { PhotosArray } from '../type';
-import { FileUpload } from '../type'
-//import 'firebase/<PACKAGE>';
+import { Files } from '../type'
+import { LoginService } from "../services/login/login.service"
+import { FeatureService } from '../services/feature/feature.service';
 
 @Injectable()
 export class FirebaseService {
@@ -27,7 +18,7 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
-  private relatedItemsDataStore: DataStore<Array<FirebaseListingItemModel>>;
+  private buildingId = this.loginService.getBuildingId();
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<ItemImageModel>>;
   
@@ -35,8 +26,10 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage, 
+    private loginService : LoginService,
+    private featureService : FeatureService
     //public loginService : LoginService, 
-    private alertCtrl : AlertController
+    //private alertCtrl : AlertController
     )  {
       
     }
@@ -46,16 +39,7 @@ export class FirebaseService {
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName).valueChanges({  idField: 'id' });
-/*        .pipe(
-       map(actions => actions.map(post => {
-          //const age = this.calcUserAge(post.createDate);
-           const CoverPic = this.getProfilePic(post.photo);
-          //return { age, ...post } as FirebaseListingItemModel;
-          return { post } as FirebaseListingItemModel;
-        })
-      )
-    );  */
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
   public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
@@ -63,9 +47,6 @@ export class FirebaseService {
     if (!this.listingDataStore) {
       // Initialize the model specifying that it is a shell model
       const shellModel: Array<FirebaseListingItemModel> = [
-        new FirebaseListingItemModel(),
-        new FirebaseListingItemModel(),
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel()
@@ -93,123 +74,49 @@ export class FirebaseService {
     this.combinedItemDataStore.load(dataSource);
 
     return this.combinedItemDataStore;
-  }
+    }
 
-//LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : FirebaseItemModel,files : FileUpload[])/* : Promise<DocumentReference>*/{    
-      try {
-        const res = await this.afs.collection(this.tableName).add({ ...itemData });
-        console.log("pub id :", res.id);
-        let fileFullPath: any[] = [];
+    public createItem(itemData : FirebaseItemModel,files : Files[])/* : Promise<DocumentReference>*/ : any{    
+        return this.afs.collection(this.tableName).add({ ...itemData }).then(async (res)=>{
+        console.log("publication id :", res.id);
+        let filesVar: any[] = [];
+        if(files.length > 0){
         for (var i = 0; i < files.length; i++) {
           try {
-            let uploaded = await this.uploadToStorage(files[i].fileData, res.id);
+            let uploaded = await this.featureService.uploadToStorage(files[i].fileData, res.id, 'application/pdf', '.pdf', 'pdf/publication/');
             console.log("createItem: state", uploaded.state);
             console.log("createItem: fileName", files[i].fileName);
             console.log("createItem: fullPath", uploaded.metadata.fullPath);
             if( uploaded.state === "success"){
-              fileFullPath.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
-          }
-          }
-          catch (err) {
-            console.log("Error uploading pdf: ", err);
+              filesVar.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
           }
         }
-        //itemData.fileFullPath = imagesFullPath;
-        return this.afs.collection(this.tableName).doc(res.id).update({ fileFullPath : fileFullPath });
-      } catch (err) {
-        console.log("Error creating itemData: ", err);
+        catch (err) {
+          console.log("Error uploading pdf: ", err);
+        }
       }
-
-  } 
-   private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
-        console.log("Uploaded",itemDataPhoto);
-        let newName = `${new Date().getTime()}.pdf`;     
-        //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
-        return this.afstore.ref(this.storagePath+ `${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'application/pdf' });
-   }
-   public deleteFromStorage(itemPath : string){        
-    return this.afstore.ref(`${itemPath}`).delete().toPromise();
-  }
-
-/*      private storeInfoToDatabase(itemData:FirebaseItemModel): Promise<DocumentReference>{
-        console.log("storeInfotoDB",itemData);
-           let photoStore = {
-            //createdById : this.auth.getLoginID(),
-            //createdDate : metadata.timeCreated,
-            //url : metadata.downloadURLs[0],
-            fullPath : metadata.fullPath,
-            contentType : metadata.contentType
-            //downloadURLs : metadata.downloadURLs[0]
-          } 
-           
-          return this.afs.collection('posts').add(itemData);
-          //return this.afs.collection('images').add(toSave);
-        } */
-  /* async addFile(){
-    const alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Do you want to add ',
-      inputs : [
-          {
-            name:'info',
-            placeholder: 'inter file name'
-          }
-        ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Store',
-          handler: (data) => {
-            console.log(data);
-            this.uploadInformation(data.info);
-          }
+      if (filesVar.length !== 0){
+        itemData.files = filesVar;  
+      }
+      return this.afs.collection(this.tableName).doc(res.id).update({ files: filesVar });  
         }
-      ]
-    });
-    await alert.present();
-    } 
-     uploadInformation(text:string){
-      let upload = this.uploadToStorage(text);
-      upload.then().then(res => {
-        console.log("louay:",res.metadata);
-        this.storeInfoToDatabase(res.metadata).then(async () => {
-          let toast =  await this.toastCtrl.create({
-            
-            message : 'File uploaded',
-            duration : 3000
-          });
-           await toast.present();
-          }
-          );  
-        }
-  
-        );
-      }*/
+      }
+        ).catch(err=> {console.log("Error insert item into DB",err)}); 
+    }
 
-  /*
-    Firebase Update User Modal
-  */
-  public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
-    return this.afs.collection('posts').doc(itemData.id).set(itemData);
-  }
-
-  public async updateItem(itemData: FirebaseItemModel, files : FileUpload[]): Promise<void> {
-      let fileFullPath: any[] = [];
+  public async updateItem(itemData: FirebaseItemModel, files : Files[]): Promise<void> {
+      let filesVar: any[] = [];
+      if( files.length > 0 ){
       for (var i = 0; i < files.length; i++) {
         
           if (files[i].filePath != ""){
           try {
-          let uploaded = await this.uploadToStorage(files[i].fileData, itemData.id);
+          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', 'pdf/publication/');
           console.log("updateItem: state", uploaded.state);
           console.log("updateItem: fileName", files[i].fileName);
           console.log("updateItem: fullPath", uploaded.metadata.fullPath);
           if( uploaded.state === "success"){
-            fileFullPath.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
+            filesVar.push({ fileName: files[i].fileName, storagePath: uploaded.metadata.fullPath });
           }
         }
         catch (err) {
@@ -217,49 +124,18 @@ export class FirebaseService {
         }
         }
         else{
-          itemData.fileFullPath[i].fileName = files[i].fileName;
+          itemData.files[i].fileName = files[i].fileName;
         }
       }
-      if ((fileFullPath.length != 0) && (itemData.fileFullPath)){ // new pdf added
-        itemData.fileFullPath.push(...fileFullPath);    
+      if ((filesVar.length != 0) && (itemData.files)){ // new pdf added
+        itemData.files.push(...filesVar);    
       }
-      else if((fileFullPath.length != 0) && !(itemData.fileFullPath)){
-        itemData.fileFullPath = fileFullPath;
+      else if((filesVar.length != 0) && !(itemData.files)){
+        itemData.files = filesVar;
       }
-      return this.afs.collection(this.tableName).doc(itemData.id).set({ ...itemData });
-  }
-
-  public deleteItem(item: FirebaseItemModel): Promise<void> {
-    //this.afstore.ref(item.id).delete();
-    return this.afs.collection('publication').doc(item.id).delete();
-  }
-
-  /*
-    Firebase Select User Image Modal
-  */
-/*   public getAvatarsDataSource(): Observable<Array<ItemImageModel>> {
-    return this.afs.collection<ItemImageModel>('avatars').valueChanges();
-  } */
-
-/*   public getAvatarsStore(dataSource: Observable<Array<ItemImageModel>>): DataStore<Array<ItemImageModel>> {
-    // Use cache if available
-    if (!this.avatarsDataStore) {
-      // Initialize the model specifying that it is a shell model
-      const shellModel: Array<ItemImageModel> = [
-        new ItemImageModel(),
-        new ItemImageModel(),
-        new ItemImageModel(),
-        new ItemImageModel(),
-        new ItemImageModel()
-      ];
-
-      this.avatarsDataStore = new DataStore(shellModel);
-      // Trigger the loading mechanism (with shell) in the dataStore
-      this.avatarsDataStore.load(dataSource);
     }
-    return this.avatarsDataStore;
-  } */
-  // Get data of a specific Item
+      return this.afs.collection(this.tableName).doc(itemData.id).update({ ...itemData });
+  }
   private getItem(itemId: string): Observable<FirebaseCombinedItemModel> {
     return this.afs.doc<FirebaseCombinedItemModel>('publication/' + itemId)
     .snapshotChanges()
@@ -272,11 +148,47 @@ export class FirebaseService {
     );
   }
 
-/*   deleteItemTest(file){
-    console.log("deleted");
-    let key = file;
-    let storagePath = file.fullPath;
-    this.afs.collection('images').doc(key).delete();
-    return this.afstore.ref(storagePath).delete();
-  } */
+/*   public deleteItem111(item: FirebaseItemModel): Promise<void> {
+    //this.afstore.ref(item.id).delete();
+    return this.afs.collection('publication').doc(item.id).delete();
+  }
+
+  public deleteFromStorage111(itemPath : string){        
+    return this.afstore.ref(`${itemPath}`).delete().toPromise();
+  }
+
+  private uploadToStorage(itemDataPhoto,id) : AngularFireUploadTask {
+    console.log("Uploaded",itemDataPhoto);
+    let newName = `${new Date().getTime()}.pdf`;     
+    //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
+    return this.afstore.ref(this.storagePath + `${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'application/pdf' });
+}
+
+public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
+return this.afs.collection('posts').doc(itemData.id).set(itemData);
+}
+
+  public deleteItem(item: FirebaseItemModel): Promise<void> {
+    if(item.files){
+      if(item.files.length >= 0){
+      this.deleteItemFromStorage(item.files).then(()=> console.log('success')).catch(err=> console.log(err));
+    }
+    }
+    return this.afs.collection(this.tableName).doc(item.id).delete();
+  }
+
+  private async deleteItemFromStorage(files : any[]) {
+    const storageRef = this.afstore.storage.ref();
+    files.forEach(item => {
+      storageRef.child(item.storagePath).delete().then(function() {
+    }).catch(function(error) {
+      console.log(error,"problem deleting storage" + item);
+    });
+  });
+  }
+
+  public deleteFromStorage(itemPath : string){        
+    //return this.afstore.ref(`${itemPath}`).delete().toPromise();
+    return this.afstore.storage.ref().child(itemPath).delete();
+}*/
 }

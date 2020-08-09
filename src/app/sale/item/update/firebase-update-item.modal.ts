@@ -4,11 +4,11 @@ import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
-import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { Observable } from "rxjs";
-import { PhotosData } from '../../../type'
-import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { File } from "@ionic-native/file/ngx";
+import { Images } from '../../../type'
+// import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+// import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
 
 
@@ -24,7 +24,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 export class FirebaseUpdateItemModal implements OnInit {
 
   @Input() item: FirebaseItemModel;
-  @Input() postImages: PhotosData[];
+  @Input() postImages: Images[];
 
   updateItemForm: FormGroup;
   //postImages : PhotosArray[] = [];
@@ -36,16 +36,17 @@ export class FirebaseUpdateItemModal implements OnInit {
     private alertController: AlertController,
     public firebaseService: FirebaseService,
     public router: Router,
-    private camera: Camera,
-    private file: File,
-    private imagePicker : ImagePicker,
+    // private camera: Camera,
+    // private file: File,
+    // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private featureService : FeatureService,
-    private actionSheetController: ActionSheetController
+    // private actionSheetController: ActionSheetController
   ) { 
   }
 
   ngOnInit() {
+    console.log("postimages",this.postImages)
     this.updateItemForm = new FormGroup({
       object: new FormControl(this.item.object, Validators.required),
       description: new FormControl(this.item.description),
@@ -71,7 +72,7 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.firebaseService.deleteItem(this.item)
+            this.featureService.deleteItem(this.item.images, this.item.id, 'posts')
             .then(
               () => {
                 this.dismissModal();
@@ -87,17 +88,19 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   deletePhoto(index : number){
-        const loading = this.featureService.presentLoadingWithOptions(5000);
+        const loading = this.featureService.presentLoadingWithOptions(2000);
          if(this.postImages[index].storagePath !== '') {      
           this.item.images.splice(index,1);    
-          this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
+          this.featureService.updateItemWithoutOptions(this.item, 'posts').then(()=> {
           const deletedimage = this.postImages.splice(index,1); 
+          // this.changeRef.detectChanges();
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
-          this.firebaseService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
+          this.featureService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
         }).catch( err => console.log("Error in deletePhoto DB: ",err));  
       }
       else{
         this.postImages.splice(index,1);
+        // this.changeRef.detectChanges();
       }
       loading.then(res=>{res.dismiss();})
       this.changeRef.detectChanges();
@@ -122,14 +125,16 @@ updateItem() {
   this.item.price = this.updateItemForm.value.price;
   this.item.status =  this.updateItemForm.value.status;
   //const {...itemData} = this.item;
-
-  this.firebaseService.updateItem(this.item,this.postImages)
+  const loading = this.featureService.presentLoadingWithOptions(2000);
+  this.featureService.updateItemWithImages(this.item, this.postImages, 'posts')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.PostUpdatedSuccessfully,2000);
+    loading.then(res=>{res.dismiss();})
     this.modalController.dismiss();
   }
   ).catch((err)=> {
     this.featureService.presentToast(this.featureService.translations.PostUpdatingErrors,2000);
+    loading.then(res=>{res.dismiss();})
     this.modalController.dismiss();
     console.log(err)
   });
@@ -149,7 +154,11 @@ doReorder(ev: any) {
   ev.detail.complete();
 }
 
-async selectImageSource() {
+selectImageSource() {
+  return this.featureService.selectImageSource(3, this.postImages.length, this.postImages, this.updateItemForm)
+}
+
+/* async selectImageSource() {
   const cameraOptions: CameraOptions = {
     allowEdit:true,
     quality: 100,
@@ -190,9 +199,9 @@ async selectImageSource() {
              let filename = imageData[i].substring(imageData[i].lastIndexOf('/')+1);
              const path = imageData[i].substring(0,imageData[i].lastIndexOf('/')+1);
                await this.file.readAsDataURL(path,filename).then((base64string)=> {                    
-               const photos : PhotosData = {isCover:false,photo:'', storagePath :''};
+               const photos : Images = {isCover:false, photoData: '', storagePath: ''};
                photos.isCover = false;
-               photos.photo = base64string;
+               photos.photoData = base64string;
                this.postImages.push(photos);
              }
            ).catch(err=>{console.log(err)})
@@ -203,41 +212,20 @@ async selectImageSource() {
        }, (err) => { console.log(err);}
        ); 
        }
-       /*else if((3 - this.postImages.length) === 1)
-       {
-         this.camera.getPicture(galleryOptions).then((imageData)=> {
-           const loading = this.featureService.presentLoadingWithOptions(5000);
-           const image = 'data:image/jpeg;base64,' + imageData;
-           let photos : PhotosData = {isCover:false, photo:'', storagePath:''};
-           photos.isCover = false;
-           photos.photo = image;    
-           this.postImages.push(photos);
-           this.updateItemForm.markAsDirty();
-           loading.then(res=>{res.dismiss();});
-           this.changeRef.detectChanges();
-         });
-       } 
-      }*/
     }, 
     {
       text: this.featureService.translations.Camera,
       icon: 'camera',
       handler: () => {
         this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
-          /*const image = "data:image/jpeg;base64," + imageData;
-          photos.isCover = false;
-          photos.photo = image;
-          this.postImages.push(photos);
-          this.updateItemForm.markAsDirty();
-          this.changeRef.detectChanges();*/
           //const loading = this.featureService.presentLoadingWithOptions(5000);
           //let photos : PhotosData = {isCover:false,photo:'',storagePath :''};
           const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
           const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
           await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+            const photos : Images = {isCover:false, photoData:'', storagePath:''};
             photos.isCover = false;
-            photos.photo = image;
+            photos.photoData = image;
             this.postImages[this.postImages.length] = photos;
             this.updateItemForm.markAsDirty();
             this.changeRef.detectChanges();
@@ -256,6 +244,6 @@ async selectImageSource() {
     }]
   });
   await actionSheet.present();
-}
+} */
 
 }

@@ -6,9 +6,10 @@ import { DataStore } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseCombinedItemModel/*, FirebasePhotoModel*/ } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { PhotosData, Images} from '../type';
+import { Images} from '../type';
 import { FirebaseUserModel } from '../users/user/firebase-user.model';
-import { LoginService } from "../services/login/login.service"
+import { LoginService } from "../services/login/login.service";
+import { FeatureService } from '../services/feature/feature.service';
 
 @Injectable()
 export class FirebaseService {
@@ -20,7 +21,8 @@ export class FirebaseService {
   constructor(
     private afs: AngularFirestore, 
     public afstore : AngularFireStorage,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private featureService : FeatureService
     )  {
     }
   /*
@@ -35,7 +37,6 @@ export class FirebaseService {
     if (!this.listingDataStore) {
       // Initialize the model specifying that it is a shell model
       const shellModel: Array<FirebaseListingItemModel> = [
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel()
@@ -55,18 +56,19 @@ export class FirebaseService {
     // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
     // is merged in the output Observable
       concatMap(item => {
+        console.log("item details ...",item)
       if (item.createDate) {
       const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res})); 
       console.log("item listing ",item);
           if (item.images.length > 0) {
             console.log("images > 0",item)
 
-          const itemPhotosPromise : Array<Promise<PhotosData>> = item.images.map( image => {
-            return this.getPicPromise(image.storagePath).then(photo => { 
-              return { photo : photo, storagePath : image.storagePath, isCover: image.isCover }
+          const itemPhotosPromise : Array<Promise<Images>> = item.images.map( image => {
+            return this.featureService.getDownloadURL(image.storagePath).then(photo => { 
+              return { photo : photo, storagePath : image.storagePath, isCover: image.isCover, photoData: '' }
          }).catch(err => {
-           return this.getPicPromise("images/no_image.jpeg").then(photo => { 
-            return { photo : photo, storagePath : image.storagePath, isCover: image.isCover } })
+           return this.featureService.getDownloadURL("images/no_image.jpeg").then(photo => { 
+            return { photo : photo, storagePath : image.storagePath, isCover: image.isCover, photoData: '' } })
         })
         });
           // Combination operator: Take the most recent value from both input sources (of(user) & forkJoin(userSkillsObservables)),
@@ -79,7 +81,7 @@ export class FirebaseService {
             forkJoin(itemPhotosPromise),
             
           ]).pipe(
-            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<PhotosData>] ) => {
+            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<Images>] ) => {
               
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
@@ -126,77 +128,7 @@ export class FirebaseService {
     return this.combinedItemDataStore;
   }
 
-//LA_2019_11 I put async here.. without it the modal will not dismiss
-  public createItem(itemData : FirebaseItemModel,postImages : PhotosData[])/* : Promise<DocumentReference> */ : any {    
-    return this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
-      console.log("post id :",res.id);
-      let images : Images[] = [];
-      if( postImages.length > 0 ){
-      for (var i = 0; i < postImages.length; i++) {
-        try {
-          let uploaded = await this.uploadToStorage(postImages[i].photo,res.id);
-
-          if( uploaded.state === "success"){
-            images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath });
-        }
-        }
-        catch (err) {
-          console.log("Error uploading pdf: ", err);
-        }
-    }
-    if (images.length !== 0){
-      itemData.images = images;  
-    }
-  }
-    return this.afs.collection(this.tableName).doc(res.id).update({...itemData});
-  } 
-  ).catch(err=> {console.log("Error insert item into DB",err)}); 
-} 
-   
-private uploadToStorage(itemDataPhoto,id): AngularFireUploadTask {
-        console.log("Uploaded",itemDataPhoto);
-        let newName = `${new Date().getTime()}.jpeg`;        
-        //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
-        return this.afstore.ref(`images/rentorsale/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
-}
-
-
-public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
-    return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
-}
-
-public async updateItem(itemData: FirebaseItemModel, postImages : PhotosData[]): Promise<void> {
-    
-    let images : Images[] = [];
-    if( postImages.length > 0 ){
-    for (var i = 0; i < postImages.length; i++) {
-        if (postImages[i].storagePath == '') {
-
-          try {
-            const uploaded = await this.uploadToStorage(postImages[i].photo, itemData.id);
-  
-            if( uploaded.state === 'success'){
-              
-                images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath });
-            }
-          }
-          catch (err) {
-            console.log('Error uploading pdf: ', err);
-          }
-      }
-      else{ //old photos
-        images.push({ isCover : postImages[i].isCover, storagePath : postImages[i].storagePath });
-      }
-    }
-    if (images.length > 0){
-      //itemData.images.push(...images);
-      itemData.images = images;
-    }
-  }
-  return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
-}
-  // Get data of a specific User
-private getItem(postId: string): Observable<FirebaseItemModel> {
+  private getItem(postId: string): Observable<FirebaseItemModel> {
     return this.afs.doc<FirebaseItemModel>(this.tableName + '/' + postId)
     .snapshotChanges()
     .pipe(
@@ -208,7 +140,78 @@ private getItem(postId: string): Observable<FirebaseItemModel> {
     );
   }
 
-  private async deleteItemStorage(storagePath : Images[]) {
+//LA_2019_11 I put async here.. without it the modal will not dismiss
+/*   public createItem(itemData : FirebaseItemModel,postImages : Images[]) : Promise<DocumentReference> : any {    
+    return this.afs.collection(this.tableName).add({...itemData}).then(async (res)=>{
+      console.log("post id :",res.id);
+      let images : Images[] = [];
+      if( postImages.length > 0 ){
+      for (var i = 0; i < postImages.length; i++) {
+        try {
+          let uploaded = await this.featureService.uploadToStorage(postImages[i].photoData, res.id, 'image/jpeg', '.jpeg', 'images/rentorsale/');
+
+          if( uploaded.state === "success"){
+            images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath, photoData: '' });
+        }
+        }
+        catch (err) {
+          console.log("Error uploading pdf: ", err);
+        }
+    }
+    if (images.length !== 0){
+      itemData.images = images;  
+    }
+    return this.afs.collection(this.tableName).doc(res.id).update({...itemData});
+  }
+  } 
+  ).catch(err=> {console.log("Error insert item into DB",err)}); 
+}  */
+
+/* public async updateItem(itemData: FirebaseItemModel, postImages : Images[]): Promise<void> {
+    
+    let images : Images[] = [];
+    if( postImages.length > 0 ){
+    for (var i = 0; i < postImages.length; i++) {
+        if (postImages[i].storagePath == '') {
+
+          try {
+            const uploaded = await this.featureService.uploadToStorage(postImages[i].photoData, itemData.id, 'image/jpeg', '.jpeg', 'images/posts/');
+  
+            if( uploaded.state === 'success'){
+              
+                images.push({ isCover : postImages[i].isCover, storagePath : uploaded.metadata.fullPath, photoData: '' });
+            }
+          }
+          catch (err) {
+            console.log('Error uploading pdf: ', err);
+          }
+      }
+      else{ //old photos
+        images.push({ isCover : postImages[i].isCover, storagePath : postImages[i].storagePath, photoData: '' });
+      }
+    }
+    if (images.length > 0){
+      //itemData.images.push(...images);
+      itemData.images = images;
+    }
+  }
+  return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
+} */
+  // Get data of a specific User
+
+/* 
+  private uploadToStorage(itemDataPhoto,id): AngularFireUploadTask {
+    console.log("Uploaded",itemDataPhoto);
+    let newName = `${new Date().getTime()}.jpeg`;        
+    //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
+    return this.afstore.ref(`images/rentorsale/${id}/${newName}`).putString(itemDataPhoto, 'data_url', { contentType: 'image/jpeg' });
+}
+
+public updateItemWithoutOptions(itemData: FirebaseItemModel): Promise<void> {
+return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
+}
+
+  private async deleteItemFromStorage(storagePath : Images[]) {
     const storageRef = this.afstore.storage.ref();
     storagePath.forEach(item => {
       storageRef.child(item.storagePath).delete().then(function() {
@@ -222,18 +225,16 @@ private getItem(postId: string): Observable<FirebaseItemModel> {
     //return this.afstore.ref(`${itemPath}`).delete().toPromise();
     return this.afstore.storage.ref().child(itemPath).delete();
 }
-
-
   public deleteItem(item: FirebaseItemModel): Promise<void> {
     if(item.images){
       if(item.images.length >= 0){
-      this.deleteItemStorage(item.images).then(()=> console.log('success')).catch(err=> console.log(err));
+      this.deleteItemFromStorage(item.images).then(()=> console.log('success')).catch(err=> console.log(err));
     }
     }
     return this.afs.collection(this.tableName).doc(item.id).delete();
   }
 
-  getPicPromise(imagesFullPath : string) : Promise<any> {
+  getDownloadURL(imagesFullPath : string) : Promise<any> {
         return this.afstore.storage.ref(imagesFullPath).getDownloadURL();   
-  } 
+  }  */
 }

@@ -7,7 +7,7 @@ import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { Crop } from '@ionic-native/crop/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { PhotosData } from '../../../type'
+import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
@@ -23,7 +23,7 @@ import { counterRangeValidator } from '../../../components/counter-input/counter
 })
 export class FirebaseCreateItemModal implements OnInit {
   croppedImagepath = "";
-  postImages : PhotosData[] = [];
+  postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   selectedPhoto: string;
@@ -52,7 +52,8 @@ export class FirebaseCreateItemModal implements OnInit {
       bedRooms: new FormControl(0, counterRangeValidator(0, 10)),
       bathRooms: new FormControl(0, counterRangeValidator(0, 8)),
       floor: new FormControl(0, counterRangeValidator(0, 30)),
-      balcony: new FormControl(false),
+      balcony: new FormControl(0, counterRangeValidator(0, 5)),
+      //balcony: new FormControl(false),
       description : new FormControl(''),
       price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl('active')
@@ -80,7 +81,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     
-    this.firebaseService.createItem(this.itemData, this.postImages)
+    this.featureService.createItemWithImages(this.itemData, this.postImages, 'rentorsale')
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
       this.dismissModal();
@@ -203,9 +204,9 @@ async selectImageSource() {
                 console.log("filename",filename)
                 console.log("path",path)
                   await this.file.readAsDataURL(path, filename).then((image)=> {
-                  const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+                  const photos : Images = {isCover:false, photoData: '', storagePath:''};
                   photos.isCover = false;
-                  photos.photo = image;
+                  photos.photoData = image;
                   this.postImages[this.postImages.length] = photos;
                 }
               ).catch(err => console.log(err));
@@ -257,9 +258,9 @@ async selectImageSource() {
           const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
           const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
           await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+            const photos : Images = {isCover:false, photoData:'', storagePath:''};
             photos.isCover = false;
-            photos.photo = image;
+            photos.photoData = image;
             this.postImages[this.postImages.length] = photos;
             this.changeRef.detectChanges();
 

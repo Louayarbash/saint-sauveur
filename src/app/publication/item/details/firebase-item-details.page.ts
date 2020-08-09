@@ -78,7 +78,7 @@ export class FirebaseItemDetailsPage implements OnInit {
       
     } */
       
-      await this.firebaseService.afstore.ref(this.item.fileFullPath[i].storagePath).getDownloadURL()
+      await this.firebaseService.afstore.ref(this.item.files[i].storagePath).getDownloadURL()
       .toPromise()
       .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
     const fileTransfer = this.transfer.create();

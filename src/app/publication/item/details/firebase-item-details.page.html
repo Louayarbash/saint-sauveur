@@ -3,35 +3,68 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="publication/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>Post Details</ion-title>
+    <ion-title>{{ 'PostDetails' | translate }} </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openFirebaseUpdateModal()" >
-        Edit
+        {{ 'Edit' | translate }} 
       </ion-button> 
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content class="item-content">
-  <ion-row class="item-info-row">
-    <ion-col class="item-details-col" size="12">
-      <h2 class="item-name">
-        <app-text-shell animation="bouncing" [data]="item.title"></app-text-shell>
-      </h2>
-      <h2 class="item-name">{{item.description}}
-        <!-- <app-text-shell animation="bouncing" [data]="item.description"></app-text-shell> -->
-      </h2>
-      <h2 class="item-name">{{item.createDate}}
-        <!-- <app-text-shell animation="bouncing" [data]="item.createDate"></app-text-shell> -->
-      </h2>
-    </ion-col>
-  </ion-row>
-  <ion-list class="items-list" *ngIf="item.fileFullPath?.length > 0">
-  <ion-item class="list-item"  *ngFor="let file of item.fileFullPath; let i = index;">
-    <app-text-shell animation="bouncing" [data]="file.fileName"></app-text-shell>
-    <ion-button class="change-image-btn" color="secondary" (click)="openPDF(i)">
-      Open
-    </ion-button>
-  </ion-item>
-</ion-list>
+<ion-content>
+  <ion-card>
+    <ion-card-content class="ion-no-padding">
+      <ion-item *ngIf="item.subject" >        
+        <ion-label>{{ 'Subject' | translate }}</ion-label>
+        <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
+         </ion-item>
+         <ng-container *ngIf="item.category == 'event'">
+      <ion-item lines="none" *ngIf="item.startDateTS">    
+        <ion-label>{{ 'MeetingStartDate' | translate }}</ion-label>
+        {{item.startDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+      </ion-item>
+      <ion-item lines="none" *ngIf="item.endDateTS">    
+        <ion-label>{{ 'MeetingEndDate' | translate }}</ion-label>
+        {{item.endDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="item.category == 'announcement'">
+      <ion-item lines="none">
+        <ion-label>{{ 'EnableVoting' | translate }}</ion-label>
+        <ion-toggle color="main" [(ngModel)]="item.voting" disabled></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="item.voting" lines="none">
+        <ion-label position="floating">{{ 'VotingNote' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="item.votingMessage" disabled></ion-input>
+      </ion-item>
+      <ion-item *ngIf="item.voting" lines="none">
+        <ion-label>{{ 'ShowResult' | translate }}</ion-label>
+        <ion-toggle color="main" [(ngModel)]="item.votingResult" disabled></ion-toggle>
+      </ion-item>
+    </ng-container>
+        </ion-card-content>
+        </ion-card>
+  <ion-card *ngIf="item.details">
+    <ion-card-header>
+      <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
+      <ion-card-title>{{ 'Details' | translate }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="item.files?.length > 0">
+    <ion-card-header>
+      <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
+      <ion-card-title>{{ 'Files' | translate }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item *ngFor="let file of item.files; let i = index;" lines="none">
+        <ion-label>{{ file.fileName }}</ion-label>
+        <ion-button color="main" (click)="openPDF(i)">
+          <ion-icon name="open-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

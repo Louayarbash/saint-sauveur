@@ -26,7 +26,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
-  rangeForm: FormGroup;
+  // rangeForm: FormGroup;
   searchQuery: string;
   //showAgeFilter = false;
   CoverPic:string;
@@ -39,6 +39,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  segmentValue = 'rent';
+  rentList: Array<FirebaseListingItemModel>;
+  saleList: Array<FirebaseListingItemModel>;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -71,7 +74,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         // We need to avoid having multiple firebase subscriptions open at the same time to avoid memory leaks
         // By using a switchMap to cancel previous subscription each time a new one arrives,
         // we ensure having just one subscription (the latest)
-        const updateSearchObservable = this.searchFiltersObservable.pipe(
+/*         const updateSearchObservable = this.searchFiltersObservable.pipe(
           switchMap((filters) => {
             // Send a shell until we have filtered data from Firebase
             const searchingShellModel = [
@@ -90,7 +93,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 if (filters.query !== '' && !filteredItems.isShell) {
                   const queryFilteredItems = filteredItems.filter(
                     item =>
-                    (item.object.toLowerCase().includes(filters.query.toLowerCase()))
+                   (item.object.toLowerCase().includes(filters.query.toLowerCase()))
                     )
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
@@ -100,14 +103,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               })
             );
           })
-        );
+        ); */
           
         // Keep track of the subscription to unsubscribe onDestroy
         // Merge filteredData with the original dataStore state
-        this.stateSubscription = merge(
-          this.listingDataStore.state,
-          updateSearchObservable
-        ).subscribe(
+        this.stateSubscription = this.listingDataStore.state.subscribe(
           (state) => {
             console.log("itemData listing",this.items)
             this.items = state;
@@ -136,6 +136,15 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     );
               } 
               });
+              let rentList= this.items; 
+              let saleList= this.items;
+
+              this.rentList = rentList.filter(item => item.type === 'rent' );
+              this.saleList = saleList.filter(item => item.type === 'sale');
+            }
+            else {
+              this.rentList = this.items;
+              this.saleList = this.items;
             }
           },
           (error) => console.log(error),
@@ -174,5 +183,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   } */
   getProfilePic(picPath : string){
     return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL();
+  }
+  segmentChanged(ev:any) {
+    //console.log(ev.detail.value);
+    //console.log(ev.target.value);
+    this.segmentValue = ev.detail.value;
+
+    // Check if there's any filter and apply it
+    //this.searchList();
   }
 }

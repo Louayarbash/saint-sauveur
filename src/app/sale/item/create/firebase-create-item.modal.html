@@ -75,11 +75,12 @@
   <ion-icon name="camera-outline"></ion-icon>
   </ion-button> 
 </ion-item-divider>
+
 <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
   <ion-item *ngFor="let image of postImages">
 <!-- <ion-row  class="ion-align-items-center"> -->
   <ion-col class="ion-padding">
-    <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photo">
+    <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photoData">
      <app-aspect-ratio [ratio]="{w:64, h:50}">
      </app-aspect-ratio>
    </app-image-shell>
@@ -90,7 +91,7 @@
     </ion-button>  
   </ion-col>
   <ion-col>
-    <ion-button color="secondary" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
+    <ion-button color="main" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
       {{ 'CoverPhoto' | translate }}
     </ion-button> 
   </ion-col>

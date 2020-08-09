@@ -1,5 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
-import { PhotosData } from '../../type';
+import { Images } from '../../type';
 
 export class FirebaseListingItemModel extends ShellModel {
 
@@ -11,7 +11,7 @@ export class FirebaseListingItemModel extends ShellModel {
   object : string;
   description : string;
   coverPhotoData :string;
-  images : Array<PhotosData> = [];
+  images : Array<Images> = [];
   constructor() {
     super();
   }

@@ -5,10 +5,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../../components/components.module';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { FirebaseItemDetailsPage } from './firebase-item-details.page';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemDetailsResolver } from './firebase-item-details.resolver';
+import { FirebaseUpdateItemModal } from "../../item/update/firebase-update-item.modal";
 
 const routes: Routes = [
   {
@@ -27,12 +28,16 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    TranslateModule,
     ComponentsModule
   ],
-  declarations: [FirebaseItemDetailsPage],
+  declarations: [FirebaseItemDetailsPage,FirebaseUpdateItemModal],
   providers: [
     FirebaseService,
     FirebaseItemDetailsResolver
-  ]
+  ],
+  entryComponents: [
+    FirebaseUpdateItemModal
+  ] 
 })
 export class FirebaseItemDetailsPageModule {}

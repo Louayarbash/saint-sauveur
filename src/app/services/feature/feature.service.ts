@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
-import { ToastController,LoadingController } from '@ionic/angular';
+import { ToastController,LoadingController, ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 //import { RatingUser } from 'app/deal/item/firebase-item.model';
 import { RatingUser } from '../../Deal/item/firebase-item.model';
 import { Observable } from 'rxjs';
 //import { map } from 'rxjs/operators';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { Images} from '../../type';
+import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+import { ImagePickerOptions, ImagePicker } from '@ionic-native/image-picker/ngx';
+import { File } from "@ionic-native/file/ngx";
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +27,12 @@ export class FeatureService {
     private loadingController : LoadingController,
     private translate : TranslateService,
     private afs: AngularFirestore,
-    public emailComposer: EmailComposer
+    public afstore : AngularFireStorage,
+    public emailComposer: EmailComposer,
+    private camera: Camera,  
+    private actionSheetController : ActionSheetController,
+    private imagePicker : ImagePicker,
+    private file: File
     //private loginService : LoginService
     ) {
     console.log("constructor FeatureService", this.userLanguage);
@@ -116,12 +127,204 @@ async getBuildingLevels(){
     return this.getBuildingLevels;
   }
   else{
-    //await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
+    // await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
   }
 
 }
 sendEmail(email : any){
   return this.emailComposer.open(email);
+}
+
+// images operations
+
+async selectImageSource(maxLength: number, currentLength: number, postImages: Images[], form: FormGroup) {
+  const cameraOptions: CameraOptions = {
+    allowEdit:true,
+    quality: 100,
+    // targetWidth: 500,
+    // targetHeight: 600,
+    // destinationType: this.camera.DestinationType.DATA_URL,
+    destinationType: this.camera.DestinationType.FILE_URI, 
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE,
+    correctOrientation: true,
+    sourceType: this.camera.PictureSourceType.CAMERA
+  };
+  
+  const pickerOptions: ImagePickerOptions = {
+    maximumImagesCount: maxLength - currentLength,
+    outputType: 0,
+    quality: 100,
+    // disable_popover: false,
+    width:500,
+    height:500// ,
+    // message:"aywa",
+    // title:"boooo"
+  };
+
+  const actionSheet = await this.actionSheetController.create({
+    header: this.translations.SelectImagesSource,
+    cssClass: 'my-custom-class',
+    buttons: [{
+      text: this.translations.PhotoGallery,
+      icon: 'images',
+      handler: () => {
+        // if((3 - this.postImages.length) !== 1 ){            
+          //this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
+           this.imagePicker.getPictures(pickerOptions).then( async (imageData : string[]) => {
+             //console.log(imageData) 
+            //const loading = this.featureService.presentLoadingWithOptions(5000);
+             for (let i = 0; i < imageData.length; i++) {
+                const filename = imageData[i].substring(imageData[i].lastIndexOf('/') + 1);
+                const path = imageData[i].substring(0,imageData[i].lastIndexOf('/') + 1);
+                //console.log("filename",filename)
+                //console.log("path",path)
+                  await this.file.readAsDataURL(path, filename).then((image)=> {
+                  const photos : Images = {isCover:false, photoData: '', storagePath:''};
+                  photos.isCover = false;
+                  photos.photoData = image;
+                  postImages[postImages.length] = photos;
+                  if(form){
+                    form.markAsDirty();
+                  }
+                }
+              ).catch(err => console.log(err));
+            }
+            
+          // this.changeRef.detectChanges(); // Louay
+          // loading.then(res=>res.dismiss());
+          }, (err) => { console.log('Error get pics',err);}
+        );  
+    }
+  }, {
+      text: this.translations.Camera,
+      icon: 'camera',
+      handler: () => {
+        this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
+          const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+          const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
+          await this.file.readAsDataURL(path, filename).then((image)=> {
+            const photos : Images = {isCover:false, photoData:'', storagePath:''};
+            photos.isCover = false;
+            photos.photoData = image;
+            postImages[postImages.length] = photos;
+            if(form){
+              form.markAsDirty();
+            }
+            // this.changeRef.detectChanges(); // Louay
+        }).catch(err => console.log(err));
+      })
+    }
+    }, {
+      text: this.translations.Cancel,
+      icon: 'close',
+      role: 'cancel',
+      handler: () => {
+        console.log('Cancel clicked');
+      }
+    }]
+  });
+  // console.log("SelectPhotos",postImages);
+  await actionSheet.present();
+  // return postImages;
+}
+
+public createItemWithImages(itemData: any,itemImages: Images[], tableName: string)/* : Promise<DocumentReference> */ : any {    
+  return this.afs.collection(tableName).add({...itemData}).then(async (res)=>{
+    console.log("post id :",res.id);
+    let images : any[] = [];
+    if( itemImages.length > 0 ){
+    for (var i = 0; i < itemImages.length; i++) {
+      try {
+        let uploaded = await this.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/posts/');
+
+        if( uploaded.state === "success"){
+          images.push({ isCover: itemImages[i].isCover, storagePath: uploaded.metadata.fullPath });
+      }
+      }
+      catch (err) {
+        console.log("Error uploading pdf: ", err);
+      }
+  }
+  if (images.length !== 0){
+    itemData.images = images;  
+  }
+  //return this.afs.collection(this.tableName).doc(res.id).update({...itemData});
+  return this.afs.collection(tableName).doc(res.id).update({images: images});
+}
+} 
+).catch(err=> {console.log("Error insert item into DB",err)}); 
+}
+
+
+public async updateItemWithImages(itemData: any, itemImages : Images[], tableName: string): Promise<void> {
+    
+  let images : any[] = [];
+  if( itemImages.length > 0 ){
+  for (var i = 0; i < itemImages.length; i++) {
+      if (itemImages[i].storagePath == '') {
+
+        try {
+          const uploaded = await this.uploadToStorage(itemImages[i].photoData, itemData.id, 'image/jpeg', '.jpeg', 'images/posts/');
+
+          if( uploaded.state === 'success'){
+            
+              images.push({ isCover : itemImages[i].isCover, storagePath : uploaded.metadata.fullPath });
+          }
+        }
+        catch (err) {
+          console.log('Error uploading pdf: ', err);
+        }
+    }
+    else{ //old photos
+      images.push({ isCover : itemImages[i].isCover, storagePath : itemImages[i].storagePath });
+    }
+  }
+  if (images.length > 0){
+    //itemData.images.push(...images);
+    itemData.images = images;
+  }
+}
+return this.afs.collection(tableName).doc(itemData.id).update({...itemData});
+}
+
+public updateItemWithoutOptions(itemData: any, tableName: string): Promise<void> {
+  return this.afs.collection(tableName).doc(itemData.id).update({...itemData});
+}
+
+public deleteItem(itemFiles: Array<any>, itemId: string, tableName: string): Promise<void> {
+  if(itemFiles){
+    if(itemFiles.length >= 0){
+    this.deleteItemFromStorage(itemFiles).then(()=> console.log('success')).catch(err=> console.log(err));
+  }
+  }
+  return this.afs.collection(tableName).doc(itemId).delete();
+}
+
+private async deleteItemFromStorage(files : any[]) {
+  const storageRef = this.afstore.storage.ref();
+  files.forEach(item => {
+    storageRef.child(item.storagePath).delete().then(function() {
+  }).catch(function(error) {
+    console.log(error,"problem deleting storage" + item);
+  });
+});
+}
+
+public deleteFromStorage(itemPath : string){        
+  //return this.afstore.ref(`${itemPath}`).delete().toPromise();
+  return this.afstore.storage.ref().child(itemPath).delete();
+}
+
+public getDownloadURL(storagePath : string) : Promise<any> {
+  return this.afstore.storage.ref(storagePath).getDownloadURL();   
+}
+
+public uploadToStorage(itemDataPhoto: string, id: string, contentType: string, extention: string, storagePath: string): AngularFireUploadTask {
+  console.log("Uploaded",itemDataPhoto);
+  let name = `${new Date().getTime()}`+ extention;        
+  //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
+  return this.afstore.ref(storagePath + `${id}/${name}`).putString(itemDataPhoto, 'data_url', { contentType: contentType });
 }
 
 }

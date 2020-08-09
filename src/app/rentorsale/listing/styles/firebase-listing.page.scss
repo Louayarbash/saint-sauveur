@@ -9,7 +9,6 @@
   border-radius: 20px 20px 20px 20px;
 }
 
-
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
 .filters-toolbar {
   --padding-start: var(--page-margin);
@@ -31,10 +30,3 @@
   }
 
 }
-
-  .empty-list-message {
-    margin: calc(var(--page-margin) * 3);
-    color: rgba(var(--ion-color-dark-rgb), 0.4);
-    text-align: center;
-  }
-

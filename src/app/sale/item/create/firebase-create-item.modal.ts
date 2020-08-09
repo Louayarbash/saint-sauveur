@@ -1,13 +1,13 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController,AlertController, ActionSheetController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
-import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { Crop } from '@ionic-native/crop/ngx';
-import { File } from "@ionic-native/file/ngx";
-import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { PhotosData } from '../../../type'
+// import { File } from "@ionic-native/file/ngx";
+// import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
@@ -22,7 +22,7 @@ import firebase from 'firebase/app';
 })
 export class FirebaseCreateItemModal implements OnInit {
   croppedImagepath = "";
-  postImages : PhotosData[] = [];
+  postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   selectedPhoto: string;
@@ -31,15 +31,15 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
-    private camera: Camera,    
+    // private camera: Camera,    
     //private alertController: AlertController,
     //private _crop: Crop,
-    private file: File,
-    private imagePicker : ImagePicker,
+    // private file: File,
+    // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private actionSheetController : ActionSheetController
+    // private actionSheetController : ActionSheetController
   ) { }
 
   ngOnInit() {
@@ -56,6 +56,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
+    console.log("postImages",this.postImages);
     this.itemData.object = this.createItemForm.value.object;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
@@ -64,14 +65,14 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    
-    this.firebaseService.createItem(this.itemData, this.postImages)
+    this.featureService.createItemWithImages(this.itemData, this.postImages, 'posts')
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
-      this.dismissModal();
-      loading.then(res=>res.dismiss());  
+      loading.then(res=>{res.dismiss();})
+      this.dismissModal();  
     }).catch((err) => { 
       this.featureService.presentToast(this.featureService.translations.PostAddingErrors, 2000);
+      loading.then(res=>{res.dismiss();})
       this.dismissModal();
       console.log(err);
      });     
@@ -102,7 +103,7 @@ doReorder(ev: any) {
     ev.preventDefault();
  }
  else{ */
-  console.log("doReorder",this.postImages);
+  // console.log("doReorder",this.postImages);
   // The `from` and `to` properties contain the index of the item
   // when the drag started and ended, respectively
   const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
@@ -115,13 +116,14 @@ doReorder(ev: any) {
 
 }
 
-async selectImageSource() {
+ selectImageSource() {
+   this.featureService.selectImageSource(3, this.postImages.length, this.postImages, null)
+}
+
+/* async selectImageSource(maxLength: number, currentLength: number) {
   const cameraOptions: CameraOptions = {
     allowEdit:true,
     quality: 100,
-    //targetWidth: 500,
-    //targetHeight: 600,
-    // destinationType: this.camera.DestinationType.DATA_URL,
     destinationType: this.camera.DestinationType.FILE_URI, 
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
@@ -130,10 +132,9 @@ async selectImageSource() {
   };
   
   const pickerOptions: ImagePickerOptions = {
-    maximumImagesCount: 3 - this.postImages.length,
+    maximumImagesCount: maxLength - currentLength,
     outputType: 0,
     quality: 100,
-    // disable_popover: false,
     width:500,
     height:500,
     message:"aywa",
@@ -143,14 +144,7 @@ async selectImageSource() {
   const actionSheet = await this.actionSheetController.create({
     header: 'Select images source',
     cssClass: 'my-custom-class',
-    buttons: [/* {
-      text: 'Delete',
-      role: 'destructive',
-      icon: 'trash',
-      handler: () => {
-        console.log('Delete clicked');
-      }
-    }, */ {
+    buttons: [ {
       text: this.featureService.translations.PhotoGallery,
       icon: 'images',
       handler: () => {
@@ -165,9 +159,9 @@ async selectImageSource() {
                 console.log("filename",filename)
                 console.log("path",path)
                   await this.file.readAsDataURL(path, filename).then((image)=> {
-                  const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+                  const photos : Images = {isCover:false, photoData: '', storagePath:''};
                   photos.isCover = false;
-                  photos.photo = image;
+                  photos.photoData = image;
                   this.postImages[this.postImages.length] = photos;
                 }
               ).catch(err => console.log(err));
@@ -177,40 +171,8 @@ async selectImageSource() {
           }, (err) => { console.log('Error get pics',err);}
         );  
         // }
-/*           else if((3 - this.postImages.length) == 1)
-          {
-            cameraOptions.sourceType = 0;
-            this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
-              console.log(imageData);
-              // URI
-              const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
-              const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
-              console.log("filename",filename)
-              console.log("path",path)
-              await this.file.readAsDataURL(path, filename).then((image)=> {
-                const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
-                photos.isCover = false;
-                photos.photo = image;
-                this.postImages[this.postImages.length] = photos;
-                this.changeRef.detectChanges();
-            // URL
-             const image = "data:image/jpeg;base64," + imageData;
-              let photos : PhotosData = {isCover:false, photo:"", storagePath:""};    
-              photos.isCover = false;
-              photos.photo = image;
-              this.postImages[this.postImages.length] = photos;
-              this.changeRef.detectChanges(); 
-            }).catch(err => console.log(err));
-          });
-      } */
     }
-  }/* , {
-      text: 'Play (open modal)',
-      icon: 'caret-forward-circle',
-      handler: () => {
-        console.log('Play clicked');
-      }
-    } */, {
+  }, {
       text: 'Camera',
       icon: 'camera',
       handler: () => {
@@ -219,18 +181,11 @@ async selectImageSource() {
           const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
           const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
           await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+            const photos : Images = {isCover:false, photoData:'', storagePath:''};
             photos.isCover = false;
-            photos.photo = image;
+            photos.photoData = image;
             this.postImages[this.postImages.length] = photos;
             this.changeRef.detectChanges();
-
-          /*const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
-          const image = "data:image/jpeg;base64," + imageData;
-          photos.isCover = false;
-          photos.photo = image;
-          this.postImages[this.postImages.length] = photos;
-          this.changeRef.detectChanges();*/
         }).catch(err => console.log(err));
       })
     }
@@ -246,5 +201,5 @@ async selectImageSource() {
   console.log("SelectPhotos",this.postImages);
   await actionSheet.present();
 }
-
+ */
 }

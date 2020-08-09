@@ -13,12 +13,14 @@ import { FirebaseItemModel } from '../firebase-item.model';
 //import { Observable } from "rxjs";
 //import { PhotosData } from '../../../type'
 import { File } from "@ionic-native/file/ngx";
-import { LoginService } from "../../../services/login/login.service"
+// import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
-import { FileUpload } from '../../../type'
+import { Files } from '../../../type'
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import dayjs from 'dayjs';
+import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -33,15 +35,24 @@ export class FirebaseUpdateItemModal implements OnInit {
   @Input() item: FirebaseItemModel;
 
   updateItemForm: FormGroup;
-  files : FileUpload[] = [];
+  files : Files[] = [];
   newName : string = "";
   nameChanging : boolean[] = [];
+  voting: boolean;
+  today : any;
+  minDate : any;
+  maxDate : any;
+  startDate : any;
+  endDate : any;
+  minStartDate : any;
+  duration : any;
+  previousCounterValue : any;//= 0;
 
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
     public router: Router,
-    private loginService : LoginService,
+    // private loginService : LoginService,
     private featureService : FeatureService,
     private alertController : AlertController,
     private chooser : Chooser,
@@ -53,27 +64,39 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   ngOnInit() {
+    this.initValues();
+    
     this.updateItemForm = new FormGroup({
-      title: new FormControl(this.item.title,  [
-        Validators.required,
-        Validators.minLength(4)
-      ]),
-      description: new FormControl(this.item.description),
-      category: new FormControl(this.item.category),
+      subject: new FormControl(this.item.subject, Validators.required),
+      details: new FormControl(this.item.details),
+      voting: new FormControl(this.item.voting),
+      votingResult: new FormControl(this.item.votingResult),
+      votingMessage: new FormControl(this.item.votingMessage),
+      date: new FormControl(this.item.date),
+      startDate : new FormControl(this.item.startDate),
+      duration : new FormControl(this.duration),
+      endDate : new FormControl(this.item.endDate),
     },
     {validators: this.changingNameValidator}
     );
+    if(this.item.category == 'event'){
+      this.updateItemForm.controls['date'].setValidators(Validators.required);
+      this.updateItemForm.controls['startDate'].setValidators(Validators.required);
+      this.updateItemForm.controls['duration'].setValidators(counterRangeValidatorMinutes(15, 360));
+      this.updateItemForm.controls['endDate'].setValidators(Validators.required);
+    }
+    this.onValueChanges();
 
-    if(this.item.fileFullPath){
-      if(this.item.fileFullPath.length > 0){
+    if(this.item.files){
+      if(this.item.files.length > 0){
       //this.getPics(this.item.imagesFullPath);
       //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} ); 
       
-      this.files = [{fileName:"" , filePath:"", fileData:"",fileStoragePath : ""}];
-      this.item.fileFullPath.map((res,index)=>{
-          let file : FileUpload = {fileName:"",filePath:"", fileData:"",fileStoragePath:""};
+      this.files = [{fileName:"" , filePath:"", fileData:"", storagePath : ""}];
+      this.item.files.map((res,index)=>{
+          let file : Files = {fileName:"",filePath:"", fileData:"", storagePath:""};
           file.fileName = res.fileName;
-          file.fileStoragePath = res.storagePath;
+          file.storagePath = res.storagePath;
           this.files[index] = file;       
       });
       //loading.then(res=>{res.dismiss();});
@@ -86,13 +109,99 @@ export class FirebaseUpdateItemModal implements OnInit {
     return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
 
   };
+
+  private onValueChanges(): void {
+    this.updateItemForm.get('date').valueChanges.subscribe(newDate=>{      
+      console.log("onDateChanges",newDate);
+      let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
+      let date = dayjs(newDate).format('YYYY-MM-DD');
+      if (today == date){
+        this.updateItemForm.get('startDate').setValue(this.today);
+        this.minStartDate = dayjs(this.today).format("HH:mm");
+        this.updateItemForm.get('endDate').setValue(this.today);
+        console.log("minStartDate",this.minStartDate);
+      } 
+      else {
+        let newDateZeroTimeISO = dayjs(newDate).set("hour", 0).set("minute",0).set("second",0).set("millisecond",0).toISOString();
+        this.updateItemForm.get('startDate').setValue(newDateZeroTimeISO);
+        this.updateItemForm.get('endDate').setValue(newDateZeroTimeISO);
+        this.minStartDate = "00:00";
+      }
+      if(this.duration > 0){
+        this.calculateEndDate();
+      }
+    });
+
+    this.updateItemForm.get('startDate').valueChanges.subscribe(newStartDate=>{      
+      //console.log("onStartDateChanges",newStartDate);
+      this.updateItemForm.get('endDate').setValue(newStartDate);
+      //this.previousCounterValue = 0;
+      if(this.duration > 0){
+        this.calculateEndDate();
+      }
+    });
+
+    this.updateItemForm.get('duration').valueChanges.subscribe(duration=>{      
+      let endDate = this.updateItemForm.get('endDate').value;
+      let endDateTS = dayjs(endDate).unix();
+      let newEndDateTS : any;
+      if (this.previousCounterValue < duration){
+         newEndDateTS = (endDateTS + (15 * 60 )) * 1000;
+      }
+      else if(this.previousCounterValue > duration){
+        newEndDateTS = (endDateTS - (15 * 60 )) * 1000;
+      }
+      else {
+        newEndDateTS = dayjs(endDate).unix() * 1000;
+      }
+      let newEndDate  = dayjs(newEndDateTS).toISOString();
+      this.updateItemForm.get('endDate').setValue(newEndDate);
+      this.duration = duration;
+      this.previousCounterValue = duration;
+    });
+  }
+
+  initValues(){
+  this.voting = this.item.voting;
+  this.today = dayjs().add(30,"minute").toISOString(); 
+  //console.log("resetDate", dayjs().toISOString());
+  this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
+  this.maxDate = dayjs().add(1,"month").toISOString();
+  let todayDay = dayjs().add(30,"minute").format('YYYY-MM-DD');
+  let dateDay = dayjs(this.item.startDate).format('YYYY-MM-DD');
+      if (todayDay == dateDay){
+        this.minStartDate = dayjs(this.today).format("HH:mm"); // dayjs(this.item.startDate).add(30,"minute").format('HH:mm');
+      } 
+      else {
+        this.minStartDate = "00:00";
+      }
+  //console.log("minStartDate",this.minStartDate)
+  // this.duration = this.duration;
+  this.duration = (this.item.endDateTS - this.item.startDateTS) / 60;
+  this.previousCounterValue = this.duration; 
+  }
+
+  private calculateEndDate(){
+    let endDate = this.updateItemForm.get('endDate').value;
+    let endDateTS = dayjs(endDate).unix();
+    let newEndDateTS = (endDateTS + ( this.duration * 60 )) * 1000;
+    let newEndDate  = dayjs(newEndDateTS).toISOString();
+    this.updateItemForm.get('endDate').setValue(newEndDate);
+  }
+  //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
+  votingChanged(ev:any) {
+    // console.log(ev);
+    this.voting = ev.detail.checked;
+  }
+  
   dismissModal() {
    this.modalController.dismiss();
   }
+
   selectFile(){
     this.chooser.getFile("application/pdf")
    .then(file => {
-     let fileUpload : FileUpload = {fileData:"",fileName:"",filePath:"",fileStoragePath:""};
+     let fileUpload : Files = {fileData:"",fileName:"",filePath:"", storagePath:""};
      let extention = file.name.slice(file.name.length-4);
      console.log("extention", extention);
      console.log(file ? file.name.slice(0,file.name.length-4) : 'canceled');
@@ -135,7 +244,7 @@ export class FirebaseUpdateItemModal implements OnInit {
   async deleteItem() {
     const alert = await this.alertController.create({
       header: 'Confirm',
-      message: 'Do you want to delete ' + this.item.title + '?',
+      message: 'Do you want to delete ' + this.item.subject + '?',
       buttons: [
         {
           text: 'No',
@@ -145,7 +254,7 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.firebaseService.deleteItem(this.item)
+            this.featureService.deleteItem(this.item.files, this.item.id, 'publication')
             .then(
               () => {
                 this.dismissModal();
@@ -161,8 +270,23 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   updateItem() {
-    this.item.title = this.updateItemForm.value.title;
-    this.item.description = this.updateItemForm.value.description;
+    if(this.item.category == 'event'){
+      this.item.date = this.updateItemForm.get('date').value;
+      this.item.dateTS = dayjs(this.updateItemForm.get('date').value).unix();
+      this.item.startDate = this.updateItemForm.get('startDate').value;
+      this.item.startDateTS = dayjs(this.updateItemForm.get('startDate').value).unix();
+      this.item.endDate = this.updateItemForm.get('endDate').value;
+      this.item.endDateTS = dayjs(this.updateItemForm.get('endDate').value).unix();
+     }
+     if(this.item.category == 'announcement'){
+      this.item.voting = this.updateItemForm.value.voting;
+      this.item.votingMessage = this.updateItemForm.value.votingMessage;
+      this.item.votingResult = this.updateItemForm.value.votingResult;
+     }
+    this.item.subject = this.updateItemForm.value.subject;
+    this.item.details = this.updateItemForm.value.details;
+    this.item.voting = this.updateItemForm.value.voting;
+    this.item.votingResult = this.updateItemForm.value.votingResult;
     const {...itemData} = this.item;
 
     this.firebaseService.updateItem(itemData,this.files)
@@ -173,12 +297,12 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
   deleteFile(index : number){ 
         //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} );
-         if(this.files[index].fileStoragePath !== "") {         
-         this.firebaseService.deleteFromStorage(this.files[index].fileStoragePath).then(res=> {
+         if(this.files[index].storagePath !== "") {         
+         this.featureService.deleteFromStorage(this.files[index].storagePath).then(res=> {
          console.log("before",this.item);
-         this.item.fileFullPath.splice(index,1);
+         this.item.files.splice(index,1);
          console.log("after",this.item);
-         this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
+         this.featureService.updateItemWithoutOptions(this.item, 'publication').then(()=> {
           this.files.splice(index,1); 
           this.featureService.presentToast("file removed from storage and DB",2000);}
           ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
@@ -191,27 +315,5 @@ export class FirebaseUpdateItemModal implements OnInit {
       }
       //loading.then(res=>{res.dismiss();})
 }
-async openFile(i:number){
-  console.log(i);
-  let filePath : string;
-  /* try {
-    
-  } catch (error) {
-    
-  } */
-    
-    await this.firebaseService.afstore.ref(this.item.fileFullPath[i].storagePath).getDownloadURL()
-    .toPromise()
-    .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
-  const fileTransfer = this.transfer.create();
-  fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entry) => {
-    console.log('download complete: ' + entry.toURL());
-    let url = entry.toURL();
-    this.fileOpener.open(url,'application/pdf');
-  }, (error) => {
-    console.log('error: ' + error);
-  }).catch(err => console.log(err));
-
-  }
   //END
 }

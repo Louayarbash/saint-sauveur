@@ -6,7 +6,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { Observable } from "rxjs";
-import { PhotosData } from '../../../type'
+import { Images } from '../../../type'
 import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
@@ -24,7 +24,7 @@ import { counterRangeValidator } from '../../../components/counter-input/counter
 export class FirebaseUpdateItemModal implements OnInit {
 
   @Input() item: FirebaseItemModel;
-  @Input() postImages: PhotosData[];
+  @Input() postImages: Images[];
 
   updateItemForm: FormGroup;
   //postImages : PhotosArray[] = [];
@@ -53,7 +53,8 @@ export class FirebaseUpdateItemModal implements OnInit {
       bedRooms: new FormControl(this.item.bedRooms, counterRangeValidator(0, 10)),
       bathRooms: new FormControl(this.item.bathRooms, counterRangeValidator(0, 8)),
       floor: new FormControl(this.item.floor, counterRangeValidator(0, 30)),
-      balcony: new FormControl(this.item.balcony),
+      balcony: new FormControl(this.item.balcony, counterRangeValidator(0, 5)),
+      //balcony: new FormControl(this.item.balcony),
       description : new FormControl(this.item.description),
       price : new FormControl(this.item.price,[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl(this.item.status)
@@ -77,11 +78,11 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.firebaseService.deleteItem(this.item)
+            this.featureService.deleteItem(this.item.images,this.item.id, 'rentorsale')
             .then(
               () => {
                 this.dismissModal();
-                this.router.navigate(['sale/listing']);
+                this.router.navigate(['rentorsale/listing']);
               },
               err => console.log(err)
             );
@@ -96,10 +97,10 @@ export class FirebaseUpdateItemModal implements OnInit {
         const loading = this.featureService.presentLoadingWithOptions(5000);
          if(this.postImages[index].storagePath !== '') {      
           this.item.images.splice(index,1);    
-          this.firebaseService.updateItemWithoutOptions(this.item).then(()=> {
+          this.featureService.updateItemWithoutOptions(this.item, 'rentorsale').then(()=> {
           const deletedimage = this.postImages.splice(index,1); 
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
-          this.firebaseService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
+          this.featureService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
         }).catch( err => console.log("Error in deletePhoto DB: ",err));  
       }
       else{
@@ -128,7 +129,7 @@ updateItem() {
     this.item.bathRooms = this.updateItemForm.value.bathRooms;
     this.item.floor = this.updateItemForm.value.floor;
     this.item.balcony = this.updateItemForm.value.balcony;
-   }
+  }
   this.item.description = this.updateItemForm.value.description;
   this.item.price = this.updateItemForm.value.price;
   this.item.status = this.updateItemForm.value.status;
@@ -136,7 +137,7 @@ updateItem() {
 
   //const {...itemData} = this.item;
 
-  this.firebaseService.updateItem(this.item,this.postImages)
+  this.featureService.updateItemWithImages(this.item, this.postImages, 'rentorsale')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.PostUpdatedSuccessfully,2000);
     this.modalController.dismiss();
@@ -203,9 +204,9 @@ async selectImageSource() {
              let filename = imageData[i].substring(imageData[i].lastIndexOf('/')+1);
              const path = imageData[i].substring(0,imageData[i].lastIndexOf('/')+1);
                await this.file.readAsDataURL(path,filename).then((base64string)=> {                    
-               const photos : PhotosData = {isCover:false,photo:'', storagePath :''};
+               const photos : Images = {isCover:false, photoData:'', storagePath: ''};
                photos.isCover = false;
-               photos.photo = base64string;
+               photos.photoData = base64string;
                this.postImages.push(photos);
              }
            ).catch(err=>{console.log(err)})
@@ -248,9 +249,9 @@ async selectImageSource() {
           const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
           const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
           await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : PhotosData = {isCover:false, photo:'', storagePath:''};
+            const photos : Images = {isCover:false, photoData:'', storagePath:''};
             photos.isCover = false;
-            photos.photo = image;
+            photos.photoData = image;
             this.postImages[this.postImages.length] = photos;
             this.updateItemForm.markAsDirty();
             this.changeRef.detectChanges();

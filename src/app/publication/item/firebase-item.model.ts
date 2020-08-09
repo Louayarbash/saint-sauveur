@@ -1,5 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
-import { FileUpload } from '../../type'
+import { Files } from '../../type'
 
 export class FirebaseSkillModel extends ShellModel {
   id: string;
@@ -20,25 +20,27 @@ export class FirebasePhotoModel /*extends ShellModel*/ {
 
 export class FirebaseItemModel extends ShellModel {  
   id:string;
-  title : string;
-  description : string;
+  subject: string;
+  details: string;
+  
+  buildingId: string;
   createdById: string;
-  createDate : string;  
+  createDate: firebase.firestore.FieldValue;  
   category:string;
+  files: Array<Files> = [];
+  // firelds for event
+  date : string;
+  dateTS : number;
+  startDate : string;
+  startDateTS : number;
+  endDate : string;
+  endDateTS : number;
+  // fields for announcement
+  voting: boolean;
+  votingMessage: string;
+  votingResult: boolean;
   //fullPathFromStore:string;
-  fileFullPath: Array<any> = [];
-
-  constructor() {
-    super();
-  }
-}
-export class FirebaseCombinedSkillModel extends FirebaseItemModel {
-  skills: Array<FirebaseSkillModel> = [
-    new FirebaseSkillModel(),
-    new FirebaseSkillModel(),
-    new FirebaseSkillModel()
-  ];
-
+  
   constructor() {
     super();
   }

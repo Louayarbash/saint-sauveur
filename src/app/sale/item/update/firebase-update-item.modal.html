@@ -51,6 +51,7 @@
                </ion-radio-group>
              </ion-item>
        <ion-item-divider>
+         {{postImages.length}}
         <ion-button size="small" color="main" (click)="selectImageSource()" [disabled]="postImages.length >= 3" slot="start">
          <div class="ion-padding">{{ 'AddPhoto' | translate }}</div> 
         <ion-icon name="camera-outline"></ion-icon>
@@ -60,7 +61,7 @@
         <ion-item *ngFor="let image of postImages">
 
         <ion-col class="ion-padding">
-          <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photo">
+          <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photoData">
             <app-aspect-ratio [ratio]="{w:64, h:50}">
            </app-aspect-ratio> 
          </app-image-shell>

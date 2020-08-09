@@ -14,7 +14,7 @@
   <ion-content>
     <section>
       <!-- <ion-list lines="full"> -->
-       <ion-item>
+<!--        <ion-item>
          <ion-label>{{ 'Type' | translate }}</ion-label>
          <ion-radio-group formControlName="type">
            <ion-row class="radio-tags">
@@ -32,8 +32,8 @@
              </ion-col>
            </ion-row>
          </ion-radio-group>
-       </ion-item>
-       <ion-item>
+       </ion-item> -->
+<!--        <ion-item>
          <ion-label>{{ 'Object' | translate }}</ion-label>
          <ion-radio-group formControlName="object">
            <ion-row class="radio-tags">
@@ -57,7 +57,7 @@
              </ion-col>
            </ion-row>
          </ion-radio-group>
-       </ion-item>
+       </ion-item> -->
        <ion-item *ngIf="item.object ==='condo'">
          <ion-grid class="ion-no-padding">
            <ion-row class="ion-align-items-center">
@@ -103,10 +103,25 @@
            </ion-row>
          </ion-grid>
        </ion-item>
-     <ion-item *ngIf="item.object ==='condo'">
+       <ion-item *ngIf="item.object ==='condo'">
+         <ion-grid class="ion-no-padding">
+           <ion-row class="ion-align-items-center">
+             <ion-col size="4">
+               <ion-label>{{ 'Balcony' | translate }}</ion-label>
+             </ion-col>
+             <ion-col class="ion-text-center">
+               <ion-label>{{updateItemForm.controls.balcony.value}}</ion-label>
+             </ion-col>
+             <ion-col>
+               <app-counter-input [max]='5' [min]='0' formControlName="balcony" basic></app-counter-input>
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+       </ion-item>
+<!--      <ion-item *ngIf="item.object ==='condo'">
        <ion-label>{{ 'Balcony' | translate }}</ion-label>
        <ion-checkbox formControlName="balcony"></ion-checkbox>
-     </ion-item>
+     </ion-item> -->
        <ion-item>
          <ion-label position="floating">{{ 'Price' | translate }}</ion-label>
          <ion-input type="number" formControlName="price"></ion-input>
@@ -152,7 +167,7 @@
         <ion-item *ngFor="let image of postImages">
 
         <ion-col class="ion-padding">
-          <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photo">
+          <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photoData">
             <app-aspect-ratio [ratio]="{w:64, h:50}">
            </app-aspect-ratio> 
          </app-image-shell>

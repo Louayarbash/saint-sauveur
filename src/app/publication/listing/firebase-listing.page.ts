@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+// import { FormGroup, FormControl } from '@angular/forms';
 import { ModalController} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+// import { switchMap, map } from 'rxjs/operators';
 
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
@@ -12,10 +12,10 @@ import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.mod
 
 import { DataStore, ShellModel } from '../../shell/data-store';
 //import { Toast } from '@ionic-native/toast/ngx';
-import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
+// import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 
 
@@ -29,13 +29,12 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
-  filePath222:string;
-  rangeForm: FormGroup;
-  searchQuery: string;
-  showAgeFilter = false;
-  CoverPic:string;
-  searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
-  searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
+  // rangeForm: FormGroup;
+  // searchQuery: string;
+  // showAgeFilter = false;
+  // CoverPic:string;
+  // searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
+  // searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
@@ -43,6 +42,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  segmentValue = 'announcements';
+  announcementsList: Array<FirebaseListingItemModel>;
+  regulationsList: Array<FirebaseListingItemModel>;
+  eventsList: Array<FirebaseListingItemModel>;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -52,10 +55,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    private document: DocumentViewer,
+    // private document: DocumentViewer,
     private file:File,
     private fileOpener:FileOpener,
-    private transfer : FileTransfer
+    // private transfer : FileTransfer
   ) { }
   
   ngOnDestroy(): void {
@@ -63,69 +66,55 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.searchQuery = '';
+/*     this.searchQuery = '';
 
     this.rangeForm = new FormGroup({
       dual: new FormControl({lower: 1, upper: 100})
-    });
+    }); */
 
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
       (resolvedRouteData) => {
         this.listingDataStore = resolvedRouteData['data'];
 
-        // We need to avoid having multiple firebase subscriptions open at the same time to avoid memory leaks
-        // By using a switchMap to cancel previous subscription each time a new one arrives,
-        // we ensure having just one subscription (the latest)
-        const updateSearchObservable = this.searchFiltersObservable.pipe(
-          switchMap((filters) => {
-/*             const filteredDataSource = this.firebaseService.searchUsersByAge(
-              filters.lower,
-              filters.upper
-            ); */
-            // Send a shell until we have filtered data from Firebase
-            const searchingShellModel = [
-              new FirebaseListingItemModel(),
-              new FirebaseListingItemModel()
-            ];
-            // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
-            const searchingDelay = 400;
-
-            const dataSourceWithShellObservable = DataStore.AppendShell(this.listingDataStore.state, searchingShellModel, searchingDelay);
-            
-            return dataSourceWithShellObservable.pipe(
-              map(filteredItems => {
-                console.log(filteredItems)        ;        
-                // Just filter items by name if there is a search query and they are not shell values
-                if (filters.query !== '' && !filteredItems.isShell) {
-                  const queryFilteredItems = filteredItems.filter(item =>
-                    
-                    item.title.toLowerCase().includes(filters.query.toLowerCase()
-                    //console.log(item.title)
-                  ));
-                  // While filtering we strip out the isShell property, add it again
-                  return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
-                } else {
-                  return filteredItems;
-                }
-              })
-            );
-          })
-        );
-
-        // Keep track of the subscription to unsubscribe onDestroy
-        // Merge filteredData with the original dataStore state
-        this.stateSubscription = merge(
-          this.listingDataStore.state,
-          updateSearchObservable
-        ).subscribe(
-          async (state) => { /* i put async here to produce PhotoFromUrl correctly*/
+        this.stateSubscription = this.listingDataStore.state
+        .subscribe(
+         (state) => {
             this.items = state;
-            console.log(this.items);
+            console.log("this.item", this.items)
+          
+            if(this.items.isShell == false) {
+/*              this.items.map(item => {
+                item.date = dayjs(item.date).format('DD, MMM, YYYY');
+                item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
+                item.endTimeCounter = dayjs(item.endDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
+                item.startTime = dayjs(item.startDate).format("HH:mm");
+                item.endTime = dayjs(item.endDate).format('HH:mm');
+              }); */
+
+              let announcementsList= this.items; 
+              let regulationsList= this.items;
+              let eventsList= this.items;
+
+              this.announcementsList = announcementsList.filter(item => item.category === 'announcement' );
+              this.regulationsList = regulationsList.filter(item => item.category === 'regulation');
+              this.eventsList = eventsList.filter(item => item.category === 'event');
+
+            }
+            else {
+              this.announcementsList = this.items;
+              this.regulationsList = this.items;
+              this.eventsList = this.items;
+            }
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
         );
+/*           (error) => console.log(error),
+          () => {
+            return console.log('stateSubscription completed');
+          }
+        ); */
       },
       (error) => console.log(error)
     );
@@ -138,14 +127,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     await modal.present();
   }
 
-  searchList() {
-    this.searchSubject.next({
-      lower: this.rangeForm.controls.dual.value.lower,
-      upper: this.rangeForm.controls.dual.value.upper,
-      query: this.searchQuery
-    });
-  }
-
   OpenLocalPDF() {
     console.log("OpenLocalPDF:",this.file.dataDirectory);
     let filePath = this.file.applicationDirectory + "www/assets/"
@@ -153,5 +134,14 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.file.copyFile(filePath,"NaraMenu.pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
       this.fileOpener.open(result.nativeURL,'application/pdf');
     });
+  }
+
+  segmentChanged(ev:any) {
+    //console.log(ev.detail.value);
+    //console.log(ev.target.value);
+    this.segmentValue = ev.detail.value;
+
+    // Check if there's any filter and apply it
+    //this.searchList();
   }
 }

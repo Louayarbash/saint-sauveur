@@ -28,30 +28,26 @@ import * as dayjs from 'dayjs';
   styleUrls: [
     './styles/firebase-listing.page.scss',
     './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss',
-    '../../user/friends/styles/user-friends.page.scss',
-    '../../user/friends/styles/user-friends.shell.scss',
-    '../../user/friends/styles/user-friends.md.scss',
-    '../../user/friends/styles/user-friends.ios.scss'
+    './styles/firebase-listing.shell.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   /*for segment implementation*/
   loginId = this.loginService.getLoginID();
   segmentValue = 'newRequests';
-  //friendsList: Array<any>;
+  // friendsList: Array<any>;
   newRequestsList: Array<FirebaseListingItemModel>;
   newOffersList: Array<FirebaseListingItemModel>;
   myRequestsList: Array<FirebaseListingItemModel>;
-  searchQuery = '';
-  showFilters = false;
+  // searchQuery = '';
+  // showFilters = false;
   /* end */
   // rangeForm: FormGroup;
   //searchQuery: string;
-  showAgeFilter = false;
-  CoverPic:string;
-  searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
-  searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
+  // showAgeFilter = false;
+  // CoverPic:string;
+  // searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
+  // searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
@@ -84,7 +80,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
    ngOnInit() {
      
-    this.searchQuery = '';
+    // this.searchQuery = '';
     
 
 /*     this.rangeForm = new FormGroup({
