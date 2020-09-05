@@ -1,21 +1,20 @@
 import { Component, OnInit, HostBinding} from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel, combinedItemModel } from '../firebase-item.model';
 //import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
-import { DataStore, ShellModel } from '../../../shell/data-store';
+import { DataStore } from '../../../shell/data-store';
 import { FcmService } from '../../../../app/services/fcm/fcm.service';
 //import { DateService } from '../../../../app/services/date/date.service';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 //import { timer } from 'rxjs';
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService } from '@ngx-translate/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -91,7 +90,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     private loginService : LoginService,
     private featureService : FeatureService,
     private callNumber: CallNumber,
-    private socialSharing : SocialSharing
+    private socialSharing : SocialSharing,
+    private routerOutlet: IonRouterOutlet
   ) { 
 
     this.loginID = this.loginService.getLoginID();
@@ -220,7 +220,9 @@ export class FirebaseItemDetailsPage implements OnInit {
       component: FirebaseUpdateItemModal,
       componentProps: {
         'item': this.item as ItemModel
-      }
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present(); 
   }

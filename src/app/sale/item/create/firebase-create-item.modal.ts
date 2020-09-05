@@ -46,8 +46,8 @@ export class FirebaseCreateItemModal implements OnInit {
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
-      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
-      status : new FormControl('active')
+      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')])// ,
+      // status : new FormControl('active')
     });
   }
 
@@ -56,24 +56,23 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
-    console.log("postImages",this.postImages);
+    // console.log("postImages",this.postImages);
     this.itemData.object = this.createItemForm.value.object;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
-    this.itemData.status = this.createItemForm.value.status;
+    // this.itemData.status = this.createItemForm.value.status;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     this.featureService.createItemWithImages(this.itemData, this.postImages, 'posts')
     .then(() => {
-      this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
-      loading.then(res=>{res.dismiss();})
-      this.dismissModal();  
+      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
+      loading.then(res=>{res.dismiss();}) 
+      this.dismissModal();  // not needed inside catch to stay on same page while errors
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.PostAddingErrors, 2000);
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       loading.then(res=>{res.dismiss();})
-      this.dismissModal();
       console.log(err);
      });     
   }

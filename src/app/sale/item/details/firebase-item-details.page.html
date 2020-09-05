@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="sale/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'PostDetails' | translate }}</ion-title>
-    <ion-buttons slot="end">
-        <ion-button (click)="openFirebaseUpdateModal()"  [hidden]="editHidden">
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsCreator">
+        <ion-button (click)="openFirebaseUpdateModal()">
           {{ 'Edit' | translate }}
       </ion-button> 
     </ion-buttons>
@@ -30,38 +30,38 @@
 <!--           <ion-list-header lines="inset">
             <ion-label>Trending</ion-label>
           </ion-list-header> -->
-          <ion-item color="main" lines="none">
+          <ion-item lines="none">
             <ion-label>{{ 'Object' | translate }}</ion-label>
             <app-text-shell animation="bouncing" [data]="item?.object"></app-text-shell>                  
           </ion-item>
-          <ion-item color="main" lines="none">    
+          <ion-item lines="none">    
             <ion-label>{{ 'Price' | translate }}</ion-label>
             <app-text-shell [data]="(item.price) ? ''.concat(item.price).concat('  $') : null"></app-text-shell>    
           </ion-item>
         
-          <ion-item-divider class="divider"> 
-            <ion-label>{{ 'SellerInfo' | translate}}</ion-label>
+          <ion-item-divider> 
+            <ion-label>{{ 'CreatorInfo' | translate}}</ion-label>
           </ion-item-divider>
-          <ion-item color="main" lines="none">    
-            <ion-label>{{ 'SellerName' | translate}}</ion-label>
+          <ion-item lines="none">    
+            <ion-label>{{ 'CreatorName' | translate}}</ion-label>
             <app-text-shell [data]="(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null"></app-text-shell>    
           </ion-item>
-            <ion-item color="main" lines="none">
+            <ion-item lines="none">
               <ion-label>{{ 'Email' | translate }}</ion-label>
               <app-text-shell animation="bouncing" [data]="item.creatorDetails?.email"></app-text-shell>                  
             </ion-item>
-            <ion-item color="main" lines="none">
+            <ion-item lines="none">
               <ion-label >{{ 'Phone' | translate }}</ion-label>
               <app-text-shell animation="bouncing" [data]="item.creatorDetails?.phone"></app-text-shell>                  
             </ion-item>
             <!-- <div *ngIf="item?.description != ''"> -->
-            <ion-item-divider class="divider">
+            <ion-item-divider>
               <ion-label>{{ 'Description' | translate }}</ion-label>
             </ion-item-divider>
      <!--        <ion-item lines="none">
               <ion-label>{{ 'Description' | translate }}</ion-label>
             </ion-item> -->
-            <ion-item color="main">
+            <ion-item>
               <ion-textarea rows="6" [value]="item.description" readonly class="ion-no-padding"></ion-textarea>
             </ion-item>
           <!-- </div> -->

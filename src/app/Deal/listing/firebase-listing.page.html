@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="app/categories"></ion-back-button>
+      <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'ParkingRequests' | translate }}-{{loginId}}</ion-title>
     <ion-buttons slot="end">
@@ -10,9 +10,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  </ion-header>
-  <ion-toolbar>
-    <ion-segment value="newRequests"  (ionChange)="segmentChanged($event)">
+    <ion-segment value="newRequests" (ionChange)="segmentChanged($event)" color="main">
         <ion-segment-button value="newRequests">
           <ion-label>{{ 'NewRequests' | translate }}</ion-label>
         </ion-segment-button>
@@ -23,8 +21,17 @@
           <ion-label>{{ 'MyRequests' | translate }}</ion-label>
         </ion-segment-button>
     </ion-segment>
-  </ion-toolbar>
+  </ion-header>
   <ion-content class="deals-requests-listing-content">
+    <ng-container *ngIf="items.isShell">
+      <div class="DivLoading">
+        <ion-spinner></ion-spinner>
+  <!--       <p>
+          Fetching data...
+        </p> -->
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!items.isShell">
     <section [hidden]="segmentValue !== 'newRequests'">
       <ng-container *ngIf="newRequestsList?.length > 0">
         <div class="listing-item" *ngFor="let item of newRequestsList" [ngClass]="{'accepted': (item.status == 'accepted'), 'new': (item.status == 'new'), 'expired': (item.status == 'expired'),'ended': (item.status == 'ended')}">
@@ -296,4 +303,5 @@
      </h3>
     </ng-container>
     </section>
+  </ng-container>
 </ion-content>

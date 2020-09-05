@@ -45,6 +45,9 @@ parking: any;
       return created;
       
   }
+  isUserAdmin(){
+    return this.getLoginID() == "Ku6jzqUAjK3iLlXWSfPK" ? true : false; 
+  }
   getLoginName(){
     return "Louay";
   }
@@ -72,7 +75,7 @@ parking: any;
   }
 
   async getUserInfo(){
-      console.log("inside getLoginInfo 111")
+      // console.log("inside getLoginInfo 111")
       try {
       const res = await this.afs.firestore.collection("users").doc(this.getLoginID()).get();
       console.log("hello",res.data());
@@ -97,16 +100,16 @@ updateUserParking(parking : any){
 getUserInfoObservable5() //: Observable<any>
  {
   return this.afs.collection("users").doc<FirebaseUserModel>(this.getLoginID()).valueChanges().subscribe((user) => {
-    console.log("BINGOOO",user);
-  this.buildingId = user.building;
+    // console.log("BINGOOO",user);
+  this.buildingId = user.buildingId;
   this.language = user.language;
   this.firstname = user.firstname;
-  this.parking = user.parking; 
-  console.log(this.buildingId);
-  console.log(this.language);
-  console.log(this.firstname);
-  console.log(this.parking);
-  //return this.parking;
+  this.parking = user.parking;
+  // console.log(this.buildingId);
+  // console.log(this.language);
+  // console.log(this.firstname);
+  // console.log(this.parking);
+  // return this.parking;
  });
 
 } 

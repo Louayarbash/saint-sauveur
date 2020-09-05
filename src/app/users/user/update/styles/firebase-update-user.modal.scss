@@ -99,10 +99,10 @@ ion-icon {
 
     // Add a deeper selector to override default colors
     .radio-tag {
-      --radio-tag-color: var(--ion-color-secondary);
+      --radio-tag-color: var(--ion-color-main);
       --radio-tag-background: var(--ion-color-lightest);
       --radio-tag-active-color: var(--ion-color-lightest);
-      --radio-tag-active-background: var(--ion-color-secondary);
+      --radio-tag-active-background: var(--ion-color-main);
 
       padding: 0px var(--page-tags-gutter);
       margin: var(--page-tags-gutter) 0px;

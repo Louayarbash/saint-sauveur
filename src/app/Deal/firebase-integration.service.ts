@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable, of, forkJoin, throwError, combineLatest, scheduled } from 'rxjs';
-import { map, concatMap, first, filter } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable, of, throwError, combineLatest } from 'rxjs';
+import { map, concatMap, first } from 'rxjs/operators';
 //import * as dayjs from 'dayjs';
-import { DataStore, ShellModel } from '../shell/data-store';
+import { DataStore } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { ItemModel, userModel, combinedItemModel } from './item/firebase-item.model';
 //import { ItemImageModel } from './item/select-image/item-image.model';
 
-import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/storage";
 import { LoginService } from "../services/login/login.service"
 import { FeatureService } from '../services/feature/feature.service'; 
 import { Router } from '@angular/router';
@@ -145,12 +145,12 @@ export class FirebaseService {
         itemData.count = index + "/" + count;
         this.afs.firestore.collection(this.tableName).add({...itemData}).then(() => {
         if(count == index){
-          this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully + itemData.count,2000)
+          this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully, 2000)
         }
         }
         ).catch(err => {
           console.log(err)
-          this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+          this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
         });            
       }  
      }
@@ -161,7 +161,7 @@ export class FirebaseService {
       }
       ).catch(err => {
         console.log(err)
-        this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+        this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       });   
      }         
     
@@ -193,11 +193,11 @@ export class FirebaseService {
           if (oldStatus == "new"){
             tran.update(itemRef, { parkingInfo : itemData.parkingInfo, status: newStatus, responseBy:this.loginService.getLoginID()});
             //console.log("changed");
-            this.featureService.presentToast(this.featureService.translations.RequestResponded,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestResponded, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
-            this.featureService.presentToast(this.featureService.translations.RequestAlreadyResponded,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestAlreadyResponded, 2000);
             this.router.navigate(['deal/listing']);
             //console.log("not changed");
             return Promise.reject(this.featureService.translations.RequestRespondedOrCanceled);
@@ -218,14 +218,14 @@ export class FirebaseService {
           if (oldStatus == "new"){
             let newStatus = "newRequestCanceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featureService.presentToast(this.featureService.translations.RequestCanceled,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestCanceled, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('NewRequestCanceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
             let newStatus = "acceptedRequestCanceled";
             tran.update(itemRef, {status: newStatus});            
-            this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
@@ -247,12 +247,12 @@ export class FirebaseService {
           if (oldStatus == "accepted"){ //and not started 
             let newStatus = "new"; 
             tran.update(itemRef, {status: newStatus, responseBy:""});            
-            this.featureService.presentToast(this.featureService.translations.RequestDealCanceled,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestDealCanceled, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Your deal is canceled!' + newStatus);
           }
           else {        
-            this.featureService.presentToast(this.featureService.translations.RequestCantCancelDeal,3000);
+            this.featureService.presentToast(this.featureService.translations.RequestCantCancelDeal, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.reject('cant cancel this request!');
           } 
@@ -274,11 +274,11 @@ export class FirebaseService {
           if (oldStatus == "new"){
             tran.update(itemRef, { /*parkingInfo : itemData.parkingInfo,*/ status: newStatus, responseBy:this.loginService.getLoginID()});
             //console.log("changed");
-            this.featureService.presentToast(this.featureService.translations.OfferAccepted,3000);
+            this.featureService.presentToast(this.featureService.translations.OfferAccepted, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
-            this.featureService.presentToast(this.featureService.translations.OfferAlreadyAccepted,3000);
+            this.featureService.presentToast(this.featureService.translations.OfferAlreadyAccepted, 2000);
             this.router.navigate(['deal/listing']);
             //console.log("not changed");
             return Promise.reject(this.featureService.translations.OfferAcceptedOrCanceled);
@@ -300,14 +300,14 @@ public cancelOffer(itemData: ItemModel) {
         if (oldStatus == "new"){
           let newStatus = "newOfferCanceled";
           tran.update(itemRef, {status: newStatus});            
-          this.featureService.presentToast(this.featureService.translations.OfferCanceled,3000);
+          this.featureService.presentToast(this.featureService.translations.OfferCanceled, 2000);
           this.router.navigate(['deal/listing']);
           return Promise.resolve('NewOfferCanceled!' + newStatus);
         }
         else if (oldStatus == "accepted"){
           let newStatus = "acceptedOfferCanceled";
           tran.update(itemRef, {status: newStatus});            
-          this.featureService.presentToast(this.featureService.translations.OfferAcceptedCanceled,3000);
+          this.featureService.presentToast(this.featureService.translations.OfferAcceptedCanceled, 2000);
           this.router.navigate(['deal/listing']);
           return Promise.resolve('Accepted offer canceled!' + newStatus);
         }
@@ -329,12 +329,12 @@ public cancelOfferDeal(itemData: ItemModel) {
         if (oldStatus == "accepted"){ //and not started 
           let newStatus = "new"; 
           tran.update(itemRef, {status: newStatus, responseBy:""});            
-          this.featureService.presentToast(this.featureService.translations.OfferDealCanceled,3000);
+          this.featureService.presentToast(this.featureService.translations.OfferDealCanceled, 2000);
           this.router.navigate(['deal/listing']);
           return Promise.resolve('Your deal is canceled!' + newStatus);
         }
         else {        
-          this.featureService.presentToast(this.featureService.translations.OfferCantCancelDeal,3000);
+          this.featureService.presentToast(this.featureService.translations.OfferCantCancelDeal, 2000);
           this.router.navigate(['deal/listing']);
           return Promise.reject('cant cancel this offer!');
         } 

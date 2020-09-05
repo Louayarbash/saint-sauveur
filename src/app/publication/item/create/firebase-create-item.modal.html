@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
   <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar>
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -12,8 +12,8 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <section>
-       <ion-list lines="full">
+    <!-- <section> -->
+       <!-- <ion-list lines="full"> -->
         <ion-item>
           <ion-label>{{ 'Category' | translate }}</ion-label>
           <ion-radio-group formControlName="category" (ionChange)="categoryChanged($event)">
@@ -102,8 +102,8 @@
           <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
           </ion-button>
         </ion-item>
-      </ion-list> 
-    </section>
+      <!-- </ion-list>  -->
+    <!-- </section> -->
     <section>
     <ion-row *ngFor="let file of files; let i = index;">
       <ion-col size="6">        

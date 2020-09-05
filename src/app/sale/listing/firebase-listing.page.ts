@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ModalController} from '@ionic/angular';
+import { ModalController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
@@ -48,6 +48,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
+    private routerOutlet: IonRouterOutlet
     //private document: DocumentViewer,
     //private file:File,
     //private fileOpener:FileOpener
@@ -148,7 +149,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateItemModal
+      component: FirebaseCreateItemModal,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }

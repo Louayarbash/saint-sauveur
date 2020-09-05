@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable, of, forkJoin, throwError, combineLatest } from 'rxjs';
-import { map, concatMap, first, filter } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
-import { DataStore, ShellModel } from '../shell/data-store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+// import * as dayjs from 'dayjs';
+import { DataStore } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseUserModel } from './user/firebase-user.model';
@@ -17,7 +17,10 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedUserDataStore: DataStore<FirebaseUserModel>;
-  private relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>>;
+  // private relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>>;
+  private buildingId = this.loginService.getBuildingId();
+  private tableName = "users";
+
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<UserImageModel>>;
   
@@ -28,7 +31,8 @@ export class FirebaseService {
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
-    return this.afs.collection<FirebaseListingItemModel>('users').valueChanges({ idField: 'id' });
+    // return this.afs.collection<FirebaseListingItemModel>('users').valueChanges({ idField: 'id' });
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
 /*      .pipe(
        map(actions => actions.map(user => {
           const age = this.calcUserAge(user.birthdate);
@@ -57,23 +61,23 @@ export class FirebaseService {
   }
 
   // Filter users by age
-  public searchUsersByAge(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
+  // public searchUsers(lower: number, upper: number): Observable<Array<FirebaseListingItemModel>> {
     // we save the dateOfBirth in our DB so we need to calc the min and max dates valid for this query
-    const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
-    const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
+    // const minDate = (dayjs(Date.now()).subtract(upper, 'year')).unix();
+    // const maxDate =  (dayjs(Date.now()).subtract(lower, 'year')).unix();
 
-    const listingCollection = this.afs.collection<FirebaseListingItemModel>('users', ref =>
-      ref.orderBy('birthdate'));
+    // const listingCollection = this.afs.collection<FirebaseListingItemModel>('users', ref =>
+    //  ref.orderBy('birthdate'));
       //.startAt(minDate).endAt(maxDate));
 
-    return listingCollection.valueChanges({ idField: 'id' });
+    // return listingCollection.valueChanges({ idField: 'id' });
 /*     .pipe(
       map(actions => actions.map(user => {
          const age = this.calcUserAge(user.birthdate);
          return { age, ...user } as FirebaseListingItemModel;
        })
      )); */
-  }
+  // }
 
   /*
     Firebase User Details Page

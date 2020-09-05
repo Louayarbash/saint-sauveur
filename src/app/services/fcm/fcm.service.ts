@@ -1,5 +1,5 @@
 //reference https://angularfirebase.com/lessons/ionic-native-with-firebase-fcm-push-notifications-ios-android/
-import { Injectable,NgZone,ChangeDetectorRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 //import { Firebase } from '@ionic-native/firebase/ngx';
 //import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -7,7 +7,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
 //import { AngularFireAuth } from '@angular/fire/auth';
 import { Platform, AlertController } from '@ionic/angular';
 import { LoginService } from "../login/login.service"
-import { mergeMapTo,mergeMap } from 'rxjs/operators';
+// import { mergeMapTo,mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class FcmService {
   // Get permission from the user
    async getToken() { 
      
-    let token;
+    let token: string;
 
     if (this.platform.is('android')) {
       token = await this.fcm.getToken();

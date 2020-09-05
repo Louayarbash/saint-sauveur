@@ -1,4 +1,4 @@
-import { Component, OnInit,NgModule, Input, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -148,7 +148,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.getUserParking(this.userParking);
     }
     else{
-      this.featureService.presentToast("No parking assigned to your profile, please contact your building administrator",3000);
+      this.featureService.presentToast(this.featureService.translations.NoParkingAssigned, 2000);
     }
   })
 
@@ -235,11 +235,12 @@ export class FirebaseCreateItemModal implements OnInit {
             this.firebaseService.createItem(this.itemData)
             .then(() => {
               this.dismissModal();
-              //this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully,2000);
+              // this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully, 2000);
               loading.then(res=>res.dismiss());
             }).catch(err => {
+              // this.dismissModal();
               console.log(err)
-              //this.featureService.presentToast(this.featureService.translations.ConnectionProblem,2000);
+              // this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
               loading.then(res=>res.dismiss());
             });              
           }
@@ -291,19 +292,19 @@ export class FirebaseCreateItemModal implements OnInit {
     this.hasMultipleParking = true;
   }
   else if(this.radioObjectFiltered.length == 0){
-    this.featureService.presentToast("No parking found!, Problem with your current parking information",3000);
+    this.featureService.presentToast(this.featureService.translations.NoParkingFound, 2000);
   }
 
   if( this.radioObjectFiltered.length != radioObject.length){
     correctedParking = this.radioObjectFiltered.map(parking => {return {id : parking.id, number : parking.number}}); 
     this.createItemForm.get('parking').setValue(null);
     this.selectedParking = "";
-    this.featureService.presentToast("Parking info. updated",3000);
+    this.featureService.presentToast(this.featureService.translations.ParkingInfoUpdated,2000);
     this.loginService.updateUserParking(correctedParking);
   }
 }
 else{
-  this.featureService.presentToast("Problem retrieving your parking info.",3000);
+  this.featureService.presentToast(this.featureService.translations.ProblemRetrievingYourParkingInfo,2000);
 }
 
     });

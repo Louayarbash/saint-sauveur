@@ -1,16 +1,16 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="app/categories"></ion-back-button>
+      <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Publications' | translate }}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-segment value="announcements"  (ionChange)="segmentChanged($event)">
+  <ion-segment value="announcements"  (ionChange)="segmentChanged($event)" color="main">
     <ion-segment-button value="announcements">
       <ion-label>{{ 'Announcements' | translate }}</ion-label>
     </ion-segment-button>
@@ -23,28 +23,29 @@
 </ion-segment>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="items.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'announcements'">
   <ng-container *ngIf="items?.length > 0">
-    <ion-card class="itemCard" button="true" *ngFor="let item of announcementsList" [routerLink]="['/publication/details', item.id]" color="main">
-      <ion-card-header>
-        <ion-card-subtitle>{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}</ion-card-subtitle>
-        <ion-card-title>{{ item.subject }}</ion-card-title>
+    <ion-card class="itemCard" button="true" *ngFor="let item of announcementsList" [routerLink]="['/publication/details', item.id]">
+      <ion-item *ngIf="item.subject" color="main">
+        <ion-icon name="megaphone-outline" slot="start"></ion-icon>
+        <ion-label>{{item.subject}}</ion-label>
+      </ion-item>
+      <ion-card-header *ngIf="item.details">
+        <ion-card-subtitle>{{ item.details }}</ion-card-subtitle>
+        <!-- <ion-card-title>{{ item.subject }}</ion-card-title>  -->
       </ion-card-header>
-      <ion-card-content *ngIf="item.subject">
-        {{ item.details }}
+      <ion-card-content>
+        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}
       </ion-card-content>
-<!--       <ion-row class="ion-align-items-center">
-        <ion-col class="ion-text-left ion-padding-horizontal ion-padding-bottom ion-text-capitalize">
-            <h3>
-              {{ item.details }}
-            </h3>
-        </ion-col>
-        <ion-col  class="ion-text-right ion-padding-horizontal ion-padding-bottom">
-            <h3>
-              Text 2
-            </h3>
-        </ion-col>
-      </ion-row> -->
     </ion-card>
     </ng-container>
     <ng-container *ngIf="announcementsList?.length == 0">
@@ -55,17 +56,21 @@
     </section>
     <section [hidden]="segmentValue !== 'regulations'">
       <ng-container *ngIf="items?.length > 0">
-        <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/publication/details', item.id]" color="main">
-          <ion-card-header>
-            <ion-card-subtitle>{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}</ion-card-subtitle>
-            <ion-card-title>{{ item.subject }}</ion-card-title>
+        <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/publication/details', item.id]">
+          <ion-item *ngIf="item.subject" color="main">
+            <ion-icon name="file-tray-stacked-outline" slot="start"></ion-icon>
+            <ion-label>{{item.subject}}</ion-label>
+          </ion-item>
+          <ion-card-header *ngIf="item.details">
+            <ion-card-subtitle>{{ item.details }}</ion-card-subtitle>
+            <!-- <ion-card-title>{{ item.subject }}</ion-card-title>  -->
           </ion-card-header>
-          <ion-card-content *ngIf="item.subject">
-            {{ item.details }}
+          <ion-card-content>
+            {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}
           </ion-card-content>
         </ion-card>
         </ng-container>
-        <ng-container *ngIf="items?.length == 0">
+        <ng-container *ngIf="regulationsList?.length == 0">
           <h3 class="empty-list-message">
             {{ 'NoItemFound' | translate }}
           </h3>
@@ -73,13 +78,17 @@
         </section>
         <section [hidden]="segmentValue !== 'events'">
           <ng-container *ngIf="items?.length > 0">
-            <ion-card class="itemCard" button="true" *ngFor="let item of eventsList" [routerLink]="['/publication/details', item.id]" color="main">
-              <ion-card-header>
-                <ion-card-subtitle>{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}</ion-card-subtitle>
-                <ion-card-title>{{ item.subject }}</ion-card-title>
+            <ion-card class="itemCard" button="true" *ngFor="let item of eventsList" [routerLink]="['/publication/details', item.id]">
+              <ion-item *ngIf="item.subject" color="main">
+                <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                <ion-label>{{item.subject}}</ion-label>
+              </ion-item>
+              <ion-card-header *ngIf="item.details">
+                <ion-card-subtitle>{{ item.details }}</ion-card-subtitle>
+                <!-- <ion-card-title>{{ item.subject }}</ion-card-title>  -->
               </ion-card-header>
-              <ion-card-content *ngIf="item.subject">
-                {{ item.details }}
+              <ion-card-content>
+                {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}
               </ion-card-content>
             </ion-card>
             </ng-container>
@@ -89,4 +98,5 @@
               </h3>
             </ng-container>
             </section>
+          </ng-container>
     </ion-content>

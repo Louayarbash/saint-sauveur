@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 //import { FormGroup, FormControl } from '@angular/forms';
-import { ModalController, AlertController} from '@ionic/angular';
+import { ModalController, AlertController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, ReplaySubject, Subscription,/*, merge, interval*/} from 'rxjs';
+import { /*Observable, ReplaySubject,*/ Subscription,/*, merge, interval*/} from 'rxjs';
 //import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
@@ -16,7 +16,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 //import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { LoginService } from '../../services/login/login.service';
 import { FeatureService } from '../../services/feature/feature.service'
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 //import { timeout } from 'rxjs/operators';
 //import { TranslateService } from '@ngx-translate/core';
 
@@ -72,7 +72,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private routerOutlet: IonRouterOutlet
   ) {
   }
   ngOnDestroy(): void {
@@ -166,7 +167,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               let myRequestsList = this.items;
               let newRequestsList = this.items;
               let newOffersList = this.items;
-              console.log("liloooo",this.loginId)
+              // console.log("liloooo",this.loginId)
               this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
               this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "request"));
               this.newOffersList = newOffersList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "offer"));
@@ -216,7 +217,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       component: FirebaseCreateItemModal,
       componentProps: {
         'type' : this.type
-      }
+      },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }

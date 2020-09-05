@@ -69,10 +69,12 @@ export class TicketDetailsPage implements OnInit {
           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;
+            case "resolved" : this.status = this.featureService.translations.Resolved;
+            break;
             case "closed" : this.status = this.featureService.translations.Closed;
             break;
             default:
-              this.status = "";
+              this.status = "Undefined";
           }
 
           this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {

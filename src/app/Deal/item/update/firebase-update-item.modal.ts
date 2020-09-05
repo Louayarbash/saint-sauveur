@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,7 +8,8 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel } from '../firebase-item.model';
 //import { Observable } from "rxjs";
 //import {PhotosArray} from '../../../type'
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+import { FeatureService } from '../../../services/feature/feature.service';
 //import { DateService } from '../../../../app/services/date/date.service';
 //import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
@@ -33,7 +34,8 @@ export class FirebaseUpdateItemModal implements OnInit {
     private modalController: ModalController,
     public alertController: AlertController,
     public firebaseService: FirebaseService,
-    public router: Router
+    public router: Router,
+    private featureService: FeatureService
     //private dateService : DateService
     //private _alertController: AlertController,
   ) { 
@@ -95,9 +97,14 @@ export class FirebaseUpdateItemModal implements OnInit {
     // const { ...itemData} = this.item;
     
     this.firebaseService.updateItem(this.item.id, this.item.note)
-    .then(
-      () => this.modalController.dismiss(),
+    .then(() => {
+      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
+      this.modalController.dismiss();
+    },
       err => console.log(err)
-    );
+    ).catch((err)=> {
+      this.featureService.presentToast(this.featureService.translations.UpdatingErrors,2000);
+      console.log(err)
+    });
   }
 }

@@ -2,14 +2,23 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  //{ path: '', redirectTo: '/walkthrough', pathMatch: 'full' },
+  // { path: '', redirectTo: 'walkthrough', pathMatch: 'full' },
 	{ path: '', redirectTo: 'deal/listing', pathMatch: 'full' },														  
   { path: 'walkthrough', loadChildren: () => import('./walkthrough/walkthrough.module').then(m => m.WalkthroughPageModule) },
-  { path: 'getting-started', loadChildren: () => import('./getting-started/getting-started.module').then(m => m.GettingStartedPageModule) },
+  { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.CategoriesPageModule) },
+  { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'rent-sale', loadChildren: () => import('./rent-sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'auth', loadChildren: () => import('./auth/firebase-auth.module').then(m => m.FirebaseAuthModule) },				
+  { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  
   { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
   { path: 'auth/signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule) },
   // tslint:disable-next-line:max-line-length
   { path: 'auth/forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule) },
+  { path: 'getting-started', loadChildren: () => import('./getting-started/getting-started.module').then(m => m.GettingStartedPageModule) },
   { path: 'app', loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule) },
   { path: 'contact-card', loadChildren: () => import('./contact-card/contact-card.module').then(m => m.ContactCardPageModule) },
   // tslint:disable-next-line:max-line-length
@@ -18,20 +27,13 @@ const routes: Routes = [
   { path: 'page-not-found', loadChildren: () => import('./page-not-found/page-not-found.module').then(m => m.PageNotFoundModule) },
   { path: 'showcase', loadChildren: () => import('./showcase/showcase.module').then(m => m.ShowcasePageModule) },
   { path: 'firebase', loadChildren: () => import('./firebase/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'rentorsale', loadChildren: () => import('./rentorsale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'deal', loadChildren: () => import('./Deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'auth', loadChildren: () => import('./auth/firebase-auth.module').then(m => m.FirebaseAuthModule) },				
-  { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
   //{ path: 'video-playlist', loadChildren: () => import('./video-playlist/video-playlist.module').then(m => m.VideoPlaylistPageModule) },
   { path: '**', redirectTo: 'page-not-found' },
 
 /*   {
     path: 'test',
-    loadChildren: () => import('./Deal/item/test/test.module').then( m => m.TestPageModule)
+    loadChildren: () => import('./deal/item/test/test.module').then( m => m.TestPageModule)
   } */
 
 ];

@@ -1,10 +1,10 @@
 app-counter-input-minutes {
-  --counter-background: #000;
-  --counter-color: #FFF;
-  --counter-border-color: #000;
+  // --counter-background: #000;
+  --counter-color: #e05c0e;
+  --counter-border-color: rgb(224,92,14);
   --counter-border-radius-outer: 50%;
   --counter-border-radius-inner: 50%;
-  --counter-size: 30px;
+  --counter-size: 100px;
 
   display: flex;
   align-items: center;

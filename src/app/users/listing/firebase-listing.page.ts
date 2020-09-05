@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
@@ -43,7 +43,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   constructor(
     public firebaseService: FirebaseService,
     public modalController: ModalController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routerOutlet: IonRouterOutlet
   ) { }
 
   ngOnDestroy(): void {
@@ -81,7 +82,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   const queryFilteredItems = filteredItems.filter(
                     item =>
                      
-                    (item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
+                    (
+                      // item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
                     item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
                   );
                   // While filtering we strip out the isShell property, add it again
@@ -114,7 +116,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateUserModal
+      component: FirebaseCreateUserModal,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }

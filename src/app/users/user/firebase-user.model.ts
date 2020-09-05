@@ -5,7 +5,7 @@ export class FirebaseUserModel extends ShellModel {
   photo: string;
   firstname: string;
   lastname: string;
-  building:string;
+  buildingId: string;
   app:string;
   parking:any[];
   type:string;
@@ -15,7 +15,8 @@ export class FirebaseUserModel extends ShellModel {
   phone: number;
   birthdate: number;
   language:string;
-
+  createDate : firebase.firestore.FieldValue;
+  
   constructor() {
     super();
   }

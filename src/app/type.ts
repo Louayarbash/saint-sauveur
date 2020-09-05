@@ -16,7 +16,7 @@ export interface Images{
     storagePath: string;
 }
 
-export interface Files{    
+export interface Files{     
     fileName: string;   
     fileData: string; 
     filePath: string;

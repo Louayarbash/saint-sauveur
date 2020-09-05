@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular
 import { ModalController, AlertController , IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
@@ -10,8 +10,8 @@ import { FirebaseUserModel } from '../firebase-user.model';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-//import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
+import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-update-user',
@@ -47,7 +47,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     private alertController: AlertController,
     private camera: Camera,
     //private _angularFireSrore :AngularFirestore,
-    //private featureService : FeatureService,
+    private featureService : FeatureService,
     private loginService : LoginService,
     private changeRef: ChangeDetectorRef
   ) { 
@@ -67,7 +67,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.updateUserForm = new FormGroup({
       firstname: new FormControl(this.user.firstname,Validators.required),
       lastname: new FormControl(this.user.lastname,Validators.required),
-      building: new FormControl(this.user.building,Validators.required),
+      // building: new FormControl(this.user.building,Validators.required),
       app : new FormControl(this.user.app),
       parking1Level : new FormControl("1000"),
       parking1Number : new FormControl(),
@@ -76,11 +76,11 @@ export class FirebaseUpdateUserModal implements OnInit {
       parking3Level : new FormControl("1000"),
       parking3Number : new FormControl(),
       code : new FormControl(this.user.code),
-      type : new FormControl(this.user.type ? this.user.type : 'owner',Validators.required),
-      role : new FormControl(this.user.role ? this.user.role : 'user',Validators.required),
+      type : new FormControl(this.user.type ? this.user.type : 'owner', Validators.required),
+      role : new FormControl(this.user.role ? this.user.role : 'user', Validators.required),
       phone: new FormControl(this.user.phone),
-      birthdate: new FormControl(dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY')),
-      language : new FormControl(this.user.language ? this.user.language : 'en',Validators.required),
+      birthdate: new FormControl(this.user.birthdate ? dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY') : null),
+      language : new FormControl(this.user.language ? this.user.language : 'en', Validators.required),
       email: new FormControl(this.user.email, Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -212,24 +212,28 @@ return radioNotNull != null;
 
   async deleteUser() {
     const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you want to delete ' + this.user.firstname + '?',
+      header:  this.featureService.translations.PleaseConfirm,
+      message: this.featureService.translations.DeletePostConfirmation + this.user.firstname + '?',
       buttons: [
         {
-          text: 'No',
+          text: this.featureService.translations.No,
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Yes',
+          text: this.featureService.translations.Yes,
           handler: () => {
             this.firebaseService.deleteUser(this.user.id)
             .then(
               () => {
+                this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
                 this.router.navigate(['users/listing']);
               },
-              err => console.log(err)
+              err => { 
+                console.log(err);
+                this.featureService.presentToast(this.featureService.translations.DeletingErrors,2000);
+               }
             );
           }
         }
@@ -244,10 +248,10 @@ return radioNotNull != null;
     this.userData.photo = this.selectedPhoto;// == this.emptyPhoto ? "" : this.selectedPhoto;
     this.userData.firstname = this.updateUserForm.value.firstname;
     this.userData.lastname = this.updateUserForm.value.lastname;
-    this.userData.birthdate = dayjs(this.updateUserForm.value.birthdate).unix();
+    this.userData.birthdate = this.updateUserForm.value.birthdate ? dayjs(this.updateUserForm.value.birthdate).unix() : null; // save it in timestamp
     this.userData.phone = this.updateUserForm.value.phone;
     this.userData.email = this.updateUserForm.value.email;
-    this.userData.building = this.updateUserForm.value.building;
+    // this.userData.building = this.updateUserForm.value.building;
     this.userData.code =this.updateUserForm.value.code;
     this.userData.type =this.updateUserForm.value.type;
     this.userData.role =this.updateUserForm.value.role;
@@ -279,10 +283,14 @@ return radioNotNull != null;
     console.log(this.selectedParking);
 
     this.firebaseService.updateUser(this.userData)
-    .then(
-      () => this.modalController.dismiss(),
-      err => console.log(err)
-    );
+    .then(() => {
+      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
+      this.modalController.dismiss();
+    }
+    ).catch((err)=> {
+      this.featureService.presentToast(this.featureService.translations.UpdatingErrors, 2000);
+      console.log(err)
+    });
   }
   //LA_2019_11
   async selectImageSource(){
@@ -305,11 +313,11 @@ return radioNotNull != null;
       sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
     };
     const alert = await this.alertController.create({
-      header: 'Select Source',
-      message: 'Pick a source for your image',
+      header: this.featureService.translations.SelectSourceHeader,
+      message: this.featureService.translations.SelectSourceMessage,
       buttons: [
         {
-          text: 'Camera',
+          text: this.featureService.translations.Camera,
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageData)=> {
               // this.myProfileImage = "data:image/jpeg;base64," + imageData;
@@ -321,7 +329,7 @@ return radioNotNull != null;
           }
         },
         {
-          text: 'Gallery',
+          text: this.featureService.translations.PhotoGallery,
           handler: ()=> {
             this.camera.getPicture(galleryOptions).then((imageData)=> {
               //this.myProfileImage = "data:image/jpeg;base64," + imageData;

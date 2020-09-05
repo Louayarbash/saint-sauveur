@@ -1,15 +1,6 @@
 import { ShellModel } from '../../shell/data-store';
 import { Files } from '../../type'
 
-export class FirebaseSkillModel extends ShellModel {
-  id: string;
-  name: string;
-
-  constructor() {
-    super();
-  }
-}
-
 export class FirebasePhotoModel /*extends ShellModel*/ {
   photo: string;
 
@@ -56,4 +47,12 @@ export class FirebaseCombinedItemModel extends FirebaseItemModel {
   constructor() {
     super();
   }
+}
+
+export class VotingPublication {     
+  publicationId: string;  
+  buildingId: string;
+  userId: string;
+  voting: string; 
+  createdDate: firebase.firestore.FieldValue;
 }

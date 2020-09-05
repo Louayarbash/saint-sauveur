@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
@@ -9,8 +9,10 @@ import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { CreateTicketModal } from '../ticket/create/create-ticket.modal';
-
+import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
+// import { filter } from 'core-js/fn/array';
+import { FeatureService } from '../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-listing',
@@ -31,10 +33,15 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
+  userIsAdmin= false;
+  segmentValue = 'active';
 
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  ticketsList: Array<FirebaseListingItemModel>;
+  activeList: Array<FirebaseListingItemModel>;
+  archivedList: Array<FirebaseListingItemModel>;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -44,14 +51,17 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    private routerOutlet: IonRouterOutlet
-  ) { }
+    private routerOutlet: IonRouterOutlet,
+    private loginService: LoginService,
+    private featureService: FeatureService
+  ) {  }
 
   ngOnDestroy(): void {
     this.stateSubscription.unsubscribe();
   }
 
   ngOnInit() {
+    this.userIsAdmin = this.loginService.isUserAdmin();
     this.searchQuery = '';
 
     // Route data is a cold subscription, no need to unsubscribe?
@@ -101,7 +111,48 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         ).subscribe(
           (state) => {
             this.items = state;
-            console.log("tickets",this.items)
+            if(this.items.isShell == false){
+              this.items.map( item => {
+                switch (item.status.toLowerCase()) {
+                  case "active" : item.statusTranslation = this.featureService.translations.Active;
+                  break;
+                  case "resolved" : item.statusTranslation = this.featureService.translations.Resolved;
+                  break;
+                  case "closed" : item.statusTranslation = this.featureService.translations.Closed;
+                  break;
+                  default:
+                    item.statusTranslation = "Undefined";
+                } 
+                switch (item.subject) {
+                  case "ElevatorBooking" : item.subjectTranslation = this.featureService.translations.ElevatorBooking;
+                  break;
+                  case "NewKeyRequest" : item.subjectTranslation = this.featureService.translations.NewKeyRequest;
+                  break;
+                  default:
+                    item.subjectTranslation = item.subject;
+                } 
+              });
+              let ticketsList= this.items;
+              let activeList= this.items;
+              let archivedList= this.items;
+
+              if(this.userIsAdmin){
+                // this.ticketsList = this.items;
+                this.activeList = activeList.filter(item => item.status === 'Active');
+                this.archivedList = archivedList.filter(item => item.status !== 'Active');
+                console.log("activeList", this.activeList);
+                console.log("archivedList",this.archivedList);
+              }
+              else {
+                this.ticketsList = ticketsList.filter(item => item.createdBy === this.loginService.getLoginID());
+              }
+            }
+             else {
+              this.ticketsList= this.items;
+              this.activeList= this.items;
+              this.archivedList= this.items;
+            }
+            // console.log("tickets",this.items)
           },
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
@@ -124,5 +175,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.searchSubject.next({
       query: this.searchQuery
     });
+  }
+  segmentChanged(ev:any) {
+    //console.log(ev.detail.value);
+    //console.log(ev.target.value);
+    this.segmentValue = ev.detail.value;
+
+    // Check if there's any filter and apply it
+    //this.searchList();
   }
 }

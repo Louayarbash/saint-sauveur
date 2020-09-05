@@ -1,7 +1,7 @@
 app-image-shell.user-image {
-  --image-shell-border-radius: var(--app-fair-radius);
+  --image-shell-border-radius: 50px;// var(--app-fair-radius);
 }
-
+/*
 .user-name > app-text-shell {
   --text-shell-line-height: 16px;
   max-width: 80%;
@@ -18,4 +18,4 @@ app-image-shell.user-image {
   &.text-loaded {
     max-width: inherit;
   }
-}
+} */

@@ -34,7 +34,7 @@
           <div *ngFor="let rating of userRating | async"> 
           <ion-row>
             <ion-col  class="header my-message ion-padding">
-            <b>{{ rating.userFirstname }}</b> ({{ rating.stars}} {{ 'Of' | translate }} 5 {{ 'Stars' | translate }})
+            <b>{{ rating.userFirstname }}</b> ({{ rating.stars }} {{ 'Of' | translate }} 5 {{ 'Stars' | translate }})
             <div class="time-my-message" text-right *ngIf="rating.review == ''">
               {{rating.createdDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
             </div>

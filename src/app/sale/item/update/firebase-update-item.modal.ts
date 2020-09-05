@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,ChangeDetectorRef} from '@angular/core';
-import { ModalController, AlertController, ActionSheetController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
@@ -51,7 +51,7 @@ export class FirebaseUpdateItemModal implements OnInit {
       object: new FormControl(this.item.object, Validators.required),
       description: new FormControl(this.item.description),
       price: new FormControl(this.item.price, Validators.required),
-      status: new FormControl(this.item.status, Validators.required)
+      // status: new FormControl(this.item.status, Validators.required)
     }); 
   }
 
@@ -75,10 +75,14 @@ export class FirebaseUpdateItemModal implements OnInit {
             this.featureService.deleteItem(this.item.images, this.item.id, 'posts')
             .then(
               () => {
+                this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
                 this.router.navigate(['sale/listing']);
               },
-              err => console.log(err)
+              err => { 
+                console.log(err);
+                this.featureService.presentToast(this.featureService.translations.DeletingErrors,2000);
+               }
             );
           }
         }
@@ -123,19 +127,18 @@ updateItem() {
   this.item.object = this.updateItemForm.value.object;
   this.item.description = this.updateItemForm.value.description;
   this.item.price = this.updateItemForm.value.price;
-  this.item.status =  this.updateItemForm.value.status;
+  // this.item.status =  this.updateItemForm.value.status;
   //const {...itemData} = this.item;
-  const loading = this.featureService.presentLoadingWithOptions(2000);
+  // const loading = this.featureService.presentLoadingWithOptions(2000);
   this.featureService.updateItemWithImages(this.item, this.postImages, 'posts')
   .then(() => {
-    this.featureService.presentToast(this.featureService.translations.PostUpdatedSuccessfully,2000);
-    loading.then(res=>{res.dismiss();})
-    this.modalController.dismiss();
+    this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
+    // loading.then(res=>{res.dismiss();})
+    this.modalController.dismiss(); // not needed inside catch to stay on same page while errors
   }
   ).catch((err)=> {
-    this.featureService.presentToast(this.featureService.translations.PostUpdatingErrors,2000);
-    loading.then(res=>{res.dismiss();})
-    this.modalController.dismiss();
+    this.featureService.presentToast(this.featureService.translations.UpdatingErrors,2000);
+    // loading.then(res=>{res.dismiss();})
     console.log(err)
   });
 }

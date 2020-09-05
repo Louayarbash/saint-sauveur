@@ -83,12 +83,15 @@ export class FirebaseCreateItemModal implements OnInit {
     this.onValueChanges();
   }
 
+  
+
   changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     //const name = control.get('name');
     
     return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
 
   }
+
   private onValueChanges(): void {
     this.createItemForm.get('date').valueChanges.subscribe(newDate=>{      
       console.log("onDateChanges",newDate);
@@ -202,7 +205,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.files.push(fileUpload);        
     }
     else{
-      this.featureService.presentToast("Only pdf is allowed",2000);
+      this.featureService.presentToast(this.featureService.translations.OnlyPDfAllowed,2000);
     }
     console.log(this.files);
     console.log("this.files.length",this.files.length);
@@ -242,7 +245,7 @@ export class FirebaseCreateItemModal implements OnInit {
     console.log("files",this.files);
     console.log("doc",index);
     this.files.splice(index,1);
-    this.featureService.presentToast("File removed",2000);
+    // this.featureService.presentToast("File removed",2000);
      /* this.files.forEach( (item, index) => {
       if(item === file) {
          this.files.splice(index,1);
@@ -275,17 +278,21 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createdById = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     this.firebaseService.createItem(this.itemData,this.files)
-    .then(res => {
-      console.log("createItem then: ",res)
+    .then(() => {
+      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
-      this.featureService.presentToast("post added successfully",2000);
       loading.then(res=>res.dismiss());  
-    });     
+    }).catch((err) => { 
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
+      loading.then(res=>res.dismiss());  
+      console.log(err);
+     });          
   }
 
-  async dismissModal() {
-    await this.modalController.dismiss();
+  dismissModal() {
+     this.modalController.dismiss();
    }
+
   /*
   // cant open cloud decide not to use it
   async openFile(i : number){

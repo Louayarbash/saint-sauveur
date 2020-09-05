@@ -37,7 +37,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     } 
   }; 
   status : string;
-  editHidden : boolean;
+  userIsCreator = false;
   postImages : Images[] = [];
 
   @HostBinding('class.is-shell') get isShell() {
@@ -52,13 +52,12 @@ export class FirebaseItemDetailsPage implements OnInit {
     private featureService : FeatureService,
     private loginService : LoginService,
     private routerOutlet: IonRouterOutlet,
-    private changeRef: ChangeDetectorRef,
+    //private changeRef: ChangeDetectorRef,
   ) { 
     }
 
   ngOnInit() {
     // this.changeRef.detectChanges();
-    this.editHidden = true;
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;
@@ -77,8 +76,8 @@ export class FirebaseItemDetailsPage implements OnInit {
             console.log("length === 0", this.photoSlider[0]);
             this.postImages = [];
           }
-          this.editHidden = this.item.createdBy == this.loginService.getLoginID() ? false : true;
-          switch (this.item.status) {
+          this.userIsCreator = this.item.createdBy == this.loginService.getLoginID() ? true : false;
+/*           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;
             case "inactive" : this.status = this.featureService.translations.InActive;
@@ -87,7 +86,7 @@ export class FirebaseItemDetailsPage implements OnInit {
             break;
             default:
               this.status = "";
-          }
+          } */
 /*           else if(!(this.item.isShell)){
             this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
             console.log("length === 0 - 2", this.photoSlider[0]);

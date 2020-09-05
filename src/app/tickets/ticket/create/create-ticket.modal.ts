@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController, IonContent } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 // import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
 import { TicketModel } from '../ticket.model';
@@ -155,7 +155,7 @@ export class CreateTicketModal implements OnInit {
       this.serviceType = typeCheck.type;
       console.log(typeCheck.type);
 
-      if(typeCheck.type === 'elevatorBooking'){
+      if(typeCheck.type === 'ElevatorBooking'){
         
         this.bookingSection = true;
         this.subjectSection = false;
@@ -230,7 +230,7 @@ export class CreateTicketModal implements OnInit {
   }
   createTicket() {
 
-    if(this.serviceType == 'elevatorBooking'){
+    if(this.serviceType == 'ElevatorBooking'){
       this.itemData.date = dayjs(this.createItemForm.get('date').value).unix();
       this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
       this.itemData.endDate = dayjs(this.createItemForm.get('endDate').value).unix();  
@@ -243,15 +243,14 @@ export class CreateTicketModal implements OnInit {
     this.itemData.typeId = this.createItemForm.value.typeId;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
-    const loading = this.featureService.presentLoadingWithOptions(5000);
+    // const loading = this.featureService.presentLoadingWithOptions(5000);
     this.firebaseService.createItem(this.itemData)
     .then(() => {
-      this.featureService.presentToast(this.featureService.translations.TicketAddedSuccessfully, 2000);
+      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
-      loading.then(res=>res.dismiss());  
+      // loading.then(res=>res.dismiss());  
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.TicketAddingErrors, 2000);
-      this.dismissModal();
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       console.log(err);
      });      
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 // import { FormGroup, FormControl } from '@angular/forms';
-import { ModalController} from '@ionic/angular';
+import { ModalController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
@@ -15,6 +15,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 // import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { LoginService } from "../../services/login/login.service"
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 
@@ -38,6 +39,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
+  userIsAdmin = false;
 
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
@@ -58,6 +60,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     // private document: DocumentViewer,
     private file:File,
     private fileOpener:FileOpener,
+    private routerOutlet: IonRouterOutlet,
+    private loginService: LoginService
     // private transfer : FileTransfer
   ) { }
   
@@ -66,6 +70,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userIsAdmin = this.loginService.isUserAdmin();
 /*     this.searchQuery = '';
 
     this.rangeForm = new FormGroup({
@@ -122,7 +127,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateItemModal
+      component: FirebaseCreateItemModal,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }

@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseUserModel } from '../firebase-user.model';
-import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
+// import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
 import { ChatModal } from '../chat/chat.modal';
-import { DataStore, ShellModel } from '../../../shell/data-store';
-import * as dayjs from 'dayjs';
+import { DataStore } from '../../../shell/data-store';
+import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 

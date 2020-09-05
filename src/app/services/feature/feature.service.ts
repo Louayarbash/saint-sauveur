@@ -4,7 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 //import { RatingUser } from 'app/deal/item/firebase-item.model';
-import { RatingUser } from '../../Deal/item/firebase-item.model';
+import { RatingUser } from '../../deal/item/firebase-item.model';
+import { VotingPublication } from '../../publication/item/firebase-item.model';
 import { Observable } from 'rxjs';
 //import { map } from 'rxjs/operators';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
@@ -95,17 +96,7 @@ fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entr
 });
 
 } */
-getUserRating(userId : string, type : string){
-  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).where('dealType', '==',type).orderBy('createdDate'));
-  return ratingRef.valueChanges();
-}
 
-setUserRating(ratingInfo : RatingUser){
-  //const rating = {ratingInfo};
-  //console.log("rating object",ratingInfo);
-  const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`;
-  return this.afs.doc(ratingPath).set({...ratingInfo});
-}
 /* public getBuildingInfo(buildingId : string): Observable<Array<any>> {
   return this.afs.collection<any>('building' , ref => ref.where('building')).valueChanges({ idField: 'id' });
 } */
@@ -326,5 +317,26 @@ public uploadToStorage(itemDataPhoto: string, id: string, contentType: string, e
   //return firebase.storage().ref(`images/${newName}`).putString(itemDataPhoto, 'base64', { contentType: 'image/jpeg' });
   return this.afstore.ref(storagePath + `${id}/${name}`).putString(itemDataPhoto, 'data_url', { contentType: contentType });
 }
+
+vote(votingInfo: VotingPublication){
+  const votingPath = `votings/${votingInfo.publicationId}_${votingInfo.userId}`;
+  return this.afs.doc(votingPath).set({...votingInfo}); 
+}
+
+getPublicationVoting(publicationId: string){
+  const votingRef = this.afs.collection('votings' , ref => ref.where('publicationId', '==', publicationId));
+  return votingRef.valueChanges() as Observable<VotingPublication[]>;
+}
+
+getUserRating(userId: string, type: string){
+  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).where('dealType', '==', type).orderBy('createdDate'));
+  return ratingRef.valueChanges();
+}
+
+setUserRating(ratingInfo: RatingUser){
+  const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`;
+  return this.afs.doc(ratingPath).set({...ratingInfo});
+}
+
 
 }

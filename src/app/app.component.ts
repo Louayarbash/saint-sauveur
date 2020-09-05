@@ -4,11 +4,11 @@ const { SplashScreen } = Plugins;*/
 /*LA_ add for cordova*/
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform, AlertController ,ToastController} from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 //import { OneSignal } from "@ionic-native/onesignal/ngx";
 /*END*/
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { tap } from 'rxjs/operators';
+import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
+// import { tap } from 'rxjs/operators';
 
 //import { AngularFirestore } from '@angular/fire/firestore';
 import { FcmService } from '../app/services/fcm/fcm.service';
@@ -17,7 +17,7 @@ import { FcmService } from '../app/services/fcm/fcm.service';
 import { LanguageService } from './language/language.service';
 import { LoginService } from './services/login/login.service';
 import { FeatureService } from './services/feature/feature.service';
-import { AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({

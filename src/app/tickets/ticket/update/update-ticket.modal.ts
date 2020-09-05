@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
 import { TicketModel } from '../ticket.model';
 // import { SelectUserImageModal } from '../select-image/select-user-image.modal';
-import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 // import { AngularFirestore } from "@angular/fire/firestore";
 // import { Observable } from "rxjs";
 // import { FeatureService } from '../../../services/feature/feature.service';
@@ -41,7 +41,7 @@ export class UpdateTicketModal implements OnInit {
     public firebaseService: FirebaseService,
     public router: Router,
     private alertController: AlertController,
-    private camera: Camera,
+    // private camera: Camera,
     //private _angularFireSrore :AngularFirestore,
     //private featureService : FeatureService,
     private loginService : LoginService,
@@ -74,7 +74,7 @@ export class UpdateTicketModal implements OnInit {
       this.updateItemForm.controls['details'].updateValueAndValidity();
     }
     
-
+/* 
     this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
       this.ticketTypes = item.ticketTypes;
       const types = item.ticketTypes;
@@ -91,7 +91,7 @@ export class UpdateTicketModal implements OnInit {
         }   
 
    
-    });
+    }); */
 
 
   }
@@ -102,24 +102,28 @@ export class UpdateTicketModal implements OnInit {
 
   async deleteItem() {
     const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you want this ticket?',
+      header: this.featureService.translations.PleaseConfirm,
+      message: this.featureService.translations.DeletePostConfirmation,
       buttons: [
         {
-          text: 'No',
+          text: this.featureService.translations.No,
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Yes',
+          text: this.featureService.translations.Yes,
           handler: () => {
             this.firebaseService.deleteItem(this.item.id)
             .then(
               () => {
+                this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
                 this.router.navigate(['tickets/listing']);
               },
-              err => console.log(err)
+              err => { 
+                console.log(err);
+                this.featureService.presentToast(this.featureService.translations.DeletingErrors,2000);
+               }
             );
           }
         }
@@ -137,12 +141,11 @@ export class UpdateTicketModal implements OnInit {
     //console.log(this.item);
     this.firebaseService.updateItem(this.item)
     .then(() => {
-      this.featureService.presentToast(this.featureService.translations.TicketUpdatedSuccessfully, 2000);
-      this.modalController.dismiss();
+      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
+      this.modalController.dismiss(); // not needed inside catch
     }
     ).catch((err)=> {
-      this.featureService.presentToast(this.featureService.translations.TicketUpdatingErrors, 2000);
-      this.modalController.dismiss();
+      this.featureService.presentToast(this.featureService.translations.UpdatingErrors, 2000);
       console.log(err)
     });
 

@@ -16,6 +16,7 @@ import { LoginService } from '../../../services/login/login.service';
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
 //import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { File } from '@ionic-native/file/ngx';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-create-user',
@@ -66,7 +67,7 @@ export class FirebaseCreateUserModal implements OnInit {
     this.createUserForm = new FormGroup({
       firstname: new FormControl('',Validators.required),
       lastname: new FormControl('',Validators.required),
-      building: new FormControl(this.loginService.getBuildingId(),Validators.required),
+      buildingId: new FormControl(this.loginService.getBuildingId(),Validators.required),
       app : new FormControl(),
       parking1Level : new FormControl('1000'),
       parking1Number : new FormControl(),
@@ -151,13 +152,15 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.birthdate = this.createUserForm.value.birthdate ? dayjs(this.createUserForm.value.birthdate).unix() : null; // save it in timestamp
     this.userData.phone = this.createUserForm.value.phone;
     this.userData.email = this.createUserForm.value.email;
-    this.userData.building = this.createUserForm.value.building;
     this.userData.code =this.createUserForm.value.code;
     this.userData.type =this.createUserForm.value.type;
     this.userData.role =this.createUserForm.value.role;
     this.userData.app =this.createUserForm.value.app;
     this.userData.language =this.createUserForm.value.language;
+    this.userData.buildingId = this.loginService.getBuildingId();
+    this.userData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     const credentials : LoginCredential = { email : this.userData.email, password : "Welcome123" }
+    const loading = this.featureService.presentLoadingWithOptions(2000);
 
     this.selectedParking = [];
     
@@ -179,9 +182,15 @@ export class FirebaseCreateUserModal implements OnInit {
 
  this.firebaseService.createUser(this.userData, credentials)
 
-    .then(() => {
-      this.dismissModal();
-    }); 
+ .then(() => {
+  this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
+  this.dismissModal();
+  loading.then(res=>res.dismiss());  
+}).catch((err) => { 
+  this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
+  console.log(err);
+ });     
+
   }
 /* 
   async changeUserImage() {
@@ -199,7 +208,7 @@ export class FirebaseCreateUserModal implements OnInit {
   // LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
-      quality:25,
+      quality:100,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -221,11 +230,11 @@ export class FirebaseCreateUserModal implements OnInit {
       sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const alert = await this.alertController.create({
-      header: "Select Source",
-      message: "Pick a source for your image",
+      header: this.featureService.translations.SelectSourceHeader,
+      message: this.featureService.translations.SelectSourceMessage,
       buttons: [
         {
-          text: "Camera",
+          text: this.featureService.translations.Camera,
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageURI)=> {
               this.cropImage(imageURI);
@@ -235,7 +244,7 @@ export class FirebaseCreateUserModal implements OnInit {
           }
         },
         {
-          text: "Gallery",
+          text: this.featureService.translations.PhotoGallery,
           handler: ()=> {
             this.camera.getPicture(galleryOptions).then((imageURI)=> {
               this.cropImage(imageURI);

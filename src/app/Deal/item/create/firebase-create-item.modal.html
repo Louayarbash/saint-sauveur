@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
   <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar>
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -105,7 +105,7 @@
   <ion-footer>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="danger" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

@@ -213,7 +213,7 @@ export class FirebaseUpdateItemModal implements OnInit {
      this.files.push(fileUpload);        
      }
      else{
-       this.featureService.presentToast("Only pdf is allowed",2000);
+       this.featureService.presentToast(this.featureService.translations.OnlyPDfAllowed,2000);
      }
      console.log(this.files);
      console.log("this.files.length",this.files.length);
@@ -230,7 +230,7 @@ export class FirebaseUpdateItemModal implements OnInit {
      btnConfirm.disabled = true;
      this.files[index].fileName = txtName.value;
      //this.item.fileFullPath[index].fileName = txtName.value;
-     this.featureService.presentToast("File name changed",2000);
+     // this.featureService.presentToast(this.featureService.translations.,2000);
      console.log("files after changing name",this.files);
    }
    changeBtnStatus(txtName,btnChange,btnConfirm){
@@ -243,24 +243,28 @@ export class FirebaseUpdateItemModal implements OnInit {
    }
   async deleteItem() {
     const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you want to delete ' + this.item.subject + '?',
+      header: this.featureService.translations.PleaseConfirm,
+      message: this.featureService.translations.DeletePostConfirmation,
       buttons: [
         {
-          text: 'No',
+          text: this.featureService.translations.No,
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Yes',
+          text: this.featureService.translations.Yes,
           handler: () => {
             this.featureService.deleteItem(this.item.files, this.item.id, 'publication')
             .then(
               () => {
+                this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
                 this.router.navigate(['publication/listing']);
               },
-              err => console.log(err)
+              err => { 
+                console.log(err);
+                this.featureService.presentToast(this.featureService.translations.DeletingErrors,2000);
+               }
             );
           }
         }
@@ -290,10 +294,14 @@ export class FirebaseUpdateItemModal implements OnInit {
     const {...itemData} = this.item;
 
     this.firebaseService.updateItem(itemData,this.files)
-    .then(
-      () => this.modalController.dismiss(),
-      err => console.log(err)
-    );
+    .then(() => {
+      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
+      this.modalController.dismiss();
+    }
+    ).catch((err)=> {
+      this.featureService.presentToast(this.featureService.translations.UpdatingErrors,2000);
+      console.log(err)
+    });
   }
   deleteFile(index : number){ 
         //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} );
@@ -304,7 +312,7 @@ export class FirebaseUpdateItemModal implements OnInit {
          console.log("after",this.item);
          this.featureService.updateItemWithoutOptions(this.item, 'publication').then(()=> {
           this.files.splice(index,1); 
-          this.featureService.presentToast("file removed from storage and DB",2000);}
+          this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);}
           ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
           }
           ).catch(err => console.log("Error in deletePhoto DB: ",err));

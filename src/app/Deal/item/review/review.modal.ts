@@ -11,7 +11,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import  * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 //import { RatingUser } from "../../../type";
 
 @Component({

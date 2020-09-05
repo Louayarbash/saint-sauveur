@@ -41,7 +41,6 @@ export class FirebaseService {
       const shellModel: Array<FirebaseListingItemModel> = [
         new FirebaseListingItemModel(),
         new FirebaseListingItemModel(),
-        new FirebaseListingItemModel(),
         new FirebaseListingItemModel()
       ];
 

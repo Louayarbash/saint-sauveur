@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{ 'MainMenu' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="categories-list">
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/publication/listing']">
+            <h2 class="category-title">{{ 'PublicationsMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/lost-found/listing']">
+            <h2 class="category-title">{{ 'LostFoundMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/deal/listing']">
+            <h2 class="category-title">{{ 'ParkingDealsMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/rent-sale/listing']">
+            <h2 class="category-title">{{ 'RentSaleMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/tickets/listing']">
+            <h2 class="category-title">{{ 'TicketsMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/sale/listing']">
+            <h2 class="category-title">{{ 'ItemsForSaleMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/users/listing']">
+            <h2 class="category-title">{{ 'UsersMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+  </ion-row>
+</ion-content>

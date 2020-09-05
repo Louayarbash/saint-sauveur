@@ -1,18 +1,18 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="publication/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'PostDetails' | translate }} </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseUpdateModal()" >
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
+      <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }} 
       </ion-button> 
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-card>
+  <ion-card class="itemCard">
     <ion-card-content class="ion-no-padding">
       <ion-item *ngIf="item.subject" >        
         <ion-label>{{ 'Subject' | translate }}</ion-label>
@@ -20,51 +20,72 @@
          </ion-item>
          <ng-container *ngIf="item.category == 'event'">
       <ion-item lines="none" *ngIf="item.startDateTS">    
-        <ion-label>{{ 'MeetingStartDate' | translate }}</ion-label>
+        <ion-label>{{ 'FromTime' | translate }}</ion-label>
         {{item.startDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
       </ion-item>
       <ion-item lines="none" *ngIf="item.endDateTS">    
-        <ion-label>{{ 'MeetingEndDate' | translate }}</ion-label>
+        <ion-label>{{ 'ToTime' | translate }}</ion-label>
         {{item.endDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
       </ion-item>
     </ng-container>
-    <ng-container *ngIf="item.category == 'announcement'">
-      <ion-item lines="none">
-        <ion-label>{{ 'EnableVoting' | translate }}</ion-label>
-        <ion-toggle color="main" [(ngModel)]="item.voting" disabled></ion-toggle>
-      </ion-item>
-      <ion-item *ngIf="item.voting" lines="none">
-        <ion-label position="floating">{{ 'VotingNote' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="item.votingMessage" disabled></ion-input>
-      </ion-item>
-      <ion-item *ngIf="item.voting" lines="none">
-        <ion-label>{{ 'ShowResult' | translate }}</ion-label>
-        <ion-toggle color="main" [(ngModel)]="item.votingResult" disabled></ion-toggle>
-      </ion-item>
-    </ng-container>
+    <ion-list *ngIf="item.details">
+    <ion-item>
+      <ion-label>{{ 'Details' | translate }}</ion-label>
+    </ion-item>
+    <ion-item  lines="none">
+      <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>             
+       </ion-item>
+      </ion-list>   
+      <ion-list *ngIf="item.files?.length > 0">
+        <ion-item>
+          <ion-label>{{ 'Files' | translate }}</ion-label>
+        </ion-item>
+        <ion-item *ngFor="let file of item.files; let i = index;" lines="none">
+          <ion-label>{{ file.fileName }}</ion-label>
+          <ion-button color="main" (click)="openPDF(i)">
+            <ion-icon name="open-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+          </ion-list>    
         </ion-card-content>
         </ion-card>
-  <ion-card *ngIf="item.details">
-    <ion-card-header>
-      <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
-      <ion-card-title>{{ 'Details' | translate }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>
-    </ion-card-content>
-  </ion-card>
-  <ion-card *ngIf="item.files?.length > 0">
-    <ion-card-header>
-      <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
-      <ion-card-title>{{ 'Files' | translate }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item *ngFor="let file of item.files; let i = index;" lines="none">
-        <ion-label>{{ file.fileName }}</ion-label>
-        <ion-button color="main" (click)="openPDF(i)">
-          <ion-icon name="open-outline"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+        <ion-card *ngIf="item.category == 'announcement' && item.voting" class="itemCard">
+        <ion-card-content>
+<!--           <ion-item lines="none">
+            <ion-label>{{ 'EnableVoting' | translate }}</ion-label>
+            <ion-toggle color="main" [(ngModel)]="item.voting" disabled></ion-toggle>
+          </ion-item> -->
+        <ng-container *ngIf="item.votingMessage">
+            <ion-item>
+              <ion-label>{{ 'VotingNote' | translate }}</ion-label>
+            </ion-item>
+          <ion-item lines="none">
+            <ion-input type="text" [(ngModel)]="item.votingMessage" readonly></ion-input>
+          </ion-item>
+        </ng-container>
+          <!-- <ion-item lines="none">
+            <ion-label>{{ 'ShowResult' | translate }}</ion-label>
+            <ion-toggle color="main" [(ngModel)]="item.votingResult" disabled></ion-toggle>
+          </ion-item> -->
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+            <ion-button color="main" (click)="vote('yes')">{{ 'VotingYes' | translate }}</ion-button>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-button color="main" (click)="vote('no')">{{ 'VotingNo' | translate }}</ion-button>
+          </ion-col>
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              {{ 'TotalYES' | translate }}: {{ countVotingYes }}
+          </ion-col>
+          <ion-col size="auto">
+            {{ 'TotalNO' | translate }}: {{ countVotingNo }}
+          </ion-col>
+          </ion-row>
+      </ion-card-content>
+      </ion-card>
+      <ng-container *ngIf="item.createDate">
+      <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+    </ng-container>
 </ion-content>

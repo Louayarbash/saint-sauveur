@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createTicket()">
   <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar>
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -31,9 +31,9 @@
           <ion-col>
           <ion-item lines=“none”>
             <ion-label >{{ 'TicketType' | translate }}</ion-label>
-            <ion-select okText="OK" cancelText="Cancel" formControlName="typeId">
-              <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.type }}</ion-select-option>
-              <ion-select-option value="1000">{{ 'other' | translate }}</ion-select-option>
+            <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="typeId" color="main">
+              <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.type | translate }}</ion-select-option>
+              <ion-select-option value="1000">{{ 'Other' | translate }}</ion-select-option>
             </ion-select>
           </ion-item>
           </ion-col>
@@ -130,7 +130,7 @@
   <ion-footer>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="secondary" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

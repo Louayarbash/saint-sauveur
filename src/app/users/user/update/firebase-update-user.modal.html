@@ -1,14 +1,14 @@
 <!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
-<form class="update-user-form ion-page" [formGroup]="updateUserForm" (ngSubmit)="updateUser()">
+<form class="ion-page" [formGroup]="updateUserForm" (ngSubmit)="updateUser()">
   <ion-header>
-    <ion-toolbar color="primary">
+    <ion-toolbar>
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title>{{ 'UpdateUser' | translate }}</ion-title>
+      <ion-title>{{ 'Update' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -19,7 +19,7 @@
         <app-aspect-ratio [ratio]="{w: 1, h: 1}">
           <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="selectedPhoto" [alt]="'user image'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-button class="change-image-btn" color="secondary" (click)="selectImageSource()">
+        <ion-button class="change-image-btn" color="main" (click)="selectImageSource()">
           <ion-icon class="btn-icon" slot="icon-only" name="camera"></ion-icon>
         </ion-button>
       </ion-col>
@@ -180,7 +180,7 @@
   </ion-col>
   <ion-col *ngIf="parking1selected" size="3" class="ion-text-center">
 
-      <ion-button color="secondary" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-outline"></ion-icon></ion-button>
+      <ion-button color="main" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-outline"></ion-icon></ion-button>
 
   </ion-col>
    </ion-row>
@@ -205,10 +205,10 @@
 <ion-col *ngIf="parking2selected" size="3">
 <ion-row class="ion-justify-content-center">
   <ion-col *ngIf="showHideParking2" class="ion-text-center" size="6">
-    <ion-button color="secondary" (click)="showHideParkingValidate2()"><ion-icon name="remove-outline"></ion-icon></ion-button>
+    <ion-button color="main" (click)="showHideParkingValidate2()"><ion-icon name="remove-outline"></ion-icon></ion-button>
 </ion-col>
 <ion-col *ngIf="!showHideParking3" class="ion-text-center" size="6">
-  <ion-button color="secondary" (click)="showHideParkingValidate3()"><ion-icon name="add-outline"></ion-icon></ion-button>
+  <ion-button color="main" (click)="showHideParkingValidate3()"><ion-icon name="add-outline"></ion-icon></ion-button>
 </ion-col>
 </ion-row>
 </ion-col>
@@ -232,12 +232,12 @@
   </ion-item>
 </ion-col>
 <ion-col *ngIf="parking3selected" size="3" class="ion-text-center">
-  <ion-button color="secondary" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-outline"></ion-icon></ion-button>
+  <ion-button color="main" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-outline"></ion-icon></ion-button>
 </ion-col>
 </ion-row>
 </ion-grid>
       </ion-list>
-      {{updateUserForm?.errors}}
+      <!-- {{updateUserForm?.errors}} -->
 <!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
         please confirm naming changes
     </div> 
@@ -259,7 +259,7 @@
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteUser()">{{ 'Delete' | translate }}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" color="secondary" type="submit" fill="solid" [disabled]="!(updateUserForm.valid && updateUserForm.dirty)">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateUserForm.valid && updateUserForm.dirty)">{{ 'Update' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

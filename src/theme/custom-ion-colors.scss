@@ -8,7 +8,7 @@
 //    You can also define new Ionic colors in each page (inside :host{ ... }) to be available just in that page
 //    (We have an example of local custom Ionic colors in the deals pages)
 :root {
-  @include ion-color('facebook') {
+  @include ion-color('facebook') { 
     --ion-color-facebook: #3b5998;
     --ion-color-facebook-rgb: 59,89,152;
     --ion-color-facebook-contrast: #ffffff;
@@ -34,12 +34,20 @@
     --ion-color-twitter-shade: #0097d1;
     --ion-color-twitter-tint: #1ab4ef;
 }
-@include ion-color('main') {
+/* @include ion-color('main') {
   --ion-color-main:#cc181e;
   --ion-color-main-rgb: 204,24,30;
   --ion-color-main-contrast: #ffffff;
   --ion-color-main-contrast-rgb: 255,255,255;
   --ion-color-main-shade: #b4151a;
   --ion-color-main-tint: #d12f35;
+} */
+@include ion-color('main') {
+--ion-color-main: #e05c0e;
+--ion-color-main-rgb: 224,92,14;
+--ion-color-main-contrast: #ffffff;
+--ion-color-main-contrast-rgb: 255,255,255;
+--ion-color-main-shade: #c5510c;
+--ion-color-main-tint: #e36c26;
 }
 }

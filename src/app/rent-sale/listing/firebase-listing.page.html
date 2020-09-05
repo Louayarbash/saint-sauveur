@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="start-menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'RentSale' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openFirebaseCreateModal()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+<!--   <ion-toolbar class="filters-toolbar">
+    <ion-row class="searchbar-row" align-items-center>
+      <ion-col>
+        <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar> -->
+  <ion-segment value="rent"  (ionChange)="segmentChanged($event)" color="main">
+    <ion-segment-button value="rent">
+      <ion-label>{{ 'ForRent' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="sale">
+      <ion-label>{{ 'ForSale' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="myList" *ngIf="myList?.length > 0">
+      <ion-label>{{ 'MyList' | translate }}</ion-label>
+    </ion-segment-button>
+</ion-segment>
+</ion-header>
+<ion-content>
+  <ng-container *ngIf="items.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!items.isShell">
+  <section [hidden]="segmentValue !== 'rent'">
+  <ng-container *ngIf="rentList?.length > 0">
+<ion-card button="true" class="itemCard" *ngFor="let item of rentList" [routerLink]="['/rent-sale/details', item.id]">
+  <app-aspect-ratio [ratio]="{w:64, h:50}">
+    <app-image-shell animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+  </app-aspect-ratio>
+  <ion-card-header>
+    <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
+    <ion-card-title>  
+      <ion-row>
+      <ion-col class="ion-no-padding">
+            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+      </ion-col>
+      <ion-col  class="ion-no-padding ion-text-right">
+            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>
+      </ion-col>
+    </ion-row>
+    </ion-card-title>
+  </ion-card-header>
+</ion-card>
+</ng-container>
+<ng-container *ngIf="rentList?.length == 0">
+  <h3  class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+</ng-container>
+</section>
+<section [hidden]="segmentValue !== 'sale'">
+  <ng-container *ngIf="saleList?.length > 0">
+<ion-card button="true" class="itemCard" *ngFor="let item of saleList" [routerLink]="['/rent-sale/details', item.id]">
+  <app-aspect-ratio [ratio]="{w:64, h:50}">
+    <app-image-shell animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+  </app-aspect-ratio>
+  <ion-card-header>
+    <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
+    <ion-card-title>  
+      <ion-row>
+      <ion-col class="ion-no-padding">
+            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+      </ion-col>
+      <ion-col  class="ion-no-padding ion-text-right">
+            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : ''"></app-text-shell>
+      </ion-col>
+    </ion-row>
+    </ion-card-title>
+    
+  </ion-card-header>
+</ion-card>
+</ng-container>
+<ng-container *ngIf="saleList?.length == 0">
+  <h3  class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+</ng-container>
+</section>
+<section [hidden]="segmentValue !== 'myList'">
+  <ng-container *ngIf="myList?.length > 0">
+<ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/rent-sale/details', item.id]">
+  <app-aspect-ratio [ratio]="{w:64, h:50}">
+    <app-image-shell animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+  </app-aspect-ratio>
+  <ion-card-header>
+    <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
+    <ion-card-title>  
+      <ion-row>
+      <ion-col class="ion-no-padding">
+            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+      </ion-col>
+      <ion-col  class="ion-no-padding ion-text-right">
+            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : ''"></app-text-shell>
+      </ion-col>
+    </ion-row>
+    </ion-card-title>
+    
+  </ion-card-header>
+</ion-card>
+</ng-container>
+<ng-container *ngIf="myList?.length == 0">
+  <h3  class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+</ng-container>
+</section>
+</ng-container>
+</ion-content>

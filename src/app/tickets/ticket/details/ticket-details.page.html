@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tickets/listing"></ion-back-button>
     </ion-buttons>
@@ -26,8 +26,8 @@
     </ion-col>
     </ion-row> -->
     
-    <ion-card *ngIf="bookingSection">
-      <ion-item *ngIf="item.reference" color="primary">
+    <ion-card class="itemCard" *ngIf="bookingSection">
+      <ion-item *ngIf="item.reference" color="main">
         <ion-label>{{ 'TicketReference' | translate }}</ion-label>
        <ion-text>{{item.reference}}</ion-text> 
       </ion-item>
@@ -55,12 +55,12 @@
       </ion-item>
       <ion-item *ngIf="item.status">
         <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
-        <ion-text>{{status}}</ion-text> 
+        <ion-text>{{ status }}</ion-text> 
       </ion-item>
       </ion-card>
-      <ion-card *ngIf="!bookingSection">
+      <ion-card class="itemCard" *ngIf="!bookingSection">
       <ion-card-content class="ion-no-padding">
-        <ion-item *ngIf="item.reference" color='primary'>
+        <ion-item *ngIf="item.reference" color='main'>
           <ion-label>{{ 'TicketReference' | translate }}</ion-label>
          <ion-text>{{item.reference}}</ion-text> 
         </ion-item>
@@ -83,12 +83,12 @@
          </ion-item>
             <ion-item *ngIf="item.status">
               <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
-             <ion-text>{{status}}</ion-text> 
+             <ion-text>{{ status }}</ion-text> 
             </ion-item>
 
           </ion-card-content>
           </ion-card>
-          <ion-card  *ngIf="item.details">
+          <ion-card class="itemCard" *ngIf="item.details">
             <ion-card-header>
               <!-- <ion-card-subtitle>{{ 'Details' | translate }}</ion-card-subtitle> -->
               <ion-card-title>{{ 'Details' | translate }}</ion-card-title>

@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="app/categories"></ion-back-button>
+      <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Ticket' | translate }}</ion-title>
     <ion-buttons slot="end">
@@ -17,26 +17,121 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
+  <ion-segment value="active"  (ionChange)="segmentChanged($event)" color="main" *ngIf="userIsAdmin">
+    <ion-segment-button value="active">
+      <ion-label>{{ 'ActiveTickets' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="archive">
+      <ion-label>{{ 'ArchivedTickets' | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
-
 <ion-content>
-  <div class="items-list" *ngIf="items?.length > 0">
-      <ion-card *ngFor="let item of items" [routerLink]="['/tickets/details', item.id]">
+<ng-container *ngIf="items.isShell">
+  <div class="DivLoading">
+    <ion-spinner></ion-spinner>
+  </div>
+</ng-container>
+<ng-container *ngIf="!items.isShell">
+<ng-container *ngIf="userIsAdmin">
+  <section [hidden]="segmentValue !== 'active'">
+  <div *ngIf="activeList?.length > 0">
+      <ion-card class="itemCard" *ngFor="let item of activeList" [routerLink]="['/tickets/details', item.id]">
+        <ion-item *ngIf="item.subject" color="main">
+          <ion-icon name="build-outline" slot="start"></ion-icon>
+          <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+        </ion-item>
         <ion-card-header>
           <ion-card-subtitle>
-            <app-text-shell animation="bouncing" [data]="item.subject"></app-text-shell>
+            {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}
           </ion-card-subtitle>
-          <ion-card-title>
-            <app-text-shell animation="bouncing" [data]="item.reference"></app-text-shell>
-            <app-text-shell animation="bouncing" [data]="item.status"></app-text-shell>
+          <ion-card-title>    
+          <ion-row>
+            <ion-col class="ion-no-padding">
+              <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+            </ion-col>
+            <ion-col class="ion-no-padding ion-text-right">
+              <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+            </ion-col>
+          </ion-row>
           </ion-card-title>
         </ion-card-header>
-        <ion-card-content>
+<!--         <ion-card-content>
           <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
-        </ion-card-content>
+        </ion-card-content> -->
       </ion-card>
   </div>
-  <h3 *ngIf="items?.length == 0" class="empty-list-message">
-    {{ 'NoTicketsFound' | translate }}
+  <h3 *ngIf="activeList?.length == 0" class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
   </h3>
+</section>
+<section [hidden]="segmentValue !== 'archive'">
+  <div *ngIf="archivedList?.length > 0">
+      <ion-card class="itemCard" *ngFor="let item of archivedList" [routerLink]="['/tickets/details', item.id]">
+        <ion-item *ngIf="item.subject" color="main">
+          <ion-icon name="build-outline" slot="start"></ion-icon>
+          <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+        </ion-item>
+        <ion-card-header>
+          <ion-card-subtitle>
+            {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}
+          </ion-card-subtitle>
+          <ion-card-title>    
+          <ion-row>
+            <ion-col class="ion-no-padding">
+              <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+            </ion-col>
+            <ion-col class="ion-no-padding ion-text-right">
+              <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+            </ion-col>
+          </ion-row>
+          </ion-card-title>
+        </ion-card-header>
+<!--         <ion-card-content>
+          <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
+        </ion-card-content> -->
+      </ion-card>
+  </div>
+  <h3 *ngIf="archivedList?.length == 0" class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+</section>
+</ng-container>
+<ng-container *ngIf="!userIsAdmin">
+  <ng-container *ngIf="items.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+    </div>
+  </ng-container>
+  <div *ngIf="ticketsList?.length > 0">
+    <ion-card class="itemCard" *ngFor="let item of ticketsList" [routerLink]="['/tickets/details', item.id]">
+      <ion-item *ngIf="item.subject" color="main">
+        <ion-icon name="build-outline" slot="start"></ion-icon>
+        <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+      </ion-item>
+      <ion-card-header>
+        <ion-card-subtitle>
+          {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}
+        </ion-card-subtitle>
+        <ion-card-title>    
+        <ion-row>
+          <ion-col class="ion-no-padding">
+            <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+          </ion-col>
+          <ion-col class="ion-no-padding ion-text-right">
+            <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+          </ion-col>
+        </ion-row>
+        </ion-card-title>
+      </ion-card-header>
+<!--       <ion-card-content>
+        <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
+      </ion-card-content> -->
+    </ion-card>
+</div>
+<h3 *ngIf="ticketsList?.length == 0" class="empty-list-message">
+  {{ 'NoItemFound' | translate }}
+</h3>
+</ng-container>
+</ng-container>
 </ion-content>
