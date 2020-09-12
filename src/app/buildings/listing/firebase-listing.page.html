@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="start-menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Buildings' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openFirebaseCreateModal()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar class="filters-toolbar">
+    <ion-row class="searchbar-row" align-items-center>
+      <ion-col>
+        <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarBuilding' | translate }}"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+<!--   <ion-segment value="active"  (ionChange)="segmentChanged($event)" color="main" *ngIf="userIsAdmin">
+    <ion-segment-button value="active">
+      <ion-label>{{ 'ActiveTickets' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="archive">
+      <ion-label>{{ 'ArchivedTickets' | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment> -->
+</ion-header>
+<ion-content>
+<ng-container *ngIf="items.isShell">
+  <div class="DivLoading">
+    <ion-spinner></ion-spinner>
+  </div>
+</ng-container>
+<ng-container *ngIf="!items.isShell">
+  <div *ngIf="items?.length > 0">
+      <ion-card class="itemCard" *ngFor="let item of items" [routerLink]="['/buildings/details', item.id]">
+        <ion-item *ngIf="item.name" color="main">
+          <ion-icon name="business-outline" slot="start"></ion-icon>
+          <ion-label>{{ item.name }}</ion-label>
+        </ion-item>
+        <ion-card-header>
+          <ion-card-subtitle>
+            {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}
+          </ion-card-subtitle>
+          <ion-card-title>    
+
+              <ion-text> {{ item.statusTranslation }}</ion-text>
+
+          </ion-card-title>
+        </ion-card-header>
+<!--         <ion-card-content>
+          <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
+        </ion-card-content> -->
+      </ion-card>
+  </div>
+  <h3 *ngIf="items?.length == 0" class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="openFirebaseCreateModal()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> 
+</ng-container>
+</ion-content>

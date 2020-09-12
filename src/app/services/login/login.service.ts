@@ -17,7 +17,7 @@ uid : string;
 buildingId: string = 'NJ6u68Cq68RgX9jXPuVx';
 languge : string;
 firstname : string;
-parking: any;
+parkings: any;
   language: string;
   constructor(
     private afAuth : AngularFireAuth,
@@ -82,8 +82,8 @@ parking: any;
       this.buildingId = res.data().building;
       this.languge = res.data().language;
       this.firstname = res.data().firstname;
-      this.parking = res.data().parking;
-      console.log("inside getLoginInfo 222", this.parking);
+      this.parkings = res.data().parkings;
+      console.log("inside getLoginInfo 222", this.parkings);
       } catch (err) {
       console.log(err);
       }
@@ -94,8 +94,8 @@ parking: any;
     return this.afs.collection("users").doc(this.getLoginID()).valueChanges();
   
 }
-updateUserParking(parking : any){
-  this.afs.collection("users").doc(this.getLoginID()).update({parking : parking})
+updateUserParking(parkings : any){
+  this.afs.collection("users").doc(this.getLoginID()).update({parkings : parkings})
 }
 getUserInfoObservable5() //: Observable<any>
  {
@@ -104,7 +104,7 @@ getUserInfoObservable5() //: Observable<any>
   this.buildingId = user.buildingId;
   this.language = user.language;
   this.firstname = user.firstname;
-  this.parking = user.parking;
+  this.parkings = user.parkings;
   // console.log(this.buildingId);
   // console.log(this.language);
   // console.log(this.firstname);

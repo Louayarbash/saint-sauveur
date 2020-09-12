@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'rent-sale', loadChildren: () => import('./rent-sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'buildings', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'auth', loadChildren: () => import('./auth/firebase-auth.module').then(m => m.FirebaseAuthModule) },				
   { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  

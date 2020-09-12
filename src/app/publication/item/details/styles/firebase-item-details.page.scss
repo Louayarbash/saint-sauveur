@@ -1,4 +1,4 @@
-@import "../../../../../theme/mixins/scrollbars";
+/* @import "../../../../../theme/mixins/scrollbars";
 
 // Custom variables
 // Note:  These ones were added by us and have nothing to do with Ionic CSS Custom Properties
@@ -9,7 +9,6 @@
   --page-related-users-gutter: calc(var(--page-margin) / 2);
 }
 
-/*css for slider LA_2020_01*/
 .slider-row {
   .details-slides {
     --bullet-background: var(--ion-color-dark-tint);
@@ -70,7 +69,6 @@
 // Alerts and in general all overlays are attached to the body or ion-app directly
 // We need to use ::ng-deep to access it from here
 
-/*END css for slider LA_2020_01*/
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
 .user-content {
@@ -228,3 +226,4 @@
     }
   }
 }
+ */

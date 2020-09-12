@@ -62,10 +62,10 @@ export class FirebaseUserDetailsPage implements OnInit {
           this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           
           this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
-            const levels = item.parking;
-            console.log(this.user.parking);
-              if (this.user.parking) {
-                this.userParking = this.user.parking.map((userParking) => { 
+            const levels = item.parkings;
+            console.log(this.user.parkings);
+              if (this.user.parkings) {
+                this.userParking = this.user.parkings.map((userParking) => { 
                   
                   let levelCheck = levels.find( (level: { id: number; }) => level.id === userParking.id );
                   if(levelCheck){

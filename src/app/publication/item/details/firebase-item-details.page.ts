@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { ModalController, AlertController, IonRouterOutlet } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel, FirebaseCombinedItemModel, VotingPublication } from '../firebase-item.model';
@@ -12,7 +12,7 @@ import { DataStore, ShellModel } from '../../../shell/data-store';
 // import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { FeatureService } from "../../../services/feature/feature.service"
 import { LoginService } from "../../../services/login/login.service"
 import firebase from 'firebase/app';

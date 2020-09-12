@@ -6,15 +6,15 @@ export class FirebaseUserModel extends ShellModel {
   firstname: string;
   lastname: string;
   buildingId: string;
-  app:string;
-  parking:any[];
-  type:string;
-  role:string;
-  code:string;
+  app: string;
+  parkings: any[];
+  type: string;
+  role: string;
+  code: string;
   email: string;
   phone: number;
   birthdate: number;
-  language:string;
+  language: string;
   createDate : firebase.firestore.FieldValue;
   
   constructor() {

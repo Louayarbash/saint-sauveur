@@ -106,12 +106,12 @@ return radioNotNull != null;
  */
 
     this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
-      this.levels = item.parking;
-      console.log("parking",this.user.parking);
+      this.levels = item.parkings;
+      console.log("parking",this.user.parkings);
 
         let userParkings = [];
-        if (this.user.parking) {
-          userParkings = this.user.parking.map((userParking) => { 
+        if (this.user.parkings) {
+          userParkings = this.user.parkings.map((userParking) => { 
             
             const levelCheck = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
             if(levelCheck){
@@ -278,7 +278,7 @@ return radioNotNull != null;
         number : this.updateUserForm.value.parking3Number});
     }
 
-    this.userData.parking = this.selectedParking.length ? this.selectedParking : null;
+    this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
     console.log(this.selectedParking);
 

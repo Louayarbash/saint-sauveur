@@ -65,7 +65,10 @@
               <ion-textarea rows="6" [value]="item.details" readonly class="ion-no-padding"></ion-textarea>
             </ion-item>
           <!-- </div> -->
-        </ion-card>   
+        </ion-card>
+        <ng-container *ngIf="item.createDate">
+          <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+        </ng-container>
        <ion-fab vertical="top" horizontal="end" slot="fixed" >
         <ion-fab-button color="main" size="small"> 
           <ion-icon name="person-circle-outline"></ion-icon>

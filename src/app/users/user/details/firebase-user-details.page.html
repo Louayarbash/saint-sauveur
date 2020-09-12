@@ -66,6 +66,10 @@
               <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
               {{ parking.desc }}/#{{ parking.number }}
             </ion-item>
+            <ion-item *ngIf="user.createDate">    
+              <ion-label>{{ 'CreateDate' | translate }}</ion-label>
+              <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
+            </ion-item>
           <!-- </ion-list> -->
         </section>
 </ion-content>

@@ -283,7 +283,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     let radioObjectFiltered : any[];
     let correctedParking : any[];
     await this.loginService.getUserParking().then(()=>{
-      userParking  = this.loginService.parking
+      userParking  = this.loginService.parkings
     });
 
       this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe( async building => {

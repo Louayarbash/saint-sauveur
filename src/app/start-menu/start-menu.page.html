@@ -74,5 +74,32 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/users/details', userId]">
+            <h2 class="category-title">{{ 'UserProfilMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/buildings/listing']">
+            <h2 class="category-title">{{ 'BuildingsMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
+    <ion-col class="category-item ion-padding" size="6">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/buildings/details', buildingId]">
+            <h2 class="category-title">{{ 'BuildingProfilMenu' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
   </ion-row>
 </ion-content>

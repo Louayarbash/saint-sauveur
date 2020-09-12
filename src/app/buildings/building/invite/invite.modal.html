@@ -1,0 +1,53 @@
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'InviteNewMembers' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-card *ngFor="let invitaion of invitaions | async">
+      <ion-card-header>
+        <ion-card-subtitle>
+          {{ invitaion.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}
+        </ion-card-subtitle>
+        <ion-card-title>    
+          <ion-chip *ngFor="let email of invitaion.emails" color="main" outline="true">
+            <ion-text color="dark">{{ email }}</ion-text>
+          </ion-chip>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+      </ion-card-content>
+  </ion-card> 
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar>
+      <!-- <ion-grid> -->
+        <ion-row>
+          <ion-col>
+            <ion-text>{{ 'EmailsListHeader' | translate }}</ion-text>
+            <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="emailsList" class="message-input ion-no-margin"></ion-textarea>
+          </ion-col>
+          </ion-row> 
+        <ion-row class="ion-align-items-center">
+          <ion-col size="10">
+            <ion-label>{{ 'InvitationMessage' | translate }}</ion-label>
+            <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="InvitationMsg" class="message-input ion-no-margin"></ion-textarea>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="emailsList ===''" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
+          </ion-col>
+          </ion-row> 
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="emailsList ===''" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
+            </ion-col>
+          </ion-row>
+    <!-- </ion-grid> -->
+    </ion-toolbar>
+  </ion-footer>

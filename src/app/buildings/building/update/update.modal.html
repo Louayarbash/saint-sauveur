@@ -1,0 +1,152 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="updateItemForm" (ngSubmit)="updateItem()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'Update' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+   <ion-card class="itemCard">
+      <ion-item-divider>
+        <ion-icon name="business" slot="start"></ion-icon>
+        <ion-label>{{ 'BuildingInfo' | translate }}</ion-label>
+        </ion-item-divider>   
+      <ion-item>
+        <ion-label  position="floating">{{ 'BuildingName' | translate }}</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label  position="floating">{{ 'Address' | translate }}</ion-label>
+        <ion-input type="text" formControlName="address"></ion-input>
+      </ion-item>
+    <ion-item>
+      <ion-label  position="floating">{{ 'PostalCode' | translate }}</ion-label>
+      <ion-input type="text" formControlName="postalCode"></ion-input>												   
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
+      <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
+    </ion-item>
+	 </ion-card>
+              <ion-card class="itemCard">
+                <ion-item-divider>
+                  <ion-icon name="settings-outline" slot="start"></ion-icon>
+                  <ion-label>{{ 'ServicesManagement' | translate }}</ion-label>
+                  </ion-item-divider>
+      <ion-item>
+        <ion-label>{{ 'SaleMenu' | translate }}</ion-label>
+        <ion-toggle color="main" formControlName="enableSale"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'RentSaleMenu' | translate }}</ion-label>
+        <ion-toggle color="main" formControlName="enableRentSale"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'LostFoundMenu' | translate }}</ion-label>
+        <ion-toggle color="main" formControlName="enableLostFound"></ion-toggle>
+      </ion-item>
+      <ion-item>
+          <ion-label>{{ 'PublicationsMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enablePublication"></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{ 'TicketsMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableTicket" (ionChange)="manageServices($event, 'ticket')"></ion-toggle>
+        </ion-item>
+	  <ng-container *ngIf="enableTicket">
+            <ion-item class="sub-item" lines="none" *ngFor="let service of services; let indexOfelement=index;">
+			  <ion-checkbox slot="start" [checked]="service.active" color="main" (ionChange)="serviceStatusChanged($event, indexOfelement)"></ion-checkbox>			 
+              <ion-text [ngClass]="{ 'disabledItem': !service.active }">{{ service.description | translate }}</ion-text>
+            </ion-item>
+        </ng-container>
+      <ion-item>
+        <ion-label>{{ 'ParkingDealsMenu' | translate }}</ion-label>
+        <ion-toggle color="main" formControlName="enableDeal" (ionChange)="manageServices($event, 'deal')"></ion-toggle>
+      </ion-item>
+      <ng-container *ngIf="enableDeal">
+        <ion-item class="sub-item" lines="none" [ngClass]="{ 'disabledItem': !parking.active }" *ngFor="let parking of parkings; let indexOfelement=index;">
+          <ion-checkbox slot="start" [disabled]="indexOfelement==0 || (indexOfelement==1 && parkings[2].active) || (indexOfelement==2 && !parkings[1].active)" [checked]="parking.active" color="main" (ionChange)="parkingsStatusChanged($event, indexOfelement, txtName, btnChange, btnConfirm)"></ion-checkbox>
+          <ion-label>{{ 'Parking' | translate }} - {{ parking.id }} </ion-label>
+          <ion-input [ngClass]="{ 'disabledItem': !parking.active }" type="text" #txtName [value]="parking.description" [disabled]="true"></ion-input>
+          <ion-button [hidden]="!parking.active" color="main" (click)="changeBtnStatus(indexOfelement, txtName, btnChange, btnConfirm)" #btnChange>          
+            <ion-icon name="pencil-outline"></ion-icon>
+          </ion-button> 
+          <ion-button [hidden]="!parking.active" color="main" (click)="confirmChanging(indexOfelement, txtName, btnChange, btnConfirm)" [disabled]=true  #btnConfirm >          
+          <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-button> 
+          
+        </ion-item>
+      </ng-container>
+    </ion-card>
+    <ion-card class="itemCard">
+       <ion-item>
+        <ion-label>{{ 'Status' | translate }}</ion-label>
+        <ion-radio-group formControlName="status">
+          <ion-row class="radio-tags">
+            <ion-col>
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'Active' | translate }}</ion-label>
+              <ion-radio value="active"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'InActive' | translate }}</ion-label>
+                <ion-radio value="inactive"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-card>
+    <ng-container *ngIf="updateItemForm.errors?.nameChanging">
+      <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
+    </ng-container> 
+<!--       <div *ngIf="createItemForm.invalid">
+      Form
+    </div>
+    <div *ngIf="createItemForm.get('duration').errors">
+      duration
+    </div>
+    <div *ngIf="createItemForm.get('subject').errors">
+      subject
+    </div>
+    <div *ngIf="createItemForm.get('details').errors">
+      details
+    </div>
+    <div *ngIf="createItemForm.get('typeId').errors">
+      typeId
+    </div> -->
+    
+<!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
+      please confirm naming changes
+  </div>  
+  <div *ngIf="createItemForm.get('name').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
+<div *ngIf="createItemForm.get('name').errors.required">
+  Name is required.
+</div>
+ <div *ngIf="createItemForm.get('title').errors.minlength">
+  Name must be at least 4 characters long.
+</div> 
+</div> -->
+
+  <!-- <img [src]="selectedPhoto" /> -->
+  
+</ion-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</form>

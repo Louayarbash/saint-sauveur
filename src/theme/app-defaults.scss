@@ -99,3 +99,65 @@ ion-content {
     margin-bottom: calc(var(--page-margin) * 2);
   }
 }
+
+.disabledItem{
+  color: var(--ion-color-medium);
+  text-decoration: line-through;
+}
+
+.sub-item{
+  // font-size: medium;
+  padding-left: 10px;
+  // --color: var(--ion-color-dark);
+}
+
+/*Chat Styling*/
+
+.message{
+  padding: 10px;
+  border-radius:10px;
+  margin-bottom :4px;
+  white-space:pre-wrap;
+  }
+  
+  .other-message{
+  background: var(--ion-color-medium-tint);
+  color:#ffffff;
+  }
+  
+  .my-message{
+  background: var(--ion-color-light-shade);
+  //color:#ffffff;
+  }
+  
+  .time-other{
+  font-style: italic;
+  color: #ffffff;
+  font-size:small;
+  float:right;
+  }
+  
+  .time-my-message{
+    font-style: italic;
+    //color: #ffffff;
+    font-size:small;
+    float:right;
+  }
+
+  .message-input{
+  width:100%;
+  border:1px solid var(--ion-color-medium);
+  border-radius : 10px;
+  //background:#fff;
+  resize:none;
+  //padding-left:10px;
+  //padding-right:10px;
+  padding:4px;
+  }
+  .msg-btn{
+  --padding-start:0.5em;
+  --padding-end:0.5em;
+  
+  }
+
+  /* Chat Styling End*/

@@ -91,7 +91,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
      this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
       //console.log("get parking",item)
-      this.levels = item.parking;
+      this.levels = item.parkings;
 
   });
 }
@@ -176,7 +176,7 @@ export class FirebaseCreateUserModal implements OnInit {
       this.selectedParking.push({ id: this.createUserForm.controls['parking3Level'].value , number : this.createUserForm.value.parking3Number});
     }
 
-    this.userData.parking = this.selectedParking.length ? this.selectedParking : null;
+    this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
     console.log(this.selectedParking);
 

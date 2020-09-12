@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../services/login/login.service';
 
 @Component({
   selector: 'app-categories',
@@ -9,4 +10,17 @@ import { Component } from '@angular/core';
     './styles/start-menu.responsive.scss'
   ]
 })
-export class StartMenuPage { }
+export class StartMenuPage implements OnInit {
+  userId: string;
+  buildingId: string;
+
+  constructor( private loginService: LoginService
+  ) {
+    
+  }
+
+  ngOnInit() {
+    this.userId = this.loginService.getLoginID();
+    this.buildingId = this.loginService.getBuildingId();
+  }
+}
