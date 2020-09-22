@@ -6,20 +6,24 @@ import { ComponentsModule } from '../components/components.module';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../../environments/environment';
-import { FirebaseAuthService } from './firebase-auth.service';
+import { AuthService } from './auth.service';
 
 const routes: Routes = [
   {
     path: 'sign-in',
-    loadChildren: () => import('./sign-in/firebase-sign-in.module').then(m => m.FirebaseSignInPageModule)
+    loadChildren: () => import('./sign-in/sign-in.module').then(m => m.FirebaseSignInPageModule)
   },
   {
     path: 'sign-up',
-    loadChildren: () => import('./sign-up/firebase-sign-up.module').then(m => m.FirebaseSignUpPageModule)
+    loadChildren: () => import('./sign-up/sign-up.module').then(m => m.FirebaseSignUpPageModule)
   },
-  {
+/*   {
     path: 'profile',
-    loadChildren: () => import('./profile/firebase-profile.module').then(m => m.FirebaseProfilePageModule)
+    loadChildren: () => import('./profile/profile.module').then(m => m.FirebaseProfilePageModule)
+  }, */
+  {
+    path: 'sign-up-first-time',
+    loadChildren: () => import('./sign-up-first-time/sign-up1.module').then(m => m.FirebaseSignUp1PageModule)
   }
 ];
 
@@ -32,6 +36,6 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule
   ],
-  providers: [FirebaseAuthService]
+  providers: [AuthService]
 })
-export class FirebaseAuthModule {}
+export class AuthModule {}

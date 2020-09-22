@@ -7,7 +7,7 @@ import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseCombinedItemModel/*, FirebasePhotoModel*/ } from './item/firebase-item.model';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { Images} from '../type';
-import { FirebaseUserModel } from '../users/user/firebase-user.model';
+import { UserModel } from '../users/user/user.model';
 import { LoginService } from "../services/login/login.service"
 import { FeatureService } from '../services/feature/feature.service';
 
@@ -57,7 +57,7 @@ export class FirebaseService {
     // is merged in the output Observable
       concatMap(item => {
       if (item.createDate) {
-      const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res})); 
+      const creatorDetails  = this.afs.doc<UserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res})); 
       console.log("item listing ",item);
           if (item.images.length > 0) {
             console.log("images > 0",item)
@@ -80,7 +80,7 @@ export class FirebaseService {
             forkJoin(itemPhotosPromise),
             
           ]).pipe(
-            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, FirebaseUserModel, Array<Images>] ) => {
+            map(([itemDetails, creatorDetails, itemPhotos]: [FirebaseItemModel, UserModel, Array<Images>] ) => {
               
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
@@ -97,7 +97,7 @@ export class FirebaseService {
             of(item),
             creatorDetails,
           ]).pipe(
-            map(([itemDetails, creatorDetails]: [FirebaseItemModel, FirebaseUserModel]) => {
+            map(([itemDetails, creatorDetails]: [FirebaseItemModel, UserModel]) => {
               // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
               return {
                 ...itemDetails,

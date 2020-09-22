@@ -3,13 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { FirebaseSignInPage } from './firebase-sign-in.page';
 import { ComponentsModule } from '../../components/components.module';
+import { FirebaseProfilePageGuard } from './profile-can-activate.guard';
+import { FirebaseProfilePage } from './profile.page';
+import { FirebaseProfileResolver } from './profile.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: FirebaseSignInPage
+    component: FirebaseProfilePage,
+    canActivate: [FirebaseProfilePageGuard],
+    resolve: {
+      data: FirebaseProfileResolver
+    }
   }
 ];
 
@@ -22,6 +28,12 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule
   ],
-  declarations: [FirebaseSignInPage]
+  declarations: [
+    FirebaseProfilePage
+  ],
+  providers: [
+    FirebaseProfilePageGuard,
+    FirebaseProfileResolver
+  ]
 })
-export class FirebaseSignInPageModule {}
+export class FirebaseProfilePageModule {}

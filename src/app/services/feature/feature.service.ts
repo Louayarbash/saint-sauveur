@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ToastController,LoadingController, ActionSheetController } from '@ionic/angular';
+import { ToastController,LoadingController, ActionSheetController, AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 //import { RatingUser } from 'app/deal/item/firebase-item.model';
 import { RatingUser } from '../../deal/item/firebase-item.model';
@@ -14,6 +14,11 @@ import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { ImagePickerOptions, ImagePicker } from '@ionic-native/image-picker/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FormGroup } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { Parkings, Services } from '../../type';
+import { LanguageService } from '../../language/language.service';
+import { first } from 'rxjs/operators';
+// const nodemailer = require('nodemailer');
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +27,10 @@ export class FeatureService {
   translations;
   userLanguage;
   buildingLevels: any;
+  availableLanguages = [];
+  // parking: Parkings[] =[{id: '1', description: 'P1', note: '', active: true}, {id: '2', description: 'P2', note: '', active: true}, {id: '3', description: 'P3', note: '', active: true}];
+  // services: Services[]= [{id: '1', description: 'ElevatorBooking', active: true}, {id: '2', description: 'NewKeyRequest', active: true}];
+
 
   constructor(    
     private toastController : ToastController,
@@ -33,10 +42,14 @@ export class FeatureService {
     private camera: Camera,  
     private actionSheetController : ActionSheetController,
     private imagePicker : ImagePicker,
-    private file: File
+    private file: File,
+    private http: HttpClient,
+    private alertController: AlertController,
+    private translatee: TranslateService,
+    public languageService : LanguageService
+    // private Transporter: Transporter
     //private loginService : LoginService
     ) {
-    console.log("constructor FeatureService", this.userLanguage);
     }
 getTranslationParams(key : string, params : Object)
 {
@@ -60,6 +73,7 @@ async presentToast(message : string, duration : number){
   });
   await toast.present();  
 }
+
 getTranslations() {
   // get translations for this page to use in the Language Chooser Alert
   this.translate.getTranslation(this.translate.currentLang)
@@ -338,5 +352,82 @@ setUserRating(ratingInfo: RatingUser){
   return this.afs.doc(ratingPath).set({...ratingInfo});
 }
 
+public createItem(tableName: string, itemData: any, id?: string): Promise<DocumentReference | void>  {
+  if (id){
+    return this.afs.collection(tableName).doc(id).set({...itemData});
+  }
+  else {
+    return this.afs.collection(tableName).add({...itemData});
+  }
+}
 
+public updateItem(tableName: string, id: string, itemData: any): Promise<void> {
+  return this.afs.collection(tableName).doc(id).update({...itemData});
+}
+
+ sendNotificationEmail(mailOptions: any){
+  const headerDict = {
+    'Content-Type': 'application/json'
+  }
+  
+  const requestOptions = {                                                                                                                                                                                
+    headers: new HttpHeaders(headerDict)
+  };
+   return this.http.post('https://us-central1-parkondo.cloudfunctions.net/sendInvitationEmails', mailOptions/*, requestOptions*/);
+}
+
+async openLanguageChooser() {
+  this.availableLanguages = this.languageService.getLanguages()
+  .map(item =>
+    ({
+      name: item.name,
+      type: 'radio',
+      label: item.name,
+      value: item.code,
+      checked: item.code === this.translatee.currentLang
+    })
+  );
+
+  const alert = await this.alertController.create({
+    header: this.translations.SelectLanguage,
+    inputs: this.availableLanguages,
+    cssClass: 'language-alert',
+    buttons: [
+      {
+        text: this.translations.Cancel,
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: () => {}
+      }, {
+        text: this.translations.OK,
+        handler: (data) => {
+          if (data) {
+            this.translatee.use(data)
+            // this.loginService.setUserLanguage(data).then(() => { this.translatee.use(data) });
+          }
+        }
+      }
+    ]
+  });
+  await alert.present();
+
+}
+
+changeLanguage(lang: string){
+  this.translatee.use(lang);
+}
+
+checkEmail(email: string): Observable<any> {
+  //console.log("getItem", itemId);
+  return this.afs.collection('invitations', ref => ref.where('emails', 'array-contains', email).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' }).pipe(first());
+  
+/*  .snapshotChanges()
+   .pipe(
+    map(a => {
+      const postData = a.payload.data();
+      const id = a.payload.id;
+      return { id, ...postData };
+    })
+  ); */
+}
 }

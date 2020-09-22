@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import {  FirebaseUserModel } from '../firebase-user.model';
+import {  UserModel } from '../user.model';
 //import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 
 import { DataStore } from '../../../shell/data-store';
@@ -19,10 +19,10 @@ export class FirebaseUserDetailsResolver implements Resolve<any> {
     // We created a FirebaseCombinedUserModel to combine the userData with the details of the userSkills (from the skills collection).
     // They are 2 different collections and we need to combine them into 1 dataSource.
 
-    const combinedUserDataSource: Observable<FirebaseUserModel/*FirebaseCombinedUserModel*/> = this.firebaseService
+    const combinedUserDataSource: Observable<UserModel/*FirebaseCombinedUserModel*/> = this.firebaseService
     .getCombinedUserDataSource(userId);
 
-     const combinedUserDataStore: DataStore<FirebaseUserModel> = this.firebaseService
+     const combinedUserDataStore: DataStore<UserModel> = this.firebaseService
     .getCombinedUserStore(combinedUserDataSource);
 
     // The user details page has a section with related users, showing users with the same skills

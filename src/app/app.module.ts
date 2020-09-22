@@ -33,7 +33,10 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';					
-// import { SliderPage } from './sale/item/slider/slider.page';				  
+// import { SliderPage } from './sale/item/slider/slider.page';			
+import { AuthService } from '../app/auth/auth.service';
+import { LoginGuard } from './auth/login.guard';
+import { SignInGuard } from './auth/signin.guard';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -77,8 +80,14 @@ export function createTranslateLoader(http: HttpClient) {
     FCM	 ,
     CallNumber,
     EmailComposer,
-    SocialSharing
+    SocialSharing,
+    AuthService,
+    LoginGuard,
+    SignInGuard
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+
+
+}

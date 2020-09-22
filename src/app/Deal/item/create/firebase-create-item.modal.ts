@@ -140,9 +140,9 @@ export class FirebaseCreateItemModal implements OnInit {
   }
   initValues(){
   
-  this.loginService.getUserInfoObservable().subscribe(user =>{
+  this.loginService.getUserInfoObservable(this.loginService.userInfo.id).subscribe(user =>{
     
-    this.userParking = user.parking;
+    this.userParking = user.parkings;
 
     if(this.userParking){
       this.getUserParking(this.userParking);

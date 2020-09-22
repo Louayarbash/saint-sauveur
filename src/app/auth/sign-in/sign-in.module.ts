@@ -2,16 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-import { FirebaseSignUpPage } from './firebase-sign-up.page';
+import { SignInPage } from './sign-in.page';
 import { ComponentsModule } from '../../components/components.module';
-
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
     path: '',
-    component: FirebaseSignUpPage
+    component: SignInPage
   }
 ];
 
@@ -22,8 +21,9 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    TranslateModule,
     ComponentsModule
   ],
-  declarations: [FirebaseSignUpPage]
+  declarations: [SignInPage]
 })
-export class FirebaseSignUpPageModule {}
+export class FirebaseSignInPageModule {}

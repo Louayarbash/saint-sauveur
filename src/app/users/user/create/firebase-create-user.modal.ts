@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseUserModel } from '../firebase-user.model';
+import { UserModel } from '../user.model';
 //import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { AngularFirestore } from '@angular/fire/firestore';
@@ -32,7 +32,7 @@ export class FirebaseCreateUserModal implements OnInit {
   isLoading = false;
 
   createUserForm: FormGroup;
-  userData: FirebaseUserModel = new FirebaseUserModel();
+  userData: UserModel = new UserModel();
   levels = [];
   selectedParking = [];
   selectedPhoto: string;
@@ -68,7 +68,7 @@ export class FirebaseCreateUserModal implements OnInit {
       firstname: new FormControl('',Validators.required),
       lastname: new FormControl('',Validators.required),
       buildingId: new FormControl(this.loginService.getBuildingId(),Validators.required),
-      app : new FormControl(),
+      apartment : new FormControl(),
       parking1Level : new FormControl('1000'),
       parking1Number : new FormControl(),
       parking2Level : new FormControl('1000'),
@@ -89,7 +89,7 @@ export class FirebaseCreateUserModal implements OnInit {
     {validators: this.parkingValidator} */
     );
 
-     this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
+     this.featureService.getItem('buildings', this.loginService.buildingId).subscribe(item => {
       //console.log("get parking",item)
       this.levels = item.parkings;
 
@@ -155,7 +155,7 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.code =this.createUserForm.value.code;
     this.userData.type =this.createUserForm.value.type;
     this.userData.role =this.createUserForm.value.role;
-    this.userData.app =this.createUserForm.value.app;
+    this.userData.apartment =this.createUserForm.value.apartment;
     this.userData.language =this.createUserForm.value.language;
     this.userData.buildingId = this.loginService.getBuildingId();
     this.userData.createDate = firebase.firestore.FieldValue.serverTimestamp();

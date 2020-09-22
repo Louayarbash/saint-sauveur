@@ -1,12 +1,12 @@
 import { ShellModel } from '../../shell/data-store';
 
-export class FirebaseUserModel extends ShellModel {
+export class UserModel extends ShellModel {
   id: string;
   photo: string;
   firstname: string;
   lastname: string;
   buildingId: string;
-  app: string;
+  apartment: string;
   parkings: any[];
   type: string;
   role: string;
@@ -14,7 +14,8 @@ export class FirebaseUserModel extends ShellModel {
   email: string;
   phone: number;
   birthdate: number;
-  language: string;
+  language: string= 'en';
+  status: string;
   createDate : firebase.firestore.FieldValue;
   
   constructor() {

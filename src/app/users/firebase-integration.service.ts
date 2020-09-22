@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { DataStore } from '../shell/data-store';
 
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseUserModel } from './user/firebase-user.model';
+import { UserModel } from './user/user.model';
 //import { UserImageModel } from './user/select-image/user-image.model';
 import { LoginService } from '../services/login/login.service';
 import { LoginCredential } from '../type';
@@ -16,7 +16,7 @@ export class FirebaseService {
   // Listing Page
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
-  private combinedUserDataStore: DataStore<FirebaseUserModel>;
+  private combinedUserDataStore: DataStore<UserModel>;
   // private relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>>;
   private buildingId = this.loginService.getBuildingId();
   private tableName = "users";
@@ -83,7 +83,7 @@ export class FirebaseService {
     Firebase User Details Page
   */
   // Concat the userData with the details of the userSkills (from the skills collection)
-  public getCombinedUserDataSource(userId: string): Observable<FirebaseUserModel> {
+  public getCombinedUserDataSource(userId: string): Observable<UserModel> {
     return this.getUser(userId);
     /*.pipe(
       // Transformation operator: Map each source value (user) to an Observable (combineDataSources | throwError) which
@@ -117,9 +117,9 @@ export class FirebaseService {
     );*/
   }
   
-  public getCombinedUserStore(dataSource: Observable<FirebaseUserModel>): DataStore<FirebaseUserModel> {
+  public getCombinedUserStore(dataSource: Observable<UserModel>): DataStore<UserModel> {
     // Initialize the model specifying that it is a shell model
-    const shellModel: FirebaseUserModel = new FirebaseUserModel();
+    const shellModel: UserModel = new UserModel();
 
     this.combinedUserDataStore = new DataStore(shellModel);
     // Trigger the loading mechanism (with shell) in the dataStore
@@ -168,7 +168,7 @@ export class FirebaseService {
   /*
     Firebase Create User Modal
   */
-  public createUser(userData: FirebaseUserModel, logincredential : LoginCredential): Promise<DocumentReference>  {
+  public createUser(userData: UserModel, logincredential : LoginCredential): Promise<DocumentReference>  {
     this.loginService.signup(logincredential);
     return this.afs.collection('users').add({...userData});
   }
@@ -176,7 +176,7 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateUser(userData: FirebaseUserModel): Promise<void> {
+  public updateUser(userData: UserModel): Promise<void> {
     console.log("updateUser", userData);
     return this.afs.collection('users').doc(userData.id).update({...userData});
   }
@@ -213,14 +213,14 @@ export class FirebaseService {
 
 
   // Get data of a specific User
-  private getUser(userId: string): Observable<FirebaseUserModel> {
-    return this.afs.doc<FirebaseUserModel>('users/' + userId)
+  private getUser(userId: string): Observable<UserModel> {
+    return this.afs.doc<UserModel>('users/' + userId)
     .snapshotChanges()
     .pipe(
       map(a => {
         const userData = a.payload.data();
         const id = a.payload.id;
-        return { id, ...userData } as FirebaseUserModel;
+        return { id, ...userData } as UserModel;
       })
     );
   }

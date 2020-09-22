@@ -1,6 +1,6 @@
 import { ShellModel } from '../../shell/data-store';
 import { Images } from '../../type';
-import { FirebaseUserModel } from '../../users/user/firebase-user.model';
+import { UserModel } from '../../users/user/user.model';
 
 
 
@@ -57,7 +57,7 @@ export class FirebaseCombinedItemModel extends FirebaseItemModel {
     new FirebasePhotoModel(),
     new FirebasePhotoModel()
   ];
-  creatorDetails : FirebaseUserModel;
+  creatorDetails : UserModel;
 
   constructor() {
     super();

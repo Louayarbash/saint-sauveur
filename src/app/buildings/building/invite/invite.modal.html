@@ -9,14 +9,15 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-card *ngFor="let invitaion of invitaions | async">
+    <ion-title class="ion-padding">{{ 'InvitationsSent' | translate }}</ion-title>
+    <ion-card class="itemCard" *ngFor="let invitaion of invitaions | async">
       <ion-card-header>
         <ion-card-subtitle>
           {{ invitaion.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}
         </ion-card-subtitle>
         <ion-card-title>    
           <ion-chip *ngFor="let email of invitaion.emails" color="main" outline="true">
-            <ion-text color="dark">{{ email }}</ion-text>
+            <ion-text>{{ email }}</ion-text>
           </ion-chip>
         </ion-card-title>
       </ion-card-header>
@@ -25,29 +26,33 @@
       </ion-card-content>
   </ion-card> 
   </ion-content>
-  <ion-footer>
+  <ion-footer class="footerInvite">
     <ion-toolbar>
+      <ion-title class="ion-padding">{{ 'InvitationForm' | translate }}</ion-title>
+    
+    <!-- <ion-toolbar> -->
       <!-- <ion-grid> -->
-        <ion-row>
+        <ion-row class="rowInvite">
           <ion-col>
             <ion-text>{{ 'EmailsListHeader' | translate }}</ion-text>
-            <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="emailsList" class="message-input ion-no-margin"></ion-textarea>
+            <ion-textarea auto-grow="false" spellcheck="true" [(ngModel)]="emailsList" class="message-input"></ion-textarea>
           </ion-col>
           </ion-row> 
-        <ion-row class="ion-align-items-center">
-          <ion-col size="10">
+        <ion-row class="rowInvite">
+          <ion-col>
             <ion-label>{{ 'InvitationMessage' | translate }}</ion-label>
-            <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="InvitationMsg" class="message-input ion-no-margin"></ion-textarea>
+            <ion-textarea auto-grow="false" spellcheck="true" [(ngModel)]="InvitationMsg" class="message-input"></ion-textarea>
           </ion-col>
-          <ion-col size="2">
+<!--           <ion-col size="2">
             <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="emailsList ===''" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
-          </ion-col>
+          </ion-col> -->
           </ion-row> 
-          <ion-row>
+          <ion-row class="rowInvite">
             <ion-col>
-              <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="emailsList ===''" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
+              <ion-button class="ion-no-margin btnInvite" expand="block" color="main" type="submit" fill="solid" [disabled]="!emailsList" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
             </ion-col>
           </ion-row>
     <!-- </ion-grid> -->
-    </ion-toolbar>
+    <!-- </ion-toolbar> -->
+  </ion-toolbar>
   </ion-footer>

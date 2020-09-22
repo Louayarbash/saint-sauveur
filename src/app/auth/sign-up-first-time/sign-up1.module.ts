@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+
 import { IonicModule } from '@ionic/angular';
-import { ComponentsModule } from '../components/components.module';
-import { ForgotPasswordPage } from './forgot-password.page';
+import { SignUp1Page } from './sign-up1.page';
+import { ComponentsModule } from '../../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { AuthService } from '../auth/auth.service';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: ForgotPasswordPage
+    component: SignUp1Page
   }
 ];
 
@@ -25,7 +26,6 @@ const routes: Routes = [
     TranslateModule,
     ComponentsModule
   ],
-  providers: [AuthService],
-  declarations: [ForgotPasswordPage]
+  declarations: [SignUp1Page]
 })
-export class ForgotPasswordPageModule {}
+export class FirebaseSignUp1PageModule {}

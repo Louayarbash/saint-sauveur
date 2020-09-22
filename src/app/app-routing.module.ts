@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LoginGuard } from './auth/login.guard';
+import { SignInGuard } from './auth/signin.guard';
+
 
 const routes: Routes = [
   // { path: '', redirectTo: 'walkthrough', pathMatch: 'full' },
-	{ path: '', redirectTo: 'deal/listing', pathMatch: 'full' },														  
+  { path: '', redirectTo: 'auth/sign-in', pathMatch: 'full' },
   { path: 'walkthrough', loadChildren: () => import('./walkthrough/walkthrough.module').then(m => m.WalkthroughPageModule) },
-  { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.CategoriesPageModule) },
+  { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.StartMenuPageModule), canActivate: [SignInGuard] },
   { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'rent-sale', loadChildren: () => import('./rent-sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canActivate: [LoginGuard] },
   { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'buildings', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'auth', loadChildren: () => import('./auth/firebase-auth.module').then(m => m.FirebaseAuthModule) },				
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canActivate: [SignInGuard] },				
   { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  
   { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
   { path: 'auth/signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule) },

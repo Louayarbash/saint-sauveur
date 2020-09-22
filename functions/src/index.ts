@@ -7,6 +7,9 @@ import admin = require('firebase-admin');
 //import { CloudTasksClient } from '@google-cloud/tasks';
 //import * as dayjs from 'dayjs';
 const { CloudTasksClient } = require('@google-cloud/tasks');
+const nodemailer = require('nodemailer');
+const cors = require("cors");
+const corsHandler = cors({origin: true});
 
 admin.initializeApp();
 
@@ -47,6 +50,7 @@ interface InfoDocumentData extends admin.firestore.DocumentData {
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
+  
 exports.newRequest = functions.firestore
     .document('deals-requests/{dealId}')
     .onCreate(async item => {
@@ -422,8 +426,8 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
               tasksClient.deleteTask({ name: after.actionTaskStarted });
               tasksClient.deleteTask({ name: after.actionTaskEnded });
               
-              const update : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
-              await item.after.ref.update(update);
+              const updateData : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
+              await item.after.ref.update(updateData);
         } 
 
       /* send notification to creater */
@@ -579,4 +583,36 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
         });
     }
     return;
+});
+
+// sending invitations emails
+export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req, res) => {
+    corsHandler(req, res, async() => {
+    try {  
+      const mailOptions = req.body
+      const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      // service: 'gmail',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'marcelouay@gmail.com',
+        pass: 'li2annalahama3ana'
+      }/* ,
+      tls: {
+        rejectUnauthorized:false
+      } */
+    });
+  
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Message sent: %s", info.messageId);
+        res.send(info);
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).send(error)
+    }
+
+  }
+  );
 })

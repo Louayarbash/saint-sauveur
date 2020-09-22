@@ -14,11 +14,13 @@ import { TranslateModule/*, TranslateService*/ } from '@ngx-translate/core';
 import { FirebaseCreateItemModal } from "../item/create/firebase-create-item.modal";
 //import { FirebaseUpdateItemModal } from "../item/update/firebase-update-item.modal";
 import { PipesModule } from '../../pipes/pipes.module';
+// import { LoginGuard } from '../../auth/login.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: FirebaseListingPage,
+    // canActivate: [LoginGuard],
     resolve: {
       data: FirebaseListingResolver
     }
@@ -39,6 +41,7 @@ const routes: Routes = [
   declarations: [FirebaseListingPage,FirebaseCreateItemModal],
   providers: [
     FirebaseService,
+    // LoginGuard,
     FirebaseListingResolver
     //TranslateService
   ],

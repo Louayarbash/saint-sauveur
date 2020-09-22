@@ -10,7 +10,7 @@ ion-toolbar {
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
-.login-content {
+.signup-content {
   --background: var(--page-background);
   --padding-start: var(--page-margin);
   --padding-end: var(--page-margin);
@@ -24,6 +24,7 @@ ion-toolbar {
     margin-bottom: calc(var(--page-margin) * (3/2));
     letter-spacing: 0.6px;
   }
+
 
   .inputs-list {
     --ion-item-background: var(--page-background);
@@ -49,7 +50,7 @@ ion-toolbar {
     }
   }
 
-  .login-btn {
+  .signup-btn {
     margin: calc(var(--page-margin) / 2) 0px;
   }
 
@@ -57,7 +58,7 @@ ion-toolbar {
     justify-content: flex-end;
     align-items: center;
 
-    .signup-btn {
+    .login-btn {
       --color: var(--ion-color-secondary);
       margin: 0px;
 

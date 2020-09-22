@@ -4,7 +4,9 @@ import { LoginCredential } from "../../type";
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 //import { FirebaseUserModel } from 'src/app/users/user/firebase-user.model';
-import { FirebaseUserModel } from '../../users/user/firebase-user.model';
+import { UserModel } from '../../users/user/user.model';
+import { BuildingModel } from '../../buildings/building/building.model';
+import { AuthService } from '../../auth/auth.service';
 //import { Observable } from 'rxjs';
 //import { DocumentSnapshot } from '@google-cloud/firestore';
 
@@ -12,17 +14,22 @@ import { FirebaseUserModel } from '../../users/user/firebase-user.model';
   providedIn: 'root'
 })
 export class LoginService {
-
-uid : string;
-buildingId: string = 'NJ6u68Cq68RgX9jXPuVx';
+userInfo: UserModel;
+buildingInfo: BuildingModel;
+// uid : string;
+buildingId: string= "LOxCBCFef7nZm8u0Sg9R";
+userId: string= "P1JvaXPwCtbcnK8VIaKQ2fGC5DA3";
 languge : string;
 firstname : string;
 parkings: any;
-  language: string;
+language: string;
+apartment: string;
   constructor(
     private afAuth : AngularFireAuth,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private authService: AuthService
     ) {
+      
    }
   login(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
@@ -31,17 +38,16 @@ parkings: any;
         return res.user.uid; 
         
       });
-      console.log("login function",this.uid);
       //this._uid = this._angularFireAuth.auth.currentUser.uid;
-      this.getUserInfo();
+      // this.getUserInfo();
       return authenticated;
       
   }
+
   signup(credentials: LoginCredential/*name: string, password: string*/):Promise<any>
   {
       const created = this.afAuth.createUserWithEmailAndPassword(credentials.email, credentials.password);
       //this.uid = this.afAuth.currentUser.uid;
-      console.log(this.uid);
       return created;
       
   }
@@ -49,75 +55,89 @@ parkings: any;
     return this.getLoginID() == "Ku6jzqUAjK3iLlXWSfPK" ? true : false; 
   }
   getLoginName(){
-    return "Louay";
-  }
-  getApaNumber(){
-    return "865";
-  }
-  getLoginID(){
-/*     if(!this.uid){
-      this.uid = "Ku6jzqUAjK3iLlXWSfPK"//UtU9xz7umeuro52XTMhz;this.afAuth.auth.currentUser.uid;
-    } */
-    return "Ku6jzqUAjK3iLlXWSfPK";//this.uid
-  }
-  getBuildingId(){
-    return "NJ6u68Cq68RgX9jXPuVx";
-  }
-
-   async getUserParking(){
-/*      if(this.parking){
-      return this.parking;
+    if(this.firstname){
+      return this.firstname;
     }
-    else{  */
-      await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
-//     }
+    else {
+      return null
+    }
+  }
+  getApaNumber(): string{
+    if(this.apartment){
+      return this.apartment;
+    }
+    else {
+      return null
+    }
+  }
+  getLoginID(): string{
+    if(this.userId){
+      return this.userId;
+    }
+    else {
+      return null
+    }
+  }
+  getBuildingId(): string{
+    if(this.buildingId){
+      return this.buildingId;
+    }
+    else {
+      return null
+    }
     
   }
 
-  async getUserInfo(){
-      // console.log("inside getLoginInfo 111")
+   async getUserParking(){
+    
+  }
+
+  async getUserInfo(userId: string): Promise<UserModel> {
       try {
-      const res = await this.afs.firestore.collection("users").doc(this.getLoginID()).get();
-      console.log("hello",res.data());
-      this.buildingId = res.data().building;
-      this.languge = res.data().language;
-      this.firstname = res.data().firstname;
-      this.parkings = res.data().parkings;
-      console.log("inside getLoginInfo 222", this.parkings);
+      const res= await this.afs.firestore.collection("users").doc(userId).get();
+      const userData= res.data() as UserModel;
+      this.userId= res.id;
+      this.buildingId= userData.buildingId;
+      this.languge= userData.language;
+      this.firstname= userData.firstname;
+      this.parkings= userData.parkings;
+      this.apartment= userData.apartment;
+      return userData;
       } catch (err) {
       console.log(err);
       }
   }
 
-   getUserInfoObservable() : Observable<any> {
+  getUserInfoObservable(uid: string): Observable<UserModel>{
     
-    return this.afs.collection("users").doc(this.getLoginID()).valueChanges();
+    return this.afs.collection("users").doc<UserModel>(uid).valueChanges();
   
+}
+getBuildingInfoObservable(buildingId: string): Observable<BuildingModel>{
+    
+  return this.afs.collection("buildings").doc<BuildingModel>(buildingId).valueChanges();
+
 }
 updateUserParking(parkings : any){
   this.afs.collection("users").doc(this.getLoginID()).update({parkings : parkings})
 }
 getUserInfoObservable5() //: Observable<any>
  {
-  return this.afs.collection("users").doc<FirebaseUserModel>(this.getLoginID()).valueChanges().subscribe((user) => {
-    // console.log("BINGOOO",user);
-  this.buildingId = user.buildingId;
-  this.language = user.language;
-  this.firstname = user.firstname;
-  this.parkings = user.parkings;
-  // console.log(this.buildingId);
-  // console.log(this.language);
-  // console.log(this.firstname);
-  // console.log(this.parking);
-  // return this.parking;
+  return this.afs.collection("users").doc<UserModel>(this.getLoginID()).valueChanges().subscribe((user) => {
+    this.buildingId = user.buildingId;
+    this.language = user.language;
+    this.firstname = user.firstname;
+    this.parkings = user.parkings;
  });
 
 } 
-  getUserLanguage(){
-    //return "fr";
+/*   getUserLanguage(){
   return this.afs.firestore.collection("users").doc(this.getLoginID()).get();
   }
   setUserLanguage(language){
     return this.afs.collection("users").doc(this.getLoginID()).update({language : language});
+  } */
+  signOut(){
+    this.authService.signOut();
   }
 }

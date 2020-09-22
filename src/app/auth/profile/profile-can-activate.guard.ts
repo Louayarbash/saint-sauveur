@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { FirebaseAuthService } from '../firebase-auth.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class FirebaseProfilePageGuard implements CanActivate {
 
   constructor(
-    private firebaseAuthService: FirebaseAuthService,
+    private firebaseAuthService: AuthService,
     private router: Router
   ) {}
 
@@ -16,7 +16,7 @@ export class FirebaseProfilePageGuard implements CanActivate {
       return true;
     } else {
       // Navigate to the login page
-      this.router.navigate(['firebase/auth/sign-in']);
+      this.router.navigate(['/auth/sign-in']);
       return false;
     }
   }

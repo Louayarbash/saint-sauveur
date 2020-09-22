@@ -4,21 +4,17 @@ const { SplashScreen } = Plugins;*/
 /*LA_ add for cordova*/
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform, AlertController } from '@ionic/angular';
-//import { OneSignal } from "@ionic-native/onesignal/ngx";
+import { Platform } from '@ionic/angular';
 /*END*/
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
-// import { tap } from 'rxjs/operators';
-
-//import { AngularFirestore } from '@angular/fire/firestore';
 import { FcmService } from '../app/services/fcm/fcm.service';
 //import { Router } from '@angular/router';
 //import { FCM } from '@ionic-native/fcm/ngx';
 import { LanguageService } from './language/language.service';
-import { LoginService } from './services/login/login.service';
+// import { LoginService } from './services/login/login.service';
 import { FeatureService } from './services/feature/feature.service';
-// import { AngularFirestore } from '@angular/fire/firestore';
-
+// import { AngularFireAuth } from '@angular/fire/auth';
+// import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -56,12 +52,12 @@ export class AppComponent {
   accountPages = [
     {
       title: 'Log In',
-      url: '/auth/login',
+      url: '/auth/sign-in',
       ionicIcon: 'log-in-outline'
     },
     {
       title: 'Sign Up',
-      url: '/auth/signup',
+      url: '/auth/sign-up',
       ionicIcon: 'person-add-outline'
     },
     {
@@ -73,12 +69,12 @@ export class AppComponent {
       title: 'Getting Started',
       url: '/getting-started',
       ionicIcon: 'rocket-outline'
-    },
+    }/* ,
     {
       title: '404 page',
       url: '/page-not-found',
       ionicIcon: 'alert-circle-outline'
-    }
+    } */
   ];
 
   available_languages = [];
@@ -90,26 +86,23 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    //private oneSignal : OneSignal,
-    private alertController :AlertController,
-    //private toastCtrl : ToastController,
+    // private oneSignal : OneSignal,
+    // private alertController :AlertController,
+    // private toastCtrl : ToastController,
     private fcmService : FcmService,
-    //private router :Router,
-    //private ngZone : NgZone,
-    //private fcm : FCM,
+    // private router :Router,
+    // private ngZone : NgZone,
+    // private fcm : FCM,
     public languageService : LanguageService,
-    private loginService : LoginService,
+    // private loginService : LoginService,
     private featureService : FeatureService,
-    //private afs : AngularFirestore
+    // private angularFireAuth: AngularFireAuth,
+    // private AuthService: AuthService
+    // private afs : AngularFirestore
     ) {
 
     this.initializeApp();
     //this.setLanguage();
-
-/*     curl https://fcm.googleapis.com/fcm/send \
-     -H "Content-Type: application/json" \
-     -H "Authorization: key=your-messaging-SERVER-key" \
-     -d '{ "notification": {"title": "Test title", "body": "Test Body", "click_action" : "https://angularfirebase.com"},"to" : "fcmToken_from_firebase"}' */
     
 /*     platform.ready().then(() => {
 
@@ -129,6 +122,7 @@ export class AppComponent {
       // Get a FCM token
       //fcmService.requestPermission();
       this.fcmService.getToken();
+
       //this.fcm.getToken();
 
       // Listen to incoming messages
@@ -195,15 +189,15 @@ export class AppComponent {
     // this language will be used as a fallback when a translation isn't found in the current language
 
     //this.translate.setDefaultLang('en');
-    let currentLanguage,building : string;
+    // let currentLanguage: string;
     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    await this.loginService.getUserLanguage().then( res => { 
-      currentLanguage = res.data().language;
-    } );
-    this.translatee.setDefaultLang(currentLanguage);
-    this.translatee.use(currentLanguage);
-    console.log(currentLanguage);
-    console.log("current lang1",this.translatee.currentLang);
+    // await this.loginService.getUserLanguage().then( res => { 
+    //  currentLanguage = res.data().language;
+    // } );
+    this.translatee.setDefaultLang('en');
+    this.translatee.use('en');
+    // console.log(currentLanguage);
+    // console.log("current lang1",this.translatee.currentLang);
     // this is to determine the text direction depending on the selected language
     // for the purpose of this example we determine that only arabic and hebrew are RTL.
     // this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -212,11 +206,10 @@ export class AppComponent {
     //this.getTranslations();
     //this.loginService.getUserInfo().then( a=> { return console.log("Louay from app.component111", a) } ).catch(err=>console.log(err));
     this.translatee.onLangChange.subscribe(() => {
-      console.log("Louay from app.component222")
       this.featureService.getTranslations();
     });
-    console.log("2",this.translatee.currentLang);
-    console.log("3",this.translatee);
+    // console.log("2",this.translatee.currentLang);
+    // console.log("3",this.translatee);
   }
 /*   getTranslations() {
     // get translations for this page to use in the Language Chooser Alert
@@ -226,7 +219,9 @@ export class AppComponent {
       this.translations = translations;
     });
   } */
-  async openLanguageChooser() {
+
+
+/*   async openLanguageChooser() {
     this.available_languages = this.languageService.getLanguages()
     .map(item =>
       ({
@@ -260,6 +255,6 @@ export class AppComponent {
     });
     await alert.present();
 
-  }
+  } */
 
 }

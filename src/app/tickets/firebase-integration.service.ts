@@ -8,7 +8,7 @@ import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { TicketModel, FirebaseCombinedTicketModel } from './ticket/ticket.model';
 //import { UserImageModel } from './user/select-image/user-image.model';
 //import { LoginService } from '../services/login/login.service';
-import { FirebaseUserModel } from '../users/user/firebase-user.model';
+import { UserModel } from '../users/user/user.model';
 import { LoginService } from "../services/login/login.service"
 
 @Injectable()
@@ -55,13 +55,13 @@ export class FirebaseService {
     return this.getItem(id) 
     .pipe(
       concatMap(item => {
-        const creatorDetails  = this.afs.doc<FirebaseUserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res}))
+        const creatorDetails  = this.afs.doc<UserModel>( 'users/' + item.createdBy).valueChanges().pipe(first()).pipe(map(res => {return res}))
         if (item){
           return combineLatest([
            of(item),
            creatorDetails,
          ]).pipe(
-           map(([ticketDetails, creatorDetails]: [TicketModel, FirebaseUserModel]) => {
+           map(([ticketDetails, creatorDetails]: [TicketModel, UserModel]) => {
              // Spread operator (see: https://dev.to/napoleon039/how-to-use-the-spread-and-rest-operator-4jbb)
              return {
                ...ticketDetails,

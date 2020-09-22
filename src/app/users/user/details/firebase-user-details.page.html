@@ -42,9 +42,9 @@
               <ion-label>{{ 'Phone' | translate }}</ion-label>
               <app-text-shell animation="bouncing" [data]="user?.phone"></app-text-shell>
             </ion-item>
-            <ion-item *ngIf="user.app">
+            <ion-item *ngIf="user.apartment">
               <ion-label>{{ 'Apartment' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="user?.app"></app-text-shell>
+              <app-text-shell animation="bouncing" [data]="user?.apartment"></app-text-shell>
             </ion-item>
             <ion-item *ngIf="user.code">    
               <ion-label>{{ 'DoorCode' | translate }}</ion-label>
@@ -69,6 +69,9 @@
             <ion-item *ngIf="user.createDate">    
               <ion-label>{{ 'CreateDate' | translate }}</ion-label>
               <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
+            </ion-item>
+            <ion-item>    
+              <ion-button expand="block" color="main" (click)="signOut()" fill="solid">{{ 'SignOut' | translate }}</ion-button>
             </ion-item>
           <!-- </ion-list> -->
         </section>

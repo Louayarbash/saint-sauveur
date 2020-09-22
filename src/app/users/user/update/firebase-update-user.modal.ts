@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseUserModel } from '../firebase-user.model';
+import { UserModel } from '../user.model';
 //import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { AngularFirestore } from "@angular/fire/firestore";
@@ -22,12 +22,12 @@ import { FeatureService } from '../../../services/feature/feature.service';
   ],
 })
 export class FirebaseUpdateUserModal implements OnInit {
-  @Input() user: FirebaseUserModel;
+  @Input() user: UserModel;
   myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
   myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
-  userData: FirebaseUserModel = new FirebaseUserModel();
+  userData: UserModel = new UserModel();
   levels = [];
   selectedParking = [];
   selectedPhoto: string;
@@ -68,7 +68,7 @@ export class FirebaseUpdateUserModal implements OnInit {
       firstname: new FormControl(this.user.firstname,Validators.required),
       lastname: new FormControl(this.user.lastname,Validators.required),
       // building: new FormControl(this.user.building,Validators.required),
-      app : new FormControl(this.user.app),
+      apartment : new FormControl(this.user.apartment),
       parking1Level : new FormControl("1000"),
       parking1Number : new FormControl(),
       parking2Level : new FormControl("1000"),
@@ -105,7 +105,7 @@ this.radioObject = this.radioObject.filter(function (radioNotNull) {
 return radioNotNull != null;
  */
 
-    this.firebaseService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
+    this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
       this.levels = item.parkings;
       console.log("parking",this.user.parkings);
 
@@ -255,7 +255,7 @@ return radioNotNull != null;
     this.userData.code =this.updateUserForm.value.code;
     this.userData.type =this.updateUserForm.value.type;
     this.userData.role =this.updateUserForm.value.role;
-    this.userData.app =this.updateUserForm.value.app;
+    this.userData.apartment =this.updateUserForm.value.apartment;
     this.userData.language =this.updateUserForm.value.language;
 
     this.selectedParking = [];

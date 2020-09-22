@@ -3,7 +3,7 @@ import { ModalController, AlertController, IonContent } from '@ionic/angular';
 //import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseUserModel } from '../../../users/user/firebase-user.model';
+import { UserModel } from '../../../users/user/user.model';
 import { AngularFirestore } from "@angular/fire/firestore";
 //import { Observable } from "rxjs";
 import { LoginService } from "../../../services/login/login.service";
@@ -22,7 +22,7 @@ import { ChatModel } from './chat.model'
 })
 export class ChatModal implements OnInit {
   // "user" is passed in firebase-details.page
-  @Input() item: FirebaseUserModel;
+  @Input() item: UserModel;
   @ViewChild(IonContent, {static:true}) content: IonContent;
   // @ViewChild(IonContent) content : IonContent;
   msgText: string;

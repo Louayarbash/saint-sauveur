@@ -1,5 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
-import { FirebaseUserModel } from '../../users/user/firebase-user.model';
+import { UserModel } from '../../users/user/user.model';
 
 export class TicketModel extends ShellModel {
   id: string;
@@ -23,7 +23,7 @@ export class TicketModel extends ShellModel {
 
 export class FirebaseCombinedTicketModel extends TicketModel {
 
-  creatorDetails : FirebaseUserModel;
+  creatorDetails : UserModel;
 
   constructor() {
     super();

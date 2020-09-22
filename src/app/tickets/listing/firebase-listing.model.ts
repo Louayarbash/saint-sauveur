@@ -1,5 +1,5 @@
 import { ShellModel } from '../../shell/data-store';
-import { FirebaseUserModel } from '../../users/user/firebase-user.model';
+import { UserModel } from '../../users/user/user.model';
 
 export class FirebaseListingItemModel extends ShellModel {
   reference:String;
@@ -11,7 +11,7 @@ export class FirebaseListingItemModel extends ShellModel {
   createdBy: string;
   status: string;
   statusTranslation: string;
-  creatorDetails : FirebaseUserModel;
+  creatorDetails : UserModel;
 
   constructor() {
     super();

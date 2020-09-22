@@ -26,4 +26,4 @@ const categoriesRoutes: Routes = [
   ],
   declarations: [ StartMenuPage ]
 })
-export class CategoriesPageModule {}
+export class StartMenuPageModule {}

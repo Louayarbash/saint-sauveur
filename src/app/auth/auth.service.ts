@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable, of, Subject, from } from 'rxjs';
 import { DataStore } from '../shell/data-store';
-import { FirebaseProfileModel } from './profile/firebase-profile.model';
+import { FirebaseProfileModel } from './profile/profile.model';
 import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 
 import { User, auth } from 'firebase/app';
 //import { cfaSignIn, cfaSignOut, mapUserToUserInfo } from 'capacitor-firebase-auth';
 
 @Injectable()
-export class FirebaseAuthService {
+export class AuthService {
 
   currentUser: User;
   userProviderAdditionalInfo: any;
@@ -18,19 +20,24 @@ export class FirebaseAuthService {
 
   constructor(
     public angularFire: AngularFireAuth,
-    public platform: Platform
+    public platform: Platform,
+    // private router: Router
   ) {
     this.angularFire.onAuthStateChanged((user) => {
       if (user) {
+        console.log("onAuthStateChanged service", user)
         // User is signed in.
         this.currentUser = user;
-      } else {
+      } 
+      else {
+        console.log("onAuthStateChanged service else", user)
+        // this.router.navigate(['auth/sign-in']);
         // No user is signed in.
         this.currentUser = null;
       }
     });
 
-    if (!this.platform.is('capacitor')) {
+    if (!this.platform.is('capacitor')) { 
       // when using signInWithRedirect, this listens for the redirect results
       this.angularFire.getRedirectResult()
       .then((result) => {

@@ -145,6 +145,7 @@ ion-content {
   }
 
   .message-input{
+    // box-shadow: lightgrey;
   width:100%;
   border:1px solid var(--ion-color-medium);
   border-radius : 10px;
@@ -160,4 +161,35 @@ ion-content {
   
   }
 
+  .footerInvite{
+    --background: var(--ion-color-light-shade);
+  }
+
+  .rowInvite{
+    padding: 0px 16px 0px 16px;    
+  }
+
+  .btnInvite{
+    padding-bottom: 5px;
+  }
+
   /* Chat Styling End*/
+
+  .error-container {
+    .error-message {
+      margin: calc(var(--page-margin) / 2) 0px;
+      display: flex;
+      align-items: center;
+      color: var(--ion-color-danger);
+      font-size: 14px;
+
+      ion-icon {
+        padding-inline-end: calc(var(--page-margin) / 2);
+      }
+    }
+  }
+  
+  .recover-message {
+    color: var(--ion-color-medium);
+    margin: calc(var(--page-margin) / 2) 0px;
+  }

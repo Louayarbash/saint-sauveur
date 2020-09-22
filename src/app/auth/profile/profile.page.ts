@@ -1,16 +1,16 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FirebaseProfileModel } from './firebase-profile.model';
-import { FirebaseAuthService } from '../firebase-auth.service';
+import { FirebaseProfileModel } from './profile.model';
+import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs';
 import { IResolvedRouteData, ResolverHelper } from '../../utils/resolver-helper';
 
 @Component({
-  selector: 'app-firebase-profile',
-  templateUrl: './firebase-profile.page.html',
+  selector: 'app-profile',
+  templateUrl: './profile.page.html',
   styleUrls: [
-    './styles/firebase-profile.page.scss',
-    './styles/firebase-profile.shell.scss'
+    './styles/profile.page.scss',
+    './styles/profile.shell.scss'
   ]
 })
 export class FirebaseProfilePage implements OnInit {
@@ -25,7 +25,7 @@ export class FirebaseProfilePage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public authService: FirebaseAuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
