@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable, of, Subject, from } from 'rxjs';
+import { Observable, of, Subject, from, BehaviorSubject } from 'rxjs';
 import { DataStore } from '../shell/data-store';
 import { FirebaseProfileModel } from './profile/profile.model';
 import { Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
+//import { LoginService } from '../services/login/login.service';
+// import { Router } from '@angular/router';
 
 
 import { User, auth } from 'firebase/app';
+import { AngularFirestore } from '@angular/fire/firestore';
 //import { cfaSignIn, cfaSignOut, mapUserToUserInfo } from 'capacitor-firebase-auth';
 
 @Injectable()
@@ -17,22 +19,32 @@ export class AuthService {
   userProviderAdditionalInfo: any;
   profileDataStore: DataStore<FirebaseProfileModel>;
   redirectResult: Subject<any> = new Subject<any>();
+  canAccessApp: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
   constructor(
     public angularFire: AngularFireAuth,
     public platform: Platform,
+    // private loginService: LoginService,
+    private afs: AngularFirestore,
     // private router: Router
   ) {
-    this.angularFire.onAuthStateChanged((user) => {
+    this.angularFire.onAuthStateChanged(async (user) => {
       if (user) {
-        console.log("onAuthStateChanged service", user)
+        console.log("onAuthStateChanged serviceif user", user)
+        let canAccessApp = await this.initializeApp(user.uid).then(res=> {return res});
+        this.canAccessApp.next(canAccessApp);
+        console.log("this.canAccessApp.value if user", this.canAccessApp.value)
         // User is signed in.
+        // this.canAccessApp= true;
         this.currentUser = user;
       } 
       else {
         console.log("onAuthStateChanged service else", user)
+        this.canAccessApp.next(false);
+        console.log("this.canAccessApp.value", this.canAccessApp.value)
         // this.router.navigate(['auth/sign-in']);
         // No user is signed in.
+        //this.canAccessApp= false;
         this.currentUser = null;
       }
     });
@@ -111,11 +123,11 @@ export class AuthService {
     return this.angularFire.createUserWithEmailAndPassword(email, password);
   }
 
-  socialSignIn(providerName: string, scopes?: Array<string>): Observable<any> {
+  // socialSignIn(providerName: string, scopes?: Array<string>): Observable<any> {
 /*     if (this.platform.is('capacitor')) {
       return cfaSignIn(providerName);
     } else { */
-      const provider = new auth.OAuthProvider(providerName);
+  /*     const provider = new auth.OAuthProvider(providerName);
 
       if (scopes) {
         scopes.forEach(scope => {
@@ -129,10 +141,10 @@ export class AuthService {
         // web but not desktop, for example mobile PWA
         return from(this.angularFire.signInWithRedirect(provider));
       }
-    }
+    } */
   
 
-  signInWithFacebook() {
+/*   signInWithFacebook() {
     const provider = new auth.FacebookAuthProvider();
     return this.socialSignIn(provider.providerId);
   }
@@ -146,7 +158,7 @@ export class AuthService {
   signInWithTwitter() {
     const provider = new auth.TwitterAuthProvider();
     return this.socialSignIn(provider.providerId);
-  }
+  } */
 
   public getProfileStore(dataSource: Observable<FirebaseProfileModel>): DataStore<FirebaseProfileModel> {
     // Initialize the model specifying that it is a shell model
@@ -156,4 +168,22 @@ export class AuthService {
     this.profileDataStore.load(dataSource);
     return this.profileDataStore;
   }
+  async initializeApp(uid: string)//: Promise<boolean> 
+    {
+    try {
+      const user= await this.afs.firestore.collection("users").doc(uid).get();
+      let userData= user.data();
+
+
+      const building= await this.afs.firestore.collection("buildings").doc(userData.buildingId).get();
+      let buildingData= building.data();
+ 
+      // this.authService.canAccessApp = (this.userStatus == 'active' && this.buildingStatus =='active');
+      return  (userData.status == 'active' && buildingData.status =='active')
+    } 
+    catch (err) {
+      console.log(err);
+    }
+  }
+
 }

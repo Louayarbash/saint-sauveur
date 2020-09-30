@@ -39,6 +39,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   status : string;
   userIsCreator = false;
   postImages : Images[] = [];
+  lan: string;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -57,7 +58,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     }
 
   ngOnInit() {
-    // this.changeRef.detectChanges();
+
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;

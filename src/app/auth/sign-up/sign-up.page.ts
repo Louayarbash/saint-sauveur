@@ -94,22 +94,22 @@ export class SignUpPage implements OnInit {
 
     // Get firebase authentication redirect result invoken when using signInWithRedirect()
     // signInWithRedirect() is only used when client is in web but not desktop
-    this.authRedirectResult = this.authService.getRedirectResult()
+/*     this.authRedirectResult = this.authService.getRedirectResult()
     .subscribe(result => {
       if (result.user) {
         this.redirectLoggedUserToMainMenuPage();
       } else if (result.error) {
         this.manageAuthWithProvidersErrors(result.error);
       }
-    });
+    }); */
 
     // Check if url contains our custom 'auth-redirect' param, then show a loader while we receive the getRedirectResult notification
-    this.route.queryParams.subscribe(params => {
+/*     this.route.queryParams.subscribe(params => {
       const authProvider = params['auth-redirect'];
       if (authProvider) {
         this.presentLoading(authProvider);
       }
-    });
+    }); */
   }
 
   ngOnInit(): void {
@@ -134,10 +134,16 @@ export class SignUpPage implements OnInit {
     });
   }
 
-  async presentLoading(authProvider?: string) {
+/*   async presentLoading(authProvider?: string) {
     const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
     this.redirectLoader = await this.loadingController.create({
       message: authProvider ? 'Signing up with ' + authProviderCapitalized : 'Signin up ...'
+    });
+    await this.redirectLoader.present();
+  } */
+  async presentLoading() {
+    this.redirectLoader = await this.loadingController.create({
+      message: this.featureService.translations.SigninIn
     });
     await this.redirectLoader.present();
   }
@@ -154,11 +160,11 @@ export class SignUpPage implements OnInit {
 
   // Before invoking auth provider redirect flow, present a loading indicator and add a flag to the path.
   // The precense of the flag in the path indicates we should wait for the auth redirect to complete.
-  prepareForAuthWithProvidersRedirection(authProvider: string) {
+/*   prepareForAuthWithProvidersRedirection(authProvider: string) {
     this.presentLoading(authProvider);
 
     this.location.go(this.location.path(), 'auth-redirect=' + authProvider, this.location.getState());
-  }
+  } */
 
   manageAuthWithProvidersErrors(errorMessage: string) {
     this.submitError = errorMessage;
@@ -167,52 +173,63 @@ export class SignUpPage implements OnInit {
     this.dismissLoading();
   }
 
-  signUpWithEmail(): void {
+  signUpWithEmail() {
+    this.presentLoading();
     this.resetSubmitError();
     const values = this.signupForm.value;
     this.authService.signUpWithEmail(values.email, values.matching_passwords.password)
-      .then(user => {
-        let userId= user.user.uid
-        this.createProfile(user.user.uid);
-        this.loginService.getUserInfo(userId).then(res =>
-          res.buildingId
-
-        )
-        // navigate to user profile
-        // this.redirectLoggedUserToProfilePage();
-      })
-      .catch(error => {
-        this.submitError = error.message;
-      });
+    .then(user => {
+      let userId= user.user.uid
+      this.createProfile(userId);
+    })
+    .catch(error => {
+      this.submitError = error.message;
+      this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
+    });
   }
 
   createProfile(uid: string){
-    this.buildingData.name= this.signupForm.value.name
+    this.buildingData.name= this.signupForm.value.name;
     this.buildingData.createDate= firebase.firestore.FieldValue.serverTimestamp();
-
     this.buildingData.createdBy = uid;
     this.userData.firstname= this.signupForm.value.firstname;
     this.userData.lastname= this.signupForm.value.lastname;
     this.userData.email= this.signupForm.value.email;
     this.userData.role= 'admin';
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
-
-      this.featureService.createItem('buildings', this.buildingData)
+    this.featureService.createItem('buildings', this.buildingData)
     .then((building: any) => {
       this.userData.buildingId= building.id
       this.featureService.createItem('users', this.userData, uid)
-    .then(()=> { 
-        this.redirectLoggedUserToMainMenuPage();
-        this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
-      }
-      ).catch((err) => {
-      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
-      console.log(err);
-      })
+      .then(() => {
+        // this.redirectLoggedUserToStartMenu();
+        this.featureService.presentToast(this.featureService.translations.UserAddedSuccessfully, 2000);
+  
+        this.loginService.initializeApp(uid).then(canAccessApp => {
+          if(canAccessApp){
+            console.log("inside signUp WithEmail canAccessApp true");
+            this.authService.canAccessApp.next(true);
+            // console.log(this.authService.canAccessApp.value);
+            this.redirectLoggedUserToMainMenuPage();
+          }
+          else{
+            this.dismissLoading();
+            console.log("inside signUp WithEmail canAccessApp false");
+            this.authService.canAccessApp.next(false);
+            this.featureService.presentToast(this.featureService.translations.CantAccesApp, 2000)
+          }
+        }
+        )
+        .catch((err )=> {
+          this.dismissLoading();
+          console.log(err);
+          this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)});
+      }).catch((err) => { 
+        console.log(err);
+        this.featureService.presentToast(this.featureService.translations.AddingUserErrors, 2000);}); 
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       console.log(err);
-     });  
+      this.featureService.presentToast(this.featureService.translations.AddingBuildingErrors, 2000);});  
   }
 
   openLanguageChooser(){

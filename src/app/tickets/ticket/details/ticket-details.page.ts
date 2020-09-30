@@ -83,7 +83,7 @@ export class TicketDetailsPage implements OnInit {
               if (this.item.typeId) {
                   let typeCheck = types.find( (type: { id: number; }) => type.id === this.item.typeId );
                   if(typeCheck){
-                    this.type = typeCheck.type;
+                    this.type = typeCheck.description;
                   }
                   else {
                     this.type = 'other';

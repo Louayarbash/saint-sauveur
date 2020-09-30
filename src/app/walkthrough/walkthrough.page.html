@@ -108,7 +108,8 @@
             </ion-col>
             <ion-col class="call-to-actions-wrapper">
               <span class="cta-leading-text">Already have an account?</span>
-              <ion-button class="get-started-button" expand="block" [routerLink]="['/auth/sign-in']">Login here</ion-button>
+              <!-- <ion-button class="get-started-button" expand="block" [routerLink]="['/auth/sign-in']">Login here</ion-button> -->
+              <ion-button class="get-started-button" expand="block" (click)="goToLoginPage()">Login here</ion-button>
               <ion-row class="alt-call-to-action-row">
                 <span class="cta-leading-text">Already have an account?</span>
                 <!-- <ion-button class="login-button" fill="clear" [routerLink]="['/auth/login']"> -->

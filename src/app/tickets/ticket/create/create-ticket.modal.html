@@ -32,7 +32,7 @@
           <ion-item lines=“none”>
             <ion-label >{{ 'TicketType' | translate }}</ion-label>
             <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="typeId" color="main">
-              <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.type | translate }}</ion-select-option>
+              <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.description | translate }}</ion-select-option>
               <ion-select-option value="1000">{{ 'Other' | translate }}</ion-select-option>
             </ion-select>
           </ion-item>

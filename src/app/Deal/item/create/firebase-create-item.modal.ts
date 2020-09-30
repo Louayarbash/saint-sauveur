@@ -69,7 +69,7 @@ export class FirebaseCreateItemModal implements OnInit {
       duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
       endDate : new FormControl(this.today/*{value : this.today, disabled : true}*/, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
-      parking : new FormControl(''),
+      // parking : new FormControl(''),
       note : new FormControl('') 
     });
     if(this.type == "offer"){
@@ -139,8 +139,15 @@ export class FirebaseCreateItemModal implements OnInit {
 
   }
   initValues(){
+
+    if(this.userParking){
+      this.getUserParking(this.userParking);
+    }
+    else{
+      this.featureService.presentToast(this.featureService.translations.NoParkingAssigned, 2000);
+    }
   
-  this.loginService.getUserInfoObservable(this.loginService.userInfo.id).subscribe(user =>{
+/*   this.loginService.getUserInfoObservable(this.loginService.userInfo.id).subscribe(user =>{
     
     this.userParking = user.parkings;
 
@@ -150,7 +157,7 @@ export class FirebaseCreateItemModal implements OnInit {
     else{
       this.featureService.presentToast(this.featureService.translations.NoParkingAssigned, 2000);
     }
-  })
+  }) */
 
   this.today = dayjs().add(30,"minute").toISOString(); 
   //console.log("resetDate", dayjs().toISOString());
@@ -190,7 +197,7 @@ export class FirebaseCreateItemModal implements OnInit {
     //this.itemData.createDate = new Date().toISOString();
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
-    this.itemData.buildingId = this.loginService.buildingId;
+    this.itemData.buildingId = this.loginService.getBuildingId();
     
 /*  this.itemData.createDate1 = firebase.firestore.Timestamp.now();
     this.itemData.createDate2 = now;

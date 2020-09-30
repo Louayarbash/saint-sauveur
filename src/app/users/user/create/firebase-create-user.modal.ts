@@ -63,6 +63,7 @@ export class FirebaseCreateUserModal implements OnInit {
   }
 
   ngOnInit() {
+    this.levels= this.loginService.getBuildingParkings();
     this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
     this.createUserForm = new FormGroup({
       firstname: new FormControl('',Validators.required),
@@ -89,11 +90,11 @@ export class FirebaseCreateUserModal implements OnInit {
     {validators: this.parkingValidator} */
     );
 
-     this.featureService.getItem('buildings', this.loginService.buildingId).subscribe(item => {
+/*      this.featureService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
       //console.log("get parking",item)
       this.levels = item.parkings;
 
-  });
+  }); */
 }
 
 /*   parkingValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {

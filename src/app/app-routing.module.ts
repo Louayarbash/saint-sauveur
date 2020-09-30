@@ -1,37 +1,38 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginGuard } from './auth/login.guard';
+import { PageGuard } from './auth/page.guard';
 import { SignInGuard } from './auth/signin.guard';
+import { IntroGuard } from './auth/intro.guard';
 
 
 const routes: Routes = [
   // { path: '', redirectTo: 'walkthrough', pathMatch: 'full' },
   { path: '', redirectTo: 'auth/sign-in', pathMatch: 'full' },
   { path: 'walkthrough', loadChildren: () => import('./walkthrough/walkthrough.module').then(m => m.WalkthroughPageModule) },
-  { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.StartMenuPageModule), canActivate: [SignInGuard] },
+  { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.StartMenuPageModule), canLoad: [PageGuard] },
   { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'rent-sale', loadChildren: () => import('./rent-sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canActivate: [LoginGuard] },
+  { path: 'deal', loadChildren: () => import('./deal/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'buildings', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
   { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canActivate: [SignInGuard] },				
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canLoad: [IntroGuard, SignInGuard] },				
   { path: 'publication', loadChildren: () => import('./publication/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },																											  
-  { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
-  { path: 'auth/signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule) },
+  // { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
+  // { path: 'auth/signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule) },
   // tslint:disable-next-line:max-line-length
   { path: 'auth/forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule) },
   { path: 'getting-started', loadChildren: () => import('./getting-started/getting-started.module').then(m => m.GettingStartedPageModule) },
-  { path: 'app', loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule) },
-  { path: 'contact-card', loadChildren: () => import('./contact-card/contact-card.module').then(m => m.ContactCardPageModule) },
+  // { path: 'app', loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule) },
+  // { path: 'contact-card', loadChildren: () => import('./contact-card/contact-card.module').then(m => m.ContactCardPageModule) },
   // tslint:disable-next-line:max-line-length
-  { path: 'forms-and-validations', loadChildren: () => import('./forms/validations/forms-validations.module').then(m => m.FormsValidationsPageModule) },
-  { path: 'forms-filters', loadChildren: () => import('./forms/filters/forms-filters.module').then(m => m.FormsFiltersPageModule) },
+  // { path: 'forms-and-validations', loadChildren: () => import('./forms/validations/forms-validations.module').then(m => m.FormsValidationsPageModule) },
+  // { path: 'forms-filters', loadChildren: () => import('./forms/filters/forms-filters.module').then(m => m.FormsFiltersPageModule) },
   { path: 'page-not-found', loadChildren: () => import('./page-not-found/page-not-found.module').then(m => m.PageNotFoundModule) },
-  { path: 'showcase', loadChildren: () => import('./showcase/showcase.module').then(m => m.ShowcasePageModule) },
-  { path: 'firebase', loadChildren: () => import('./firebase/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
+  // { path: 'showcase', loadChildren: () => import('./showcase/showcase.module').then(m => m.ShowcasePageModule) },
+  // { path: 'firebase', loadChildren: () => import('./firebase/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
+  // { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
   //{ path: 'video-playlist', loadChildren: () => import('./video-playlist/video-playlist.module').then(m => m.VideoPlaylistPageModule) },
   { path: '**', redirectTo: 'page-not-found' },
 

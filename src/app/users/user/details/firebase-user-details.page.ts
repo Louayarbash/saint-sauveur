@@ -11,6 +11,7 @@ import { DataStore } from '../../../shell/data-store';
 import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-firebase-user-details',
@@ -42,7 +43,8 @@ export class FirebaseUserDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private featureService : FeatureService,
     private loginService : LoginService,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -69,7 +71,7 @@ export class FirebaseUserDetailsPage implements OnInit {
                   
                   let levelCheck = levels.find( (level: { id: number; }) => level.id === userParking.id );
                   if(levelCheck){
-                    return { id : userParking.id ,number : userParking.number , desc : levelCheck.desc };
+                    return { id : userParking.id ,number : userParking.number , description : levelCheck.description };
                   }
                 });
               }
@@ -112,8 +114,14 @@ export class FirebaseUserDetailsPage implements OnInit {
     await modal.present();
   }
 
-  signOut(){
-    this.loginService.signOut();
+  signOut() {
+    this.authService.signOut().subscribe(() => {
+      // Sign-out successful.
+      // Replace state as we are no longer authorized to access profile page.
+      this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
+    }, (error) => {
+      console.log('signout error', error);
+    });
   }
   
   

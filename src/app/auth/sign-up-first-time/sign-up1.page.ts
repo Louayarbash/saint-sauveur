@@ -99,22 +99,22 @@ export class SignUp1Page implements OnInit {
 
     // Get firebase authentication redirect result invoken when using signInWithRedirect()
     // signInWithRedirect() is only used when client is in web but not desktop
-    this.authRedirectResult = this.authService.getRedirectResult()
+/*     this.authRedirectResult = this.authService.getRedirectResult()
     .subscribe(result => {
       if (result.user) {
-        this.redirectLoggedUserToStartMenu();
+        this.redirectLoggedUserToMainMenuPage();
       } else if (result.error) {
         this.manageAuthWithProvidersErrors(result.error);
       }
-    });
+    }); */
 
     // Check if url contains our custom 'auth-redirect' param, then show a loader while we receive the getRedirectResult notification
-    this.route.queryParams.subscribe(params => {
+/*     this.route.queryParams.subscribe(params => {
       const authProvider = params['auth-redirect'];
       if (authProvider) {
         this.presentLoading(authProvider);
       }
-    });
+    }); */
   }
 
   ngOnInit(): void {
@@ -123,7 +123,7 @@ export class SignUp1Page implements OnInit {
 
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
-  redirectLoggedUserToStartMenu() {
+  redirectLoggedUserToMainMenuPage() {
     this.dismissLoading();
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
@@ -140,10 +140,18 @@ export class SignUp1Page implements OnInit {
     });
   }
 
-  async presentLoading(authProvider?: string) {
+/*   async presentLoading(authProvider?: string) {
     const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
     this.redirectLoader = await this.loadingController.create({
       message: authProvider ? 'Signing up with ' + authProviderCapitalized : 'Signin up ...'
+    });
+    await this.redirectLoader.present();
+  } */
+  async presentLoading() {
+    // const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
+    this.redirectLoader = await this.loadingController.create({
+      message: this.featureService.translations.SigninIn
+      // message: authProvider ? 'Signing in with ' + authProviderCapitalized : 'Signin in ...'
     });
     await this.redirectLoader.present();
   }
@@ -160,11 +168,11 @@ export class SignUp1Page implements OnInit {
 
   // Before invoking auth provider redirect flow, present a loading indicator and add a flag to the path.
   // The precense of the flag in the path indicates we should wait for the auth redirect to complete.
-  prepareForAuthWithProvidersRedirection(authProvider: string) {
+/*   prepareForAuthWithProvidersRedirection(authProvider: string) {
     this.presentLoading(authProvider);
 
     this.location.go(this.location.path(), 'auth-redirect=' + authProvider, this.location.getState());
-  }
+  } */
 
   manageAuthWithProvidersErrors(errorMessage: string) {
     this.submitError = errorMessage;
@@ -173,24 +181,18 @@ export class SignUp1Page implements OnInit {
     this.dismissLoading();
   }
 
-  signUpUserWithEmail(): void {
+  signUpUserWithEmail() {
+    this.presentLoading();
     this.resetSubmitError();
     const values = this.signup1Form.value;
     this.authService.signUpWithEmail(values.email, values.matching_passwords.password)
       .then(user => {
         let userId= user.user.uid
-        this.createUserProfile(user.user.uid);
-        this.loginService.getUserInfo(userId).then(res =>{
-          console.log(res.buildingId);
-          this.redirectLoggedUserToStartMenu();
-        }
-        )
-        .catch(err=> console.log(err))
-        // navigate to user profile
-        // this.redirectLoggedUserToProfilePage();
+        this.createUserProfile(userId);
       })
       .catch(error => {
         this.submitError = error.message;
+        this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
       });
   }
 
@@ -204,18 +206,37 @@ export class SignUp1Page implements OnInit {
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
 
     this.featureService.createItem('users', this.userData, uid)
-    .then(() => {
-      this.redirectLoggedUserToStartMenu();
-      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
-      // loading.then(res=>res.dismiss());  
+     .then(() => {
+      // this.redirectLoggedUserToStartMenu();
+      this.featureService.presentToast(this.featureService.translations.UserAddedSuccessfully, 2000);
+
+      this.loginService.initializeApp(uid).then(canAccessApp => {
+        if(canAccessApp){
+          console.log("inside signUp 1 WithEmail canAccessApp true");
+          this.authService.canAccessApp.next(true);
+          // console.log(this.authService.canAccessApp.value);
+          this.redirectLoggedUserToMainMenuPage();
+        }
+        else{
+          this.dismissLoading();
+          console.log("inside signUp 1 WithEmail canAccessApp false");
+          this.authService.canAccessApp.next(false);
+          this.featureService.presentToast(this.featureService.translations.CantAccesApp, 2000)
+        }
+      }
+      )
+      .catch((err )=> {
+        this.dismissLoading();
+        console.log(err);
+        this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)}
+      );
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       console.log(err);
-     });
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);}); 
   }
 
   openLanguageChooser(){
-/*     console.log('1',this.signupForm.get('email').hasError('required')) 
+/*  console.log('1',this.signupForm.get('email').hasError('required')) 
     console.log('2',this.signupForm.get('email').hasError('pattern'))
     console.log('3',this.signupForm.get('email').hasError('pattern') && this.signupForm.get('email').hasError('required')) */
     this.featureService.openLanguageChooser();
@@ -240,7 +261,7 @@ export class SignUp1Page implements OnInit {
     )
     // .catch(err => console.log(err));
   }
-  changeLanguage(lang: string){
+   changeLanguage(lang: string){
     this.featureService.changeLanguage(lang);
   }
 

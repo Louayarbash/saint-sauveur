@@ -1,68 +1,62 @@
-import { Injectable, NgZone } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { CanLoad, Router } from '@angular/router';
+import { map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+// import { LoginService } from '../services/login/login.service';
+// import { FeatureService } from '../services/feature/feature.service';
+// import { Storage } from '@ionic/storage';
 import { LoginService } from '../services/login/login.service';
 import { FeatureService } from '../services/feature/feature.service';
+// import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable()
-export class SignInGuard implements CanActivate {
-
+export class SignInGuard implements CanLoad {
+// a= new BehaviorSubject(true);
   constructor(
     private authService: AuthService,
     private router: Router,
     private loginService: LoginService,
-    private featureService: FeatureService,
-    private ngZone: NgZone
+    private featureService: FeatureService
+    // private storage: Storage
   ) {}
 
-  canActivate(){
-      return this.authService.angularFire.authState.pipe(
-        map((auth) => {
-          
-          if(!auth){
-            console.log("sign in guard true", auth)
-            return true;
+    canLoad(){
+    console.log("inside sign in guard");
+    // return true;
+     return this.authService.angularFire.authState.pipe(
+      take(1),
+      map((auth) => {
+        if(!auth){
+          return true;
+        }
+         else {
+          this.loginService.initializeApp(auth.uid).then(canAccessApp => {
+          if(canAccessApp){
+              this.authService.canAccessApp.next(true);
+              this.router.navigate(['start-menu'], { replaceUrl: true });
+            }
+            else {
+                this.featureService.presentToast('cant acces the app from sign in guard', 2000);
+                this.authService.signOut().subscribe(() => {
+                  // Sign-out successful.
+                  // Replace state as we are no longer authorized to access profile page.
+                  this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
+                }, (error) => {
+                  console.log('signout error', error);
+                });
+            }
           }
-          else{
-            
-           this.loginService.getUserInfoObservable(auth.uid).subscribe(user => {
-              if((user.status == 'active') && (user.buildingId)){
-                this.loginService.userInfo= user;
-                this.loginService.getBuildingInfoObservable(user.buildingId).subscribe(building=> {
-                  
-                  if(building.status=='active'){
-                     this.ngZone.run(() => {
-                    this.router.navigate(['start-menu']);
-                   });
-                  }
-                  else{
-                    this.featureService.presentToast('Building account is not active',3000);
-                    this.authService.signOut()
-/*                     .toPromise().then(() =>
-                    this.ngZone.run(() => {
-                     this.router.navigate(['auth/sign-in'])
-                    }) 
-                    ); */
-                  }
-                }); 
-                
-              }
-              else{
-                console.log("user is not active");
-                this.featureService.presentToast('User status problem',3000);
-                this.authService.signOut();
-                  // this.ngZone.run(() => {
-                    // this.router.navigate(['auth/sign-in']);
-                  // }
-              }
-            })
-          } 
-         
-          
-        }));
-  }
-
+          )
+          .catch((err )=> { this.featureService.presentToast('problem while verifying building or user info. from sign in guard error: '+ err, 2000); return true;})
+        }
+        
+        }
+        )
+        )  
+      }
+        }
+   
 /*   canActivate(): boolean {
 
     // check if user is authenticated
@@ -79,4 +73,4 @@ export class SignInGuard implements CanActivate {
   }
 
 } */
-}
+

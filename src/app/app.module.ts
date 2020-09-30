@@ -35,8 +35,10 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';					
 // import { SliderPage } from './sale/item/slider/slider.page';			
 import { AuthService } from '../app/auth/auth.service';
-import { LoginGuard } from './auth/login.guard';
+import { PageGuard } from './auth/page.guard';
 import { SignInGuard } from './auth/signin.guard';
+import { IntroGuard } from './auth/intro.guard';
+import { IonicStorageModule } from '@ionic/storage';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -47,6 +49,7 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
 	  AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,	 
@@ -82,8 +85,9 @@ export function createTranslateLoader(http: HttpClient) {
     EmailComposer,
     SocialSharing,
     AuthService,
-    LoginGuard,
-    SignInGuard
+    PageGuard,
+    SignInGuard,
+    IntroGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -163,7 +163,7 @@
   <ion-item lines=“none”>
     <ion-label position="floating">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
     <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
-      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
   </ion-item>
@@ -187,7 +187,7 @@
     <ion-item>
     <ion-label position="floating">{{ 'Parking' | translate }} 2 {{ 'level' | translate }}</ion-label>
     <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
-      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
   </ion-item>
@@ -216,7 +216,7 @@
 <ion-item>
 <ion-label position="floating">{{ 'Parking' | translate }} 3 {{ 'level' | translate }}</ion-label>
     <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
-      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.desc }}</ion-select-option>
+      <ion-select-option *ngFor="let level of levels" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
   </ion-item>

@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild, HostBinding } from '@angular/core';
-
 import { IonSlides, MenuController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
+import { INTRO_KEY } from '../auth/intro.guard';
 
 @Component({
   selector: 'app-walkthrough',
@@ -24,7 +26,11 @@ export class WalkthroughPage implements OnInit, AfterViewInit {
 
   @HostBinding('class.last-slide-active') isLastSlide = false;
 
-  constructor(public menu: MenuController) { }
+  constructor(
+    public menu: MenuController,
+    private router: Router,
+    private storage: Storage
+    ) { }
 
   ngOnInit(): void {
     this.menu.enable(false);
@@ -55,5 +61,12 @@ export class WalkthroughPage implements OnInit, AfterViewInit {
     this.slides.length().then(length => {
       this.slides.slideTo(length);
     });
+  }
+  async goToLoginPage(){
+    this.menu.enable(true);
+    await this.storage.set( INTRO_KEY, true );
+    console.log("goToLoginPage");
+    this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
+    
   }
 }

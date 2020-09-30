@@ -24,8 +24,8 @@ import { first } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class FeatureService {
-  translations;
-  userLanguage;
+  translations: any;
+  userLanguage: any;
   buildingLevels: any;
   availableLanguages = [];
   // parking: Parkings[] =[{id: '1', description: 'P1', note: '', active: true}, {id: '2', description: 'P2', note: '', active: true}, {id: '3', description: 'P3', note: '', active: true}];
@@ -45,7 +45,6 @@ export class FeatureService {
     private file: File,
     private http: HttpClient,
     private alertController: AlertController,
-    private translatee: TranslateService,
     public languageService : LanguageService
     // private Transporter: Transporter
     //private loginService : LoginService
@@ -384,7 +383,7 @@ async openLanguageChooser() {
       type: 'radio',
       label: item.name,
       value: item.code,
-      checked: item.code === this.translatee.currentLang
+      checked: item.code === this.translate.currentLang
     })
   );
 
@@ -402,7 +401,7 @@ async openLanguageChooser() {
         text: this.translations.OK,
         handler: (data) => {
           if (data) {
-            this.translatee.use(data)
+            this.translate.use(data)
             // this.loginService.setUserLanguage(data).then(() => { this.translatee.use(data) });
           }
         }
@@ -410,11 +409,10 @@ async openLanguageChooser() {
     ]
   });
   await alert.present();
-
 }
 
 changeLanguage(lang: string){
-  this.translatee.use(lang);
+  this.translate.use(lang);
 }
 
 checkEmail(email: string): Observable<any> {

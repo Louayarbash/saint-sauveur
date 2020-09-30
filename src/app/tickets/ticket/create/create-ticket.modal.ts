@@ -58,6 +58,7 @@ export class CreateTicketModal implements OnInit {
   }
 
   ngOnInit() {
+    this.ticketTypes= this.loginService.getBuildingServices();
     this.bookingSection = false;
     this.subjectSection = true;
     this.today = dayjs().add(24,"hour").toISOString(); 
@@ -79,11 +80,11 @@ export class CreateTicketModal implements OnInit {
     }/* ,
     {validators: this.parkingValidator} */
     );
-
-     this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
+    
+/*      this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
       console.log("get ticketTypes",item)
       this.ticketTypes = item.ticketTypes;
-  });
+  }); */
 
   this.onValueChanges();
   }
@@ -152,10 +153,10 @@ export class CreateTicketModal implements OnInit {
       console.log(this.createItemForm.errors);
     let typeCheck = this.ticketTypes.find((type: { id: number; }) => type.id === newTypeId );
     if(typeCheck && newTypeId != '1000'){
-      this.serviceType = typeCheck.type;
+      this.serviceType = typeCheck.description;
       console.log(typeCheck.type);
 
-      if(typeCheck.type === 'ElevatorBooking'){
+      if(typeCheck.description === 'ElevatorBooking'){
         
         this.bookingSection = true;
         this.subjectSection = false;

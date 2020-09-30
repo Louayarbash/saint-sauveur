@@ -1,4 +1,11 @@
 {
+  "SigninIn": "Signin in ...",
+  "SignUpProblem":"SignUp problem",
+  "InitializingAppProblem": "Aplication initializing problem",
+  "CantAccesApp": "Can't acces Parkondo",
+  "AddingUserErrors": "Adding user problem",
+  "AddingBuildingErrors": "Adding building problem",
+  "UserAddedSuccessfully": "User added successfully",
   "EmailResetPasswordSent": "Please check your email",
   "SignInMsg": "Sign in if you already have an account",
   "Or": "Or",

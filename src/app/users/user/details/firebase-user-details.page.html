@@ -64,7 +64,7 @@
             </ion-item>
             <ion-item *ngFor="let parking of userParking; let index = index;">    
               <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
-              {{ parking.desc }}/#{{ parking.number }}
+              {{ parking.description }}/#{{ parking.number }}
             </ion-item>
             <ion-item *ngIf="user.createDate">    
               <ion-label>{{ 'CreateDate' | translate }}</ion-label>

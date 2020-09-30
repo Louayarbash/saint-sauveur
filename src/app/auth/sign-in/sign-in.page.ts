@@ -79,32 +79,33 @@ export class SignInPage implements OnInit {
 
     // Get firebase authentication redirect result invoken when using signInWithRedirect()
     // signInWithRedirect() is only used when client is in web but not desktop
-    this.authRedirectResult = this.authService.getRedirectResult()
+/*     this.authRedirectResult = this.authService.getRedirectResult()
     .subscribe(result => {
       if (result.user) {
         this.redirectLoggedUserToMainMenuPage();
       } else if (result.error) {
         this.manageAuthWithProvidersErrors(result.error);
       }
-    });
+    }); */
 
     // Check if url contains our custom 'auth-redirect' param, then show a loader while we receive the getRedirectResult notification
-    this.route.queryParams.subscribe(params => {
+/*     this.route.queryParams.subscribe(params => {
       const authProvider = params['auth-redirect'];
       if (authProvider) {
         this.presentLoading(authProvider);
       }
-    });
+    }); */
   }
 
   ngOnInit(): void {
+    console.log('sign in oninit');
     this.menu.enable(false);
   }
 
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
   redirectLoggedUserToMainMenuPage() {
-    // this.dismissLoading();
+    this.dismissLoading();
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
     // That's why we need to wrap the router navigation call inside an ngZone wrapper
@@ -121,10 +122,11 @@ export class SignInPage implements OnInit {
     });
   }
 
-  async presentLoading(authProvider?: string) {
-    const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
+  async presentLoading(/*authProvider?: string*/) {
+    // const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
     this.redirectLoader = await this.loadingController.create({
-      message: authProvider ? 'Signing in with ' + authProviderCapitalized : 'Signin in ...'
+      message: "Signin in ..."
+      // message: authProvider ? 'Signing in with ' + authProviderCapitalized : 'Signin in ...'
     });
     await this.redirectLoader.present();
   }
@@ -137,11 +139,11 @@ export class SignInPage implements OnInit {
 
   // Before invoking auth provider redirect flow, present a loading indicator and add a flag to the path.
   // The precense of the flag in the path indicates we should wait for the auth redirect to complete.
-  prepareForAuthWithProvidersRedirection(authProvider: string) {
+/*   prepareForAuthWithProvidersRedirection(authProvider: string) {
     this.presentLoading(authProvider);
 
     this.location.replaceState(this.location.path(), 'auth-redirect=' + authProvider, this.location.getState());
-  }
+  } */
 
   manageAuthWithProvidersErrors(errorMessage: string) {
     this.submitError = errorMessage;
@@ -155,19 +157,30 @@ export class SignInPage implements OnInit {
   }
 
   signInWithEmail() {
+    this.presentLoading();
     this.resetSubmitError();
     this.authService.signInWithEmail(this.loginForm.value['email'], this.loginForm.value['password'])
     .then(user => {
-      console.log("inside signInWithEmail")
-    // let userId= user.user.uid
-/*       this.loginService.getUserInfo(userId).then(res =>{
-      console.log(res.buildingId);
-      // navigate to user profile
-      this.redirectLoggedUserToMainMenuPage()
-      
-    }) 
-      .catch(err=> console.log(err))*/
-      this.redirectLoggedUserToMainMenuPage()
+    
+      console.log("inside signInWithEmail");
+      this.loginService.initializeApp(user.user.uid).then(canAccessApp => {
+        if(canAccessApp){
+          console.log("inside signInWithEmail canAccessApp true");
+          this.authService.canAccessApp.next(true);
+          // console.log(this.authService.canAccessApp.value);
+          this.redirectLoggedUserToMainMenuPage()
+        }
+        else{
+          this.dismissLoading();
+          console.log("inside signInWithEmail canAccessApp false");
+          this.authService.canAccessApp.next(false);
+          this.featureService.presentToast('cant acces the app', 2000)
+        }
+      }
+      )
+      .catch((err )=> {
+        this.dismissLoading();
+        this.featureService.presentToast('problem while verifying building or user info. error: '+ err, 2000)});
     })
     .catch(error => {
       console.log(error);
