@@ -17,19 +17,19 @@
           <ion-icon name="business" slot="start"></ion-icon>
           <ion-label>{{ 'BuildingInfo' | translate }}</ion-label>
           </ion-item-divider>
-        <ion-item *ngIf="item.name">        
+        <ion-item >        
         <ion-label>{{ 'BuildingName' | translate }}</ion-label>
-        <ion-text>{{ item?.name }}</ion-text>                  
+        <ion-text>{{ item.name }}</ion-text>                  
          </ion-item>
-         <ion-item *ngIf="item.address" >        
+         <ion-item >        
           <ion-label>{{ 'Address' | translate }}</ion-label>
-          <ion-text>{{ item?.address }}</ion-text>    
+          <ion-text>{{ item.address }}</ion-text>    
            </ion-item>
-           <ion-item *ngIf="item.postalCode">        
+           <ion-item>        
             <ion-label>{{ 'PostalCode' | translate }}</ion-label>
-            <ion-text>{{ item?.postalCode }}</ion-text>                
+            <ion-text>{{ item.postalCode }}</ion-text>                
              </ion-item>
-             <ion-item *ngIf="item.details">
+             <ion-item>
               <ion-label slot="start">{{ 'Details' | translate }}</ion-label>      
               <ion-textarea slot="start" rows="6" cols="20" readonly [value]="item.details"></ion-textarea>
             </ion-item>

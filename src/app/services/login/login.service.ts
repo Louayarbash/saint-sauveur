@@ -85,7 +85,7 @@ userStatus: string; */
       return this.userInfo.buildingId;
     }
     else {
-      return 'buildingIdNull'
+      return null
     }
   }
 

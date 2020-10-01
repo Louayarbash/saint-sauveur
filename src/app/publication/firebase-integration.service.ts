@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DataStore, ShellModel } from '../shell/data-store';
+import { DataStore } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { FirebaseItemModel, FirebaseCombinedItemModel } from './item/firebase-item.model';
-import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
+import { AngularFireStorage } from "@angular/fire/storage";
 import { Files } from '../type'
 import { LoginService } from "../services/login/login.service"
 import { FeatureService } from '../services/feature/feature.service';
@@ -18,7 +18,7 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
-  private buildingId = this.loginService.getBuildingId();
+  // private buildingId= this.loginService.getBuildingId();
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<ItemImageModel>>;
   
@@ -39,7 +39,7 @@ export class FirebaseService {
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.getBuildingId()).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
   public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ModalController, AlertController , IonContent } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 // import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
@@ -11,7 +11,7 @@ import { TicketModel } from '../ticket.model';
 // import { AngularFirestore } from "@angular/fire/firestore";
 // import { Observable } from "rxjs";
 // import { FeatureService } from '../../../services/feature/feature.service';
-import { LoginService } from '../../../services/login/login.service';
+// import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
@@ -42,9 +42,9 @@ export class UpdateTicketModal implements OnInit {
     public router: Router,
     private alertController: AlertController,
     // private camera: Camera,
-    //private _angularFireSrore :AngularFirestore,
-    //private featureService : FeatureService,
-    private loginService : LoginService,
+    // private _angularFireSrore :AngularFirestore,
+    // private featureService : FeatureService,
+    // private loginService : LoginService,
     // private changeRef: ChangeDetectorRef,
     private featureService: FeatureService
   ) { 

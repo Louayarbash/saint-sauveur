@@ -28,8 +28,8 @@ import firebase from 'firebase/app';
 })
 export class FirebaseCreateUserModal implements OnInit {
 
-  croppedImagepath = "";
-  isLoading = false;
+  // croppedImagepath = "";
+  // isLoading = false;
 
   createUserForm: FormGroup;
   userData: UserModel = new UserModel();
@@ -51,9 +51,9 @@ export class FirebaseCreateUserModal implements OnInit {
     private alertController: AlertController,
     private featureService: FeatureService,
     private loginService: LoginService,
-    private crop: Crop,
+    // private crop: Crop,
     //private imagePicker: ImagePicker,
-    private file: File
+    // private file: File
   ) { 
     this.showHideParking2 = false;
     this.showHideParking3 = false;
@@ -238,20 +238,30 @@ export class FirebaseCreateUserModal implements OnInit {
           text: this.featureService.translations.Camera,
           handler: ()=> {
             this.camera.getPicture(cameraOptions).then((imageURI)=> {
-              this.cropImage(imageURI);
-              //const image = "data:image/jpeg;base64," + imageUri;
-              //this.selectedPhoto = image;
-            });
+              this.featureService.cropImage(imageURI)
+              .then(base64 => {
+                if(base64)
+                  this.selectedPhoto = base64;
+                })
+              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+              }
+             )
+             .catch(err=> console.log('problem getting photo', err));
           }
         },
         {
           text: this.featureService.translations.PhotoGallery,
           handler: ()=> {
             this.camera.getPicture(galleryOptions).then((imageURI)=> {
-              this.cropImage(imageURI);
-              //const image = "data:image/jpeg;base64," + imageData;
-              //this.selectedPhoto = image;
-            });
+              this.featureService.cropImage(imageURI)
+              .then(base64 => {
+                if(base64)
+                  this.selectedPhoto = base64;
+                })
+              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+              }
+             )
+             .catch(err=> console.log('problem getting photo', err));
           }
         }
       ]
@@ -308,40 +318,4 @@ showHideParkingValidate3(){
       alert(err);
     });
   } */
-
-  cropImage(imgPath) {
-    
-    const cropOptions: CropOptions = {
-      quality: 25
-//      targetHeight: 100,
-//      targetWidth : 150
-    }
-
-    this.crop.crop(imgPath, cropOptions)
-      .then(
-        newPath => {
-          this.croppedImageToBase64(newPath.split('?')[0])
-        },
-        error => {
-          alert('Error cropping image' + error);
-        }
-      );
-  }
-
-  croppedImageToBase64(ImagePath) {
-
-    this.isLoading = true;
-    let copyPath = ImagePath;
-    const splitPath = copyPath.split('/');
-    const imageName = splitPath[splitPath.length - 1];
-    const filePath = ImagePath.split(imageName)[0];
-
-    this.file.readAsDataURL(filePath, imageName).then(base64 => {
-      //this.croppedImagepath = base64;
-      //console.log("mmmmmmmmmmmmm",base64)
-      this.selectedPhoto = base64;
-    /*} , error => {
-      alert('Error in showing image' + error); */
-    }).catch( err=> console.log(err,'Error in croppedImageToBase64'));
-  }
 }

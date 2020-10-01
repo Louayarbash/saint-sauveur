@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { ModalController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
+import { Subscription } from 'rxjs';
 // import { switchMap, map } from 'rxjs/operators';
 
 import { FirebaseService } from '../firebase-integration.service';
@@ -134,14 +134,14 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     await modal.present();
   }
 
-  OpenLocalPDF() {
+/*   OpenLocalPDF() {
     console.log("OpenLocalPDF:",this.file.dataDirectory);
     let filePath = this.file.applicationDirectory + "www/assets/"
     let fakeName = Date.now();
     this.file.copyFile(filePath,"NaraMenu.pdf",this.file.dataDirectory,`${fakeName}.pdf`).then(result => {
       this.fileOpener.open(result.nativeURL,'application/pdf');
     });
-  }
+  } */
 
   segmentChanged(ev:any) {
     //console.log(ev.detail.value);

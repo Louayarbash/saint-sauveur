@@ -10,7 +10,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-    <ion-segment value="newRequests" (ionChange)="segmentChanged($event)" color="main">
+    <ion-segment [(ngModel)]="segmentValue" color="main">
         <ion-segment-button value="newRequests">
           <ion-label>{{ 'NewRequests' | translate }}</ion-label>
         </ion-segment-button>

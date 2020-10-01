@@ -120,7 +120,7 @@ export class FirebaseUserDetailsPage implements OnInit {
       // Replace state as we are no longer authorized to access profile page.
       this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
     }, (error) => {
-      console.log('signout error', error);
+      console.log('signout error', error); 
     });
   }
   

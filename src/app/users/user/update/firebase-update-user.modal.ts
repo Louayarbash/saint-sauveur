@@ -23,7 +23,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 })
 export class FirebaseUpdateUserModal implements OnInit {
   @Input() user: UserModel;
-  myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
+  // myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
   myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
@@ -296,21 +296,24 @@ return radioNotNull != null;
   async selectImageSource(){
     const cameraOptions: CameraOptions = {
       quality:100,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
+	    cameraDirection : this.camera.Direction.FRONT,											
+      // targetHeight:200,		 
       correctOrientation:true,
       sourceType:this.camera.PictureSourceType.CAMERA
     };
+
     const galleryOptions: CameraOptions = {
+	  
       quality:100,
-      destinationType: this.camera.DestinationType.DATA_URL,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetHeight:200,
+      // targetHeight:200,
       correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
+      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const alert = await this.alertController.create({
       header: this.featureService.translations.SelectSourceHeader,
@@ -319,25 +322,31 @@ return radioNotNull != null;
         {
           text: this.featureService.translations.Camera,
           handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageData)=> {
-              // this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              const image = 'data:image/jpeg;base64,' + imageData;
-              // this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              // this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
-              this.selectedPhoto = image;
-            });
+            this.camera.getPicture(cameraOptions).then((imageURI)=> {
+              this.featureService.cropImage(imageURI)
+              .then(base64 => {
+                if(base64)
+                  this.selectedPhoto = base64;
+                })
+              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+              }
+             )
+             .catch(err=> console.log('problem getting photo', err));
           }
         },
         {
           text: this.featureService.translations.PhotoGallery,
           handler: ()=> {
-            this.camera.getPicture(galleryOptions).then((imageData)=> {
-              //this.myProfileImage = "data:image/jpeg;base64," + imageData;
-              const image = "data:image/jpeg;base64," + imageData;
-              //this._angularFireSrore.collection("users").doc(this._angularFireAuth.auth.currentUser.uid).set({image_src : image});
-              //this._angularFireSrore.collection("users").doc(this.user.id).update({photo : image});
-              this.selectedPhoto = image;
-            });
+            this.camera.getPicture(galleryOptions).then((imageURI)=> {
+              this.featureService.cropImage(imageURI)
+              .then(base64 => {
+                if(base64)
+                  this.selectedPhoto = base64;
+                })
+              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+              }
+             )
+             .catch(err=> console.log('problem getting photo', err));
           }
         }
       ]

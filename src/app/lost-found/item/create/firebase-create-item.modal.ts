@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
@@ -11,24 +11,23 @@ import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
+import { ReplaySubject } from 'rxjs';
 // import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
 @Component({
   selector: 'app-firebase-create-itemRentSale',
-  templateUrl: './firebase-create-item.modal.html',
-  styleUrls: [
-    './styles/firebase-create-item.modal.scss',
-    './styles/firebase-create-item.shell.scss'
-  ],
+  templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
-  croppedImagepath = "";
+  @Input() segmentValue: string;
+  @Input() segmentValueSubject: ReplaySubject<string>;
+
   postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   selectedPhoto: string;
   uploadedImage: any;
-  typeSelected: string = 'lost';
+  // typeSelected: string;
 
   constructor(
     private modalController: ModalController,
@@ -46,7 +45,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
   ngOnInit() {
     this.createItemForm = new FormGroup({
-      type : new FormControl('lost', Validators.required),
+      type : new FormControl(this.segmentValue, Validators.required),
       subject : new FormControl('', Validators.required),
       details : new FormControl(''),
       status : new FormControl('active')
@@ -58,6 +57,8 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
+    
+    this.segmentValue= this.createItemForm.value.type;
     this.itemData.type = this.createItemForm.value.type;
     this.itemData.subject = this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
@@ -66,9 +67,9 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    
     this.featureService.createItemWithImages(this.itemData, this.postImages, 'lost-found')
     .then(() => {
+      this.segmentValueSubject.next(this.createItemForm.value.type);
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
       loading.then(res=>res.dismiss());  
@@ -77,14 +78,13 @@ export class FirebaseCreateItemModal implements OnInit {
       console.log(err);
      });     
   }
-
+/* 
   typeChanged(ev:any) {
-    console.log(ev.detail.value);
-    this.typeSelected = ev.detail.value;
-  }
+    this.segmentValueSubject.next(ev.detail.value)
+  } */
   
   deletePhoto(index : number){
-      console.log("deletephoto",this.postImages);
+      // console.log("deletephoto",this.postImages);
           this.postImages.splice(index,1);
           this.changeRef.detectChanges();
   }
@@ -108,7 +108,7 @@ doReorder(ev: any) {
     ev.preventDefault();
  }
  else{ */
-  console.log("doReorder",this.postImages);
+  // console.log("doReorder",this.postImages);
   // The `from` and `to` properties contain the index of the item
   // when the drag started and ended, respectively
   const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  

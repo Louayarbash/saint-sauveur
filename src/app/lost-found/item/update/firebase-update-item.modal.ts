@@ -16,8 +16,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
   selector: 'app-firebase-update-item',
   templateUrl: './firebase-update-item.modal.html',
   styleUrls: [
-    './styles/firebase-update-item.modal.scss',
-    './styles/firebase-update-item.shell.scss'
+    './styles/firebase-update-item.modal.scss'
   ],
 })
 

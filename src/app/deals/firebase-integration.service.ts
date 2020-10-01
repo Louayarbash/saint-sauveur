@@ -25,7 +25,6 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
   private combinedItemDataStore: DataStore<ItemModel>;
-  private buildingId = this.loginService.getBuildingId();
   
   constructor(
     private afs: AngularFirestore, 
@@ -40,7 +39,7 @@ export class FirebaseService {
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     //this.loginService.getUserInfo();
     //console.log("building inside deal service",this.loginService.getBuildingId());
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({  idField: 'id' })
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.getBuildingId()).orderBy('createDate', 'desc')).valueChanges({  idField: 'id' })
     
       //.pipe(map(actions => actions.map(item => { 
         //const listingDetails = item.id + "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");

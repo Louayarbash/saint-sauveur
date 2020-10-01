@@ -225,7 +225,7 @@ export class UpdateBuildingModal implements OnInit {
   }
 
   confirmChanging(index, txtName, btnChange, btnConfirm){
-    if(!txtName.value){
+    if(txtName.value){
       this.nameChanging[index] = { naming: false };
       // console.log(this.nameChanging);
       this.updateItemForm.markAsDirty();
@@ -237,7 +237,7 @@ export class UpdateBuildingModal implements OnInit {
       this.parkings[index].description = txtName.value;
     }
     else {
-      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully.EnterValidParkingLabel, 2000);
+      this.featureService.presentToast(this.featureService.translations.EnterValidParkingLabel, 2000);
     }
     
   }

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 //import { FormGroup, FormControl } from '@angular/forms';
 import { ModalController, AlertController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import { /*Observable, ReplaySubject,*/ Subscription,/*, merge, interval*/} from 'rxjs';
+import { /*Observable, ReplaySubject,*/ Observable, ReplaySubject, Subscription,/*, merge, interval*/} from 'rxjs';
 //import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
@@ -27,11 +27,12 @@ import dayjs from 'dayjs';
   templateUrl: './firebase-listing.page.html',
   styleUrls: [
     './styles/firebase-listing.page.scss',
-    './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.ios.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
+  segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
+  segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
   /*for segment implementation*/
   loginId = this.loginService.getLoginID();
   segmentValue = 'newRequests';
@@ -142,7 +143,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         .subscribe(
          (state) => {
             this.items = state;
-            console.log("this.item", this.items)
+            // console.log("this.item", this.items)
           
             if(!this.items.isShell) {
 
@@ -171,9 +172,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
               this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "request"));
               this.newOffersList = newOffersList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "offer"));
-              console.log("myRequestsList",this.myRequestsList);
-              console.log("newRequestsList",this.newRequestsList);
-              console.log("newOffersList",this.newOffersList);
+              // console.log("myRequestsList",this.myRequestsList);
+              // console.log("newRequestsList",this.newRequestsList);
+              // console.log("newOffersList",this.newOffersList);
             }
             else {
               this.myRequestsList = this.items;
@@ -192,14 +193,14 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       (error) => console.log(error)
     );
   }
-  segmentChanged(ev:any) {
+/*   segmentChanged(ev:any) {
     //console.log(ev.detail.value);
     //console.log(ev.target.value);
     this.segmentValue = ev.detail.value;
 
     // Check if there's any filter and apply it
     //this.searchList();
-  }
+  } */
 /*   searchList(): void {
     const query = (this.searchQuery && this.searchQuery !== null) ? this.searchQuery : '';
 

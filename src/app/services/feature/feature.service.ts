@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import { Parkings, Services } from '../../type';
 import { LanguageService } from '../../language/language.service';
 import { first } from 'rxjs/operators';
+import { Crop, CropOptions } from '@ionic-native/crop/ngx';
 // const nodemailer = require('nodemailer');
 
 @Injectable({
@@ -45,7 +46,8 @@ export class FeatureService {
     private file: File,
     private http: HttpClient,
     private alertController: AlertController,
-    public languageService : LanguageService
+    public languageService : LanguageService,
+    private crop: Crop
     // private Transporter: Transporter
     //private loginService : LoginService
     ) {
@@ -427,5 +429,38 @@ checkEmail(email: string): Observable<any> {
       return { id, ...postData };
     })
   ); */
+}
+cropImage(imgPath) {
+    
+  const cropOptions: CropOptions = {
+    quality: 25
+//      targetHeight: 100,
+//      targetWidth : 150
+  }
+
+  return this.crop.crop(imgPath, cropOptions)
+    .then(
+      newPath => {
+       return this.croppedImageToBase64(newPath.split('?')[0])
+      }  ,
+      error => {
+        console.log('Error cropping image' + error);
+      }  
+    );
+    
+}
+
+croppedImageToBase64(ImagePath) {
+
+  //this.isLoading = true;
+  let copyPath = ImagePath;
+  const splitPath = copyPath.split('/');
+  const imageName = splitPath[splitPath.length - 1];
+  const filePath = ImagePath.split(imageName)[0];
+
+  return this.file.readAsDataURL(filePath, imageName)
+  //.then(base64 => {
+  //  this.selectedPhoto = base64;
+  //}).catch( err=> console.log(err,'Error in croppedImageToBase64'));
 }
 }

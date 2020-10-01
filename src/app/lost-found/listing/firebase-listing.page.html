@@ -4,11 +4,11 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'LostFound' | translate }}</ion-title>
-    <ion-buttons slot="end" >
+<!--     <ion-buttons slot="end" >
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
 <!--   <ion-toolbar class="filters-toolbar">
     <ion-row class="searchbar-row" align-items-center>
@@ -17,7 +17,7 @@
       </ion-col>
     </ion-row>
   </ion-toolbar> -->
-  <ion-segment value="lost"  (ionChange)="segmentChanged($event)" color="main">
+  <ion-segment [(ngModel)]="segmentValue" color="main">
     <ion-segment-button value="lost">
       <ion-label>{{ 'Lost' | translate }}</ion-label>
     </ion-segment-button>
@@ -118,5 +118,11 @@
     {{ 'NoItemFound' | translate }}
   </h3>
 </ng-container>
+
 </section>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="main">
+    <ion-icon  name="add" (click)="openFirebaseCreateModal()"></ion-icon>
+  </ion-fab-button>
+</ion-fab> 
 </ion-content>

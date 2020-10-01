@@ -165,6 +165,7 @@ export class CreateBuildingModal implements OnInit {
   }
 
   confirmChanging(index, txtName, btnChange, btnConfirm){
+    if(txtName.value){
     this.nameChanging[index] = { naming: false };
     console.log(this.nameChanging);
     this.createItemForm.updateValueAndValidity();
@@ -173,6 +174,10 @@ export class CreateBuildingModal implements OnInit {
     btnChange.disabled = false;
     btnConfirm.disabled = true;
     this.parkings[index].description = txtName.value;
+  }
+  else {
+    this.featureService.presentToast(this.featureService.translations.EnterValidParkingLabel, 2000);
+  }
   }
 
 }
