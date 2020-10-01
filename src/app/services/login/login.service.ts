@@ -72,6 +72,7 @@ userStatus: string; */
       return 'apartmentNull'
     }
   }
+
   getLoginID(): string{
     if(this.userInfo.id){
       return this.userInfo.id;
@@ -80,6 +81,11 @@ userStatus: string; */
       return 'userIdNull'
     }
   }
+
+  getAuthID(){
+    return this.authService.getUserId()
+  }
+
   getBuildingId(): string{
     if(this.userInfo.buildingId){
       return this.userInfo.buildingId;

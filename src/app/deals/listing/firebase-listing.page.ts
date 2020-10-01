@@ -81,6 +81,12 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.stateSubscription.unsubscribe();
   }
    ngOnInit() {
+     this.loginService.getAuthID().subscribe(user=> {
+      this.loginService.initializeApp(user.uid).then(()=>
+        console.log('App juste reinitialized')
+      ).catch();
+     });
+     
      
     // this.searchQuery = '';
     
@@ -92,7 +98,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
       (resolvedRouteData) => {
-        this.listingDataStore = resolvedRouteData['data'];
+        this.listingDataStore = resolvedRouteData['data']; 
 
         // We need to avoid having multiple firebase subscriptions open at the same time to avoid memory leaks
         // By using a switchMap to cancel previous subscription each time a new one arrives,
@@ -226,7 +232,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   async chooseType(){
+    let canOffer= this.loginService.getUserParking()?.length > 0 ? false : true;
+    // let offerLabel= this.loginService.getUserParking()?.length > 0 ? this.featureService.translations.Offer : this.featureService.translations.CantOffer
       let alert = await this.alertController.create({
+        cssClass: 'alertDealCreate',
         header: this.featureService.translations.ChooseType,
         message: this.featureService.translations.ChooseTypeMsg,
         inputs: [{
@@ -236,6 +245,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           value : "request" ,
           checked: true
         },{
+          disabled: canOffer,
           name : "offer" , 
           type : 'radio' , 
           label : this.featureService.translations.Offer, 

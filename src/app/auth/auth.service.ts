@@ -64,6 +64,10 @@ export class AuthService {
     }
   }
 
+  getUserId(){
+    return this.angularFire.user;
+  }
+
   getRedirectResult(): Observable<any> {
     return this.redirectResult.asObservable();
   }

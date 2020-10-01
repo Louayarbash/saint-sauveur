@@ -203,7 +203,7 @@
   "Update" : "Update",
   "Delete" : "Delete",
   "ChooseType" : "Please choose:",
-  "ChooseTypeMsg" : "Do you want to request or offer a parking?",
+  "ChooseTypeMsg" : "Do you want to request or offer a parking? (Add parking to your profil to be able to offer a parking!)",
   "Request" : "REQUEST",
   "Offer" : "OFFER",
   "new" : "NEW",
