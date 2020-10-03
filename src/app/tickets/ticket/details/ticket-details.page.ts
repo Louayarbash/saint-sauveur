@@ -3,22 +3,18 @@ import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
-import { TicketModel, FirebaseCombinedTicketModel} from '../ticket.model';
+import { FirebaseCombinedTicketModel} from '../ticket.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { UpdateTicketModal } from '../update/update-ticket.modal';
 import { ChatModal } from '../chat/chat.modal';
-import { DataStore, ShellModel } from '../../../shell/data-store';
+import { DataStore } from '../../../shell/data-store';
 // import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 
 @Component({
   selector: 'app-ticket-details',
-  templateUrl: './ticket-details.page.html',
-  styleUrls: [
-    './styles/ticket-details.page.scss',
-    './styles/ticket-details.shell.scss'
-  ],
+  templateUrl: './ticket-details.page.html'
 })
 export class TicketDetailsPage implements OnInit {
   item: FirebaseCombinedTicketModel;
@@ -29,6 +25,9 @@ export class TicketDetailsPage implements OnInit {
   endDate: string;
   startTime: string;
   endTime: string;
+  userIsCreator: boolean;
+  userIsAdmin: boolean;
+  canModify: boolean = false;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -58,14 +57,19 @@ export class TicketDetailsPage implements OnInit {
        
 
           if (this.item.createDate){
-          if(this.item.subject == 'elevatorBooking'){
-            this.bookingSection = this.item.subject == 'elevatorBooking' ? true : false;
+
+          this.userIsCreator = this.item.createdBy == this.loginService.getLoginID() ? true : false;
+          this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
+          this.canModify = this.userIsCreator || this.userIsAdmin; 
+
+          if(this.item.subject == 'ElevatorBooking'){
+            this.bookingSection = true;
             this.date = dayjs(this.item.date * 1000).format("DD, MMM, YYYY");
             this.endDate = dayjs(this.item.endDate * 1000).format("DD, MMM, YYYY");
             this.startTime = dayjs(this.item.startDate * 1000).format("HH:mm");
             this.endTime = dayjs(this.item.endDate * 1000).format('HH:mm');
           }
-  
+
           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;
@@ -77,7 +81,9 @@ export class TicketDetailsPage implements OnInit {
               this.status = "Undefined";
           }
 
-          this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
+
+
+/*           this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe(item => {
             const types = item.ticketTypes;
             console.log(types);
               if (this.item.typeId) {
@@ -89,7 +95,7 @@ export class TicketDetailsPage implements OnInit {
                     this.type = 'other';
                   }
               }   
-          });
+          }); */
         }
         }
       );
@@ -102,10 +108,11 @@ export class TicketDetailsPage implements OnInit {
   }
 
   async openFirebaseUpdateModal() {
+    const { creatorDetails, ...itemData } = this.item; // Remove photos and creatorDetails from the item object
     const modal = await this.modalController.create({
       component: UpdateTicketModal,
       componentProps: {
-        'item': this.item
+        'item': itemData // this.item
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl

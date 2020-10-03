@@ -14,11 +14,7 @@ import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-create-item',
-  templateUrl: './firebase-create-item.modal.html',
-  styleUrls: [
-    './styles/firebase-create-item.modal.scss',
-    './styles/firebase-create-item.shell.scss'
-  ],
+  templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
   croppedImagepath = "";

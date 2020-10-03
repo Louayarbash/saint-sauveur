@@ -16,8 +16,7 @@ import { ChatModel } from './chat.model'
   selector: 'app-firebase-update-user',
   templateUrl: './chat.modal.html',
   styleUrls: [
-    './styles/firebase-update-user.modal.scss',
-    './styles/firebase-update-user.shell.scss'
+    './styles/firebase-update-user.modal.scss'
   ],
 })
 export class ChatModal implements OnInit {

@@ -17,12 +17,12 @@ import { AuthService } from '../../../auth/auth.service';
   selector: 'app-firebase-user-details',
   templateUrl: './firebase-user-details.page.html',
   styleUrls: [
-    './styles/firebase-user-details.page.scss',
-    './styles/firebase-user-details.shell.scss'
+    './styles/firebase-user-details.page.scss'
   ],
 })
 export class FirebaseUserDetailsPage implements OnInit {
   user: UserModel;
+  userIsAdmin: boolean= false;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   //relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
@@ -31,6 +31,7 @@ export class FirebaseUserDetailsPage implements OnInit {
   type: string;
   language: string;
   userParking = [];
+  status: any;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.user && this.user.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -58,11 +59,21 @@ export class FirebaseUserDetailsPage implements OnInit {
         (state) => {
           console.log(state);
           this.user = state;
+          this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
           this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
           this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
           this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
           this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           
+          switch (this.user.status) {
+            case "active" : this.status = this.featureService.translations.Active;
+            break;
+            case "inactive" : this.status = this.featureService.translations.InActive;
+            break;
+            default:
+              this.status = "Undefined";
+          }
+
           this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
             const levels = item.parkings;
             console.log(this.user.parkings);

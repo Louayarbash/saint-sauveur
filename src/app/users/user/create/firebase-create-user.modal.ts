@@ -13,17 +13,16 @@ import { LoginCredential } from '../../type';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 
-import { Crop, CropOptions } from '@ionic-native/crop/ngx';
-//import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-import { File } from '@ionic-native/file/ngx';
+// import { Crop, CropOptions } from '@ionic-native/crop/ngx';
+// import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+// import { File } from '@ionic-native/file/ngx';
 import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-create-user',
   templateUrl: './firebase-create-user.modal.html',
   styleUrls: [
-    './styles/firebase-create-user.modal.scss',
-    './styles/firebase-create-user.shell.scss'
+    './styles/firebase-create-user.modal.scss'
   ],
 })
 export class FirebaseCreateUserModal implements OnInit {
@@ -85,7 +84,8 @@ export class FirebaseCreateUserModal implements OnInit {
       email: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ]))
+      ])),
+      status: new FormControl('active',Validators.required)
     }/* ,
     {validators: this.parkingValidator} */
     );
@@ -160,6 +160,8 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.language =this.createUserForm.value.language;
     this.userData.buildingId = this.loginService.getBuildingId();
     this.userData.createDate = firebase.firestore.FieldValue.serverTimestamp();
+    this.userData.createdBy = this.loginService.getLoginID();
+    this.userData.status = this.createUserForm.value.status;
     const credentials : LoginCredential = { email : this.userData.email, password : "Welcome123" }
     const loading = this.featureService.presentLoadingWithOptions(2000);
 

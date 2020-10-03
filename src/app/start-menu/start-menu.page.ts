@@ -15,7 +15,7 @@ export class StartMenuPage implements OnInit {
   userId: string;
   buildingId: string;
   username: string;
-  username2: string;
+  userIsAdmin: boolean= false;
 
   constructor( 
     private loginService: LoginService,
@@ -32,5 +32,7 @@ export class StartMenuPage implements OnInit {
     this.userId = this.loginService.getLoginID();
     this.buildingId = this.loginService.getBuildingId();
     this.username= this.loginService.getLoginName();
+    this.userIsAdmin= this.loginService.isUserAdmin();
+    this.loginService.buildingInfo.enableDeal;
   }
 }

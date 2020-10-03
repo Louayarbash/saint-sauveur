@@ -15,11 +15,7 @@ import { Parkings, Services} from '../../../type';
 
 @Component({
   selector: 'app-building-details',
-  templateUrl: './details.page.html',
-  styleUrls: [
-    './styles/details.page.scss',
-    './styles/details.shell.scss'
-  ],
+  templateUrl: './details.page.html'
 })
 export class BuildingDetailsPage implements OnInit {
   item: BuildingModel;

@@ -16,11 +16,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-update-ticket',
-  templateUrl: './update-ticket.modal.html',
-  styleUrls: [
-    './styles/update-ticket.modal.scss',
-    './styles/update-ticket.shell.scss'
-  ],
+  templateUrl: './update-ticket.modal.html'
 })
 export class UpdateTicketModal implements OnInit {
   @Input() item: TicketModel;
@@ -57,7 +53,7 @@ export class UpdateTicketModal implements OnInit {
     this.endDate = dayjs(this.item.endDate * 1000).format("DD, MMM, YYYY");
     this.startTime = dayjs(this.item.startDate * 1000).format("HH:mm");
     this.endTime = dayjs(this.item.endDate * 1000).format('HH:mm');
-    this.bookingSection = this.item.subject == 'elevatorBooking' ? true : false;
+    this.bookingSection = this.item.subject == 'ElevatorBooking' ? true : false;
     this.updateItemForm = new FormGroup({
       details: new FormControl(this.item.details),
       status: new FormControl(this.item.status,Validators.required)
@@ -65,7 +61,7 @@ export class UpdateTicketModal implements OnInit {
     {validators: this.parkingValidator} */
     );
 
-    if (this.item.subject == 'elevatorBooking') {
+    if (this.item.subject == 'ElevatorBooking') {
       this.updateItemForm.controls['details'].setValidators(null);
       this.updateItemForm.controls['details'].updateValueAndValidity();
     }   

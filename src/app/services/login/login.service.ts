@@ -166,6 +166,12 @@ userStatus: string; */
       this.buildingInfo.name= buildingData.name;
       this.buildingInfo.services= buildingData.services; 
       this.buildingInfo.status= buildingData.status;
+      this.buildingInfo.enableSale= buildingData.enableSale;
+      this.buildingInfo.enableRentSale= buildingData.enableRentSale;
+      this.buildingInfo.enableLostFound= buildingData.enableLostFound;
+      this.buildingInfo.enableTicket= buildingData.enableTicket;
+      this.buildingInfo.enablePublication= buildingData.enablePublication;
+      this.buildingInfo.enableDeal=  buildingData.enableDeal;
       // this.authService.canAccessApp = (this.userStatus == 'active' && this.buildingStatus =='active');
       return  (this.userInfo.status == 'active' && this.buildingInfo.status =='active')
     } 

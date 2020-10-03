@@ -65,7 +65,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="userIsAdmin">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/users/listing']">
@@ -83,7 +83,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="userIsAdmin">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/buildings/listing']">
@@ -92,7 +92,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="userIsAdmin">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/buildings/details', buildingId]">

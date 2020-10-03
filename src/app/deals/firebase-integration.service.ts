@@ -33,13 +33,20 @@ export class FirebaseService {
     private featureService : FeatureService,
     private router : Router    
     )  {
+/*           this.loginService.getAuthID().subscribe(user=> {
+          this.loginService.initializeApp(user.uid).then(()=>
+          console.log('App juste reinitialized')
+        ) 
+       }); */
 
     }
       
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
+
+     return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.getBuildingId()).orderBy('createDate', 'desc')).valueChanges({  idField: 'id' })
     //this.loginService.getUserInfo();
     //console.log("building inside deal service",this.loginService.getBuildingId());
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.getBuildingId()).orderBy('createDate', 'desc')).valueChanges({  idField: 'id' })
+    
     
       //.pipe(map(actions => actions.map(item => { 
         //const listingDetails = item.id + "New parking request on " + dayjs(item.date).format("DD, MMM, YYYY") + " from " + dayjs(item.startDate).format("HH:mm") + " to " + dayjs(item.endDate).format("HH:mm");

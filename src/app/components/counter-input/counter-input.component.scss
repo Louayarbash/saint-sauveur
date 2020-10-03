@@ -4,11 +4,12 @@ app-counter-input {
   --counter-color-activated: #FFF; */
     // --counter-background: #000;
   --counter-color: #e05c0e;
-  --counter-border-color: rgb(224,92,14);
-  --counter-border-color: #000;
+  // --counter-border-color: rgb(224,92,14);
+  --counter-border-color: #e05c0e;
   --counter-border-radius-outer: 50%;
   --counter-border-radius-inner: 50%;
   --counter-size: 30px;
+  padding: 5px;
 
   display: flex;
   align-items: center;
@@ -63,7 +64,7 @@ app-counter-input {
   }
 
   &[basic] {
-    --counter-border-radius-outer: 12px;
+    --counter-border-radius-outer: 8px;
     --counter-border-radius-inner: 0px;
 
     .counter-value {

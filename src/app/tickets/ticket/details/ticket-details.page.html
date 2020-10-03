@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="tickets/listing"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'TicketDetails' | translate }}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="canModify">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
@@ -29,29 +29,34 @@
     <ion-card class="itemCard" *ngIf="bookingSection">
       <ion-item *ngIf="item.reference" color="main">
         <ion-label>{{ 'TicketReference' | translate }}</ion-label>
-       <ion-text>{{item.reference}}</ion-text> 
+       <ion-text>{{ item.reference }}</ion-text> 
       </ion-item>
-      <ion-item lines="none" *ngIf="item.createDate">    
+      <ion-item *ngIf="item.subject">    
+        <ion-label>{{ 'Subject' | translate }}</ion-label>
+        <ion-text>{{ item.subject | translate }}</ion-text> 
+      </ion-item>
+      <ion-item *ngIf="item.createDate">    
         <ion-label>{{ 'TicketDate' | translate }}</ion-label>
         {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
         <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
       </ion-item>
-      <ion-item lines="none" *ngIf="item.creatorDetails">    
+      <ion-item *ngIf="item.creatorDetails">    
         <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
-        {{item.creatorDetails.firstname.concat(" ").concat(item.creatorDetails.lastname)}}
-         <app-text-shell animation="bouncing" [data]="item.creatorDetails.firstname"></app-text-shell>
+        <!-- {{item.creatorDetails.firstname.concat(" ").concat(item.creatorDetails.lastname)}} -->
+         <!-- <app-text-shell animation="bouncing" [data]="item.creatorDetails.firstname"></app-text-shell> -->
+         <ion-text>{{item.creatorDetails.firstname}}</ion-text> 
       </ion-item>
       <ion-item>
         <ion-label>{{ 'BookingDate' | translate }}</ion-label>
-        <app-text-shell animation="bouncing" [data]="date"></app-text-shell>          
+        <ion-text>{{date}}</ion-text>          
       </ion-item>
       <ion-item>
         <ion-label>{{ 'FromTime' | translate }}</ion-label>
-        <app-text-shell animation="bouncing" [data]="startTime"></app-text-shell>
+        <ion-text>{{startTime}}</ion-text>
       </ion-item>
       <ion-item>
           <ion-label>{{ 'ToTime' | translate }}</ion-label>
-          <app-text-shell animation="bouncing" [data]="endTime"></app-text-shell>
+          <ion-text>{{endTime}}</ion-text>
       </ion-item>
       <ion-item *ngIf="item.status">
         <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
@@ -64,23 +69,25 @@
           <ion-label>{{ 'TicketReference' | translate }}</ion-label>
          <ion-text>{{item.reference}}</ion-text> 
         </ion-item>
-        <ion-item lines="none" *ngIf="item.createDate">    
+        <ion-item *ngIf="item.subject" >        
+          <ion-label>{{ 'Subject' | translate }}</ion-label>
+          <ion-text>{{ item.subject | translate }}</ion-text>            
+           </ion-item>
+        <ion-item *ngIf="item.createDate">    
           <ion-label>{{ 'TicketDate' | translate }}</ion-label>
           {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
         </ion-item>
-        <ion-item lines="none" *ngIf="item.creatorDetails">    
+        <ion-item *ngIf="item.creatorDetails">    
           <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
           {{item.creatorDetails.firstname}}
           <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
         </ion-item>
-      <ion-item *ngIf="item.typeId">
+<!--       <ion-item *ngIf="item.typeId">
         <ion-label>{{ 'TicketType' | translate }}</ion-label>
+        <ion-text>{{type}}</ion-text>
         <app-text-shell animation="bouncing" [data]="type"></app-text-shell>                  
-       </ion-item>
-        <ion-item *ngIf="item.subject && type == 'other'" >        
-        <ion-label>{{ 'Subject' | translate }}</ion-label>
-        <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
-         </ion-item>
+       </ion-item> -->
+
             <ion-item *ngIf="item.status">
               <ion-label>{{ 'TicketStatus' | translate }}</ion-label>
              <ion-text>{{ status }}</ion-text> 
@@ -98,7 +105,7 @@
             </ion-card-content>
           </ion-card>
           <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-            <ion-fab-button>
+            <ion-fab-button color="main">
               <ion-icon name="chatbubbles-outline" (click)="openChatModal()"></ion-icon>
             </ion-fab-button>
           </ion-fab> 

@@ -17,6 +17,7 @@ export class UserModel extends ShellModel {
   language: string= 'en';
   status: string;
   createDate : firebase.firestore.FieldValue;
+  createdBy: string;
   
   constructor() {
     super();

@@ -18,15 +18,17 @@ import { FeatureService } from '../../services/feature/feature.service';
   selector: 'app-firebase-listing',
   templateUrl: './firebase-listing.page.html',
   styleUrls: [
-    './styles/firebase-listing.page.scss',
-    './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.page.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
+
   rangeForm: FormGroup;
   searchQuery: string;
   showAgeFilter = false;
+  
+  segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
+  segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
 
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
@@ -61,6 +63,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.searchQuery = '';
 
@@ -123,6 +126,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   default:
                     item.statusTranslation = "Undefined";
                 } 
+                console.log("booo",item.subject)
                 switch (item.subject) {
                   case "ElevatorBooking" : item.subjectTranslation = this.featureService.translations.ElevatorBooking;
                   break;
@@ -138,8 +142,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
               if(this.userIsAdmin){
                 // this.ticketsList = this.items;
-                this.activeList = activeList.filter(item => item.status === 'Active');
-                this.archivedList = archivedList.filter(item => item.status !== 'Active');
+                this.activeList = activeList.filter(item => item.status === 'active');
+                this.archivedList = archivedList.filter(item => item.status !== 'active');
                 console.log("activeList", this.activeList);
                 console.log("archivedList",this.archivedList);
               }
@@ -165,6 +169,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: CreateTicketModal,
+      componentProps: {
+        // segmentValue : this.segmentValue,
+        segmentValueSubject: this.segmentValueSubject
+      },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
@@ -176,12 +184,12 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       query: this.searchQuery
     });
   }
-  segmentChanged(ev:any) {
+/*   segmentChanged(ev:any) {
     //console.log(ev.detail.value);
     //console.log(ev.target.value);
     this.segmentValue = ev.detail.value;
 
     // Check if there's any filter and apply it
     //this.searchList();
-  }
+  } */
 }

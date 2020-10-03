@@ -33,6 +33,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 })
 
 export class FirebaseItemDetailsPage implements OnInit {
+  userIsCreator = false;
   acceptOfferButtonHidden : boolean;
   proposeButtonHidden : boolean;
   cancelRequestDealButtonHidden : boolean;
@@ -93,10 +94,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     private socialSharing : SocialSharing,
     private routerOutlet: IonRouterOutlet
   ) { 
-
     this.loginID = this.loginService.getLoginID();
-    this.editDeal = false;
-   
     this.proposeButtonHidden = true;
     this.cancelRequestButtonHidden = true;
     this.cancelRequestDealButtonHidden = true;
@@ -175,7 +173,7 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.ratingFormCreator.get('rate').setValue(this.rating);
             this.ratingFormResponder.get('rate').setValue(this.rating);
             this.noteSection = this.item.note ? true : false;
-            this.editDeal = (this.loginID == this.item.createdBy) ? true : false;
+            this.userIsCreator = this.item.createdBy == this.loginID ? true : false;
             if(this.item.createdBy){
               if(!this.typeIsRequest){
                 this.parkingInfo = this.featureService.translations.level + "(" + this.item.parkingInfo.level +"), " + "#" + this.item.parkingInfo.number;

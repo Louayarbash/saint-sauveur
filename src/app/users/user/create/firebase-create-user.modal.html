@@ -154,6 +154,30 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+<ion-grid class="ion-no-margin ion-no-padding">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="status" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'Active' | translate }}</ion-label>
+              <ion-radio value="active"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'InActive' | translate }}</ion-label>
+                <ion-radio value="inactive"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 <ion-item-divider lines="none" >
   <ion-label>{{ 'Parking' | translate }}</ion-label>
   </ion-item-divider>

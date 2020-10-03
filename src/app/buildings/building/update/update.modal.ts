@@ -17,11 +17,7 @@ import { Parkings, Services} from '../../../type';
 
 @Component({
   selector: 'app-firebase-update',
-  templateUrl: './update.modal.html',
-  styleUrls: [
-    './styles/update.modal.scss',
-    './styles/update.shell.scss'
-  ],
+  templateUrl: './update.modal.html'
 })
 export class UpdateBuildingModal implements OnInit {
   @Input() item: BuildingModel;

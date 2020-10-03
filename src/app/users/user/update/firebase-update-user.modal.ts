@@ -17,8 +17,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
   selector: 'app-firebase-update-user',
   templateUrl: './firebase-update-user.modal.html',
   styleUrls: [
-    './styles/firebase-update-user.modal.scss',
-    './styles/firebase-update-user.shell.scss'
+    './styles/firebase-update-user.modal.scss'
   ],
 })
 export class FirebaseUpdateUserModal implements OnInit {
@@ -84,7 +83,8 @@ export class FirebaseUpdateUserModal implements OnInit {
       email: new FormControl(this.user.email, Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ]))
+      ])),
+      status : new FormControl(this.user.status, Validators.required)
     }/* ,
     {validators: this.parkingValidator} */
     );
@@ -252,12 +252,12 @@ return radioNotNull != null;
     this.userData.phone = this.updateUserForm.value.phone;
     this.userData.email = this.updateUserForm.value.email;
     // this.userData.building = this.updateUserForm.value.building;
-    this.userData.code =this.updateUserForm.value.code;
-    this.userData.type =this.updateUserForm.value.type;
-    this.userData.role =this.updateUserForm.value.role;
-    this.userData.apartment =this.updateUserForm.value.apartment;
-    this.userData.language =this.updateUserForm.value.language;
-
+    this.userData.code= this.updateUserForm.value.code;
+    this.userData.type= this.updateUserForm.value.type;
+    this.userData.role= this.updateUserForm.value.role;
+    this.userData.apartment= this.updateUserForm.value.apartment;
+    this.userData.language= this.updateUserForm.value.language;
+    this.userData.status= this.updateUserForm.value.status;
     this.selectedParking = [];
     
     if(this.updateUserForm.controls['parking1Level'].value !== '1000'){

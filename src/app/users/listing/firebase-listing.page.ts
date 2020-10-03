@@ -16,15 +16,13 @@ import { DataStore, ShellModel } from '../../shell/data-store';
   selector: 'app-firebase-listing',
   templateUrl: './firebase-listing.page.html',
   styleUrls: [
-    './styles/firebase-listing.page.scss',
-    './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.page.scss'  
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   rangeForm: FormGroup;
   searchQuery: string;
-  showAgeFilter = false;
+  // showAgeFilter = false;
 
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();

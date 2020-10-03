@@ -12,8 +12,8 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <section>
-        <ion-list lines="full">
+
+        <!-- <ion-list lines="full"> -->
           <ion-item>
             <ion-label>Date</ion-label>
             <ion-input class="ion-text-end" type="text" formControlName="date"></ion-input>
@@ -34,13 +34,13 @@
               <ion-label position="floating">Note</ion-label>
               <ion-textarea rows="6" cols="20" formControlName="note"></ion-textarea>
             </ion-item>
-        </ion-list>
-      </section>
+        <!-- </ion-list> -->
+  
   </ion-content>
   <ion-footer>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="danger" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

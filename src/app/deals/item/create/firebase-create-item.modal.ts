@@ -12,6 +12,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 //import { TranslateService, TranslateModule } from '@ngx-translate/core';
 //import { FirebaseListingPageModule } from "../../listing/firebase-listing.module";
 import firebase from 'firebase/app';
+import { ReplaySubject } from 'rxjs';
 
 interface userParking {
   index : number;
@@ -32,7 +33,9 @@ interface userParking {
 
 
 export class FirebaseCreateItemModal implements OnInit {
-  @Input() type : string;
+  @Input() type: string;
+  @Input() segmentValueSubject: ReplaySubject<string>;
+
   loginID = this.loginService.getLoginID();
   userParking : userParking[];
   createItemForm: FormGroup;
@@ -226,10 +229,10 @@ export class FirebaseCreateItemModal implements OnInit {
       messageTranslate2 = "CreateParkingOfferConfirmation2";
     }
     if(date == endDate){
-      message = this.featureService.getTranslationParams(messageTranslate,{date : date, startTime : startTime, endTime : endTime});
+      message = this.featureService.getTranslationParams(messageTranslate,{numPlaces: this.itemData.count, date : date, startTime : startTime, endTime : endTime});
     }
     else{
-      message = this.featureService.getTranslationParams(messageTranslate2,{date : date, startTime : startTime, endDate: endDate, endTime : endTime})
+      message = this.featureService.getTranslationParams(messageTranslate2,{numPlaces: this.itemData.count, date : date, startTime : startTime, endDate: endDate, endTime : endTime})
     }    
     const alert = await this.alertController.create({
       header: header,
@@ -241,6 +244,7 @@ export class FirebaseCreateItemModal implements OnInit {
             const loading = this.featureService.presentLoadingWithOptions(5000);
             this.firebaseService.createItem(this.itemData)
             .then(() => {
+              this.segmentValueSubject.next('myRequests');
               this.dismissModal();
               // this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully, 2000);
               loading.then(res=>res.dismiss());

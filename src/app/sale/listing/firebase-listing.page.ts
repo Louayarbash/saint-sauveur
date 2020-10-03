@@ -20,9 +20,7 @@ import { DataStore, ShellModel } from '../../shell/data-store';
   selector: 'app-firebase-listing',
   templateUrl: './firebase-listing.page.html',
   styleUrls: [
-    './styles/firebase-listing.page.scss',
-    './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.page.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {

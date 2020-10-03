@@ -20,18 +20,16 @@ import { DataStore, ShellModel } from '../../shell/data-store';
   selector: 'app-firebase-listing',
   templateUrl: './firebase-listing.page.html',
   styleUrls: [
-    './styles/firebase-listing.page.scss',
-    './styles/firebase-listing.ios.scss',
-    './styles/firebase-listing.shell.scss'
+    './styles/firebase-listing.page.scss'
   ],
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   // rangeForm: FormGroup;
-  searchQuery: string;
+  // searchQuery: string;
   //showAgeFilter = false;
   CoverPic:string;
-  searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
-  searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
+  segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
+  segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
@@ -66,8 +64,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    this.searchQuery = '';
+    this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
+    // this.searchQuery = '';
 
     // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
@@ -173,17 +171,21 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal,
+      componentProps: {
+        segmentValue : this.segmentValue,
+        segmentValueSubject: this.segmentValueSubject
+      },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }
 
-  searchList() {
+/*   searchList() {
     this.searchSubject.next({
       query: this.searchQuery
     });
-  }
+  } */
 
 /*   OpenLocalPDF() {
     console.log("OpenLocalPDF:",this.file.dataDirectory);
@@ -201,12 +203,12 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   getProfilePic(picPath : string){
     return this.firebaseService.afstore.storage.ref(picPath).getDownloadURL();
   }
-  segmentChanged(ev:any) {
+/*   segmentChanged(ev:any) {
     //console.log(ev.detail.value);
     //console.log(ev.target.value);
     this.segmentValue = ev.detail.value;
 
     // Check if there's any filter and apply it
     //this.searchList();
-  }
+  } */
 }

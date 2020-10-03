@@ -16,19 +16,20 @@
        <!-- <ion-list lines="full"> -->
         <ion-item>
           <ion-label>{{ 'Type' | translate }}</ion-label>
-          <ion-radio-group formControlName="type" (ionChange)="typeChanged($event)">
+          <ion-radio-group formControlName="type">
             <div class="radio-tags">
             <ion-row>
-              <ion-col>
-              <ion-item class="radio-tag" lines="none">
-                <ion-label class="tag-label">{{ 'ForSale' | translate }}</ion-label>
-                <ion-radio value="sale"></ion-radio>
-              </ion-item>
-            </ion-col>
               <ion-col>
                 <ion-item class="radio-tag" lines="none">
                   <ion-label class="tag-label">{{ 'ForRent' | translate }}</ion-label>
                   <ion-radio value="rent"></ion-radio>
+                </ion-item>
+
+            </ion-col>
+              <ion-col>
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'ForSale' | translate }}</ion-label>
+                  <ion-radio value="sale"></ion-radio>
                 </ion-item>
               </ion-col>
             </ion-row>

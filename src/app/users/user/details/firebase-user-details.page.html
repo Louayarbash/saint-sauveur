@@ -4,13 +4,13 @@
       <ion-back-button defaultHref="users/listing"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'UserDetails' | translate }}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
-      <ion-button (click)="openChatModal()">
+<!--       <ion-button (click)="openChatModal()">
         {{ 'Contact' | translate }}
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -32,35 +32,40 @@
           <!-- <ion-list> -->
             <ion-item *ngIf="user.email">
               <ion-label>{{ 'Email' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="user?.email"></app-text-shell>                  
+              <ion-text>{{ user?.email }}</ion-text>                  
             </ion-item>
             <ion-item *ngIf="user.birthdate">    
               <ion-label>{{ 'DateOfBirth' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="birthdate"></app-text-shell>    
+              <ion-text>{{ birthdate }}</ion-text>
+                 
             </ion-item>
             <ion-item *ngIf="user.phone">
               <ion-label>{{ 'Phone' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="user?.phone"></app-text-shell>
+              <ion-text>{{ user?.phone }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.apartment">
               <ion-label>{{ 'Apartment' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="user?.apartment"></app-text-shell>
+              <ion-text>{{ user?.apartment }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.code">    
               <ion-label>{{ 'DoorCode' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="user?.code"></app-text-shell>
+              <ion-text>{{ user?.code }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.type">    
               <ion-label>{{ 'Type' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="type"></app-text-shell>
+              <ion-text>{{ type }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.language">
               <ion-label>{{ 'Language' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="language"></app-text-shell>
+              <ion-text>{{ language }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.role">    
               <ion-label>{{ 'Role' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="role"></app-text-shell>
+              <ion-text>{{ role }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.status">    
+              <ion-label>{{ 'Status' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>
             </ion-item>
             <ion-item *ngFor="let parking of userParking; let index = index;">    
               <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>

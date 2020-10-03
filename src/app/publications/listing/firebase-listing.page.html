@@ -4,11 +4,11 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Publications' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="userIsAdmin">
+<!--     <ion-buttons slot="end" *ngIf="userIsAdmin">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ion-segment value="announcements"  (ionChange)="segmentChanged($event)" color="main">
     <ion-segment-button value="announcements">
@@ -99,4 +99,9 @@
             </ng-container>
             </section>
           </ng-container>
+          <ion-fab vertical="bottom" horizontal="end" slot="fixed"  *ngIf="userIsAdmin">
+            <ion-fab-button color="main">
+              <ion-icon  name="add" (click)="openFirebaseCreateModal()"></ion-icon>
+            </ion-fab-button>
+          </ion-fab> 
     </ion-content>

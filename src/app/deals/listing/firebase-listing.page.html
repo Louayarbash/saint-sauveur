@@ -4,11 +4,11 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'ParkingRequests' | translate }}-{{loginId}}</ion-title>
-    <ion-buttons slot="end">
+<!--     <ion-buttons slot="end">
       <ion-button (click)="chooseType()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
     <ion-segment [(ngModel)]="segmentValue" color="main">
         <ion-segment-button value="newRequests">
@@ -304,4 +304,9 @@
     </ng-container>
     </section>
   </ng-container>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="main">
+      <ion-icon  name="add" (click)="chooseType()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> 
 </ion-content>

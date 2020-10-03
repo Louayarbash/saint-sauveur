@@ -12,6 +12,12 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
       <ion-card class="itemCard">
         <ion-item-divider>
           <ion-icon name="business" slot="start"></ion-icon>
@@ -103,6 +109,7 @@
           <ng-container *ngIf="item.createDate">
           <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
           </ng-container>
+        </ng-container>
            <ion-fab vertical="bottom" horizontal="end" slot="fixed">
             <ion-fab-button>
               <ion-icon name="person-add-outline" (click)="inviteModal()"></ion-icon>

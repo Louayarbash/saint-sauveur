@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
@@ -12,16 +12,15 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-firebase-create-itemRentSale',
-  templateUrl: './firebase-create-item.modal.html',
-  styleUrls: [
-    './styles/firebase-create-item.modal.scss',
-    './styles/firebase-create-item.shell.scss'
-  ],
+  templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
+  @Input() segmentValue: string;
+  @Input() segmentValueSubject: ReplaySubject<string>;
   croppedImagepath = "";
   postImages : Images[] = [];
   createItemForm: FormGroup;
@@ -47,7 +46,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
   ngOnInit() {
     this.createItemForm = new FormGroup({
-      type : new FormControl('sale', Validators.required),
+      type : new FormControl(this.segmentValue, Validators.required),
       object : new FormControl('condo', Validators.required),
       bedRooms: new FormControl(0, counterRangeValidator(0, 10)),
       bathRooms: new FormControl(0, counterRangeValidator(0, 8)),
@@ -83,6 +82,7 @@ export class FirebaseCreateItemModal implements OnInit {
     
     this.featureService.createItemWithImages(this.itemData, this.postImages, 'rent-sale')
     .then(() => {
+      this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
       this.dismissModal(); // not needed inside catch to stay on same page while errors
       loading.then(res=>res.dismiss());  
@@ -92,10 +92,10 @@ export class FirebaseCreateItemModal implements OnInit {
      });     
   }
 
-  typeChanged(ev:any) {
-    console.log(ev.detail.value);
+/*   typeChanged(ev:any) {
+    // console.log(ev.detail.value);
     this.typeSelected = ev.detail.value;
-  }
+  } */
 
   objectChanged(ev:any) {
     console.log(ev.detail.value);

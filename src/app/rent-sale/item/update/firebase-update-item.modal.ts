@@ -14,11 +14,7 @@ import { counterRangeValidator } from '../../../components/counter-input/counter
 
 @Component({
   selector: 'app-firebase-update-item',
-  templateUrl: './firebase-update-item.modal.html',
-  styleUrls: [
-    './styles/firebase-update-item.modal.scss',
-    './styles/firebase-update-item.shell.scss'
-  ],
+  templateUrl: './firebase-update-item.modal.html'
 })
 
 export class FirebaseUpdateItemModal implements OnInit {

@@ -81,12 +81,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.stateSubscription.unsubscribe();
   }
    ngOnInit() {
-     this.loginService.getAuthID().subscribe(user=> {
-      this.loginService.initializeApp(user.uid).then(()=>
-        console.log('App juste reinitialized')
-      ).catch();
-     });
-     
+
+    this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
      
     // this.searchQuery = '';
     
@@ -167,7 +163,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 item.date = dayjs(item.date).format('DD, MMM, YYYY');
                 item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
                 item.endTimeCounter = dayjs(item.endDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
-                item.startTime = dayjs(item.startDate).format("HH:mm");
+                item.startTime = dayjs(item.startDate).format("HH:mm"); 
                 item.endTime = dayjs(item.endDate).format('HH:mm');
               });
 
@@ -223,7 +219,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal,
       componentProps: {
-        'type' : this.type
+        type : this.type,
+        // segmentValue : this.segmentValue,
+        segmentValueSubject: this.segmentValueSubject
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl

@@ -14,11 +14,7 @@ import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-create-building',
-  templateUrl: './create.modal.html',
-  styleUrls: [
-    './styles/create.modal.scss',
-    './styles/create.shell.scss'
-  ],
+  templateUrl: './create.modal.html'
 })
 export class CreateBuildingModal implements OnInit {
 

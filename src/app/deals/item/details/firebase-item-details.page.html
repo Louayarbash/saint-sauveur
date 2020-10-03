@@ -5,8 +5,9 @@
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseUpdateModal()" *ngIf="editDeal" >
-          {{ 'Edit' | translate }} - {{ loginID }} - {{item.id}}
+      <ion-button (click)="openFirebaseUpdateModal()" *ngIf="userIsCreator" >
+          {{ 'Edit' | translate }}
+           <!-- - {{ loginID }} - {{item.id}} -->
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

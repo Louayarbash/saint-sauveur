@@ -4,11 +4,11 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Ticket' | translate }}</ion-title>
-    <ion-buttons slot="end">
+<!--     <ion-buttons slot="end">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ion-toolbar class="filters-toolbar">
     <ion-row class="searchbar-row" align-items-center>
@@ -17,7 +17,7 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
-  <ion-segment value="active"  (ionChange)="segmentChanged($event)" color="main" *ngIf="userIsAdmin">
+  <ion-segment [(ngModel)]="segmentValue" color="main" *ngIf="userIsAdmin">
     <ion-segment-button value="active">
       <ion-label>{{ 'ActiveTickets' | translate }}</ion-label>
     </ion-segment-button>
@@ -34,7 +34,7 @@
 </ng-container>
 <ng-container *ngIf="!items.isShell">
 <ng-container *ngIf="userIsAdmin">
-  <section [hidden]="segmentValue !== 'active'">
+  <ng-container *ngIf="segmentValue == 'active'">
   <div *ngIf="activeList?.length > 0">
       <ion-card class="itemCard" *ngFor="let item of activeList" [routerLink]="['/tickets/details', item.id]">
         <ion-item *ngIf="item.subject" color="main">
@@ -64,8 +64,8 @@
   <h3 *ngIf="activeList?.length == 0" class="empty-list-message">
     {{ 'NoItemFound' | translate }}
   </h3>
-</section>
-<section [hidden]="segmentValue !== 'archive'">
+</ng-container>
+<ng-container *ngIf="segmentValue == 'archive'">
   <div *ngIf="archivedList?.length > 0">
       <ion-card class="itemCard" *ngFor="let item of archivedList" [routerLink]="['/tickets/details', item.id]">
         <ion-item *ngIf="item.subject" color="main">
@@ -95,7 +95,7 @@
   <h3 *ngIf="archivedList?.length == 0" class="empty-list-message">
     {{ 'NoItemFound' | translate }}
   </h3>
-</section>
+</ng-container>
 </ng-container>
 <ng-container *ngIf="!userIsAdmin">
   <ng-container *ngIf="items.isShell">
@@ -134,4 +134,9 @@
 </h3>
 </ng-container>
 </ng-container>
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="main">
+    <ion-icon  name="add" (click)="openFirebaseCreateModal()"></ion-icon>
+  </ion-fab-button>
+</ion-fab> 
 </ion-content>

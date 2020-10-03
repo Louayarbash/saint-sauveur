@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController, IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 // import dayjs from 'dayjs';
@@ -12,17 +12,14 @@ import { LoginService } from '../../../services/login/login.service';
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-create-ticket',
-  templateUrl: './create-ticket.modal.html',
-  styleUrls: [
-    './styles/create-ticket.modal.scss',
-    './styles/create-ticket.shell.scss'
-  ],
+  templateUrl: './create-ticket.modal.html'
 })
 export class CreateTicketModal implements OnInit {
-
+  @Input() segmentValueSubject: ReplaySubject<string>;
   croppedImagepath = "";
   createItemForm: FormGroup;
   itemData: TicketModel = new TicketModel();
@@ -152,7 +149,7 @@ export class CreateTicketModal implements OnInit {
     this.createItemForm.get('typeId').valueChanges.subscribe(newTypeId=>{      
       console.log(this.createItemForm.errors);
     let typeCheck = this.ticketTypes.find((type: { id: number; }) => type.id === newTypeId );
-    if(typeCheck && newTypeId != '1000'){
+    if(typeCheck && newTypeId != '1000') {
       this.serviceType = typeCheck.description;
       console.log(typeCheck.type);
 
@@ -179,9 +176,9 @@ export class CreateTicketModal implements OnInit {
         this.createItemForm.controls['duration'].setValidators(counterRangeValidatorMinutes(15, 1440));
         this.createItemForm.controls['duration'].updateValueAndValidity();
 
-
       }
-      else{
+
+      else {
         this.bookingSection = false;
         this.subjectSection = false;
 
@@ -247,6 +244,7 @@ export class CreateTicketModal implements OnInit {
     // const loading = this.featureService.presentLoadingWithOptions(5000);
     this.firebaseService.createItem(this.itemData)
     .then(() => {
+      this.segmentValueSubject.next('active');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
       // loading.then(res=>res.dismiss());  

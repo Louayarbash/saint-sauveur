@@ -16,11 +16,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
   selector: 'invite-user',
-  templateUrl: './invite.modal.html',
-  styleUrls: [
-    './styles/firebase-update.modal.scss',
-    './styles/firebase-update.shell.scss'
-  ],
+  templateUrl: './invite.modal.html'
 })
 export class InviteModal implements OnInit {
   // "user" is passed in firebase-details.page

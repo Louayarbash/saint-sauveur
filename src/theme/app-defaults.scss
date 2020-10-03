@@ -8,6 +8,10 @@ ion-title {
   --background: transparent !important;
 } 
 
+app-image-shell.user-image {
+  --image-shell-border-radius: 50px;// var(--app-fair-radius);
+}
+
 .itemCard {
   border-radius: 20px 20px 20px 20px;
 }
@@ -91,12 +95,6 @@ ion-content {
 
   //  padding: 0px var(--page-tags-gutter);
     margin: var(--page-tags-gutter) 0px;
-  }
-}
-:host-context(.ios) {
-  .radio-tags,
-  .checkbox-tags {
-    margin-bottom: calc(var(--page-margin) * 2);
   }
 }
 
