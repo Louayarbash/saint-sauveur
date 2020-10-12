@@ -36,7 +36,7 @@ export class FeatureService {
   constructor(    
     private toastController : ToastController,
     private loadingController : LoadingController,
-    private translate : TranslateService,
+    public translate : TranslateService,
     private afs: AngularFirestore,
     public afstore : AngularFireStorage,
     public emailComposer: EmailComposer,
@@ -56,6 +56,7 @@ getTranslationParams(key : string, params : Object)
 {
   return this.translate.instant(key,params)
 }
+
 async presentLoadingWithOptions(duration) {
   const loading = await this.loadingController.create({
     spinner: "bubbles",
@@ -75,13 +76,13 @@ async presentToast(message : string, duration : number){
   await toast.present();  
 }
 
-getTranslations() {
+getTranslations(lang: any) {
   // get translations for this page to use in the Language Chooser Alert
-  this.translate.getTranslation(this.translate.currentLang)
-  .subscribe((translations) => {
-    console.log("inside getTranslationss",translations);
-    this.translations = translations;
-  });
+/*   this.translate.getTranslation(lang)
+  .subscribe((translations) => { */
+    // console.log("inside getTranslationss",translations);
+    this.translations = lang.translations;
+  // });
 } 
 /* async DownloadAndOpenPDF(item: FirebaseListingItemModel ){
   const options: DocumentViewerOptions = {
@@ -128,7 +129,8 @@ getItem(tableName : string, itemId: string): Observable<any> {
     })
   ); */
 }
-async getBuildingLevels(){
+
+/* async getBuildingLevels(){
   if (this.buildingLevels){
     return this.getBuildingLevels;
   }
@@ -136,7 +138,7 @@ async getBuildingLevels(){
     // await this.getUserInfo().then(() => {console.log("boo");}).catch((err)=> console.log("connection problem:",err));
   }
 
-}
+} */
 sendEmail(email : any){
   return this.emailComposer.open(email);
 }

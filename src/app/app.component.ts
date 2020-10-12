@@ -82,7 +82,7 @@ export class AppComponent {
   textDir = 'ltr';
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
-    private translatee: TranslateService,
+    private translate: TranslateService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
@@ -194,8 +194,8 @@ export class AppComponent {
     // await this.loginService.getUserLanguage().then( res => { 
     //  currentLanguage = res.data().language;
     // } );
-    this.translatee.setDefaultLang('en');
-    this.translatee.use('en');
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
     // console.log(currentLanguage);
     // console.log("current lang1",this.translatee.currentLang);
     // this is to determine the text direction depending on the selected language
@@ -205,8 +205,9 @@ export class AppComponent {
     // });
     //this.getTranslations();
     //this.loginService.getUserInfo().then( a=> { return console.log("Louay from app.component111", a) } ).catch(err=>console.log(err));
-    this.translatee.onLangChange.subscribe(() => {
-      this.featureService.getTranslations();
+    this.translate.onLangChange.subscribe((lang) => {
+      // console.log('hon',lang);
+      this.featureService.getTranslations(lang);
     });
     // console.log("2",this.translatee.currentLang);
     // console.log("3",this.translatee);

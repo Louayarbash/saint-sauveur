@@ -3,7 +3,7 @@ import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseCombinedTicketModel} from '../ticket.model';
+import { TicketModel, FirebaseCombinedTicketModel} from '../ticket.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { UpdateTicketModal } from '../update/update-ticket.modal';
 import { ChatModal } from '../chat/chat.modal';
@@ -112,7 +112,7 @@ export class TicketDetailsPage implements OnInit {
     const modal = await this.modalController.create({
       component: UpdateTicketModal,
       componentProps: {
-        'item': itemData // this.item
+        'item': itemData as TicketModel// this.item
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl

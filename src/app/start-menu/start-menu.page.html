@@ -4,14 +4,14 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      {{ 'MainMenu' | translate }} welcome {{username}} to {{ buildingId }}
+      {{ 'MainMenu' | translate }} welcome {{username}} to {{ buildingId }} {{userIsAdmin}}{{userIsAdmin2}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row class="categories-list">
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enablePublication">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/publication/listing']">
@@ -20,7 +20,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enableLostFound">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/lost-found/listing']">
@@ -29,7 +29,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enableDeal">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/deal/listing']">
@@ -38,7 +38,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enableRentSale">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/rent-sale/listing']">
@@ -47,7 +47,7 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enableTicket">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/tickets/listing']">
@@ -56,11 +56,11 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
-    <ion-col class="category-item ion-padding" size="6">
+    <ion-col class="category-item ion-padding" size="6" *ngIf="enableSale">
       <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <a class="category-anchor" [routerLink]="['/sale/listing']">
-            <h2 class="category-title">{{ 'ItemsForSaleMenu' | translate }}</h2>
+            <h2 class="category-title">{{ 'SaleMenu' | translate }}</h2>
           </a>
         </app-aspect-ratio>
       </app-image-shell>

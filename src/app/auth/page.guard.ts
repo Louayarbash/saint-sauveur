@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanLoad, Router } from '@angular/router';
+import { CanLoad, Router } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { LoginService } from '../services/login/login.service';
+// import { LoginService } from '../services/login/login.service';
 
 @Injectable()
 export class PageGuard implements CanLoad {
@@ -10,7 +10,7 @@ export class PageGuard implements CanLoad {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loginService: LoginService
+    // private loginService: LoginService
   ) {}
 
 
@@ -21,11 +21,11 @@ export class PageGuard implements CanLoad {
       take(1),
       map((canAccessApp) => {
         if(canAccessApp){
-          console.log("canAccessApp if", canAccessApp)
+          console.log("canAccessApp if", canAccessApp);
           return true;
       }
       else {
-        console.log("canAccessApp else", canAccessApp)
+        console.log("canAccessApp else", canAccessApp);
         this.router.navigate(['/auth/sign-in'],{ replaceUrl: true});
           return false;
       }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {  CanLoad, Router } from '@angular/router';
 // import { map } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+// import { AuthService } from './auth.service';
 // import { LoginService } from '../services/login/login.service';
 // import { FeatureService } from '../services/feature/feature.service';
 import { Storage } from '@ionic/storage';
@@ -11,7 +11,7 @@ export const INTRO_KEY = 'intro-seen';
 export class IntroGuard implements CanLoad {
 
   constructor(
-    private authService: AuthService,
+    // private authService: AuthService,
     private router: Router,
     private storage: Storage
   ) {}

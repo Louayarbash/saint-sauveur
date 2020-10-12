@@ -20,6 +20,7 @@ const location = 'northamerica-northeast1';
 const queue = 'queue-firebase';
 const tasksClient = new CloudTasksClient();
 const queuePath: string = tasksClient.queuePath(project, location, queue);
+const db = admin.firestore();
 
 // Payload of JSON data to send to Cloud Tasks, will be received by the HTTP callback
 interface RequestTaskPayload {
@@ -33,7 +34,6 @@ interface RequestTaskPayload {
 } */
 interface InfoDocumentData extends admin.firestore.DocumentData {
     expiresIn?: number
-    
     startDateTS?: number//admin.firestore.Timestamp
     endDateTS?: number//admin.firestore.Timestamp
     durationSeconds?: number
@@ -46,13 +46,15 @@ interface InfoDocumentData extends admin.firestore.DocumentData {
     actionTaskStarted?: admin.firestore.FieldValue//string
     actionTaskEnded?: admin.firestore.FieldValue//string
     actionTaskExpired?: admin.firestore.FieldValue
+    startedAt?: number;
+    endedAt?: number;
+    expiredAt?: number; 
 }
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
-  
-exports.newRequest = functions.firestore
-    .document('deals-requests/{dealId}')
+exports.onNewRequest = functions.firestore
+    .document('deals/{dealId}')
     .onCreate(async item => {
 
     const data = item.data();//.after.data();
@@ -76,7 +78,7 @@ exports.newRequest = functions.firestore
     }
 
     // ref to the device collection for the user
-    const db = admin.firestore()
+    //const db = admin.firestore()
     const devicesRef = db.collection('devices').where('userId', '==', createdBy)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
@@ -90,12 +92,7 @@ exports.newRequest = functions.firestore
       tokens.push( token )
     })
 
-    /*return*/ admin.messaging().sendToDevice(tokens, payload).then(res => {
-        //console.log("Sent Successfully", res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+
       /* 2 */
       /* Cretate task to change status to expired */
       const dataFortask = data as InfoDocumentData;
@@ -132,9 +129,10 @@ exports.newRequest = functions.firestore
       const [ responseExpired ] = await tasksClient.createTask({parent : queuePath, task : taskExpired});
       const actionTaskExpired = responseExpired.name
       const update: InfoDocumentData = { actionTaskExpired , serverStatingTime : expiresAtSeconds }
-      await item.ref.update(update)
+      await item.ref.update(update);
+      return admin.messaging().sendToDevice(tokens, payload);
 }
-return;
+return
 });
 
 /*code for the time scheduling task*/
@@ -196,7 +194,7 @@ export const changeRequestStatusToStarted = functions.https.onRequest(async (req
     const payload = req.body as RequestTaskPayload
     try {
         //res.send("Hello from Firebase!");
-        await admin.firestore().doc(payload.docPath).update({status: "started" , startedAt: admin.firestore.Timestamp.now().seconds});
+        await admin.firestore().doc(payload.docPath).update({status: "started" , actionTaskStarted : admin.firestore.FieldValue.delete(), startedAt: admin.firestore.Timestamp.now().seconds});
         res.send(200)
     }
     catch (error) {
@@ -208,7 +206,7 @@ export const changeRequestStatusToEnded = functions.https.onRequest(async (req, 
     const payload = req.body as RequestTaskPayload
     try {
         //res.send("Hello from Firebase!");
-        await admin.firestore().doc(payload.docPath).update({status: "ended", endingAt: admin.firestore.Timestamp.now().seconds});
+        await admin.firestore().doc(payload.docPath).update({status: "ended", actionTaskEnded : admin.firestore.FieldValue.delete(), endedAt: admin.firestore.Timestamp.now().seconds});
         res.send(200)
     }
     catch (error) {
@@ -221,7 +219,7 @@ export const changeRequestStatusToExpired = functions.https.onRequest(async (req
     try {
         ;
         //res.send("Hello from Firebase!");
-        await admin.firestore().doc(payload.docPath).update({status: "expired", expiredAt: admin.firestore.Timestamp.now().seconds});
+        await admin.firestore().doc(payload.docPath).update({status: "expired", actionTaskExpired : admin.firestore.FieldValue.delete(), expiredAt: admin.firestore.Timestamp.now().seconds});
         res.send(200)
     }
     catch (error) {
@@ -230,13 +228,16 @@ export const changeRequestStatusToExpired = functions.https.onRequest(async (req
     }
 })
 export const reminderToLeave = functions.https.onRequest(async (req, res) => {
+  try {  
+    
     const taskPayload = req.body as RequestTaskPayload
-    const item = (await admin.firestore().doc(taskPayload.docPath).get()).data() as InfoDocumentData
+    const getItem= await admin.firestore().doc(taskPayload.docPath).get();
+    const item = getItem.data() as InfoDocumentData;
     console.log("inside reminder item", item);
     console.log("inside reminder taskPayload", taskPayload);
-    try {
-        //res.send("Hello from Firebase!");
-        const createdBy = item.createdBy;
+    
+    //res.send("Hello from Firebase!");
+    const createdBy = item.createdBy;
     
     // Notification content
     const payload = {
@@ -252,7 +253,6 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
     }
 
     // ref to the device collection for the user
-    const db = admin.firestore()
     const devicesRef = db.collection('devices').where('userId', '==', createdBy)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
@@ -265,20 +265,18 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
       const token = result.data().token;
       tokens.push( token )
     })
-
-    /*return*/ admin.messaging().sendToDevice(tokens, payload).then(result => {
-        //console.log("Sent Successfully", res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-        res.send(200)
+    admin.messaging().sendToDevice(tokens, payload).then(()=>{
+      res.send(200)
+    }
+    ).catch(err => res.status(500).send(err));
     }
     catch (error) {
         console.error(error)
         res.status(500).send(error)
     }
-})
+
+  }
+  )
 
 
 
@@ -300,7 +298,7 @@ functions.firestore.document('/deals-requests/{id}').onUpdate(async change => {
     }
 }) */
 
-exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}').onUpdate(async item => {
+exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdate(async item => {
 //export const onUpdateRequest = functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
 
     const before = item.before.data() as InfoDocumentData
@@ -311,23 +309,17 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
     //console.log("createdBy",data.createdBy);
     const responseBy = after.responseBy;
     const createdBy = after.createdBy;
+  
+    // Canceled (by creator) (OK)
+    if ((before.status === "new") && (after.status === "canceled") && (after.actionTaskExpired)){
 
-    if ((before.status === "new") && ((after.status === "canceled") || (after.status === "accepted"))){
-    const actionTaskExpired = after.actionTaskExpired
-    if ( actionTaskExpired ) {
-
-        //const tasksClient = new CloudTasksClient()
-        await tasksClient.deleteTask({ name: actionTaskExpired })
-/*         await item.after.ref.update({
-            actionTaskExpired: admin.firestore.FieldValue.delete()
-        }) */
+        await tasksClient.deleteTask({ name: after.actionTaskExpired });
+        const update : InfoDocumentData = { actionTaskExpired : admin.firestore.FieldValue.delete() };
+            return item.after.ref.update(update);
     }
-    
-    }
-    if ((before.status === "accepted" || before.status === "started") && (after.status === "canceled")){
-        
-
-    if (after.actionTaskStarted) {
+    // Canceled (by creator) - after acceptance (OK)
+    else if ((before.status === "accepted" || before.status === "started") && (after.status === "canceled")){
+    if ( after.actionTaskStarted ) { // before status === "accepted"
 
             //const tasksClient = new CloudTasksClient()
             tasksClient.deleteTask({ name: after.actionTaskReminder });
@@ -336,14 +328,14 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
             
             const update : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
             await item.after.ref.update(update);
-      } 
-      else if(after.actionTaskEnded) {
+    } 
+    else if( after.actionTaskReminder ) { // before status === "started"
             tasksClient.deleteTask({ name: after.actionTaskReminder });
             tasksClient.deleteTask({ name: after.actionTaskEnded });
             
             const update : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskEnded : admin.firestore.FieldValue.delete() };
             await item.after.ref.update(update);
-      }
+    }
     // Notification content
     const payload = {
       notification: {
@@ -353,13 +345,13 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
-        landing_page: "request",
+        landing_page: "deal",
         id: id
       }
     }
     
     // ref to the device collection for the user
-    const db = admin.firestore()
+
     const devicesRef = db.collection('devices').where('userId', '==', responseBy)
 
     // get the user's tokens and send notifications
@@ -375,14 +367,16 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
       tokens.push( token )
     })
 
-    /*return*/ admin.messaging().sendToDevice(tokens, payload).then(res => {
+    return admin.messaging().sendToDevice(tokens, payload)
+    //.then(res => {
         //console.log("Sent Successfully", res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      //})
+      //.catch(err => {
+      //  console.log(err);
+      //});
     }
-    if ((before.status === "accepted") && (after.status === "new")){
+    // canceled by responder (OK)
+    else if ((before.status === "accepted") && (after.status === "new")){
       /* 2 */
       /* Cretate task to change status to expired */
       
@@ -396,10 +390,8 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
       console.log("Louay expiresAtSeconds",expiresAtSeconds);
       
       const urlExpired = `https://us-central1-${project}.cloudfunctions.net/changeRequestStatusToExpired`;
-
       const docPath = item.after.ref.path;
       const payloadTask: RequestTaskPayload = { docPath };
-  
       const taskExpired = {
           httpRequest: {
               httpMethod: 'POST',
@@ -416,36 +408,40 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
 
       const [ responseExpired ] = await tasksClient.createTask({parent : queuePath, task : taskExpired});
       const actionTaskExpired = responseExpired.name
-      const update: InfoDocumentData = { actionTaskExpired }
-      await item.after.ref.update(update)
+      let update: InfoDocumentData;// = { actionTaskExpired }
+      // await item.after.ref.update(update)
       /*delete tasks*/
-      if (after.responseBy) {
+      if (after.actionTaskEnded) {
   
               //const tasksClient = new CloudTasksClient()
               tasksClient.deleteTask({ name: after.actionTaskReminder });
               tasksClient.deleteTask({ name: after.actionTaskStarted });
               tasksClient.deleteTask({ name: after.actionTaskEnded });
               
-              const updateData : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
-              await item.after.ref.update(updateData);
-        } 
+              update = { actionTaskExpired, actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
+              
+      } 
+      else{
+        update = { actionTaskExpired }
+      }
+      await item.after.ref.update(update);
 
-      /* send notification to creater */
-      const payload = {
-        notification: {
-            title: '',
-            body: `Dear ${createdBy} - deal canceled by the responder!`,
-            icon: 'https://goo.gl/Fz9nrQ',
-            click_action:"FCM_PLUGIN_ACTIVITY"
+    /* send notification to creater */
+    const payload = {
+      notification: {
+          title: '',
+          body: `Dear ${createdBy} - deal canceled by the responder!`,
+          icon: 'https://goo.gl/Fz9nrQ',
+          click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
-          landing_page: "request",
+          landing_page: "deal",
           id: id
         }
       }
       
       // ref to the device collection for the user
-      const db = admin.firestore()
+
       const devicesRef = db.collection('devices').where('userId', '==', createdBy)
   
       // get the user's tokens and send notifications
@@ -457,18 +453,25 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
       // send a notification to each device token
       devices.forEach(result => {
         const token = result.data().token;
-  
         tokens.push( token )
       })
   
-      /*return*/ admin.messaging().sendToDevice(tokens, payload).then(res => {
+      return admin.messaging().sendToDevice(tokens, payload)
+      // .then(res => {
           //console.log("Sent Successfully", res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      }
-    if (after.status === "accepted" && !(after.actionTaskStarted) && (after.serverStatingTime) && (after.durationSeconds)){
+      //  })
+      //  .catch(err => {
+      //    console.log(err);
+      //  });
+    }
+    //Accepted (OK)
+    else if (after.status === "accepted" && (before.status === "new") /*&& !(after.actionTaskStarted)*/ && (after.serverStatingTime) && (after.durationSeconds)){
+
+      if ( after.actionTaskExpired ) {
+
+        await tasksClient.deleteTask({ name: after.actionTaskExpired })
+
+    }
         /* Cretate task to change status to not accepted */
 
       let reminderAtSeconds: number | undefined;
@@ -504,7 +507,8 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
               seconds: startsAtSeconds
           }
        } 
-       const taskEnded = {
+
+      const taskEnded = {
         httpRequest: {
             httpMethod: 'POST',
             url : urlEnded,
@@ -516,8 +520,9 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
         scheduleTime: {
             seconds: endsAtSeconds
         }
-    }
-    const taskReminderToLeave = {
+      }
+
+      const taskReminderToLeave = {
         httpRequest: {
             httpMethod: 'POST',
             url : urlReminderToLeave,
@@ -529,19 +534,19 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
         scheduleTime: {
             seconds: reminderAtSeconds
         }
-    }
+      }
 
-    const [ responseStarted ] = await tasksClient.createTask({ parent : queuePath, task : taskStarted })
-    const actionTaskStarted = responseStarted.name
-    const [ responseEnded ] = await tasksClient.createTask({ parent : queuePath, task : taskEnded })
-    const actionTaskEnded = responseEnded.name
-    const [ responseReminder ] = await tasksClient.createTask({ parent : queuePath, task : taskReminderToLeave })
-    const actionTaskReminder = responseReminder.name
+      const [ responseStarted ] = await tasksClient.createTask({ parent : queuePath, task : taskStarted })
+      const actionTaskStarted = responseStarted.name
+      const [ responseEnded ] = await tasksClient.createTask({ parent : queuePath, task : taskEnded })
+      const actionTaskEnded = responseEnded.name
+      const [ responseReminder ] = await tasksClient.createTask({ parent : queuePath, task : taskReminderToLeave })
+      const actionTaskReminder = responseReminder.name
       
-    /*deletin expiration task after request acceptance */
-    //await tasksClient.deleteTask({ name : after.actionTaskExpired });
+    /* deletin expiration task after request acceptance */
+    // await tasksClient.deleteTask({ name : after.actionTaskExpired });
     // update deals-requests
-    const update : InfoDocumentData = { actionTaskStarted , actionTaskEnded, actionTaskReminder, actionTaskExpired : admin.firestore.FieldValue.delete() };
+    const update : InfoDocumentData = { actionTaskStarted, actionTaskEnded, actionTaskReminder, actionTaskExpired : admin.firestore.FieldValue.delete() };
     await item.after.ref.update(update);
 
 /*send notification to creater*/
@@ -555,13 +560,13 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
             click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
-          landing_page: "request",
+          landing_page: "deal",
           id: id
         }
       }
       
       // ref to the device collection for the user
-      const db = admin.firestore()
+
       const devicesRef = db.collection('devices').where('userId', '==', createdBy)
       // get the user's tokens and send notifications
       const devices = await devicesRef.get();
@@ -575,12 +580,13 @@ exports.onUpdateRequest = functions.firestore.document('deals-requests/{dealId}'
         tokens.push( token )
       })
   
-      /*return*/ admin.messaging().sendToDevice(tokens, message).then(res => {
+      return admin.messaging().sendToDevice(tokens, message)
+      //.then(res => {
           //console.log("Sent Successfully", res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        //})
+        //.catch(err => {
+        //  console.log(err);
+        //});
     }
     return;
 });
@@ -612,7 +618,6 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req, re
         console.error(error)
         res.status(500).send(error)
     }
-
   }
   );
 })

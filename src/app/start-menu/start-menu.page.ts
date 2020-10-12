@@ -16,6 +16,13 @@ export class StartMenuPage implements OnInit {
   buildingId: string;
   username: string;
   userIsAdmin: boolean= false;
+  enableDeal: boolean= false;
+  enableLostFound: boolean= false;
+  enablePublication: boolean= false;
+  enableRentSale: boolean= false;
+  enableTicket: boolean= false;
+  enableSale: boolean= false;
+  userIsAdmin2: string;
 
   constructor( 
     private loginService: LoginService,
@@ -27,12 +34,32 @@ export class StartMenuPage implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.loginService.currentUserInfo.subscribe(
+      userInfo => {
+        this.username = userInfo.firstname;
+        this.userIsAdmin= this.loginService.isUserAdmin();
+        this.userIsAdmin2= userInfo.role;
+      }
+      );
+      
+      this.loginService.currentBuildingInfo.subscribe(
+        buildingInfo => {
+          this.enableDeal= buildingInfo.enableDeal;
+          this.enableLostFound= buildingInfo.enableLostFound
+          this.enablePublication= buildingInfo.enablePublication;
+          this.enableRentSale= buildingInfo.enableRentSale;
+          this.enableSale= buildingInfo.enableSale;
+          this.enableTicket= buildingInfo.enableTicket;
+        }
+        );
     console.log('start menu OnInit');
     this.menu.enable(true);
     this.userId = this.loginService.getLoginID();
     this.buildingId = this.loginService.getBuildingId();
-    this.username= this.loginService.getLoginName();
-    this.userIsAdmin= this.loginService.isUserAdmin();
-    this.loginService.buildingInfo.enableDeal;
+    // this.username= this.loginService.getLoginName();
+    // this.userIsAdmin= this.loginService.isUserAdmin();
+
+
   }
 }

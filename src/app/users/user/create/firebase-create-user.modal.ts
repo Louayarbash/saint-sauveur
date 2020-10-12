@@ -162,7 +162,7 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.userData.createdBy = this.loginService.getLoginID();
     this.userData.status = this.createUserForm.value.status;
-    const credentials : LoginCredential = { email : this.userData.email, password : "Welcome123" }
+    // const credentials : LoginCredential = { email : this.userData.email, password : "Welcome123" }
     const loading = this.featureService.presentLoadingWithOptions(2000);
 
     this.selectedParking = [];
@@ -183,8 +183,7 @@ export class FirebaseCreateUserModal implements OnInit {
     
     console.log(this.selectedParking);
 
- this.firebaseService.createUser(this.userData, credentials)
-
+ this.firebaseService.createUser(this.userData)
  .then(() => {
   this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
   this.dismissModal();

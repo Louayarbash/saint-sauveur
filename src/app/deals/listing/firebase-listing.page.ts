@@ -35,6 +35,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
   /*for segment implementation*/
   loginId = this.loginService.getLoginID();
+  loginName = this.loginService.getLoginName();
   segmentValue = 'newRequests';
   // friendsList: Array<any>;
   newRequestsList: Array<FirebaseListingItemModel>;
@@ -149,16 +150,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           
             if(!this.items.isShell) {
 
-/*               this.a = this.items.map(item => {item.id = "1"; return item} )
-              this.b = this.items.map(item => {item.id = "2"; return item} )
-              this.c = this.items.map(item => {item.id = "3"; item.note = "khara"; return item} )
-
-              console.log("a",this.a);
-              console.log("b",this.b);
-              console.log("c",this.c); 
-              console.log("dayjsTS",dayjs(1587782116000))
-              console.log("dayjsISO",dayjs("2020-04-24T22:35:16.138-04:00")) */
-
               this.items.map(item => {
                 item.date = dayjs(item.date).format('DD, MMM, YYYY');
                 item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');
@@ -170,10 +161,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               let myRequestsList = this.items;
               let newRequestsList = this.items;
               let newOffersList = this.items;
-              // console.log("liloooo",this.loginId)
+
               this.myRequestsList = myRequestsList.filter(item => item.createdBy === this.loginId || item.responseBy === this.loginId);
-              this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "request"));
-              this.newOffersList = newOffersList.filter(item => ((item.status === "new") || (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")) && (item.createdBy !== this.loginId) && (item.type == "offer"));
+              this.newRequestsList = newRequestsList.filter(item => ((item.status === "new") /*|| (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")*/) && (item.createdBy !== this.loginId) && (item.type == "request"));
+              this.newOffersList = newOffersList.filter(item => ((item.status === "new") /*|| (item.status === "expired") || (item.status === "accepted") || (item.status === "ended")*/) && (item.createdBy !== this.loginId) && (item.type == "offer"));
               // console.log("myRequestsList",this.myRequestsList);
               // console.log("newRequestsList",this.newRequestsList);
               // console.log("newOffersList",this.newOffersList);

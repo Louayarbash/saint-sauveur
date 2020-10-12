@@ -36,6 +36,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   parking2selected: boolean;
   parking3selected: boolean;
   selectOptions: any;
+  userIsAdmin= this.loginService.isUserAdmin();
   @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
@@ -105,9 +106,10 @@ this.radioObject = this.radioObject.filter(function (radioNotNull) {
 return radioNotNull != null;
  */
 
-    this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
-      this.levels = item.parkings;
-      console.log("parking",this.user.parkings);
+     // this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
+      
+      this.levels = this.loginService.getBuildingParkings();
+      // console.log("parking",this.user.parkings);
 
         let userParkings = [];
         if (this.user.parkings) {
@@ -123,9 +125,9 @@ return radioNotNull != null;
           return res != null;
         });
       
-     console.log("userParkingIds",userParkings)
+     // console.log("userParkingIds",userParkings)
      if(userParkings[0]){
-      console.log(1);
+      // console.log(1);
 
       this.parking1selected = true;
 
@@ -136,7 +138,7 @@ return radioNotNull != null;
     }
     
     if(userParkings[1]){
-      console.log(2);
+      // console.log(2);
 
       this.parking2selected = true;
 
@@ -148,7 +150,7 @@ return radioNotNull != null;
       this.showHideParking2 = false;
     }
     if(userParkings[2]){
-      console.log(3);
+      // console.log(3);
 
       this.parking3selected = true;
       
@@ -160,7 +162,7 @@ return radioNotNull != null;
       this.showHideParking3 = false;
     }
    
-    });
+    // });
 
 
   }
@@ -281,9 +283,10 @@ return radioNotNull != null;
     this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
     console.log(this.selectedParking);
-
+    
     this.firebaseService.updateUser(this.userData)
     .then(() => {
+      // this.loginService.updateUserInfo(this.userData);
       this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
       this.modalController.dismiss();
     }

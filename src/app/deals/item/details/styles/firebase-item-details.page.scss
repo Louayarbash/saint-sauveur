@@ -1,54 +1,16 @@
-@import "../../../../../theme/mixins/scrollbars";
+// @import "../../../../../theme/mixins/scrollbars";
 
 // Custom variables
 // Note:  These ones were added by us and have nothing to do with Ionic CSS Custom Properties
 :host {
   --page-margin: var(--app-fair-margin);
-  --page-background: var(--app-background);
-
-  //--page-related-users-gutter: calc(var(--page-margin) / 2);
 }
 
-.page-content {
-/* 
-  .line-separator{
-
-    height:1px;
-    
-    //background:#717171;
-    
-    border-bottom:1px solid #313030;
-    
-    } */
-
-  --background: var(--page-background);
-/*      .inputs-list {
-      --ion-item-background: var(--page-background);
-      padding: 40px var(--page-margin) 30px;//var(--page-margin);
-      .input-item {
-        --padding-start: 40px;
-        --padding-end: 0px;
-        --inner-padding-end: 0px;
-      }
-    }  */
-
-  &.ended {
-    --page-deal-color: var(--page-expired-color);
-  }
-  &.imminent-end {
-    --page-deal-color: var(--page-distant-end-color);
-  }
-  &.ends-soon {
-    --page-deal-color: var(--page-ends-soon-color);
-  }
-  &.distant-end {
-    --page-deal-color: var(--page-distant-end-color);
-  }
-
+  .itemCard {
   .expiration-countdown {
     height: 50px;
     color: var(--ion-color-lightest);
-    background-color: var(--ion-color-danger);
+    background-color: var(--ion-color-main);
     padding: calc(var(--page-margin) / 2) var(--page-margin);
 
     position: sticky;
@@ -58,8 +20,6 @@
       //text-align: center;
       //justify-content: center;
       //align-items: center;
-    
-    
   
     .expiration-lead {
       //padding: 0px calc(var(--page-margin) / 2);
@@ -89,24 +49,19 @@
     
   }
   }
-
-/*   .dealDetails1{
-    background-color : darkorange;//var(--app-background-shade);
-    border-bottom : 1px;
-    border-color : var(--app-background-shade);
-  } */
-  .user-details {
-    background-color : var(--app-background-shade);
+}
+  // .user-details {
+/*     background-color : var(--app-background-shade);
     margin: 0px var(--page-margin) 0px var(--page-margin);
     border-radius: var(--app-fair-radius);
     box-shadow: 1px 1px 4px 1px var(--page-item-shadow-color);
     //border-style: solid;
     //border-bottom-width: calc((var(--page-margin) / 2) * 3);
     //border-bottom-color: var(--page-deal-border-color);
-    padding :  var(--page-margin);
+    padding :  var(--page-margin);*/
 
     .user-details-section {
-      --ion-grid-column-padding: 0px;
+      --ion-grid-column-padding: 0px; 
     
       //margin: var(--page-margin);
       //margin-left: 0px;
@@ -115,7 +70,7 @@
         width: 25%;
         max-width: 30%;
         app-image-shell.user-image {
-          --image-shell-border-radius: var(--app-fair-radius);//var(--page-border-radius);
+          --image-shell-border-radius: 20px;//var(--page-border-radius);
         }
       }
       .user-info-wrapper {
@@ -133,56 +88,9 @@
           //letter-spacing: 0.5px;
         }
 
-/*         .user-data-row {
-          //padding-bottom: var(--page-margin);
-          //flex-wrap: nowrap;
-          //justify-content: space-between;
-    
-          .user-name {
-            padding-bottom: var(--page-margin);
-            margin: 0px;
-            //font-size: 20px;
-            //letter-spacing: 0.5px;
-          }
-    
-           .user-title {
-            margin: 0px;
-            color: var(--ion-color-medium);
-            //font-size: 16px;
-          } 
-        } */
-
         app-rating-input {
           --rating-color: var(--ion-color-secondary);
         }
-    
-/*         .actions-row {
-          //--ion-grid-columns: 10;
-          //--ion-grid-column-padding: var(--page-actions-padding);
-    
-          //justify-content: space-between;
-          //flex-wrap: nowrap;
-          //margin-left: calc(var(--page-actions-padding) * -1);
-          //margin-right: calc(var(--page-actions-padding) * -1);
-    
-           .main-actions {
-            flex-grow: 0;
-            margin:0px;
-            padding-bottom: 5px;
-            padding-left: 0px;
-            //margin-left: calc(var(--page-actions-padding) * -1);
-            //margin-right: calc(var(--page-actions-padding) * -1);
-            display: flex;
-          } 
-        } */
       }
-
-     }
-
-}
-
-/* .delete-btn {
-  margin: var(--page-margin);
-} */
-
-}
+    // }
+ }

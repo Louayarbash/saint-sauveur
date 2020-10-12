@@ -168,7 +168,7 @@ export class FirebaseService {
   /*
     Firebase Create User Modal
   */
-  public createUser(userData: UserModel, logincredential : LoginCredential): Promise<DocumentReference>  {
+  public createUser(userData: UserModel): Promise<DocumentReference>  {
     // this.loginService.signup(logincredential);
     return this.afs.collection('users').add({...userData});
   }

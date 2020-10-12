@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ModalController, IonRouterOutlet } from '@ionic/angular';
+import { ModalController, IonRouterOutlet, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
@@ -12,6 +12,8 @@ import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import { AuthService } from '../../../auth/auth.service';
+// import { userModel } from 'src/app/deals/item/firebase-item.model';
+import { Parkings } from '../../../type';
 
 @Component({
   selector: 'app-firebase-user-details',
@@ -23,6 +25,7 @@ import { AuthService } from '../../../auth/auth.service';
 export class FirebaseUserDetailsPage implements OnInit {
   user: UserModel;
   userIsAdmin: boolean= false;
+  isLoggedInUser: boolean = false;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   //relatedUsers: Array<FirebaseListingItemModel> & ShellModel;
@@ -32,6 +35,7 @@ export class FirebaseUserDetailsPage implements OnInit {
   language: string;
   userParking = [];
   status: any;
+
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.user && this.user.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -45,7 +49,8 @@ export class FirebaseUserDetailsPage implements OnInit {
     private featureService : FeatureService,
     private loginService : LoginService,
     private routerOutlet: IonRouterOutlet,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -60,6 +65,7 @@ export class FirebaseUserDetailsPage implements OnInit {
           console.log(state);
           this.user = state;
           this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
+          this.isLoggedInUser = this.loginService.getLoginID() == this.user.id ? true : false;
           this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
           this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
           this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
@@ -73,9 +79,25 @@ export class FirebaseUserDetailsPage implements OnInit {
             default:
               this.status = "Undefined";
           }
-
-          this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
-            const levels = item.parkings;
+          this.loginService.currentBuildingInfo.subscribe(building =>
+            {
+              const levels = building.parkings;
+              if (this.user.parkings) {
+                this.userParking = this.user.parkings.map((userParking: Parkings) => { 
+                  
+                  let levelCheck = levels.find((level) => { level.id === userParking.id });
+                  if(levelCheck){
+                    return { id : userParking.id, description: levelCheck.description, note: levelCheck.note, active: levelCheck.active };
+                  }
+                });
+              }
+              this.userParking = this.userParking.filter(function (res) {
+                return res != null;
+              });
+            }
+          );
+/*             this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
+            const levels =item.parkings;
             console.log(this.user.parkings);
               if (this.user.parkings) {
                 this.userParking = this.user.parkings.map((userParking) => { 
@@ -89,7 +111,7 @@ export class FirebaseUserDetailsPage implements OnInit {
               this.userParking = this.userParking.filter(function (res) {
                 return res != null;
               });   
-          });
+           });  */
         }
       );
 /*       relatedUsersDataStore.state.subscribe(
@@ -125,14 +147,34 @@ export class FirebaseUserDetailsPage implements OnInit {
     await modal.present();
   }
 
-  signOut() {
-    this.authService.signOut().subscribe(() => {
-      // Sign-out successful.
-      // Replace state as we are no longer authorized to access profile page.
-      this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
-    }, (error) => {
-      console.log('signout error', error); 
+  async signOut() {
+
+
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.LogOutHeader,
+      message: this.featureService.translations.LogOutMessage,
+      buttons: [
+        {
+          text: this.featureService.translations.Yes,
+          handler: ()=> {
+            this.authService.signOut().subscribe(() => {
+              // Sign-out successful.
+              // Replace state as we are no longer authorized to access profile page.
+              this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
+            }, (error) => {
+              console.log('signout error', error); 
+            });
+          }
+        }, {
+          text: this.featureService.translations.No,
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+      ]
     });
+
+    await alert.present();
   }
   
   

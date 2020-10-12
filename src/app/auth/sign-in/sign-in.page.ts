@@ -104,8 +104,8 @@ export class SignInPage implements OnInit {
 
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
-  redirectLoggedUserToMainMenuPage() {
-    this.dismissLoading();
+  async redirectLoggedUserToMainMenuPage() {
+    await this.dismissLoading();
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
     // That's why we need to wrap the router navigation call inside an ngZone wrapper
@@ -131,9 +131,10 @@ export class SignInPage implements OnInit {
     await this.redirectLoader.present();
   }
 
-  async dismissLoading() {
+   async dismissLoading() {
     if (this.redirectLoader) {
-      await this.redirectLoader.dismiss();
+      console.log('Bonga');
+       return this.redirectLoader.dismiss();
     }
   }
 
@@ -165,16 +166,21 @@ export class SignInPage implements OnInit {
       console.log("inside signInWithEmail");
       this.loginService.initializeApp(user.user.uid).then(canAccessApp => {
         if(canAccessApp){
-          console.log("inside signInWithEmail canAccessApp true");
           this.authService.canAccessApp.next(true);
+          console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.getValue());
+          console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.value);
           // console.log(this.authService.canAccessApp.value);
-          this.redirectLoggedUserToMainMenuPage()
+          this.redirectLoggedUserToMainMenuPage();
         }
         else{
-          this.dismissLoading();
-          console.log("inside signInWithEmail canAccessApp false");
-          this.authService.canAccessApp.next(false);
-          this.featureService.presentToast('cant acces the app', 2000)
+          this.dismissLoading().then(()=>{
+            this.authService.canAccessApp.next(false);
+            this.featureService.presentToast('cant acces the app', 2000)
+          })
+          
+          console.log("inside signInWithEmail canAccessApp false", this.authService.canAccessApp.value);
+          
+          
         }
       }
       )

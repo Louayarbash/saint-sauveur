@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'ParkingRequests' | translate }}-{{loginId}}</ion-title>
+    <ion-title>{{ 'ParkingRequests' | translate }}-{{ loginId }}{{ loginName }}</ion-title>
 <!--     <ion-buttons slot="end">
       <ion-button (click)="chooseType()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -220,6 +220,12 @@
                 <span class="button-cta">{{ item?.status | translate }}</span>
               </ion-button>
             </ion-col>
+<!--             <ion-col class="call-to-action-col">
+              <ion-button class="claim-button" expand="block" color="medium"  [routerLink]="['/deal/details', item.id]">
+                <span class="button-cta">{{ item?.status | translate }}</span>
+                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+              </ion-button>
+            </ion-col> -->
           </ion-row>
           <ion-row class="middle-row ion-justify-content-between" >
             <ion-col class="item-description" size="auto">

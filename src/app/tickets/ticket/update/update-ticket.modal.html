@@ -17,24 +17,26 @@
           <!-- <ion-list lines="full"> -->
             <ion-item>
               <ion-label>{{ 'TicketReference' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="item.reference"></app-text-shell>
+              <ion-text>{{ item.reference }}</ion-text> 
+              <!-- <app-text-shell animation="bouncing" [data]="item.reference"></app-text-shell> -->
             </ion-item>
             <ion-item >
               <ion-label>{{ 'Subject' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="item.subject"></app-text-shell>
+              <ion-text>{{ item.subject | translate }}</ion-text> 
             </ion-item>
             <ion-card *ngIf="bookingSection">
               <ion-item>
                 <ion-label>Date</ion-label>
-                <app-text-shell animation="bouncing" [data]="date"></app-text-shell>          
+                <ion-text>{{ date }}</ion-text> 
+                <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell>           -->
               </ion-item>
               <ion-item>
                 <ion-label>{{ 'FromTime' | translate }}</ion-label>
-                <app-text-shell animation="bouncing" [data]="startTime"></app-text-shell>
+                <ion-text>{{ startTime }}</ion-text> 
               </ion-item>
               <ion-item>
                   <ion-label>{{ 'ToTime' | translate }}</ion-label>
-                  <app-text-shell animation="bouncing" [data]="endTime"></app-text-shell>
+                  <ion-text>{{ endTime }}</ion-text> 
               </ion-item>
             </ion-card>
             <ion-item>

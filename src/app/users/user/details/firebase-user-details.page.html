@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="users/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'UserDetails' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="userIsAdmin">
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
@@ -75,8 +75,9 @@
               <ion-label>{{ 'CreateDate' | translate }}</ion-label>
               <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
             </ion-item>
-            <ion-item>    
-              <ion-button expand="block" color="main" (click)="signOut()" fill="solid">{{ 'SignOut' | translate }}</ion-button>
+            <ion-item *ngIf="isLoggedInUser">
+              <ion-label>{{ 'SignOut' | translate }}</ion-label>  
+                <ion-icon (click)="signOut()" name="log-out-outline"></ion-icon>
             </ion-item>
           <!-- </ion-list> -->
         </section>

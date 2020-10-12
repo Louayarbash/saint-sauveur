@@ -8,8 +8,12 @@ ion-title {
   --background: transparent !important;
 } 
 
-app-image-shell.user-image {
-  --image-shell-border-radius: 50px;// var(--app-fair-radius);
+/* app-image-shell.user-image {
+  --image-shell-border-radius: 50%;// var(--app-fair-radius);
+} */
+
+app-image-shell.item-image {
+  --image-shell-border-radius: var(--app-fair-radius);
 }
 
 .itemCard {
@@ -27,9 +31,7 @@ app-image-shell.user-image {
   background-position: center center;
 }
 
-app-image-shell.item-image {
-  --image-shell-border-radius: var(--app-fair-radius);
-}
+
 
 ion-content {
   --background: var(--app-background-shade);

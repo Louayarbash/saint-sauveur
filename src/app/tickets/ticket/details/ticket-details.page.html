@@ -37,7 +37,7 @@
       </ion-item>
       <ion-item *ngIf="item.createDate">    
         <ion-label>{{ 'TicketDate' | translate }}</ion-label>
-        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}
         <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
       </ion-item>
       <ion-item *ngIf="item.creatorDetails">    

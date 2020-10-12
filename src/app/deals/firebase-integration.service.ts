@@ -222,14 +222,14 @@ export class FirebaseService {
         .then(doc => {          
           let oldStatus = doc.data().status;          
           if (oldStatus == "new"){
-            let newStatus = "newRequestCanceled";
+            let newStatus = "canceled"; // newRequestCanceled
             tran.update(itemRef, {status: newStatus});            
             this.featureService.presentToast(this.featureService.translations.RequestCanceled, 2000);
             this.router.navigate(['deal/listing']);
             return Promise.resolve('NewRequestCanceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
-            let newStatus = "acceptedRequestCanceled";
+            let newStatus = "canceled"; // acceptedRequestCanceled
             tran.update(itemRef, {status: newStatus});            
             this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled, 2000);
             this.router.navigate(['deal/listing']);
@@ -304,14 +304,14 @@ public cancelOffer(itemData: ItemModel) {
       .then(doc => {          
         let oldStatus = doc.data().status;          
         if (oldStatus == "new"){
-          let newStatus = "newOfferCanceled";
+          let newStatus = "canceled"; // newOfferCanceled
           tran.update(itemRef, {status: newStatus});            
           this.featureService.presentToast(this.featureService.translations.OfferCanceled, 2000);
           this.router.navigate(['deal/listing']);
           return Promise.resolve('NewOfferCanceled!' + newStatus);
         }
         else if (oldStatus == "accepted"){
-          let newStatus = "acceptedOfferCanceled";
+          let newStatus = "canceled"; // acceptedOfferCanceled
           tran.update(itemRef, {status: newStatus});            
           this.featureService.presentToast(this.featureService.translations.OfferAcceptedCanceled, 2000);
           this.router.navigate(['deal/listing']);

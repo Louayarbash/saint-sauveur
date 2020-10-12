@@ -1,42 +1,45 @@
 import { Injectable } from '@angular/core';
-// import { AngularFireAuth } from '@angular/fire/auth';
-// import { Services } from "../../type";
 import { AngularFirestore } from '@angular/fire/firestore';
-// import { Observable } from 'rxjs';
-//import { FirebaseUserModel } from 'src/app/users/user/firebase-user.model';
 import { UserModel } from '../../users/user/user.model';
 import { BuildingModel } from '../../buildings/building/building.model';
 import { AuthService } from '../../auth/auth.service';
-//import { Observable } from 'rxjs';
-//import { DocumentSnapshot } from '@google-cloud/firestore';
 import { FeatureService } from '../../services/feature/feature.service';
+import { BehaviorSubject } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-userInfo: UserModel = new UserModel();
-buildingInfo: BuildingModel = new BuildingModel();
-// uid : string;
-/* buildingId: string; //= "LOxCBCFef7nZm8u0Sg9R";
-userId: string; //= "P1JvaXPwCtbcnK8VIaKQ2fGC5DA3";
-languge : string;
-firstname : string;
-parkings: any;
-language: string;
-apartment: string;
-buildingName: string;
-services: Services[];
-buildingStatus: string;
-userStatus: string; */
+
+private userInfo: UserModel = new UserModel();
+private userInfoSource = new BehaviorSubject(this.userInfo);
+currentUserInfo = this.userInfoSource.asObservable();
+
+private buildingInfo: BuildingModel = new BuildingModel();
+private buildingInfoSource = new BehaviorSubject(this.buildingInfo);
+currentBuildingInfo = this.buildingInfoSource.asObservable();
 
   constructor(
     // private afAuth : AngularFireAuth,
     private afs: AngularFirestore,
     private authService: AuthService,
-    private featureService: FeatureService
+    private featureService: FeatureService,
+    private alertController: AlertController
     ) {
       console.log('login service constructor');
+      this.userInfo.firstname= "HI";
+      
    }
+/*    updateUserInfo(userInfo)
+   {
+    this.userInfoSource.next(userInfo);
+   }
+
+   updateBuildingInfo(buildingInfo)
+   {
+    this.userInfoSource.next(buildingInfo);
+   } */
 
   isUserGlobalAdmin(){
     return this.userInfo.email == "louay.arbash@gmail.com" ? true : false; 
@@ -51,7 +54,7 @@ userStatus: string; */
       return this.userInfo.firstname;
     }
     else {
-      return 'firstNameNull';
+      return 'N/A';
     }
   }
 
@@ -60,7 +63,7 @@ userStatus: string; */
       return this.userInfo.role;
     }
     else {
-      return 'roleNull';
+      return 'user';
     }
   }
 
@@ -69,7 +72,7 @@ userStatus: string; */
       return this.userInfo.apartment;
     }
     else {
-      return 'apartmentNull'
+      return 'N/A'
     }
   }
 
@@ -82,10 +85,10 @@ userStatus: string; */
     }
   }
 
-  getAuthID(){
+/*   getAuthID(){
     return this.authService.getUserId()
   }
-
+ */
   getBuildingId(): string{
     if(this.userInfo.buildingId){
       return this.userInfo.buildingId;
@@ -116,6 +119,15 @@ userStatus: string; */
   updateUserParking(parkings : any){
     this.afs.collection("users").doc(this.getLoginID()).update({parkings : parkings})
   }
+
+  getUserLanguage(){
+    if(this.userInfo.language){
+      return this.userInfo.language;
+    }
+    else {
+      return 'en';
+    }
+  }
   
   getBuildingServices(){
     if(this.buildingInfo.services){
@@ -126,57 +138,78 @@ userStatus: string; */
     }
   }
 
-
-/*   async getUserInfo(userId: string): Promise<UserModel> {
-      try {
-      const res= await this.afs.firestore.collection("users").doc(userId).get();
-      const userData= res.data() as UserModel;
-      this.userInfo.id= res.id;
-      this.userInfo.buildingId= userData.buildingId;
-      this.userInfo.language= userData.language;
-      this.userInfo.firstname= userData.firstname;
-      this.userInfo.parkings= userData.parkings;
-      this.userInfo.apartment= userData.apartment;
-      return userData;
-      } catch (err) {
-      console.log(err);
-      }
-  } */
-
-   async initializeApp(uid: string): Promise<boolean> 
+   async initializeApp(uid: string) : Promise<boolean> 
     {
     console.log("initializeApp");
     try {
-      const user= await this.afs.firestore.collection("users").doc(uid).get();
+      
+      const user= await this.afs.firestore.collection("users").doc(uid).get({source: 'server'});
       console.log(user.data());
       let userData= user.data() as UserModel;
       this.userInfo.id= uid;
-      this.userInfo.buildingId= userData.buildingId;
-      this.userInfo.language= userData.language? userData.language : 'en';
-      this.featureService.changeLanguage(this.userInfo.language);
-      this.userInfo.firstname= userData.firstname;
-      this.userInfo.parkings= userData.parkings;
-      this.userInfo.apartment= userData.apartment;  
-      this.userInfo.status= userData.status;
-      this.userInfo.email= userData.email;
-      this.userInfo.role= userData.role;
+      this.userInfo= userData;
+      if(userData.language !== this.featureService.translate.currentLang){
+        this.featureService.changeLanguage(userData.language);
+      }
+      this.featureService.getItem('users', uid).subscribe(async item => {
+        this.userInfo= item;
+        this.userInfoSource.next( item ); 
+        if(item.language !== this.featureService.translate.currentLang){
+          this.featureService.changeLanguage(item.language);
+        }
 
-      const building= await this.afs.firestore.collection("buildings").doc(this.userInfo.buildingId).get();
+        if(item.status !== 'active'){
+          const alert = await this.alertController.create({
+            header: this.featureService.translations.StatusInactiveHeader,
+            message: this.featureService.translations.StatusInactiveMessage,
+            buttons: [
+              {
+                text: this.featureService.translations.OK,
+                handler: ()=> {
+                  this.signOut();
+                }
+              }
+            ]
+          });
+      
+          await alert.present();
+        }
+    });
+    this.userInfoSource.next( userData );
+      const building= await this.afs.firestore.collection("buildings").doc(this.userInfo.buildingId).get({source: 'server'});
+      console.log(building.data());
       let buildingData= building.data() as BuildingModel;
-      this.buildingInfo.name= buildingData.name;
-      this.buildingInfo.services= buildingData.services; 
-      this.buildingInfo.status= buildingData.status;
-      this.buildingInfo.enableSale= buildingData.enableSale;
-      this.buildingInfo.enableRentSale= buildingData.enableRentSale;
-      this.buildingInfo.enableLostFound= buildingData.enableLostFound;
-      this.buildingInfo.enableTicket= buildingData.enableTicket;
-      this.buildingInfo.enablePublication= buildingData.enablePublication;
-      this.buildingInfo.enableDeal=  buildingData.enableDeal;
-      // this.authService.canAccessApp = (this.userStatus == 'active' && this.buildingStatus =='active');
-      return  (this.userInfo.status == 'active' && this.buildingInfo.status =='active')
+      this.buildingInfo= buildingData;
+      this.featureService.getItem('buildings', userData.buildingId).subscribe(async item => {
+        this.buildingInfo= item;
+        this.buildingInfoSource.next( item );
+        if(item.status !== 'active'){
+          const alert = await this.alertController.create({
+            header: this.featureService.translations.StatusInactiveHeader,
+            message: this.featureService.translations.StatusInactiveMessage,
+            buttons: [
+              {
+                text: this.featureService.translations.OK,
+                handler: ()=> {
+                  this.signOut();
+                }
+              }
+            ]
+          });
+      
+          await alert.present();
+        }
+      });
+
+      this.buildingInfoSource.next( buildingData );
+      console.log(this.userInfo.status == 'active' && this.buildingInfo.status =='active');
+      console.log(this.userInfo.status);
+      console.log(this.buildingInfo.status);
+      return  (this.userInfo.status == 'active' && this.buildingInfo.status =='active');
     } 
     catch (err) {
       console.log(err);
+      return false;
     }
   }
 

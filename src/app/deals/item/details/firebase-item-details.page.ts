@@ -26,9 +26,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
   selector: 'app-firebase-item-details',
   templateUrl: './firebase-item-details.page.html',
   styleUrls: [
-    './styles/firebase-item-details.page.scss',
-    './styles/firebase-item-details.shell.scss'
-
+    './styles/firebase-item-details.page.scss'
   ],
 })
 
