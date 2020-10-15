@@ -13,7 +13,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import { AuthService } from '../../../auth/auth.service';
 // import { userModel } from 'src/app/deals/item/firebase-item.model';
-import { Parkings } from '../../../type';
+import { ParkingInfo } from '../../../type';
 
 @Component({
   selector: 'app-firebase-user-details',
@@ -33,7 +33,7 @@ export class FirebaseUserDetailsPage implements OnInit {
   role: string;
   type: string;
   language: string;
-  userParking = [];
+  parkingInfo: ParkingInfo[] = [];
   status: any;
 
 
@@ -54,8 +54,6 @@ export class FirebaseUserDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
-
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<UserModel> = resolvedDataStores.user;
@@ -78,55 +76,20 @@ export class FirebaseUserDetailsPage implements OnInit {
             break;
             default:
               this.status = "Undefined";
-          }
-          this.loginService.currentBuildingInfo.subscribe(building =>
-            {
-              const levels = building.parkings;
-              if (this.user.parkings) {
-                this.userParking = this.user.parkings.map((userParking: Parkings) => { 
-                  
-                  let levelCheck = levels.find((level) => { level.id === userParking.id });
-                  if(levelCheck){
-                    return { id : userParking.id, description: levelCheck.description, note: levelCheck.note, active: levelCheck.active };
-                  }
-                });
-              }
-              this.userParking = this.userParking.filter(function (res) {
-                return res != null;
-              });
-            }
-          );
-/*             this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
-            const levels =item.parkings;
-            console.log(this.user.parkings);
-              if (this.user.parkings) {
-                this.userParking = this.user.parkings.map((userParking) => { 
-                  
-                  let levelCheck = levels.find( (level: { id: number; }) => level.id === userParking.id );
-                  if(levelCheck){
-                    return { id : userParking.id ,number : userParking.number , description : levelCheck.description };
-                  }
-                });
-              }
-              this.userParking = this.userParking.filter(function (res) {
-                return res != null;
-              });   
-           });  */
-        }
-      );
-/*       relatedUsersDataStore.state.subscribe(
-        (state) => {
-          this.relatedUsers = state;
-        }
-      ); */
+      }
+      if(this.user.parkings){
+        this.parkingInfo= this.loginService.getParkingInfo(this.user.parkings);
+      }
     });
-  }
+  });
+}
 
   async openFirebaseUpdateModal() {
     const modal = await this.modalController.create({
       component: FirebaseUpdateUserModal,
       componentProps: {
-        'user': this.user
+        'user': this.user,
+        'parkingInfo': this.parkingInfo
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl

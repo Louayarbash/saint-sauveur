@@ -6,6 +6,7 @@ import { AuthService } from '../../auth/auth.service';
 import { FeatureService } from '../../services/feature/feature.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
+import { ParkingInfo } from '../../type';
 
 @Injectable({
   providedIn: 'root'
@@ -136,6 +137,22 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     else {
       return null
     }
+  }
+
+  getParkingInfo(userParkings: any[]){
+    if(userParkings){
+      let parkingInfo: ParkingInfo[] = userParkings.map((userParking) => {     
+        let parkingCheck = this.getBuildingParkings().find((buildingParking) => { return buildingParking.id == userParking.id });
+          if(parkingCheck){
+            return { id: userParking.id, number: userParking.number, description: parkingCheck.description, active: parkingCheck.active };
+          }
+        });
+        parkingInfo= parkingInfo.filter(function (res) {
+          return res != null;
+      });
+      return parkingInfo;
+    }
+    else return null
   }
 
    async initializeApp(uid: string) : Promise<boolean> 

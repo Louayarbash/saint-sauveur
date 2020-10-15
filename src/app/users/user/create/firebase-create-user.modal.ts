@@ -3,19 +3,13 @@ import { ModalController,AlertController, IonContent } from '@ionic/angular';
 import { Validators, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
 import dayjs from 'dayjs';
 //import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
-
 import { FirebaseService } from '../../firebase-integration.service';
 import { UserModel } from '../user.model';
 //import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { AngularFirestore } from '@angular/fire/firestore';
-import { LoginCredential } from '../../type';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
-
-// import { Crop, CropOptions } from '@ionic-native/crop/ngx';
-// import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker/ngx';
-// import { File } from '@ionic-native/file/ngx';
 import firebase from 'firebase/app';
 
 @Component({
@@ -32,7 +26,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   createUserForm: FormGroup;
   userData: UserModel = new UserModel();
-  levels = [];
+  buildingParkings = [];
   selectedParking = [];
   selectedPhoto: string;
   showHideParking2: boolean;
@@ -62,7 +56,7 @@ export class FirebaseCreateUserModal implements OnInit {
   }
 
   ngOnInit() {
-    this.levels= this.loginService.getBuildingParkings();
+    this.buildingParkings= this.loginService.getBuildingParkings();
     this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
     this.createUserForm = new FormGroup({
       firstname: new FormControl('',Validators.required),

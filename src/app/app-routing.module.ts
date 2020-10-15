@@ -18,29 +18,11 @@ const routes: Routes = [
   { path: 'buildings', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canLoad: [IntroGuard, SignInGuard] },				
-  { path: 'publication', loadChildren: () => import('./publications/firebase-integration.module').then(m => m.FirebaseIntegrationModule) , canLoad: [PageGuard] },																				  
-  // { path: 'auth/login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
-  // { path: 'auth/signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule) },
-  // tslint:disable-next-line:max-line-length
+  { path: 'publication', loadChildren: () => import('./publications/firebase-integration.module').then(m => m.FirebaseIntegrationModule) , canLoad: [PageGuard] },
+  { path: 'events', loadChildren: () => import('./events/firebase-integration.module').then(m => m.FirebaseIntegrationModule) , canLoad: [PageGuard] },																				  
   { path: 'auth/forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule) },
-  // { path: 'getting-started', loadChildren: () => import('./getting-started/getting-started.module').then(m => m.GettingStartedPageModule) },
-  // { path: 'app', loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule) },
-  // { path: 'contact-card', loadChildren: () => import('./contact-card/contact-card.module').then(m => m.ContactCardPageModule) },
-  // tslint:disable-next-line:max-line-length
-  // { path: 'forms-and-validations', loadChildren: () => import('./forms/validations/forms-validations.module').then(m => m.FormsValidationsPageModule) },
-  // { path: 'forms-filters', loadChildren: () => import('./forms/filters/forms-filters.module').then(m => m.FormsFiltersPageModule) },
   { path: 'page-not-found', loadChildren: () => import('./page-not-found/page-not-found.module').then(m => m.PageNotFoundModule) },
-  // { path: 'showcase', loadChildren: () => import('./showcase/showcase.module').then(m => m.ShowcasePageModule) },
-  // { path: 'firebase', loadChildren: () => import('./firebase/firebase-integration.module').then(m => m.FirebaseIntegrationModule) },
-  // { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsPageModule) },
-  //{ path: 'video-playlist', loadChildren: () => import('./video-playlist/video-playlist.module').then(m => m.VideoPlaylistPageModule) },
-  { path: '**', redirectTo: 'page-not-found' },
-
-/*   {
-    path: 'test',
-    loadChildren: () => import('./deal/item/test/test.module').then( m => m.TestPageModule)
-  } */
-
+  { path: '**', redirectTo: 'page-not-found' }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

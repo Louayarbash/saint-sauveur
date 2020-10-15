@@ -6,8 +6,10 @@ export class FirebaseListingItemModel extends ShellModel {
   createdById: string;
   createDate: number;
   subject: string;
-  description : string;
-  category:string;
+  description: string;
+  startDate : string;
+  startDateTS : number;
+  
   constructor() {
     super();
 

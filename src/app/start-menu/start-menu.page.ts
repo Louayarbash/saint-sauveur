@@ -19,6 +19,7 @@ export class StartMenuPage implements OnInit {
   enableDeal: boolean= false;
   enableLostFound: boolean= false;
   enablePublication: boolean= false;
+  enableEvent: boolean= false;
   enableRentSale: boolean= false;
   enableTicket: boolean= false;
   enableSale: boolean= false;
@@ -48,6 +49,7 @@ export class StartMenuPage implements OnInit {
           this.enableDeal= buildingInfo.enableDeal;
           this.enableLostFound= buildingInfo.enableLostFound
           this.enablePublication= buildingInfo.enablePublication;
+          this.enableEvent= buildingInfo.enableEvent;
           this.enableRentSale= buildingInfo.enableRentSale;
           this.enableSale= buildingInfo.enableSale;
           this.enableTicket= buildingInfo.enableTicket;

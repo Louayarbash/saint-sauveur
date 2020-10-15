@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="events/listing"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
+      <ion-button (click)="openFirebaseUpdateModal()">
+        {{ 'Edit' | translate }} 
+      </ion-button> 
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card class="itemCard">
+    <ion-card-content class="ion-no-padding">
+      <ion-item *ngIf="item.subject" >        
+        <ion-label>{{ 'Subject' | translate }}</ion-label>
+        <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
+         </ion-item>
+
+      <ion-item lines="none" *ngIf="item.startDateTS">    
+        <ion-label>{{ 'FromTime' | translate }}</ion-label>
+        {{item.startDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+      </ion-item>
+      <ion-item lines="none" *ngIf="item.endDateTS">    
+        <ion-label>{{ 'ToTime' | translate }}</ion-label>
+        {{item.endDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+      </ion-item>
+
+    <ion-list *ngIf="item.details">
+    <ion-item>
+      <ion-label>{{ 'Details' | translate }}</ion-label>
+    </ion-item>
+    <ion-item  lines="none">
+      <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>             
+       </ion-item>
+      </ion-list>   
+      <ion-list *ngIf="item.files?.length > 0">
+        <ion-item>
+          <ion-label>{{ 'Files' | translate }}</ion-label>
+        </ion-item>
+        <ion-item *ngFor="let file of item.files; let i = index;" lines="none">
+          <ion-label>{{ file.fileName }}</ion-label>
+          <ion-button color="main" (click)="openPDF(i)">
+            <ion-icon name="open-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+          </ion-list>    
+        </ion-card-content>
+        </ion-card>
+      <ng-container *ngIf="item.createDate">
+      <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+    </ng-container>
+</ion-content>

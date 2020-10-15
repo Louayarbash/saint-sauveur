@@ -13,7 +13,6 @@ export class FirebaseItemModel extends ShellModel {
   id:string;
   subject: string;
   details: string;
-  
   buildingId: string;
   createdById: string;
   createDate: firebase.firestore.FieldValue;  

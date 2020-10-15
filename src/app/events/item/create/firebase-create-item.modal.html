@@ -1,0 +1,102 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'NewEvent' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+        <ion-item>
+          <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
+          <ion-input type="text" formControlName="subject"></ion-input>
+        </ion-item>
+
+          <ion-item>
+            <ion-label>Date</ion-label>
+            <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'FromTime' | translate }}</ion-label>
+            <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues = "0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate"  formControlName="startDate"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-grid class="ion-no-padding">
+            <ion-row class="ion-align-items-center">
+              <ion-col size="4">
+            <ion-label>{{ 'Duration' | translate }}</ion-label>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-label>{{createItemForm.controls.duration.value}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <app-counter-input-minutes formControlName="duration" basic></app-counter-input-minutes>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          </ion-item>
+          <ion-item>
+              <ion-label>{{ 'ToTime' | translate }}</ion-label>
+              <ion-datetime display-format="DD, MMMM, YYYY HH:mm" formControlName="endDate" readonly></ion-datetime>
+          </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
+          <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
+        </ion-item>
+
+        <ion-item>          
+          <!-- <ion-button class="change-image-btn" color="secondary" (click)="selectFile()" [disabled]="files.length >= 3"> -->
+          <ion-button (click)="selectFile()" [disabled]="files.length >= 5" color="main">
+            <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      <!-- </ion-list>  -->
+    <!-- </section> -->
+    <section>
+    <ion-row *ngFor="let file of files; let i = index;">
+      <ion-col size="6">        
+        <!-- <ion-label position="floating">{{ 'ChangeName' | translate }}</ion-label> -->
+        <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
+      </ion-col>
+      <ion-col size="6" >
+        <ion-button class="change-image-btn" color="main" (click)="deleteFile(i)">          
+          <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
+      </ion-button> 
+      <ion-button  class="change-image-btn" color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+          <ion-icon name="pencil-outline"></ion-icon>
+          <!-- <ion-icon name="pencil-outline"></ion-icon> -->
+      </ion-button> 
+      <ion-button  class="change-image-btn" color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+          <ion-icon name="checkmark-outline"></ion-icon>
+      </ion-button> 
+      </ion-col>
+    </ion-row>
+</section>
+
+<ng-container *ngIf="createItemForm.errors?.nameChanging">
+  <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
+</ng-container> 
+<ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
+  <ion-icon name="warning-outline"></ion-icon>
+<div *ngIf="createItemForm.get('subject').errors.required">
+  {{ 'SubjectRequired' | translate }}
+</div>
+<!-- <div *ngIf="createItemForm.get('subject').errors.minlength">
+Name must be at least 4 characters long.
+</div> -->
+</ng-container> 
+</ion-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</form>

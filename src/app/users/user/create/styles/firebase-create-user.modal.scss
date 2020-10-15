@@ -1,5 +1,3 @@
-@import "../../../../../theme/mixins/inputs/checkbox-tag";
-@import "../../../../../theme/mixins/inputs/radio-tag";
 
 :host {
   --page-margin: var(--app-fair-margin);
@@ -49,69 +47,5 @@
       }
     }
   }
-
-  //check box
-	/* .checkbox-tags {
-		padding: calc(var(--page-margin) / 2) calc(var(--page-margin) - var(--page-tags-gutter));
-
-		@include checkbox-tag();
-
-    .checkbox-tag {
-      padding: 10px var(--page-tags-gutter);
-      margin: var(--page-tags-gutter) 0px;
-    }
-
-    // Add a deeper selector to override default colors
-    &.square-checkbox-tags {
-      background-color: var(--page-background);
-
-      .checkbox-tag {
-        --checkbox-tag-color: var(--ion-color-medium);
-        --checkbox-tag-background: var(--ion-color-lightest);
-        --checkbox-tag-active-color: var(--ion-color-lightest);
-        --checkbox-tag-active-background: var(--ion-color-secondary);
-      }
-    }
-
-    // Add a deeper selector to override default colors
-    &.rounded-checkbox-tags {
-  		background-color: var(--ion-color-lightest);
-
-      .checkbox-tag {
-        --checkbox-tag-color: var(--ion-color-lightest);
-        --checkbox-tag-background: var(--ion-color-light-shade);
-        --checkbox-tag-active-color: var(--ion-color-lightest);
-        --checkbox-tag-active-background: var(--ion-color-secondary);
-      }
-    }
-  } */
-  
-  //radio tag
-  .radio-tags {
-    padding: 0px calc(var(--page-margin) - var(--page-tags-gutter));
-		background-color: var(--page-background);
-    justify-content: space-between;
-
-		@include radio-tag();
-
-    // Add a deeper selector to override default colors
-    .radio-tag {
-      --radio-tag-color: var(--ion-color-main);
-      --radio-tag-background: var(--ion-color-lightest);
-      --radio-tag-active-color: var(--ion-color-lightest);
-      --radio-tag-active-background: var(--ion-color-main);
-
-      padding: 0px var(--page-tags-gutter);
-      margin: var(--page-tags-gutter) 0px;
-    }
-  }
-  
-  :host-context(.ios) {
-    .radio-tags,
-    .checkbox-tags {
-      margin-bottom: calc(var(--page-margin) * 2);
-    }
-  }
-
 
 }

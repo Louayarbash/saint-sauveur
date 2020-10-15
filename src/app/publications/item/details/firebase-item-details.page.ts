@@ -21,12 +21,7 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-firebase-item-details',
-  templateUrl: './firebase-item-details.page.html',
-  styleUrls: [
-    './styles/firebase-item-details.page.scss',
-    './styles/firebase-item-details.shell.scss'
-
-  ],
+  templateUrl: './firebase-item-details.page.html'
 })
 
 

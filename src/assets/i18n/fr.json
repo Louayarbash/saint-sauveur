@@ -1,4 +1,6 @@
 {
+  "UpComing": "A venir",
+  "Archive": "Archive",
   "LogOutHeader": "Confirmation de déconnexion",
   "LogOutMessage": "Êtes-vous sûr de vouloir vous déconnecter?",
   "StatusInactiveHeader": "Problème de statut",
@@ -103,6 +105,7 @@
   "Announcements": "Avis",
   "Regulations": "Règlements",
   "Events": "Événements",
+  "NewEvent": "Nouvel événement",
   "NewPublication": "Nouvelle publication",
   "Announcement": "Avis",
   "Regulation": "Règlement",
@@ -119,6 +122,7 @@
   "TotalNO": "Totale NON",
   "MainMenu": "Menu principale",
   "PublicationsMenu": "Publications",
+  "EventsMenu": "Événement",
   "LostFoundMenu": "Perdre / Trouver",
   "ParkingDealsMenu": "Accords des stationnements",
   "RentSaleMenu": "Loyer / Vendre",

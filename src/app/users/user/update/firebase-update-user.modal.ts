@@ -12,6 +12,7 @@ import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { Observable } from "rxjs";
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
+import { ParkingInfo } from '../../../type';
 
 @Component({
   selector: 'app-firebase-update-user',
@@ -22,12 +23,13 @@ import { FeatureService } from '../../../services/feature/feature.service';
 })
 export class FirebaseUpdateUserModal implements OnInit {
   @Input() user: UserModel;
+  @Input() parkingInfo: ParkingInfo[];
   // myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
   emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
   myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
   userData: UserModel = new UserModel();
-  levels = [];
+  buildingParkings = this.loginService.getBuildingParkings();
   selectedParking = [];
   selectedPhoto: string;
   showHideParking2: boolean;
@@ -90,72 +92,37 @@ export class FirebaseUpdateUserModal implements OnInit {
     {validators: this.parkingValidator} */
     );
 
-     /* this.featureService.getItem('building', this.loginService.buildingId).subscribe(item => {
-      this.levels = item.parking;
-      console.log("this.levels", this.levels);
-    }); */
-
-
-/*     if (level){
-      //let checked = index == 0 ? true : false; 
-       level = level.desc
-       return { name : level , type : 'radio' , label : this.featureService.translations.Level + ": " + level + ' #' + 
-       userParking.number , value : {level : level ,number : userParking.number} ,checked: false}
-
-this.radioObject = this.radioObject.filter(function (radioNotNull) {
-return radioNotNull != null;
- */
-
-     // this.firebaseService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
-      
-      this.levels = this.loginService.getBuildingParkings();
-      // console.log("parking",this.user.parkings);
-
-        let userParkings = [];
-        if (this.user.parkings) {
-          userParkings = this.user.parkings.map((userParking) => { 
-            
-            const levelCheck = this.levels.find( (level: { id: number; }) => level.id === userParking.id );
-            if(levelCheck){
-              return { id : userParking.id ,number : userParking.number , description : levelCheck.description };
-            }
-          });
-        }
-        userParkings = userParkings.filter(function (res) {
-          return res != null;
-        });
-      
      // console.log("userParkingIds",userParkings)
-     if(userParkings[0]){
+     if(this.parkingInfo[0]){
       // console.log(1);
 
       this.parking1selected = true;
 
-      this.updateUserForm.controls['parking1Level'].setValue(userParkings[0].id);
-      this.updateUserForm.controls['parking1Number'].setValue(userParkings[0].number);
+      this.updateUserForm.controls['parking1Level'].setValue(this.parkingInfo[0].id);
+      this.updateUserForm.controls['parking1Number'].setValue(this.parkingInfo[0].number);
       this.changeRef.detectChanges();
 
     }
     
-    if(userParkings[1]){
+    if(this.parkingInfo[1]){
       // console.log(2);
 
       this.parking2selected = true;
 
-      this.updateUserForm.controls['parking2Level'].setValue(userParkings[1].id);
-      this.updateUserForm.controls['parking2Number'].setValue(userParkings[1].number);
+      this.updateUserForm.controls['parking2Level'].setValue(this.parkingInfo[1].id);
+      this.updateUserForm.controls['parking2Number'].setValue(this.parkingInfo[1].number);
       this.changeRef.detectChanges();
     }
     else{
       this.showHideParking2 = false;
     }
-    if(userParkings[2]){
+    if(this.parkingInfo[2]){
       // console.log(3);
 
       this.parking3selected = true;
       
-      this.updateUserForm.controls['parking3Level'].setValue(userParkings[2].id);
-      this.updateUserForm.controls['parking3Number'].setValue(userParkings[2].number);
+      this.updateUserForm.controls['parking3Level'].setValue(this.parkingInfo[2].id);
+      this.updateUserForm.controls['parking3Number'].setValue(this.parkingInfo[2].number);
       this.changeRef.detectChanges();
     }
     else{

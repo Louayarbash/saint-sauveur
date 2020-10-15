@@ -14,16 +14,13 @@ import { counterRangeValidatorMinutes } from '../../../components/counter-input-
   selector: 'app-firebase-update-item',
   templateUrl: './firebase-update-item.modal.html'
 })
-
 export class FirebaseUpdateItemModal implements OnInit {
-  // "user" is passed in firebase-details.page
   @Input() item: FirebaseItemModel;
 
   updateItemForm: FormGroup;
   files : Files[] = [];
   newName : string = "";
   nameChanging : boolean[] = [];
-  voting: boolean;
   today : any;
   minDate : any;
   maxDate : any;
@@ -39,8 +36,11 @@ export class FirebaseUpdateItemModal implements OnInit {
     public router: Router,
     private featureService : FeatureService,
     private alertController : AlertController,
-    private chooser : Chooser
-  ) { }
+    private chooser : Chooser,
+
+  ) { 
+
+  }
 
   ngOnInit() {
     this.initValues();
@@ -48,22 +48,13 @@ export class FirebaseUpdateItemModal implements OnInit {
     this.updateItemForm = new FormGroup({
       subject: new FormControl(this.item.subject, Validators.required),
       details: new FormControl(this.item.details),
-      voting: new FormControl(this.item.voting),
-      votingResult: new FormControl(this.item.votingResult),
-      votingMessage: new FormControl(this.item.votingMessage),
-      date: new FormControl(this.item.date),
-      startDate : new FormControl(this.item.startDate),
-      duration : new FormControl(this.duration),
-      endDate : new FormControl(this.item.endDate),
+      date: new FormControl(this.item.date, Validators.required),
+      startDate : new FormControl(this.item.startDate, Validators.required),
+      duration : new FormControl(this.duration, counterRangeValidatorMinutes(15, 360)),
+      endDate : new FormControl(this.item.endDate, Validators.required),
     },
     {validators: this.changingNameValidator}
     );
-    if(this.item.category == 'event'){
-      this.updateItemForm.controls['date'].setValidators(Validators.required);
-      this.updateItemForm.controls['startDate'].setValidators(Validators.required);
-      this.updateItemForm.controls['duration'].setValidators(counterRangeValidatorMinutes(15, 360));
-      this.updateItemForm.controls['endDate'].setValidators(Validators.required);
-    }
     this.onValueChanges();
 
     if(this.item.files){
@@ -83,8 +74,10 @@ export class FirebaseUpdateItemModal implements OnInit {
   } 
   }
   changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-
+    //const name = control.get('name');
+    
     return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
+
   };
 
   private onValueChanges(): void {
@@ -139,7 +132,7 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   initValues(){
-  this.voting = this.item.voting;
+
   this.today = dayjs().add(30,"minute").toISOString(); 
   //console.log("resetDate", dayjs().toISOString());
   this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
@@ -165,11 +158,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     let newEndDate  = dayjs(newEndDateTS).toISOString();
     this.updateItemForm.get('endDate').setValue(newEndDate);
   }
-  //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
-  votingChanged(ev:any) {
-    // console.log(ev);
-    this.voting = ev.detail.checked;
-  }
+
   
   dismissModal() {
    this.modalController.dismiss();
@@ -251,23 +240,17 @@ export class FirebaseUpdateItemModal implements OnInit {
   }
 
   updateItem() {
-    if(this.item.category == 'event'){
+
       this.item.date = this.updateItemForm.get('date').value;
       this.item.dateTS = dayjs(this.updateItemForm.get('date').value).unix();
       this.item.startDate = this.updateItemForm.get('startDate').value;
       this.item.startDateTS = dayjs(this.updateItemForm.get('startDate').value).unix();
       this.item.endDate = this.updateItemForm.get('endDate').value;
       this.item.endDateTS = dayjs(this.updateItemForm.get('endDate').value).unix();
-     }
-     if(this.item.category == 'announcement'){
-      this.item.voting = this.updateItemForm.value.voting;
-      this.item.votingMessage = this.updateItemForm.value.votingMessage;
-      this.item.votingResult = this.updateItemForm.value.votingResult;
-     }
+
     this.item.subject = this.updateItemForm.value.subject;
     this.item.details = this.updateItemForm.value.details;
-    this.item.voting = this.updateItemForm.value.voting;
-    this.item.votingResult = this.updateItemForm.value.votingResult;
+
     const {...itemData} = this.item;
 
     this.firebaseService.updateItem(itemData,this.files)

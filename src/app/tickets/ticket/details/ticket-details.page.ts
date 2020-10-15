@@ -54,10 +54,7 @@ export class TicketDetailsPage implements OnInit {
         (state) => {
        
           this.item = state;
-       
-
           if (this.item.createDate){
-
           this.userIsCreator = this.item.createdBy == this.loginService.getLoginID() ? true : false;
           this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
           this.canModify = this.userIsCreator || this.userIsAdmin; 
@@ -99,11 +96,6 @@ export class TicketDetailsPage implements OnInit {
         }
         }
       );
-/*       relatedUsersDataStore.state.subscribe(
-        (state) => {
-          this.relatedUsers = state;
-        }
-      ); */
     });
   }
 

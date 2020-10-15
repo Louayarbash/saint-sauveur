@@ -1,28 +1,39 @@
-import { Component, OnInit/*,ChangeDetectorRef*/ } from '@angular/core';
+import { Component, Input, OnInit/*,ChangeDetectorRef*/ } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl,ValidatorFn,ValidationErrors } from '@angular/forms';
+// import * as dayjs from 'dayjs';
+// import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
+
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
+//import { AngularFirestore } from '@angular/fire/firestore';
+// import { Date } from 'core-js';
+
+//import { File } from "@ionic-native/file/ngx";
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { Files } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
+//import { FileOpener } from '@ionic-native/file-opener/ngx';
+//import { FilePath } from '@ionic-native/file-path/ngx';
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
+import { ReplaySubject } from 'rxjs';
+
 
 @Component({
   selector: 'app-firebase-create-item',
   templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
+  @Input() segmentValue: string;
+  @Input() segmentValueSubject: ReplaySubject<string>;
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
   files: Files[] = [];
   newName: string = "";
   nameChanging: boolean[] = [];
-  voting: boolean;
-  categorySelected: string = 'announcement';
   today : any;
   minDate : any;
   maxDate : any;
@@ -31,14 +42,21 @@ export class FirebaseCreateItemModal implements OnInit {
   minStartDate : any;
   duration : any;
   previousCounterValue : any;//= 0;
+    
 
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
+    //private changeRef: ChangeDetectorRef,
     private chooser: Chooser,
     private loginService : LoginService,
     private featureService : FeatureService
-  ) { }
+    //private fileOpener : FileOpener,
+    //private filePath : FilePath,
+    //private file : File
+  ) { 
+    
+  }
 
   ngOnInit() {
     this.initValues();
@@ -48,23 +66,23 @@ export class FirebaseCreateItemModal implements OnInit {
         // ,Validators.minLength(4)
       ]),
       details : new FormControl(''),
-      category: new FormControl('announcement'),
-      voting: new FormControl(false),
-      votingResult: new FormControl(false),
-      votingMessage: new FormControl(''),
-      date: new FormControl(this.today),
-      startDate : new FormControl(this.today),
-      duration : new FormControl(0),
-      endDate : new FormControl(this.today),
+      date: new FormControl(this.today, Validators.required),
+      startDate : new FormControl(this.today, Validators.required),
+      duration : new FormControl(0, counterRangeValidatorMinutes(15, 360)),
+      endDate : new FormControl(this.today, Validators.required),
     },
     {validators: this.changingNameValidator}
     );
     this.onValueChanges();
   }
 
+  
+
   changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     //const name = control.get('name');
+    
     return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
+
   }
 
   private onValueChanges(): void {
@@ -138,31 +156,6 @@ export class FirebaseCreateItemModal implements OnInit {
     this.createItemForm.get('endDate').setValue(newEndDate);
   }
   //get skillsFormArray() { return <FormArray>this.createUserForm.get('skills'); }
-  votingChanged(ev:any) {
-    // console.log(ev);
-    this.voting = ev.detail.checked;
-  }
-
-  categoryChanged(ev:any) {
-    console.log('categoryChanged', ev.detail.value);
-    this.categorySelected = ev.detail.value;
-    if(this.categorySelected == 'event'){
-      this.createItemForm.controls['date'].setValidators(Validators.required);
-      this.createItemForm.controls['startDate'].setValidators(Validators.required);
-      this.createItemForm.controls['duration'].setValidators(counterRangeValidatorMinutes(15, 360));
-      this.createItemForm.controls['endDate'].setValidators(Validators.required);
-    }
-    else {
-      this.createItemForm.controls['date'].setValidators(null);
-      this.createItemForm.controls['startDate'].setValidators(null);
-      this.createItemForm.controls['duration'].setValidators(null);
-      this.createItemForm.controls['endDate'].setValidators(null);
-    }
-    this.createItemForm.controls['date'].updateValueAndValidity();
-    this.createItemForm.controls['startDate'].updateValueAndValidity();
-    this.createItemForm.controls['duration'].updateValueAndValidity();
-    this.createItemForm.controls['endDate'].updateValueAndValidity();
-  }
 
   selectFile(){
    this.chooser.getFile("application/pdf")
@@ -232,28 +225,25 @@ export class FirebaseCreateItemModal implements OnInit {
 }
 
    createItem() {
-     if(this.categorySelected == 'event'){
+
       this.itemData.date = this.createItemForm.get('date').value;
       this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
       this.itemData.startDate = this.createItemForm.get('startDate').value;
       this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
       this.itemData.endDate = this.createItemForm.get('endDate').value;
       this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
-     }
-     if(this.categorySelected == 'announcement'){
-      this.itemData.voting = this.createItemForm.value.voting;
-      this.itemData.votingMessage = this.createItemForm.value.votingMessage;
-      this.itemData.votingResult = this.createItemForm.value.votingResult;
-     }
+
+
     this.itemData.subject = this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
     this.itemData.buildingId = this.loginService.getBuildingId();
-    this.itemData.category = this.createItemForm.value.category;
+
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdById = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     this.firebaseService.createItem(this.itemData,this.files)
     .then(() => {
+      this.segmentValueSubject.next('upcoming');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
       loading.then(res=>res.dismiss());  

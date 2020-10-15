@@ -10,7 +10,7 @@ import { ComponentsModule } from '../components/components.module';
 const firebaseRoutes: Routes = [
   {
     path: 'listing',
-    loadChildren: () => import('./listing/firebase-listing.module').then(m => m.FirebaseListingPageModule)
+    loadChildren: () => import('./listing/firebase-listing.module').then(m => m.EventsListingPageModule)
   },
   {
     path: 'details/:id',

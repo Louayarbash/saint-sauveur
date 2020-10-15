@@ -16,6 +16,7 @@ export class BuildingModel extends ShellModel {
   enableLostFound: boolean= true;
   enableTicket: boolean= true;
   enablePublication: boolean= true;
+  enableEvent: boolean= true;
   enableDeal: boolean= true;
   status: string= 'active';
   createdBy: string;

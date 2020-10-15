@@ -1,4 +1,6 @@
 {
+  "UpComing": "UpComing",
+  "Archive": "Archive",
   "LogOutHeader": "Logging out conformation",
   "LogOutMessage": "Are you sure you want to logout?",
   "StatusInactiveHeader": "Status problem",
@@ -103,6 +105,7 @@
   "Announcements": "Announcements",
   "Regulations": "Regulations",
   "Events": "Events",
+  "NewEvent": "New event",
   "NewPublication": "New publication",
   "Announcement": "Announcement",
   "Regulation": "Regulation",
@@ -119,6 +122,7 @@
   "TotalNO": "Total NO",
   "MainMenu": "Main Menu",
   "PublicationsMenu": "Publications",
+  "EventsMenu": "Events",
   "LostFoundMenu": "Lost / Found",
   "ParkingDealsMenu": "Parking deals",
   "RentSaleMenu": "Rent / Sale",

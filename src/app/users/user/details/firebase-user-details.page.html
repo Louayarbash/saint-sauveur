@@ -67,7 +67,7 @@
               <ion-label>{{ 'Status' | translate }}</ion-label>
               <ion-text>{{ status }}</ion-text>
             </ion-item>
-            <ion-item *ngFor="let parking of userParking; let index = index;">    
+            <ion-item *ngFor="let parking of parkingInfo; let index = index;">    
               <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
               {{ parking.description }}/#{{ parking.number }}
             </ion-item>

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tickets/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'TicketDetails' | translate }}</ion-title>
+    <ion-title class="ion-no-padding">{{ 'TicketDetails' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="canModify">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content>
 <!--   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">

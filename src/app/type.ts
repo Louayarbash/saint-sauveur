@@ -30,6 +30,13 @@ export interface Parkings{
     active: boolean; 
 }
 
+export interface ParkingInfo {
+    id: string, 
+    number: string,
+    description: string,
+    active: boolean
+}
+
 export interface Services{     
     id: string;
     description: string;
