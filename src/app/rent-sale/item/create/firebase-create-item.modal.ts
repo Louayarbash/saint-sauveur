@@ -79,8 +79,8 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    
-    this.featureService.createItemWithImages(this.itemData, this.postImages, 'rent-sale')
+    const {isShell, ...itemData} = this.itemData;
+    this.featureService.createItemWithImages(itemData, this.postImages, 'rent-sale')
     .then(() => {
       this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);

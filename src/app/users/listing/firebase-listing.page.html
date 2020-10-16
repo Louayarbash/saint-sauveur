@@ -4,26 +4,20 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Users' | translate }}<ion-text color="medium" *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
-<!--     <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseCreateModal()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
   </ion-toolbar>
-  <ion-toolbar class="filters-toolbar">
-    <ion-row class="searchbar-row" align-items-center>
+  <ion-toolbar class="filters-toolbar11">
+    <ion-row class="searchbar-row11">
       <ion-col>
         <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarUsers' | translate }}"></ion-searchbar>
       </ion-col>
     </ion-row>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
       <ion-spinner></ion-spinner>
-<!--       <p>
+<!--   {{ 'Users' | translate }}    <p>
         Fetching data...
       </p> -->
     </div>

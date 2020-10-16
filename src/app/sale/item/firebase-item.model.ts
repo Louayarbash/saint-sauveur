@@ -28,11 +28,10 @@ export class FirebaseItemModel extends ShellModel {
   object : string;
   description : string;
   price : string;
-  //coverPhoto:string;
   createdBy : string;
   createDate : firebase.firestore.FieldValue;
   images : Array<Images> = [];
-  // status : string;
+  status : string;
   buildingId: string;
 
   constructor() {

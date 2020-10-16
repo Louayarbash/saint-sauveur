@@ -4,6 +4,15 @@ ion-title {
   font-weight: 400;
   letter-spacing: 0.4px;
 }
+
+ion-searchbar.items-searchbar {
+  padding: 0px;
+  // override Ionic fixed height
+  height: 100%;
+  // Learn more about CSS contain property here: https://termvader.github.io/css-contain/
+  contain: content;
+}
+
 .sliderModal .modal-wrapper{
   --background: transparent !important;
 } 

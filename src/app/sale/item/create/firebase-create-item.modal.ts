@@ -1,49 +1,41 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
-// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-//import { Crop } from '@ionic-native/crop/ngx';
-// import { File } from "@ionic-native/file/ngx";
-// import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-firebase-create-item',
   templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
+  @Input() segmentValueSubject: ReplaySubject<string>;
   croppedImagepath = "";
   postImages : Images[] = [];
   createItemForm: FormGroup;
-  itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemData: FirebaseItemModel= new FirebaseItemModel();
   selectedPhoto: string;
   uploadedImage: any;
 
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
-    // private camera: Camera,    
-    //private alertController: AlertController,
-    //private _crop: Crop,
-    // private file: File,
-    // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
-    private featureService : FeatureService,
-    // private actionSheetController : ActionSheetController
+    private featureService : FeatureService
   ) { }
 
   ngOnInit() {
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
-      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')])// ,
-      // status : new FormControl('active')
+      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
+      status : new FormControl('active')
     });
   }
 
@@ -52,17 +44,19 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
-    // console.log("postImages",this.postImages);
+    
     this.itemData.object = this.createItemForm.value.object;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
-    // this.itemData.status = this.createItemForm.value.status;
+    this.itemData.status = this.createItemForm.value.status;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    this.featureService.createItemWithImages(this.itemData, this.postImages, 'posts')
+    const {isShell, ...itemData} = this.itemData;
+    this.featureService.createItemWithImages(itemData, this.postImages, 'posts')
     .then(() => {
+      this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       loading.then(res=>{res.dismiss();}) 
       this.dismissModal();  // not needed inside catch to stay on same page while errors

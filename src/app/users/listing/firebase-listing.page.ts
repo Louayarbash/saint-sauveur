@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,13 +13,9 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 
 @Component({
   selector: 'app-firebase-listing',
-  templateUrl: './firebase-listing.page.html',
-  styleUrls: [
-    './styles/firebase-listing.page.scss'  
-  ],
+  templateUrl: './firebase-listing.page.html'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
-  rangeForm: FormGroup;
   searchQuery: string;
   // showAgeFilter = false;
 

@@ -176,8 +176,9 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
     console.log(this.selectedParking);
+    const {isShell, ...userData} = this.userData;
 
- this.firebaseService.createUser(this.userData)
+ this.firebaseService.createUser(userData)
  .then(() => {
   this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
   this.dismissModal();

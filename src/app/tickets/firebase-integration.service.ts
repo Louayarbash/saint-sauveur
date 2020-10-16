@@ -120,7 +120,7 @@ export class FirebaseService {
   }
 
  
-  public createItem(itemData: TicketModel): Promise<DocumentReference>  {
+  public createItem(itemData: any): Promise<DocumentReference>  {
     return this.afs.collection(this.tableName).add({...itemData});
   }
 

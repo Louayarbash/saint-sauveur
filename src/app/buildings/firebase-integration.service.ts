@@ -67,7 +67,7 @@ export class FirebaseService {
   }
 
  
-  public createItem(itemData: BuildingModel): Promise<DocumentReference>  {
+  public createItem(itemData: any): Promise<DocumentReference>  {
     return this.afs.collection(this.tableName).add({...itemData});
   }
 

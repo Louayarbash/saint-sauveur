@@ -9,7 +9,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
-
+import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
 //import { Toast } from '@ionic-native/toast/ngx';
 //import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
@@ -18,22 +18,19 @@ import { DataStore, ShellModel } from '../../shell/data-store';
 
 @Component({
   selector: 'app-firebase-listing',
-  templateUrl: './firebase-listing.page.html',
-  styleUrls: [
-    './styles/firebase-listing.page.scss'
-  ],
+  templateUrl: './firebase-listing.page.html'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
-  rangeForm: FormGroup;
   searchQuery: string;
-  //showAgeFilter = false;
-  CoverPic:string;
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
-
+  segmentValue = 'sale';
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
-
+  segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
+  segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
+  saleList: Array<FirebaseListingItemModel>;
+  myList: Array<FirebaseListingItemModel>;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
@@ -46,7 +43,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private loginService: LoginService
     //private document: DocumentViewer,
     //private file:File,
     //private fileOpener:FileOpener
@@ -59,7 +57,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
     this.searchQuery = '';
 
     // Route data is a cold subscription, no need to unsubscribe?
@@ -135,6 +133,17 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     );
               } 
               });
+     
+              let saleList= this.items;
+              let myList= this.items;
+
+
+              this.saleList = saleList.filter(item => item.status === 'active');
+              this.myList = myList.filter(item => item.createdBy === this.loginService.getLoginID());
+            }
+            else {
+              this.saleList = this.items;
+              this.myList = this.items;
             }
           },
           (error) => console.log(error),

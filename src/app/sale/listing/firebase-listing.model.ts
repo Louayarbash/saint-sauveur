@@ -12,6 +12,7 @@ export class FirebaseListingItemModel extends ShellModel {
   description : string;
   coverPhotoData :string;
   images : Array<Images> = [];
+  status: string;
   constructor() {
     super();
   }

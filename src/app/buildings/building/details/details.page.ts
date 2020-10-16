@@ -45,7 +45,7 @@ export class BuildingDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    console.log("louay",this.item);
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];

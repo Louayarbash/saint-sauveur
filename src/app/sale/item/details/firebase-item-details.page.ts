@@ -36,9 +36,9 @@ export class FirebaseItemDetailsPage implements OnInit {
   postImages : Images[] = [];
   lan: string;
 
-  @HostBinding('class.is-shell') get isShell() {
-    return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
-  }
+   @HostBinding('class.is-shell') get isShell() {
+    return ((this.item && this.item.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
+  } 
 
   constructor(
     public firebaseService: FirebaseService,

@@ -67,7 +67,8 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    this.featureService.createItemWithImages(this.itemData, this.postImages, 'lost-found')
+    const {isShell, ...itemData} = this.itemData;
+    this.featureService.createItemWithImages(itemData, this.postImages, 'lost-found')
     .then(() => {
       this.segmentValueSubject.next(this.createItemForm.value.type);
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);

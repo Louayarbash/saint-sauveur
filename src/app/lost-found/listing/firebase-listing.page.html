@@ -4,12 +4,13 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'LostFound' | translate }}</ion-title>
+  </ion-toolbar>
 <!--     <ion-buttons slot="end" >
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons> -->
-  </ion-toolbar>
+  <ion-toolbar>
 <!--   <ion-toolbar class="filters-toolbar">
     <ion-row class="searchbar-row" align-items-center>
       <ion-col>
@@ -31,6 +32,7 @@
       <ion-label>{{ 'MyList' | translate }}</ion-label>
     </ion-segment-button>
 </ion-segment>
+</ion-toolbar>
 </ion-header>
 <ion-content>
   <section [hidden]="segmentValue !== 'lost'">

@@ -10,6 +10,7 @@
       </ion-button>
     </ion-buttons> -->
   </ion-toolbar>
+  <ion-toolbar>
   <ion-segment value="announcements" (ionChange)="segmentChanged($event)" color="main">
     <ion-segment-button value="announcements">
       <ion-label>{{ 'Announcements' | translate }}</ion-label>
@@ -18,6 +19,7 @@
       <ion-label>{{ 'Regulations' | translate }}</ion-label>
     </ion-segment-button>
 </ion-segment>
+</ion-toolbar>
 </ion-header>
 <ion-content>
   <ng-container *ngIf="items.isShell">

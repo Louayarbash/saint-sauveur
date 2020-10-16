@@ -3,20 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'Ticket' | translate }}</ion-title>
-<!--     <ion-buttons slot="end">
-      <ion-button (click)="openFirebaseCreateModal()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
+    <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
   </ion-toolbar>
-  <ion-toolbar class="filters-toolbar">
-    <ion-row class="searchbar-row" align-items-center>
-      <ion-col>
-        <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
+<ion-toolbar>
   <ion-segment [(ngModel)]="segmentValue" color="main" *ngIf="userIsAdmin">
     <ion-segment-button value="active">
       <ion-label>{{ 'ActiveTickets' | translate }}</ion-label>
@@ -25,6 +14,7 @@
       <ion-label>{{ 'ArchivedTickets' | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
+</ion-toolbar>
 </ion-header>
 <ion-content>
 <ng-container *ngIf="items.isShell">

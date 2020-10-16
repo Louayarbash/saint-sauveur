@@ -241,8 +241,9 @@ export class CreateTicketModal implements OnInit {
     this.itemData.typeId = this.createItemForm.value.typeId;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
+    const {isShell, ...itemData} = this.itemData;
     // const loading = this.featureService.presentLoadingWithOptions(5000);
-    this.firebaseService.createItem(this.itemData)
+    this.firebaseService.createItem(itemData)
     .then(() => {
       this.segmentValueSubject.next('active');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);

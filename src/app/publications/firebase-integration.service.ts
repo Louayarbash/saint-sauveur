@@ -76,7 +76,7 @@ export class FirebaseService {
     return this.combinedItemDataStore;
     }
 
-    public createItem(itemData : FirebaseItemModel,files : Files[])/* : Promise<DocumentReference>*/ : any{    
+    public createItem(itemData : any,files : Files[])/* : Promise<DocumentReference>*/ : any{    
         return this.afs.collection(this.tableName).add({ ...itemData }).then(async (res)=>{
         console.log("publication id :", res.id);
         let filesVar: any[] = [];

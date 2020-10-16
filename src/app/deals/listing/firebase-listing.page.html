@@ -10,6 +10,7 @@
       </ion-button>
     </ion-buttons> -->
   </ion-toolbar>
+<ion-toolbar>
     <ion-segment [(ngModel)]="segmentValue" color="main">
         <ion-segment-button value="newRequests">
           <ion-label>{{ 'NewRequests' | translate }}</ion-label>
@@ -21,6 +22,7 @@
           <ion-label>{{ 'MyRequests' | translate }}</ion-label>
         </ion-segment-button>
     </ion-segment>
+  </ion-toolbar>
   </ion-header>
   <ion-content class="deals-requests-listing-content">
     <ng-container *ngIf="items.isShell">

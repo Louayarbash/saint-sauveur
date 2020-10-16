@@ -7,11 +7,20 @@
     <ion-buttons slot="end" *ngIf="userIsCreator">
         <ion-button (click)="openFirebaseUpdateModal()">
           {{ 'Edit' | translate }}
-      </ion-button> 
+        </ion-button> 
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
   <ion-card class="itemCard">  
         <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
   <ion-row class="slider-row">
@@ -90,6 +99,7 @@
           </ion-item>         
         </ion-list>  
       </ion-card> -->
+    </ng-container>
        <ion-fab vertical="top" horizontal="end" slot="fixed" >
         <ion-fab-button color="main" size="small"> 
           <ion-icon name="person-circle-outline"></ion-icon>

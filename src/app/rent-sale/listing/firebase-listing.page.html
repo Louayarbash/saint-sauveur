@@ -4,11 +4,24 @@
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'RentSale' | translate }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
 <!--     <ion-buttons slot="end">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons> -->
+    <ion-segment [(ngModel)]="segmentValue" color="main">
+      <ion-segment-button value="rent">
+        <ion-label>{{ 'ForRent' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sale">
+        <ion-label>{{ 'ForSale' | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="myList" *ngIf="myList?.length > 0">
+        <ion-label>{{ 'MyList' | translate }}</ion-label>
+      </ion-segment-button>
+  </ion-segment>
   </ion-toolbar>
 <!--   <ion-toolbar class="filters-toolbar">
     <ion-row class="searchbar-row" align-items-center>
@@ -17,17 +30,7 @@
       </ion-col>
     </ion-row>
   </ion-toolbar> -->
-  <ion-segment [(ngModel)]="segmentValue" color="main">
-    <ion-segment-button value="rent">
-      <ion-label>{{ 'ForRent' | translate }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="sale">
-      <ion-label>{{ 'ForSale' | translate }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="myList" *ngIf="myList?.length > 0">
-      <ion-label>{{ 'MyList' | translate }}</ion-label>
-    </ion-segment-button>
-</ion-segment>
+
 </ion-header>
 <ion-content>
   <ng-container *ngIf="items.isShell">

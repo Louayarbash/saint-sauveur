@@ -252,7 +252,8 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdById = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
-    this.firebaseService.createItem(this.itemData,this.files)
+    const {isShell, ...itemData} = this.itemData;
+    this.firebaseService.createItem(itemData, this.files)
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();

@@ -14,7 +14,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="user-content">
+<ion-content>
+  
   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">
@@ -32,7 +33,7 @@
           <!-- <ion-list> -->
             <ion-item *ngIf="user.email">
               <ion-label>{{ 'Email' | translate }}</ion-label>
-              <ion-text>{{ user?.email }}</ion-text>                  
+              <ion-text>{{ user.email }}</ion-text>                  
             </ion-item>
             <ion-item *ngIf="user.birthdate">    
               <ion-label>{{ 'DateOfBirth' | translate }}</ion-label>
@@ -41,15 +42,15 @@
             </ion-item>
             <ion-item *ngIf="user.phone">
               <ion-label>{{ 'Phone' | translate }}</ion-label>
-              <ion-text>{{ user?.phone }}</ion-text>
+              <ion-text>{{ user.phone }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.apartment">
               <ion-label>{{ 'Apartment' | translate }}</ion-label>
-              <ion-text>{{ user?.apartment }}</ion-text>
+              <ion-text>{{ user.apartment }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.code">    
               <ion-label>{{ 'DoorCode' | translate }}</ion-label>
-              <ion-text>{{ user?.code }}</ion-text>
+              <ion-text>{{ user.code }}</ion-text>
             </ion-item>
             <ion-item *ngIf="user.type">    
               <ion-label>{{ 'Type' | translate }}</ion-label>
@@ -81,4 +82,7 @@
             </ion-item>
           <!-- </ion-list> -->
         </section>
+<!--       <ng-container *ngIf="user.createDate">
+        <ion-text color="dark" class="ion-padding-left createDate">{{user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+      </ng-container> -->
 </ion-content>

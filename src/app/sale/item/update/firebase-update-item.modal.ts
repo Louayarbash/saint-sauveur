@@ -47,7 +47,7 @@ export class FirebaseUpdateItemModal implements OnInit {
       object: new FormControl(this.item.object, Validators.required),
       description: new FormControl(this.item.description),
       price: new FormControl(this.item.price, Validators.required),
-      // status: new FormControl(this.item.status, Validators.required)
+      status: new FormControl(this.item.status, Validators.required)
     }); 
   }
 
@@ -123,7 +123,7 @@ updateItem() {
   this.item.object = this.updateItemForm.value.object;
   this.item.description = this.updateItemForm.value.description;
   this.item.price = this.updateItemForm.value.price;
-  // this.item.status =  this.updateItemForm.value.status;
+  this.item.status =  this.updateItemForm.value.status;
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   this.featureService.updateItemWithImages(this.item, this.postImages, 'posts')

@@ -16,10 +16,7 @@ import { FeatureService } from '../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-listing',
-  templateUrl: './firebase-listing.page.html',
-  styleUrls: [
-    './styles/firebase-listing.page.scss'
-  ],
+  templateUrl: './firebase-listing.page.html'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
 

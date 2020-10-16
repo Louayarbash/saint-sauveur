@@ -12,6 +12,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
 <!--   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">
@@ -104,6 +113,7 @@
               <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>
             </ion-card-content>
           </ion-card>
+        </ng-container>
           <ion-fab vertical="bottom" horizontal="end" slot="fixed">
             <ion-fab-button color="main">
               <ion-icon name="chatbubbles-outline" (click)="openChatModal()"></ion-icon>
