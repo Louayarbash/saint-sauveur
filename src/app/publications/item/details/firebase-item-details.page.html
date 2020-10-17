@@ -27,16 +27,6 @@
         <ion-label>{{ 'Subject' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
          </ion-item>
-         <ng-container *ngIf="item.category == 'event'">
-      <ion-item lines="none" *ngIf="item.startDateTS">    
-        <ion-label>{{ 'FromTime' | translate }}</ion-label>
-        {{item.startDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
-      </ion-item>
-      <ion-item lines="none" *ngIf="item.endDateTS">    
-        <ion-label>{{ 'ToTime' | translate }}</ion-label>
-        {{item.endDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
-      </ion-item>
-    </ng-container>
     <ion-list *ngIf="item.details">
     <ion-item>
       <ion-label>{{ 'Details' | translate }}</ion-label>

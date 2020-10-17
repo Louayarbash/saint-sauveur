@@ -244,7 +244,7 @@ public createItemWithImages(itemData: any,itemImages: Images[], tableName: strin
     if( itemImages.length > 0 ){
     for (var i = 0; i < itemImages.length; i++) {
       try {
-        let uploaded = await this.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/posts/');
+        let uploaded = await this.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/' + tableName + '/');
 
         if( uploaded.state === "success"){
           images.push({ isCover: itemImages[i].isCover, storagePath: uploaded.metadata.fullPath });

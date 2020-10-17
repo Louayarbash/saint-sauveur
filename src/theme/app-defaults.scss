@@ -13,6 +13,10 @@ ion-searchbar.items-searchbar {
   contain: content;
 }
 
+.searchbar-input.sc-ion-searchbar-md {
+  padding-left: 10px;
+}
+
 .sliderModal .modal-wrapper{
   --background: transparent !important;
 } 
@@ -88,6 +92,7 @@ ion-content {
 .DivLoading{
   margin: 20px 40px; 
   text-align: center;
+  // color: var(--ion-color-main);
 }
 
 .radio-tags {

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-searchbar class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
+    <ion-searchbar search-icon="undefined" animated class="items-searchbar" [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
   </ion-toolbar>
 <ion-toolbar>
   <ion-segment [(ngModel)]="segmentValue" color="main" *ngIf="userIsAdmin">

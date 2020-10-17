@@ -3,7 +3,7 @@ import { ModalController, AlertController, IonRouterOutlet } from '@ionic/angula
 import { ActivatedRoute } from '@angular/router';
 
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel, FirebaseCombinedItemModel, VotingPublication } from '../firebase-item.model';
+import { FirebaseItemModel, VotingPublication } from '../firebase-item.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 
@@ -26,7 +26,7 @@ import { map } from 'rxjs/operators';
 
 
 export class FirebaseItemDetailsPage implements OnInit {
-  item: FirebaseCombinedItemModel;
+  item: FirebaseItemModel;
   publicationVoting: Observable<Array<VotingPublication>>;
   countVotingObservable: Observable<{countVotingYes: number, countVotingNo: number}>;
   countVotingYes: number;
@@ -55,7 +55,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
-      const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;
+      const combinedDataStore: DataStore<FirebaseItemModel> = resolvedDataStores.item;
       combinedDataStore.state.subscribe(
          async (state) => {
           this.item = state;
@@ -81,9 +81,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     });
   }
   async openFirebaseUpdateModal() {
-    delete this.item.photos;
-    delete this.item.isShell;
-
     const modal = await this.modalController.create({
       component: FirebaseUpdateItemModal,
       componentProps: {

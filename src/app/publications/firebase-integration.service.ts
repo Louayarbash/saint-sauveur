@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataStore } from '../shell/data-store';
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
-import { FirebaseItemModel, FirebaseCombinedItemModel } from './item/firebase-item.model';
+import { FirebaseItemModel } from './item/firebase-item.model';
 import { AngularFireStorage } from "@angular/fire/storage";
 import { Files } from '../type'
 import { LoginService } from "../services/login/login.service"
@@ -17,7 +17,7 @@ export class FirebaseService {
   // Listing Page
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   // User Details Page
-  private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
+  private combinedItemDataStore: DataStore<FirebaseItemModel>;
   // private buildingId= this.loginService.getBuildingId();
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<ItemImageModel>>;
@@ -31,7 +31,6 @@ export class FirebaseService {
     //public loginService : LoginService, 
     //private alertCtrl : AlertController
     )  {
-      
     }
 
   /*
@@ -62,12 +61,12 @@ export class FirebaseService {
     Firebase User Details Page
   */
   // Concat the userData with the details of the userSkills (from the skills collection)
-  public getCombinedItemDataSource(itemId: string): Observable<FirebaseCombinedItemModel> {
+  public getCombinedItemDataSource(itemId: string): Observable<FirebaseItemModel> {
     return this.getItem(itemId);
   }
-  public getCombinedItemStore(dataSource: Observable<FirebaseCombinedItemModel>): DataStore<FirebaseCombinedItemModel> {
+  public getCombinedItemStore(dataSource: Observable<FirebaseItemModel>): DataStore<FirebaseItemModel> {
     // Initialize the model specifying that it is a shell model
-    const shellModel: FirebaseCombinedItemModel = new FirebaseCombinedItemModel();
+    const shellModel: FirebaseItemModel = new FirebaseItemModel();
 
     this.combinedItemDataStore = new DataStore(shellModel);
     // Trigger the loading mechanism (with shell) in the dataStore
@@ -136,14 +135,14 @@ export class FirebaseService {
     }
       return this.afs.collection(this.tableName).doc(itemData.id).update({ ...itemData });
   }
-  private getItem(itemId: string): Observable<FirebaseCombinedItemModel> {
-    return this.afs.doc<FirebaseCombinedItemModel>('publication/' + itemId)
+  private getItem(itemId: string): Observable<FirebaseItemModel> {
+    return this.afs.doc<FirebaseItemModel>('publication/' + itemId)
     .snapshotChanges()
     .pipe(
       map(a => {
         const itemData = a.payload.data();
         const id = a.payload.id;
-        return { id, ...itemData } as FirebaseCombinedItemModel;
+        return { id, ...itemData } as FirebaseItemModel;
       })
     );
   }

@@ -12,7 +12,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-        <ion-list lines="full">
+        <!-- <ion-list lines="full"> -->
           <ion-item>
             <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
             <ion-input type="text" formControlName="subject"></ion-input>
@@ -56,23 +56,23 @@
               <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-item>
-        </ion-list>
+        <!-- </ion-list> -->
+<ion-card class="itemCard">   
 
-    <ng-container>
       <ion-row *ngFor="let file of files; let i = index;">
-        <ion-col size="6">        
+        <ion-col size="8" class="ion-align-self-center">        
           <!-- <ion-label position="floating">{{ 'ChangeName' | translate }}</ion-label> -->
           <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
         </ion-col>
-        <ion-col size="6" >
-          <ion-button class="change-image-btn" color="main" (click)="deleteFile(i)">          
+        <ion-col size="4" >
+          <ion-button color="main" (click)="deleteFile(i)">          
             <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
         </ion-button> 
-        <ion-button  class="change-image-btn" color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+        <ion-button color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
             <ion-icon name="create-outline"></ion-icon>
             <!-- <ion-icon name="pencil-outline"></ion-icon> -->
         </ion-button> 
-        <ion-button  class="change-image-btn" color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+        <ion-button color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
             <ion-icon name="checkmark-outline"></ion-icon>
         </ion-button> 
 <!--         <ion-button *ngIf="file.storagePath != ''" color="main" (click)="openFile(i)">          
@@ -80,8 +80,8 @@
         </ion-button>  -->
         </ion-col>
       </ion-row>
-  </ng-container>
-
+  
+</ion-card>
   <ng-container *ngIf="updateItemForm.errors?.nameChanging">
     <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
   </ng-container> 

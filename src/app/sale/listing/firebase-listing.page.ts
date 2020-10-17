@@ -157,6 +157,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal,
+      componentProps: {
+        segmentValueSubject: this.segmentValueSubject
+      },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });

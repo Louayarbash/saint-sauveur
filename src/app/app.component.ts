@@ -38,11 +38,11 @@ export class AppComponent {
       url: '/app/user',
       ionicIcon: 'person-outline'
     },
-    {
+   /*  {
       title: 'Contact Card',
       url: '/contact-card',
       customIcon: './assets/custom-icons/side-menu/contact-card.svg'
-    },
+    }, */
     {
       title: 'Notifications',
       url: '/app/notifications',

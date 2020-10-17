@@ -12,40 +12,11 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-        <ion-list lines="full">
+        <!-- <ion-list lines="full"> -->
           <ion-item>
             <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
             <ion-input type="text" formControlName="subject"></ion-input>
           </ion-item>
-          <ng-container *ngIf="item.category == 'event'">
-            <ion-item>
-              <ion-label>Date</ion-label>
-              <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ 'FromTime' | translate }}</ion-label>
-              <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues = "0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate"  formControlName="startDate"></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-grid class="ion-no-padding">
-              <ion-row class="ion-align-items-center">
-                <ion-col size="4">
-              <ion-label>{{ 'Duration' | translate }}</ion-label>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-label>{{updateItemForm.controls.duration.value}}</ion-label>
-                </ion-col>
-                <ion-col>
-                  <app-counter-input-minutes formControlName="duration" basic></app-counter-input-minutes>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-            </ion-item>
-            <ion-item>
-                <ion-label>{{ 'ToTime' | translate }}</ion-label>
-                <ion-datetime display-format="DD, MMMM, YYYY HH:mm" formControlName="endDate" readonly></ion-datetime>
-            </ion-item>
-          </ng-container>
           <ion-item>
             <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
             <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
@@ -69,23 +40,23 @@
               <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-item>
-        </ion-list>
+        <!-- </ion-list> -->
 
-    <ng-container>
+        <ion-card class="itemCard"> 
       <ion-row *ngFor="let file of files; let i = index;">
-        <ion-col size="6">        
+        <ion-col size="8">        
           <!-- <ion-label position="floating">{{ 'ChangeName' | translate }}</ion-label> -->
           <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
         </ion-col>
-        <ion-col size="6" >
-          <ion-button class="change-image-btn" color="main" (click)="deleteFile(i)">          
+        <ion-col size="4" >
+          <ion-button color="main" (click)="deleteFile(i)">          
             <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
         </ion-button> 
-        <ion-button  class="change-image-btn" color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+        <ion-button color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
             <ion-icon name="create-outline"></ion-icon>
             <!-- <ion-icon name="pencil-outline"></ion-icon> -->
         </ion-button> 
-        <ion-button  class="change-image-btn" color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+        <ion-button color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
             <ion-icon name="checkmark-outline"></ion-icon>
         </ion-button> 
 <!--         <ion-button *ngIf="file.storagePath != ''" color="main" (click)="openFile(i)">          
@@ -93,7 +64,7 @@
         </ion-button>  -->
         </ion-col>
       </ion-row>
-  </ng-container>
+      </ion-card> 
 
   <ng-container *ngIf="updateItemForm.errors?.nameChanging">
     <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
