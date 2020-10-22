@@ -12,52 +12,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <section>
-      <!-- <ion-list lines="full"> -->
-<!--        <ion-item>
-         <ion-label>{{ 'Type' | translate }}</ion-label>
-         <ion-radio-group formControlName="type">
-           <ion-row class="radio-tags">
-             <ion-col class="ion-margin-end">
-             <ion-item class="radio-tag" lines="none">
-               <ion-label class="tag-label">{{ 'ForSale' | translate }}</ion-label>
-               <ion-radio value="sale"></ion-radio>
-             </ion-item>
-           </ion-col>
-             <ion-col>
-               <ion-item class="radio-tag" lines="none">
-                 <ion-label class="tag-label">{{ 'ForRent' | translate }}</ion-label>
-                 <ion-radio value="rent"></ion-radio>
-               </ion-item>
-             </ion-col>
-           </ion-row>
-         </ion-radio-group>
-       </ion-item> -->
-<!--        <ion-item>
-         <ion-label>{{ 'Object' | translate }}</ion-label>
-         <ion-radio-group formControlName="object">
-           <ion-row class="radio-tags">
-             <ion-col class="ion-margin-end">
-             <ion-item class="radio-tag" lines="none">
-               <ion-label class="tag-label">{{ 'Apartment' | translate }}</ion-label>
-               <ion-radio value="condo"></ion-radio>
-             </ion-item>
-           </ion-col>
-             <ion-col class="ion-margin-end">
-               <ion-item class="radio-tag" lines="none">
-                 <ion-label class="tag-label">{{ 'Parking' | translate }}</ion-label>
-                 <ion-radio value="parking"></ion-radio>
-               </ion-item>
-             </ion-col>
-             <ion-col>
-               <ion-item class="radio-tag" lines="none">
-                 <ion-label class="tag-label">{{ 'Locker' | translate }}</ion-label>
-                 <ion-radio value="locker"></ion-radio>
-               </ion-item>
-             </ion-col>
-           </ion-row>
-         </ion-radio-group>
-       </ion-item> -->
+    <!-- <section> -->
        <ion-item *ngIf="item.object ==='condo'">
          <ion-grid class="ion-no-padding">
            <ion-row class="ion-align-items-center">
@@ -156,7 +111,7 @@
                </ion-radio-group>
              </ion-item>
      <!-- </ion-list>  -->
-   </section>
+   <!-- </section> -->
        <ion-item-divider>
         <ion-button size="small" color="main" (click)="selectImageSource()" [disabled]="postImages.length >= 3" slot="start">
          <div class="ion-padding">{{ 'AddPhoto' | translate }}</div> 
@@ -188,6 +143,13 @@
   </ion-content>
 
   <ion-footer>
+    <ng-container *ngIf="updateItemForm.get('price').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('price').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'PriceRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>

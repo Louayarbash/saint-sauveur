@@ -13,6 +13,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
 <ion-card class="itemCard ion-padding-bottom">
   <ion-row color="main" class="expiration-countdown ion-align-items-center" *ngIf="typeIsRequest && ((startTimeCounter | appTimeDifference) >= 0) && (!item.isShell) && (item.status == 'new')">
     <ion-col size='6' class="ion-text-end">
@@ -233,6 +242,7 @@
       <app-text-shell [data]="(endTimeCounter | appTimeAgo)"></app-text-shell>
     </span> -->
 </ion-row>
+</ng-container>
 </ion-content>
 <ion-footer>
   <ion-row>

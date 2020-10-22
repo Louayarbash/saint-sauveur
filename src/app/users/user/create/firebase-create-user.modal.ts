@@ -43,10 +43,7 @@ export class FirebaseCreateUserModal implements OnInit {
     private camera: Camera,
     private alertController: AlertController,
     private featureService: FeatureService,
-    private loginService: LoginService,
-    // private crop: Crop,
-    //private imagePicker: ImagePicker,
-    // private file: File
+    private loginService: LoginService
   ) { 
     this.showHideParking2 = false;
     this.showHideParking3 = false;
@@ -84,17 +81,8 @@ export class FirebaseCreateUserModal implements OnInit {
     {validators: this.parkingValidator} */
     );
 
-/*      this.featureService.getItem('buildings', this.loginService.getBuildingId()).subscribe(item => {
-      //console.log("get parking",item)
-      this.levels = item.parkings;
-
-  }); */
 }
 
-/*   parkingValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-    return !("1000" === "1000")  ? { 'parking1Validator': true } : null;
-
-  } */
 
   parking1Changed(ev:any) {
     console.log(ev.detail.value);
@@ -175,7 +163,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
     this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
-    console.log(this.selectedParking);
+    // console.log(this.selectedParking);
     const {isShell, ...userData} = this.userData;
 
  this.firebaseService.createUser(userData)

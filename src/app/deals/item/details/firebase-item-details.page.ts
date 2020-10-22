@@ -1,19 +1,13 @@
 import { Component, OnInit, HostBinding} from '@angular/core';
 import { ModalController, AlertController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel, combinedItemModel } from '../firebase-item.model';
-//import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 import { DataStore } from '../../../shell/data-store';
-import { FcmService } from '../../../../app/services/fcm/fcm.service';
-//import { DateService } from '../../../../app/services/date/date.service';
 import dayjs from 'dayjs';
-//import { timer } from 'rxjs';
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
-//import { TranslateService } from '@ngx-translate/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -44,8 +38,6 @@ export class FirebaseItemDetailsPage implements OnInit {
   userInfoCreatorBlock : boolean;
   userInfoResponderBlock : boolean;
   chatWithCreatorButton : boolean;
-  //ratingCreatorButton : boolean;
-  //ratingResponderButton : boolean;
   noteSection : boolean;
   loginID : string;
   item: combinedItemModel;
@@ -84,8 +76,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private alertController : AlertController,
-    private FCM : FcmService,
-    //private dateService: DateService,
     private loginService : LoginService,
     private featureService : FeatureService,
     private callNumber: CallNumber,
@@ -102,8 +92,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.userInfoCreatorBlock = false;
     this.userInfoResponderBlock = false;
     this.chatWithCreatorButton = false;
-    //this.ratingCreatorButton = false;
-    //this.ratingResponderButton = false;
     this.noteSection = false;
     this.notRatedYetCreator = false;
     this.notRatedYetResponder = false;
@@ -118,9 +106,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.ratingFormResponder = new FormGroup({
       rate: new FormControl(this.rating)
     });
-    //console.log("rere1",this.rating);
-    //console.log("Deals details inside OnInit",this.loginService.buildingId);
-    this.FCM.getToken();
+
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<combinedItemModel> = resolvedDataStores.item;
@@ -128,9 +114,6 @@ export class FirebaseItemDetailsPage implements OnInit {
       combinedDataStore.state.subscribe(
           (state) => {
           this.item = state;
-          //console.log("ITEM",this.item)
-          //console.log("USERINFO",this.item.userInfoRequ)
-          //console.log("USERINFO2",this.item.userInfoResp)
 
           if (this.item.date){
 
@@ -199,14 +182,8 @@ export class FirebaseItemDetailsPage implements OnInit {
               }));
             }
           }
-          //console.log("rere2",this.rating);
         }
       );
-        /*relatedUsersDataStore.state.subscribe(
-        (state) => {
-          this.relatedUsers = state;
-        }
-        ); */
     });
   }
   async openFirebaseUpdateModal() {
@@ -223,17 +200,6 @@ export class FirebaseItemDetailsPage implements OnInit {
     await modal.present(); 
   }
 
-
-/*   oberserableTimer() {
-    const source = timer(0, 1000);
-    const abc = source.subscribe(val => {
-      console.log(val, '-');
-      this.subscribeTimer = this.timeLeft - val;
-      if(this.subscribeTimer == 50){
-        abc.unsubscribe();
-      }
-    });
-  } */
   
   call(number : string) {
     console.log(number);

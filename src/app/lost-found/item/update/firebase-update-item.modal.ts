@@ -121,8 +121,8 @@ updateItem() {
   this.item.status = this.updateItemForm.value.status;
 
   // const loading = this.featureService.presentLoadingWithOptions(2000);
-
-  this.featureService.updateItemWithImages(this.item, this.postImages, 'lost-found')
+  const {isShell, ...itemData} = this.item;
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'lost-found')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     this.modalController.dismiss();

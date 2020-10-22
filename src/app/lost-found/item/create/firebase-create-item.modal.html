@@ -98,6 +98,13 @@
   </ion-content>
 
   <ion-footer>
+    <ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row *ngIf="createItemForm.get('subject').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>

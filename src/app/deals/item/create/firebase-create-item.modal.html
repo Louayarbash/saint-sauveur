@@ -21,8 +21,8 @@
      {{this.createItemForm.get('endDate').value }} endDate<br>
      {{minStartDate}}minStartDate -->
 
-     <section>
-      <ion-list lines="full">
+     <!-- <section> -->
+      <!-- <ion-list lines="full"> -->
         <ion-item>
           <ion-label>Date</ion-label>
           <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
@@ -72,7 +72,7 @@
                 <ion-label>{{ 'Parking' | translate }}</ion-label>
               </ion-col>
               <ion-col class="ion-text-center">
-                <ion-button (click)="chooseParkingToOffer()">{{ 'Choose' | translate }}</ion-button>
+                <ion-button color="main" (click)="chooseParkingToOffer()">{{ 'Choose' | translate }}</ion-button>
               </ion-col>
               <ion-col class="ion-text-end">
                 <!-- <ion-input type="text" formControlName="parking" readonly></ion-input> -->
@@ -98,11 +98,13 @@
           <ion-label position="floating">Note</ion-label>
           <ion-textarea rows="6" cols="20" formControlName="note"></ion-textarea>
         </ion-item>
-      </ion-list> 
-    </section> 
+      <!-- </ion-list>  -->
+    <!-- </section>  -->
   </ion-content>
 
   <ion-footer>
+
+      
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>

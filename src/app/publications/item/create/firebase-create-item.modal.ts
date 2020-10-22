@@ -42,7 +42,7 @@ export class FirebaseCreateItemModal implements OnInit {
       votingResult: new FormControl(false),
       votingMessage: new FormControl('')
     },
-    {validators: this.changingNameValidator}
+    { validators: this.changingNameValidator }
     );
   }
 
@@ -129,14 +129,6 @@ export class FirebaseCreateItemModal implements OnInit {
 }
 
    createItem() {
-/*      if(this.categorySelected == 'event'){
-      this.itemData.date = this.createItemForm.get('date').value;
-      this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
-      this.itemData.startDate = this.createItemForm.get('startDate').value;
-      this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
-      this.itemData.endDate = this.createItemForm.get('endDate').value;
-      this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
-     } */
      if(this.categorySelected == 'announcement'){
       this.itemData.voting = this.createItemForm.value.voting;
       this.itemData.votingMessage = this.createItemForm.value.votingMessage;

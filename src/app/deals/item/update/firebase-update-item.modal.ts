@@ -2,16 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
-
 import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel } from '../firebase-item.model';
-//import { Observable } from "rxjs";
-//import {PhotosArray} from '../../../type'
 import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
-//import { DateService } from '../../../../app/services/date/date.service';
-//import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -32,17 +26,10 @@ export class FirebaseUpdateItemModal implements OnInit {
     public firebaseService: FirebaseService,
     public router: Router,
     private featureService: FeatureService
-    //private dateService : DateService
-    //private _alertController: AlertController,
   ) { 
-    
   }
 
   ngOnInit() {
-  /*console.log(this.item.date);
-    console.log(this.item.startDate);
-    console.log(this.item.endDate); */
-
     this.dateString = dayjs(this.item.date).format("DD, MMM, YYYY");//this.dateService.timestampToISOString(this.item.date);
     this.startTimeString = dayjs(this.item.startDate).format("HH:mm");
     this.endTimeString = dayjs(this.item.endDate).format("HH:mm");
@@ -58,34 +45,6 @@ export class FirebaseUpdateItemModal implements OnInit {
   dismissModal() {
    this.modalController.dismiss();
   }
-
-/*   async deleteItem() {
-    const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Are you sure you want to delete this request?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.firebaseService.deleteItem(this.item)
-            .then(
-              () => {
-                this.dismissModal();
-                this.router.navigate(['deal/listing']);
-              },
-              err => console.log(err)
-            );
-          }
-        }
-      ]
-    });
-    await alert.present();
-  } */
 
   updateItem() {
 

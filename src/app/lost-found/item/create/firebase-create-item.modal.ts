@@ -3,10 +3,6 @@ import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
-// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-//import { Crop } from '@ionic-native/crop/ngx';
-// import { File } from "@ionic-native/file/ngx";
-// import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
@@ -32,15 +28,9 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
-    // private camera: Camera,    
-    // private alertController: AlertController,
-    // private _crop: Crop,
-    // private file: File,
-    // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
-    private featureService : FeatureService,
-    // private actionSheetController : ActionSheetController
+    private featureService : FeatureService
   ) { }
 
   ngOnInit() {

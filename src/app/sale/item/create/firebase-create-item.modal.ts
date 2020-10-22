@@ -88,19 +88,9 @@ makeCover(index: number){
 }
 
 doReorder(ev: any) {
-/*   if (ev.cancelable) {
-    ev.preventDefault();
- }
- else{ */
-  // console.log("doReorder",this.postImages);
-  // The `from` and `to` properties contain the index of the item
-  // when the drag started and ended, respectively
   const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
   this.postImages.splice(ev.detail.to, 0, draggedItem);
   this.createItemForm.markAsDirty();
-  // Finish the reorder and position the item in the DOM based on
-  // where the gesture ended. This method can also be called directly
-  // by the reorder group
   ev.detail.complete();
 
 }
@@ -109,86 +99,4 @@ doReorder(ev: any) {
    this.featureService.selectImageSource(3, this.postImages.length, this.postImages, null)
 }
 
-/* async selectImageSource(maxLength: number, currentLength: number) {
-  const cameraOptions: CameraOptions = {
-    allowEdit:true,
-    quality: 100,
-    destinationType: this.camera.DestinationType.FILE_URI, 
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true,
-    sourceType:this.camera.PictureSourceType.CAMERA
-  };
-  
-  const pickerOptions: ImagePickerOptions = {
-    maximumImagesCount: maxLength - currentLength,
-    outputType: 0,
-    quality: 100,
-    width:500,
-    height:500,
-    message:"aywa",
-    title:"boooo"
-  };
-
-  const actionSheet = await this.actionSheetController.create({
-    header: 'Select images source',
-    cssClass: 'my-custom-class',
-    buttons: [ {
-      text: this.featureService.translations.PhotoGallery,
-      icon: 'images',
-      handler: () => {
-        // if((3 - this.postImages.length) !== 1 ){            
-          //this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
-           this.imagePicker.getPictures(pickerOptions).then( async (imageData : string[]) => {
-             console.log(imageData) 
-            //const loading = this.featureService.presentLoadingWithOptions(5000);
-             for (let i = 0; i < imageData.length; i++) {
-                const filename = imageData[i].substring(imageData[i].lastIndexOf('/') + 1);
-                const path = imageData[i].substring(0,imageData[i].lastIndexOf('/') + 1);
-                console.log("filename",filename)
-                console.log("path",path)
-                  await this.file.readAsDataURL(path, filename).then((image)=> {
-                  const photos : Images = {isCover:false, photoData: '', storagePath:''};
-                  photos.isCover = false;
-                  photos.photoData = image;
-                  this.postImages[this.postImages.length] = photos;
-                }
-              ).catch(err => console.log(err));
-            }
-          this.changeRef.detectChanges(); 
-          // loading.then(res=>res.dismiss());
-          }, (err) => { console.log('Error get pics',err);}
-        );  
-        // }
-    }
-  }, {
-      text: 'Camera',
-      icon: 'camera',
-      handler: () => {
-        // cameraOptions.sourceType = 1;
-        this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
-          const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
-          const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
-          await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : Images = {isCover:false, photoData:'', storagePath:''};
-            photos.isCover = false;
-            photos.photoData = image;
-            this.postImages[this.postImages.length] = photos;
-            this.changeRef.detectChanges();
-        }).catch(err => console.log(err));
-      })
-    }
-    }, {
-      text: 'Cancel',
-      icon: 'close',
-      role: 'cancel',
-      handler: () => {
-        console.log('Cancel clicked');
-      }
-    }]
-  });
-  console.log("SelectPhotos",this.postImages);
-  await actionSheet.present();
-}
- */
 }

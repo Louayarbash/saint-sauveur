@@ -143,7 +143,8 @@ export class UpdateBuildingModal implements OnInit {
     this.item.enableDeal = this.updateItemForm.value.enableDeal;
     // this.item.typeId = this.updateItemForm.value.typeId;
     //console.log(this.item);
-    this.firebaseService.updateItem(this.item)
+    const {isShell, ...itemData} = this.item;
+    this.firebaseService.updateItem(itemData)
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
       this.modalController.dismiss(); // not needed inside catch

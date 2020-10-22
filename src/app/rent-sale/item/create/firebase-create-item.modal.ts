@@ -19,7 +19,7 @@ import { ReplaySubject } from 'rxjs';
   templateUrl: './firebase-create-item.modal.html'
 })
 export class FirebaseCreateItemModal implements OnInit {
-  @Input() segmentValue: string;
+  // @Input() segmentValue: string;
   @Input() segmentValueSubject: ReplaySubject<string>;
   croppedImagepath = "";
   postImages : Images[] = [];
@@ -46,7 +46,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
   ngOnInit() {
     this.createItemForm = new FormGroup({
-      type : new FormControl(this.segmentValue, Validators.required),
+      type : new FormControl('sale', Validators.required),
       object : new FormControl('condo', Validators.required),
       bedRooms: new FormControl(0, counterRangeValidator(0, 10)),
       bathRooms: new FormControl(0, counterRangeValidator(0, 8)),
@@ -83,19 +83,20 @@ export class FirebaseCreateItemModal implements OnInit {
     this.featureService.createItemWithImages(itemData, this.postImages, 'rent-sale')
     .then(() => {
       this.segmentValueSubject.next('myList');
-      this.featureService.presentToast(this.featureService.translations.PostAddedSuccessfully, 2000);
+      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal(); // not needed inside catch to stay on same page while errors
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.PostAddingErrors, 2000);
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
+      loading.then(res=>res.dismiss());  
       console.log(err);
      });     
   }
 
-/*   typeChanged(ev:any) {
+  typeChanged(ev:any) {
     // console.log(ev.detail.value);
     this.typeSelected = ev.detail.value;
-  } */
+  } 
 
   objectChanged(ev:any) {
     console.log(ev.detail.value);

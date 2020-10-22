@@ -17,17 +17,8 @@
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
       <ion-spinner></ion-spinner>
-<!--   {{ 'Users' | translate }}    <p>
-        Fetching data...
-      </p> -->
     </div>
   </ng-container>
-<!--   <ion-item>
-    <ion-avatar slot="start">
-      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-avatar>
-    <ion-label>Item Avatar</ion-label>
-  </ion-item> -->
   <ng-container *ngIf="!items.isShell">
   <ion-list class="ion-no-padding" *ngIf="items?.length > 0">
     <ion-item *ngFor="let item of items" [routerLink]="['/users/details', item.id]">

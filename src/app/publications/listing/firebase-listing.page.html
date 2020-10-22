@@ -57,7 +57,7 @@
       <ng-container *ngIf="items?.length > 0">
         <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/publication/details', item.id]">
           <ion-item *ngIf="item.subject" color="main">
-            <ion-icon name="file-tray-stacked-outline" slot="start"></ion-icon>
+            <ion-icon slot="start" name="newspaper-outline"></ion-icon>
             <ion-label>{{item.subject}}</ion-label>
           </ion-item>
           <ion-card-header *ngIf="item.details">

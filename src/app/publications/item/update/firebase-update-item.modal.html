@@ -65,47 +65,30 @@
         </ion-col>
       </ion-row>
       </ion-card> 
-
-  <ng-container *ngIf="updateItemForm.errors?.nameChanging">
-    <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
-  </ng-container> 
-  <ng-container *ngIf="updateItemForm.get('subject').invalid && (updateItemForm.dirty || updateItemForm.touched)" class="alert alert-danger">
-  <div *ngIf="updateItemForm.get('subject').errors.required">
-    {{ 'SubjectRequired' | translate }}
-  </div>
-  <!-- <div *ngIf="createItemForm.get('subject').errors.minlength">
-  Name must be at least 4 characters long.
-  </div> -->
-  </ng-container> 
-<!--         <ion-row *ngFor="let file of files; let i = index;">   
-          <ion-col size="8" >        
-            <ion-label color="main" position="floating">{{ 'ChangeName' | translate }}</ion-label>
-              <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
-          </ion-col>
-          <ion-col size="4" >
-            <ion-button color="main" (click)="deleteFile(i)">          
-              <ion-icon slot="icon-only" name="trash"></ion-icon>      
-            </ion-button> 
-            <ion-button color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
-              {{ 'ModifyName' | translate }}
-            </ion-button> 
-            <ion-button color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
-              {{ 'Confirm' | translate }}
-            </ion-button> 
-            <ion-button color="main" (click)="openFile(i)">          
-              <ion-icon name="open-outline"></ion-icon>
-            </ion-button> 
-          </ion-col>
-        </ion-row> -->
   </ion-content>
-
   <ion-footer>
-    <ion-row class="form-actions-wrapper">
+    <!-- updateItemForm.get('subject').invalid &&  -->
+<!--     {{updateItemForm.dirty}}
+    {{updateItemForm.touched}}
+    {{updateItemForm.errors?.nameChanging}} -->
+    <ion-row *ngIf="updateItemForm.errors?.nameChanging">
+      <ion-col>
+      <ion-text class="ion-padding-left validation">{{ 'PleaseConfirmNamingChange' | translate }}</ion-text>
+    </ion-col>
+    </ion-row>
+    <ng-container *ngIf="updateItemForm.get('subject').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('subject').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row>
       <ion-col>
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!updateItemForm.valid">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

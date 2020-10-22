@@ -127,7 +127,7 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateItem(itemData: TicketModel): Promise<void> {
+  public updateItem(itemData: any): Promise<void> {
     return this.afs.collection(this.tableName).doc(itemData.id).update({...itemData});
   }
 

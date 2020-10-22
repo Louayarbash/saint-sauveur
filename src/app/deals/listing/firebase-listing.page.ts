@@ -84,64 +84,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
    ngOnInit() {
 
     this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
-     
-    // this.searchQuery = '';
-    
 
-/*     this.rangeForm = new FormGroup({
-      dual: new FormControl({lower: 1, upper: 100})
-    }); */
-
-    // Route data is a cold subscription, no need to unsubscribe?
     this.route.data.subscribe(
       (resolvedRouteData) => {
         this.listingDataStore = resolvedRouteData['data']; 
 
-        // We need to avoid having multiple firebase subscriptions open at the same time to avoid memory leaks
-        // By using a switchMap to cancel previous subscription each time a new one arrives,
-        // we ensure having just one subscription (the latest)
-/*         const updateSearchObservable = this.searchFiltersObservable.pipe(
-          switchMap((filters) => {
-            const filteredDataSource = this.firebaseService.searchUsersByAge(
-              filters.lower,
-              filters.upper
-            );
-            // Send a shell until we have filtered data from Firebase
-            const searchingShellModel = [
-              new FirebaseListingItemModel(),
-              new FirebaseListingItemModel()
-            ];
-            // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
-            const searchingDelay = 400;
-
-            const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
-            
-            return dataSourceWithShellObservable.pipe(
-              map(filteredItems => {
-                console.log(filteredItems)        ;        
-                // Just filter items by name if there is a search query and they are not shell values
-                if (filters.query !== '' && !filteredItems.isShell) {
-                  const queryFilteredItems = filteredItems.filter(item =>
-                    
-                    item.title.toLowerCase().includes(filters.query.toLowerCase()
-                    //console.log(item.title)
-                  ));
-                  // While filtering we strip out the isShell property, add it again
-                  return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
-                } else {
-                  return filteredItems;
-                }
-              })
-            ); 
-          })
-        ); */
-
-        // Keep track of the subscription to unsubscribe onDestroy
-        // Merge filteredData with the original dataStore state
-/*         this.stateSubscription = merge(
-          this.listingDataStore.state,
-          updateSearchObservable
-        ) */
         this.stateSubscription = this.listingDataStore.state
         .subscribe(
          (state) => {
@@ -186,26 +133,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       (error) => console.log(error)
     );
   }
-/*   segmentChanged(ev:any) {
-    //console.log(ev.detail.value);
-    //console.log(ev.target.value);
-    this.segmentValue = ev.detail.value;
 
-    // Check if there's any filter and apply it
-    //this.searchList();
-  } */
-/*   searchList(): void {
-    const query = (this.searchQuery && this.searchQuery !== null) ? this.searchQuery : '';
-
-    if (this.segmentValue === 'myRequests') {
-      this.newRequestsList = this.items.filter(item => item.createdBy === this.loginService.getLoginID());
-    } else if (this.segmentValue === 'newRequests') {
-      this.newRequestsList = this.items.filter(item => item.status === "new");
-  }
-} */
-/*   filterList(list : any[], query): Array<any> {
-    return list.filter(item => item.createdBy === this.loginService.getLoginID());
-  } */
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateItemModal,
@@ -221,12 +149,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   async chooseType(){
-    let canOffer= this.loginService.getUserParking()?.length > 0 ? false : true;
-    // let offerLabel= this.loginService.getUserParking()?.length > 0 ? this.featureService.translations.Offer : this.featureService.translations.CantOffer
+    let canOffer= this.loginService.getUserParkingInfo()?.length > 0 ? true : false;
       let alert = await this.alertController.create({
-        cssClass: 'alertDealCreate',
+        // cssClass: 'alertDealCreate',
         header: this.featureService.translations.ChooseType,
-        message: this.featureService.translations.ChooseTypeMsg,
+        message: canOffer ? this.featureService.translations.ChooseTypeMsg : this.featureService.translations.ChooseTypeMsgNoParking,
         inputs: [{
           name : "request" , 
           type : 'radio' , 
@@ -234,7 +161,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           value : "request" ,
           checked: true
         },{
-          disabled: canOffer,
+          disabled: !canOffer,
           name : "offer" , 
           type : 'radio' , 
           label : this.featureService.translations.Offer, 
@@ -260,13 +187,4 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       });
       await alert.present();
     }
-  
-  
-/*   searchList() {
-    this.searchSubject.next({
-      lower: this.rangeForm.controls.dual.value.lower,
-      upper: this.rangeForm.controls.dual.value.upper,
-      query: this.searchQuery
-    });
-  } */
 }

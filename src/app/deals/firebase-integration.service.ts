@@ -142,7 +142,7 @@ export class FirebaseService {
   }
 
 //LA_2019_11 I put async here.. without it the modal will not dismiss
-    public async createItem(itemData : ItemModel)/* : Promise<DocumentReference>*/{     
+    public async createItem(itemData : any)/* : Promise<DocumentReference>*/{     
       console.log(itemData);
       //return this.afs.collection(this.tableName).add({...itemData});
      const count =  +itemData.count;

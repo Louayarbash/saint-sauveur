@@ -139,6 +139,22 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
+  getUserParkingInfo(){
+    if(this.getUserParking()){
+      let parkingInfo: ParkingInfo[] = this.getUserParking().map((userParking) => {     
+        let parkingCheck = this.getBuildingParkings().find((buildingParking) => { return buildingParking.id == userParking.id });
+          if(parkingCheck){
+            return { id: userParking.id, number: userParking.number, description: parkingCheck.description, active: parkingCheck.active };
+          }
+        });
+        parkingInfo= parkingInfo.filter(function (res) {
+          return res != null;
+      });
+      return parkingInfo;
+    }
+    else return null
+  }
+
   getParkingInfo(userParkings: any[]){
     if(userParkings){
       let parkingInfo: ParkingInfo[] = userParkings.map((userParking) => {     

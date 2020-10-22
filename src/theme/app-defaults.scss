@@ -89,6 +89,14 @@ ion-content {
   padding-left: 25px;
   font-size: small;
 }
+
+ion-text.validation{
+  font-style:italic;
+  padding-left: 10px;
+  font-size: small;
+  color: var(--ion-color-danger);
+}
+
 .DivLoading{
   margin: 20px 40px; 
   text-align: center;

@@ -38,7 +38,7 @@ export class FirebaseUserDetailsPage implements OnInit {
 
 
   @HostBinding('class.is-shell') get isShell() {
-    return ((this.user && this.user.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
+    return ((this.user && this.user.isShell)) ? true : false;
   }
 
   constructor(

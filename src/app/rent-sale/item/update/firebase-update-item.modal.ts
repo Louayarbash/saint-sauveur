@@ -4,11 +4,8 @@ import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
-// import { Camera } from '@ionic-native/camera/ngx';
 import { Observable } from "rxjs";
 import { Images } from '../../../type'
-// import { ImagePicker } from '@ionic-native/image-picker/ngx';
-// import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
@@ -32,9 +29,6 @@ export class FirebaseUpdateItemModal implements OnInit {
     private alertController: AlertController,
     public firebaseService: FirebaseService,
     public router: Router,
-    // private camera: Camera,
-    // private file: File,
-    // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private featureService : FeatureService,
     // private actionSheetController: ActionSheetController
@@ -50,7 +44,6 @@ export class FirebaseUpdateItemModal implements OnInit {
       bathRooms: new FormControl(this.item.bathRooms, counterRangeValidator(0, 8)),
       floor: new FormControl(this.item.floor, counterRangeValidator(0, 30)),
       balcony: new FormControl(this.item.balcony, counterRangeValidator(0, 5)),
-      //balcony: new FormControl(this.item.balcony),
       description : new FormControl(this.item.description),
       price : new FormControl(this.item.price,[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl(this.item.status)
@@ -133,11 +126,8 @@ updateItem() {
   this.item.description = this.updateItemForm.value.description;
   this.item.price = this.updateItemForm.value.price;
   this.item.status = this.updateItemForm.value.status;
-  // const loading = this.featureService.presentLoadingWithOptions(2000);
-
-  //const {...itemData} = this.item;
-
-  this.featureService.updateItemWithImages(this.item, this.postImages, 'rent-sale')
+  const {isShell, ...itemData} = this.item;
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'rent-sale')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     this.modalController.dismiss();// not needed inside catch to stay on same page while errors

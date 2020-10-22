@@ -93,14 +93,15 @@ export class CreateBuildingModal implements OnInit {
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     const {isShell, ...itemData} = this.itemData;
-    // const loading = this.featureService.presentLoadingWithOptions(5000);
+    const loading = this.featureService.presentLoadingWithOptions(5000);
     this.firebaseService.createItem(itemData)
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
-      // loading.then(res=>res.dismiss());  
+      loading.then(res=>res.dismiss());  
     }).catch((err) => { 
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
+      loading.then(res=>res.dismiss());  
       console.log(err);
      });      
   }

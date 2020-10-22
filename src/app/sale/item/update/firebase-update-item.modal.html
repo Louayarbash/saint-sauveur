@@ -81,6 +81,20 @@
   </ion-content>
 
   <ion-footer>
+    <ng-container *ngIf="updateItemForm.get('object').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('object').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'ObjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateItemForm.get('price').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('price').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'PriceRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>

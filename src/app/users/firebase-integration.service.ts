@@ -176,7 +176,7 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateUser(userData: UserModel): Promise<void> {
+  public updateUser(userData: any): Promise<void> {
     console.log("updateUser", userData);
     return this.afs.collection('users').doc(userData.id).update({...userData});
   }

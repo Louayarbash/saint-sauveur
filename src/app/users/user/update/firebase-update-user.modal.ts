@@ -249,9 +249,9 @@ export class FirebaseUpdateUserModal implements OnInit {
 
     this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
-    console.log(this.selectedParking);
-    
-    this.firebaseService.updateUser(this.userData)
+    // console.log(this.selectedParking);
+    const {isShell, ...userData} = this.userData;
+    this.firebaseService.updateUser(userData)
     .then(() => {
       // this.loginService.updateUserInfo(this.userData);
       this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);

@@ -105,41 +105,20 @@
         </ion-radio-group>
       </ion-item>
     </ion-card>
-    <ng-container *ngIf="updateItemForm.errors?.nameChanging">
-      <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
-    </ng-container> 
-<!--       <div *ngIf="createItemForm.invalid">
-      Form
-    </div>
-    <div *ngIf="createItemForm.get('duration').errors">
-      duration
-    </div>
-    <div *ngIf="createItemForm.get('subject').errors">
-      subject
-    </div>
-    <div *ngIf="createItemForm.get('details').errors">
-      details
-    </div>
-    <div *ngIf="createItemForm.get('typeId').errors">
-      typeId
-    </div> -->
-    
-<!--      <div *ngIf="createItemForm.errors?.nameChanging" class="cross-validation-error-message alert alert-danger">
-      please confirm naming changes
-  </div>  
-  <div *ngIf="createItemForm.get('name').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
-<div *ngIf="createItemForm.get('name').errors.required">
-  Name is required.
-</div>
- <div *ngIf="createItemForm.get('title').errors.minlength">
-  Name must be at least 4 characters long.
-</div> 
-</div> -->
-
-  <!-- <img [src]="selectedPhoto" /> -->
-  
 </ion-content>
   <ion-footer>
+    <ion-row *ngIf="updateItemForm.errors?.nameChanging">
+      <ion-col>
+      <ion-text class="ion-padding-left validation">{{ 'PleaseConfirmNamingChange' | translate }}</ion-text>
+    </ion-col>
+    </ion-row>
+    <ng-container *ngIf="updateItemForm.get('name').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('name').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'NameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>

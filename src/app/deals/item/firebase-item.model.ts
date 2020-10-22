@@ -41,8 +41,7 @@ export class ItemModel extends ShellModel {
   expiresIn : number;
   durationSeconds : number;
   buildingId : string;
-  admin : boolean = false;
-  parkingInfo : {level:string, number:string};
+  parkingInfo : { level:string, number:string };
   constructor() {
     super();
   }

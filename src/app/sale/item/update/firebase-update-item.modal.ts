@@ -126,7 +126,8 @@ updateItem() {
   this.item.status =  this.updateItemForm.value.status;
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
-  this.featureService.updateItemWithImages(this.item, this.postImages, 'posts')
+  const {isShell, ...itemData} = this.item;
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'posts')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     // loading.then(res=>{res.dismiss();})
@@ -140,109 +141,16 @@ updateItem() {
 }
 
 doReorder(ev: any) {
-  // The `from` and `to` properties contain the index of the item
-  // when the drag started and ended, respectively
-  //console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
 
   const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
   this.postImages.splice(ev.detail.to, 0, draggedItem);  
   this.updateItemForm.markAsDirty();
-  // Finish the reorder and position the item in the DOM based on
-  // where the gesture ended. This method can also be called directly
-  // by the reorder group
+
   ev.detail.complete();
 }
 
 selectImageSource() {
   return this.featureService.selectImageSource(3, this.postImages.length, this.postImages, this.updateItemForm)
 }
-
-/* async selectImageSource() {
-  const cameraOptions: CameraOptions = {
-    allowEdit:true,
-    quality: 100,
-    //targetWidth: 500,
-    //targetHeight: 600,
-    // destinationType: this.camera.DestinationType.DATA_URL,
-    destinationType: this.camera.DestinationType.FILE_URI, 
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE,
-    correctOrientation: true,
-    sourceType:this.camera.PictureSourceType.CAMERA
-  };
-  
-  const pickerOptions: ImagePickerOptions = {
-    maximumImagesCount: 3 - this.postImages.length,
-    outputType: 0,
-    quality: 100,
-    // disable_popover: false,
-    width:500,
-    height:500,
-    message:"message",
-    title:"title"
-  };
-
-
-  const actionSheet = await this.actionSheetController.create({
-    header: this.featureService.translations.SelectImagesSource,
-    // cssClass: 'my-custom-class',
-    buttons: [
-    {
-      text: this.featureService.translations.PhotoGallery,
-      icon: 'images',
-      handler: ()=> {
-       // if((3 - this.postImages.length) !== 1) {
-        this.imagePicker.getPictures(pickerOptions).then( async (imageData : string[]) => { 
-         const loading = this.featureService.presentLoadingWithOptions(5000);         
-          for (var i = 0; i < imageData.length; i++) {
-             let filename = imageData[i].substring(imageData[i].lastIndexOf('/')+1);
-             const path = imageData[i].substring(0,imageData[i].lastIndexOf('/')+1);
-               await this.file.readAsDataURL(path,filename).then((base64string)=> {                    
-               const photos : Images = {isCover:false, photoData: '', storagePath: ''};
-               photos.isCover = false;
-               photos.photoData = base64string;
-               this.postImages.push(photos);
-             }
-           ).catch(err=>{console.log(err)})
-         }
-       this.updateItemForm.markAsDirty();
-       this.changeRef.detectChanges(); 
-       loading.then(res=> {res.dismiss();});
-       }, (err) => { console.log(err);}
-       ); 
-       }
-    }, 
-    {
-      text: this.featureService.translations.Camera,
-      icon: 'camera',
-      handler: () => {
-        this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
-          //const loading = this.featureService.presentLoadingWithOptions(5000);
-          //let photos : PhotosData = {isCover:false,photo:'',storagePath :''};
-          const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
-          const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
-          await this.file.readAsDataURL(path, filename).then((image)=> {
-            const photos : Images = {isCover:false, photoData:'', storagePath:''};
-            photos.isCover = false;
-            photos.photoData = image;
-            this.postImages[this.postImages.length] = photos;
-            this.updateItemForm.markAsDirty();
-            this.changeRef.detectChanges();
-          //loading.then(res=>{res.dismiss();});
-      }).catch(err => console.log(err));
-    })
-  }
-
-    }, {
-      text: this.featureService.translations.Cancel,
-      icon: 'close',
-      role: 'cancel',
-      handler: () => {
-        console.log('Cancel clicked');
-      }
-    }]
-  });
-  await actionSheet.present();
-} */
 
 }

@@ -89,6 +89,13 @@
 
   </ion-content>
   <ion-footer>
+    <ng-container *ngIf="updateItemForm.get('details').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('details').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'DetailsRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>

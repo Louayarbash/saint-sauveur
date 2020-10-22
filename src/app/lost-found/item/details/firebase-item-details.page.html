@@ -12,6 +12,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
   <ion-card class="itemCard">  
         <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
   <ion-row class="slider-row">
@@ -69,6 +78,7 @@
         <ng-container *ngIf="item.createDate">
           <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
         </ng-container>
+      </ng-container>
        <ion-fab vertical="top" horizontal="end" slot="fixed" >
         <ion-fab-button color="main" size="small"> 
           <ion-icon name="person-circle-outline"></ion-icon>
