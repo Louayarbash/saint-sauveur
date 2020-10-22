@@ -92,7 +92,7 @@ export class AppComponent {
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       
-      this.splashScreen.hide();
+      // this.splashScreen.hide();
 
       // Get a FCM token
       //fcmService.requestPermission();

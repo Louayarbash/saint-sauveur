@@ -1,26 +1,15 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-//import { FormGroup, FormControl } from '@angular/forms';
+
 import { ModalController, AlertController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import { /*Observable, ReplaySubject,*/ Observable, ReplaySubject, Subscription,/*, merge, interval*/} from 'rxjs';
-//import { switchMap, map } from 'rxjs/operators';
+import { /*Observable, ReplaySubject,*/ Observable, ReplaySubject, Subscription} from 'rxjs';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
-//import { TestPage } from '../item/test/test.page';
-FirebaseCreateItemModal
-
 import { DataStore, ShellModel } from '../../shell/data-store';
-//import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
-//import { File } from '@ionic-native/file/ngx';
-//import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { LoginService } from '../../services/login/login.service';
 import { FeatureService } from '../../services/feature/feature.service'
 import dayjs from 'dayjs';
-//import { timeout } from 'rxjs/operators';
-//import { TranslateService } from '@ngx-translate/core';
-
-
 
 @Component({
   selector: 'app-firebase-listing',
@@ -33,23 +22,13 @@ import dayjs from 'dayjs';
 export class FirebaseListingPage implements OnInit, OnDestroy {
   segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
   segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
-  /*for segment implementation*/
   loginId = this.loginService.getLoginID();
   loginName = this.loginService.getLoginName();
   segmentValue = 'newRequests';
-  // friendsList: Array<any>;
   newRequestsList: Array<FirebaseListingItemModel>;
   newOffersList: Array<FirebaseListingItemModel>;
   myRequestsList: Array<FirebaseListingItemModel>;
-  // searchQuery = '';
-  // showFilters = false;
-  /* end */
-  // rangeForm: FormGroup;
-  //searchQuery: string;
-  // showAgeFilter = false;
-  // CoverPic:string;
-  // searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
-  // searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
+
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
@@ -59,10 +38,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   items: Array<FirebaseListingItemModel> & ShellModel;
 
   type : string;
-
-/*   a:Array<FirebaseListingItemModel> ;
-  b:Array<FirebaseListingItemModel> ;
-  c:Array<FirebaseListingItemModel> ; */
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -187,4 +162,5 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
       });
       await alert.present();
     }
+
 }

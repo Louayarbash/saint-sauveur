@@ -27,14 +27,17 @@
         <ion-label>{{ 'Subject' | translate }}</ion-label>
         <app-text-shell animation="bouncing" [data]="item?.subject"></app-text-shell>                  
          </ion-item>
-
-      <ion-item lines="none" *ngIf="item.startDateTS">    
+         <ion-item *ngIf="item.dateTS">    
+          <ion-label>Date</ion-label>
+          {{item.dateTS * 1000 | date:'dd, MMM, yyyy'}}
+        </ion-item>
+      <ion-item *ngIf="item.startDateTS">    
         <ion-label>{{ 'FromTime' | translate }}</ion-label>
-        {{item.startDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        {{item.startDateTS * 1000 | date:'HH:mm'}}
       </ion-item>
-      <ion-item lines="none" *ngIf="item.endDateTS">    
+      <ion-item *ngIf="item.endDateTS">    
         <ion-label>{{ 'ToTime' | translate }}</ion-label>
-        {{item.endDateTS * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
+        {{item.endDateTS * 1000 | date:'HH:mm a'}}
       </ion-item>
 
     <ion-list *ngIf="item.details">

@@ -251,8 +251,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     this.item.subject = this.updateItemForm.value.subject;
     this.item.details = this.updateItemForm.value.details;
 
-    const {...itemData} = this.item;
-
+    const {isShell, ...itemData} = this.item;
     this.firebaseService.updateItem(itemData,this.files)
     .then(() => {
       this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);

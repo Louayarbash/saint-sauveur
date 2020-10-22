@@ -56,13 +56,20 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         .subscribe(
          (state) => {
             this.items = state;
-            if(this.items) {
+            if(!this.items.isShell) {
+/*             this.items.map(item => {
+              item.date = dayjs(item.dateTS * 1000).format('DD, MMM, YYYY');
+              item.startTime = dayjs(item.startDate).format("HH:mm"); 
+              item.endTime = dayjs(item.endDate).format('HH:mm');
+            }); */
+
               let upcomingList= this.items; 
               let archiveList= this.items;            
                
               this.upcomingList = upcomingList.filter(item => item.startDateTS > dayjs().unix());
               this.archiveList = archiveList.filter(item => item.startDateTS < dayjs().unix());
-            }
+            
+          }
             else {
               this.upcomingList = this.items;
               this.archiveList = this.items;

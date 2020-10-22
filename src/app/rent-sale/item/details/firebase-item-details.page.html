@@ -30,52 +30,51 @@
 <!--           <ion-list-header lines="inset">
             <ion-label>Trending</ion-label>
           </ion-list-header> -->
-          <ion-item lines="none">
+          <ion-item>
             <ion-label>{{ 'Type' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.type"></app-text-shell>                  
+            <ion-text>{{ type }}</ion-text>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item>
             <ion-label>{{ 'Object' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.object"></app-text-shell>                  
+            <ion-text>{{ object }}</ion-text>
           </ion-item>
           <ng-container *ngIf="item?.object ==='condo'">
-          <ion-item lines="none">
+          <ion-item *ngIf="item?.bedRooms">
             <ion-label>{{ 'BedRooms' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.bedRooms"></app-text-shell>                  
+            <ion-text>{{ item?.bedRooms }}</ion-text>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item *ngIf="item?.bathRooms">
             <ion-label>{{ 'BathRooms' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.bathRooms"></app-text-shell>                  
+            <ion-text>{{ item?.bathRooms }}</ion-text>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item *ngIf="item?.floor">
             <ion-label>{{ 'Floor' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.floor"></app-text-shell>                  
+            <ion-text>{{ item?.floor }}</ion-text>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item *ngIf="item?.balcony">
             <ion-label>{{ 'Balcony' | translate }}</ion-label>
-            <app-text-shell animation="bouncing" [data]="item?.balcony"></app-text-shell>                  
+            <ion-text>{{ item?.balcony }}</ion-text>
           </ion-item>
         </ng-container>
-          <ion-item lines="none">    
+          <ion-item>    
             <ion-label *ngIf="item?.type == 'sale'">{{ 'Price' | translate }}</ion-label>
-            <ion-label *ngIf="item?.type == 'rent'">{{ 'Rent (Monthly)' | translate }}</ion-label>
-            <app-text-shell [data]="(item.price) ? ''.concat(item.price).concat('  $') : ''"></app-text-shell>    
+            <ion-label *ngIf="item?.type == 'rent'">{{ 'MonthlyRent' | translate }}</ion-label>
+            <ion-text> {{ (item.price) ? ''.concat(item.price).concat('  $') : '' }}</ion-text>
           </ion-item>
-        
           <ion-item-divider> 
             <ion-label>{{ 'CreatorInfo' | translate}}</ion-label>
           </ion-item-divider>
           <ion-item lines="none">    
             <ion-label>{{ 'CreatorName' | translate}}</ion-label>
-            <app-text-shell [data]="(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null"></app-text-shell>    
+            <ion-text>{{ (item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null }}</ion-text>
           </ion-item>
             <ion-item lines="none">
               <ion-label>{{ 'Email' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="item.creatorDetails?.email"></app-text-shell>                  
+              <ion-text>{{ item.creatorDetails?.email }}</ion-text>
             </ion-item>
             <ion-item lines="none">
               <ion-label >{{ 'Phone' | translate }}</ion-label>
-              <app-text-shell animation="bouncing" [data]="item.creatorDetails?.phone"></app-text-shell>                  
+              <ion-text>{{ item.creatorDetails?.phone }}</ion-text>
             </ion-item>
             <!-- <div *ngIf="item?.description != ''"> -->
             <ion-item-divider>

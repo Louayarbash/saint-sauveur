@@ -53,10 +53,11 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        <ion-text>{{ object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>{{ 'PerMonth' | translate }}
+        <ion-label>{{ 'Rent (Monthly)' | translate }}:</ion-label>
+        <ion-text> {{ (item.price) ? ''.concat(item.price).concat('  $') : '' }}</ion-text>
       </ion-col>
     </ion-row>
     </ion-card-title>
@@ -80,10 +81,13 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        <ion-text>{{ object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : ''"></app-text-shell>
+        
+        <ion-label>{{ 'Price' | translate }}</ion-label>
+        <ion-text> {{ (item.price) ? ''.concat(item.price).concat('  $') : '' }}</ion-text>
+
       </ion-col>
     </ion-row>
     </ion-card-title>
@@ -108,10 +112,12 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        <ion-text>{{ object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : ''"></app-text-shell>
+        <ion-label *ngIf="item?.type == 'sale'">{{ 'Price' | translate }}</ion-label>
+        <ion-label *ngIf="item?.type == 'rent'">{{ 'Rent (Monthly)' | translate }}</ion-label>
+        <ion-text> {{ (item.price) ? ''.concat(item.price).concat('  $') : '' }}</ion-text>
       </ion-col>
     </ion-row>
     </ion-card-title>

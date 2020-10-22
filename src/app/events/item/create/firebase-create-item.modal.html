@@ -80,20 +80,20 @@
     </ion-row>
 <!-- </section> -->
 </ion-card> 
-<ng-container *ngIf="createItemForm.errors?.nameChanging">
-  <div class="alert alert-danger">{{ 'PleaseConfirmNamingChange' | translate }}</div>
-</ng-container>
-<ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)" class="alert alert-danger">
-  <ion-icon name="warning-outline"></ion-icon>
-<div *ngIf="createItemForm.get('subject').errors.required">
-  {{ 'SubjectRequired' | translate }}
-</div>
-<!-- <div *ngIf="createItemForm.get('subject').errors.minlength">
-Name must be at least 4 characters long.
-</div> -->
-</ng-container> 
 </ion-content>
   <ion-footer>
+    <ion-row *ngIf="createItemForm.errors?.nameChanging">
+      <ion-col>
+      <ion-text class="ion-padding-left validation">{{ 'PleaseConfirmNamingChange' | translate }}</ion-text>
+    </ion-col>
+    </ion-row>
+    <ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row *ngIf="createItemForm.get('subject').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>

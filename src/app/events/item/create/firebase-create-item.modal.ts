@@ -1,21 +1,12 @@
 import { Component, Input, OnInit/*,ChangeDetectorRef*/ } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Validators, FormGroup, FormControl,ValidatorFn,ValidationErrors } from '@angular/forms';
-// import * as dayjs from 'dayjs';
-// import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
-
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
-//import { AngularFirestore } from '@angular/fire/firestore';
-// import { Date } from 'core-js';
-
-//import { File } from "@ionic-native/file/ngx";
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { Files } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
-//import { FileOpener } from '@ionic-native/file-opener/ngx';
-//import { FilePath } from '@ionic-native/file-path/ngx';
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
@@ -47,13 +38,10 @@ export class FirebaseCreateItemModal implements OnInit {
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
-    //private changeRef: ChangeDetectorRef,
     private chooser: Chooser,
     private loginService : LoginService,
     private featureService : FeatureService
-    //private fileOpener : FileOpener,
-    //private filePath : FilePath,
-    //private file : File
+
   ) { 
     
   }

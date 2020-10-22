@@ -8,12 +8,14 @@ import { AuthService } from './auth.service';
 import { LoginService } from '../services/login/login.service';
 import { FeatureService } from '../services/feature/feature.service';
 // import { BehaviorSubject } from 'rxjs';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 
 @Injectable()
 export class SignInGuard implements CanLoad {
 // a= new BehaviorSubject(true);
   constructor(
+    private splashScreen: SplashScreen,
     private authService: AuthService,
     private router: Router,
     private loginService: LoginService,
@@ -33,6 +35,7 @@ export class SignInGuard implements CanLoad {
          else {
           this.loginService.initializeApp(auth.uid).then(canAccessApp => {
           if(canAccessApp){
+            this.splashScreen.hide();
               this.authService.canAccessApp.next(true);
               this.router.navigate(['start-menu'], { replaceUrl: true });
             }

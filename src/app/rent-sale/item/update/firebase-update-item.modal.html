@@ -78,7 +78,9 @@
        <ion-checkbox formControlName="balcony"></ion-checkbox>
      </ion-item> -->
        <ion-item>
-         <ion-label position="floating">{{ 'Price' | translate }}</ion-label>
+        <ion-label position="floating" *ngIf="item?.type == 'sale'">{{ 'Price' | translate }}</ion-label>
+        <ion-label position="floating" *ngIf="item?.type == 'rent'">{{ 'MonthlyRent' | translate }}</ion-label>
+         <!-- <ion-label position="floating">{{ 'Price' | translate }}</ion-label> -->
          <ion-input type="number" formControlName="price"></ion-input>
        </ion-item>
        <ion-item>

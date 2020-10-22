@@ -22,16 +22,16 @@
             <ion-row>
               <ion-col>
                 <ion-item class="radio-tag" lines="none">
-                  <ion-label class="tag-label">{{ 'ForRent' | translate }}</ion-label>
-                  <ion-radio value="rent"></ion-radio>
-                </ion-item>
-            </ion-col>
-              <ion-col>
-                <ion-item class="radio-tag" lines="none">
                   <ion-label class="tag-label">{{ 'ForSale' | translate }}</ion-label>
                   <ion-radio value="sale"></ion-radio>
                 </ion-item>
               </ion-col>
+              <ion-col>
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'ForRent' | translate }}</ion-label>
+                  <ion-radio value="rent"></ion-radio>
+                </ion-item>
+            </ion-col>
             </ion-row>
           </div>
           </ion-radio-group>
@@ -60,30 +60,6 @@
                   </ion-item>
                 </ion-col>
               </ion-row>
-    <!--         <ion-row>
-              <ion-col>
-              <ion-item class="radio-tag" lines="none">
-                <ion-label class="tag-label">{{ 'Apartment' | translate }}</ion-label>
-                <ion-radio value="condo"></ion-radio>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        <ion-row>
-              <ion-col>
-                <ion-item class="radio-tag" lines="none">
-                  <ion-label class="tag-label">{{ 'Parking' | translate }}</ion-label>
-                  <ion-radio value="parking"></ion-radio>
-                </ion-item>
-              </ion-col>
-              </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-item class="radio-tag" lines="none">
-                  <ion-label class="tag-label">{{ 'Locker' | translate }}</ion-label>
-                  <ion-radio value="locker"></ion-radio>
-                </ion-item>
-              </ion-col>
-            </ion-row> -->
           </div>
           </ion-radio-group>
         </ion-item>
@@ -155,7 +131,7 @@
       </ion-item> -->
         <ion-item>
           <ion-label *ngIf="typeSelected == 'sale'" position="floating">{{ 'Price' | translate }}</ion-label>
-          <ion-label *ngIf="typeSelected == 'rent'" position="floating">{{ 'Rent (Monthly)' | translate }}</ion-label>
+          <ion-label *ngIf="typeSelected == 'rent'" position="floating">{{ 'MonthlyRent' | translate }}</ion-label>
           <ion-input type="number" formControlName="price"></ion-input>
         </ion-item>
         <ion-item>

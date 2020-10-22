@@ -106,7 +106,7 @@ export class FirebaseService {
         ).catch(err=> {console.log("Error insert item into DB",err)}); 
     }
 
-  public async updateItem(itemData: FirebaseItemModel, files : Files[]): Promise<void> {
+  public async updateItem(itemData: any, files : Files[]): Promise<void> {
       let filesVar: any[] = [];
       if( files.length > 0 ){
       for (var i = 0; i < files.length; i++) {

@@ -32,6 +32,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     } 
   }; 
   status : string;
+  type : string;
+  object : string;
   userIsCreator= false;
   postImages : Images[] = [];
 
@@ -69,16 +71,36 @@ export class FirebaseItemDetailsPage implements OnInit {
             console.log("length === 0", this.photoSlider[0]);
             this.postImages = [];
           }
+
           this.userIsCreator = this.item.createdBy == this.loginService.getLoginID() ? true : false;
+
           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;
             case "inactive" : this.status = this.featureService.translations.InActive;
             break;
-            case "sold" : this.status = this.featureService.translations.Sold;
+            default:
+              this.status = '';
+          }
+
+          switch (this.item.type) {
+            case "rent" : this.type = this.featureService.translations.ForRent;
+            break;
+            case "sale" : this.type = this.featureService.translations.ForSale;
             break;
             default:
-              this.status = "";
+              this.type = '';
+          }
+
+          switch (this.item.object) {
+            case "condo" : this.object = this.featureService.translations.Apartment;
+            break;
+            case "parking" : this.object = this.featureService.translations.Parking;
+            break;
+            case "locker" : this.object = this.featureService.translations.Locker;
+            break;
+            default:
+              this.object = '';
           }
 /*           else if(!(this.item.isShell)){
             this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
@@ -147,7 +169,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     const email = {
       to: this.item.creatorDetails.email,
       subject: this.item.object,
-      body: 'How are you?',
+      body: 'Is this still available?',
       isHtml: true
     }
 
