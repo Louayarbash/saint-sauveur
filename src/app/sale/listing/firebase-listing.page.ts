@@ -1,20 +1,13 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ModalController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-
 import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
-
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
 import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
-//import { Toast } from '@ionic-native/toast/ngx';
-//import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
-//import { File } from '@ionic-native/file/ngx';
-//import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Component({
   selector: 'app-firebase-listing',
@@ -45,9 +38,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private routerOutlet: IonRouterOutlet,
     private loginService: LoginService
-    //private document: DocumentViewer,
-    //private file:File,
-    //private fileOpener:FileOpener
   ) { 
 
   }

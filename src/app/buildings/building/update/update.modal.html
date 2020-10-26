@@ -56,6 +56,10 @@
           <ion-toggle color="main" formControlName="enablePublication"></ion-toggle>
         </ion-item>
         <ion-item>
+          <ion-label>{{ 'EventsMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableEvent"></ion-toggle>
+        </ion-item>
+        <ion-item>
           <ion-label>{{ 'TicketsMenu' | translate }}</ion-label>
           <ion-toggle color="main" formControlName="enableTicket" (ionChange)="manageServices($event, 'ticket')"></ion-toggle>
         </ion-item>

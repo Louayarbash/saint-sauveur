@@ -22,12 +22,13 @@ export class BuildingDetailsPage implements OnInit {
   status: string;
   parkings: Parkings[];
   services: Services[];
-  enableDeal: boolean;
-  enableSale: boolean;
-  enableLostFound: boolean;
-  enablePublication: boolean;
-  enableRentSale: boolean;
-  enableTicket: boolean;
+  enableDeal: string;
+  enableSale: string;
+  enableLostFound: string;
+  enablePublication: string;
+  enableEvent: string;
+  enableRentSale: string;
+  enableTicket: string;
   userIsAdmin = false;
 
   @HostBinding('class.is-shell') get isShell() {
@@ -56,11 +57,12 @@ export class BuildingDetailsPage implements OnInit {
        
           this.item = state;
 
-          if (this.item.createDate){
+          if (!this.item.isShell){
 
           this.enableDeal = this.item.enableDeal ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableLostFound = this.item.enableLostFound ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enablePublication = this.item.enablePublication ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
+          this.enableEvent = this.item.enableEvent ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableRentSale = this.item.enableRentSale ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableSale = this.item.enableSale ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableTicket = this.item.enableTicket ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;

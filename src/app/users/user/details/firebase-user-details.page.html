@@ -68,6 +68,11 @@
               <ion-label>{{ 'Status' | translate }}</ion-label>
               <ion-text>{{ status }}</ion-text>
             </ion-item>
+            <ion-item *ngIf="enableNotifications">
+              <ion-text slot="start">{{ 'EnableNotifications' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableNotifications }}</ion-text>
+              <ion-toggle [checked]="user.enableNotifications" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
             <ion-item *ngFor="let parking of parkingInfo; let index = index;">    
               <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
               {{ parking.description }}/#{{ parking.number }}

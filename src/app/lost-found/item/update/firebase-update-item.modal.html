@@ -47,8 +47,9 @@
           </ion-item>
     <ion-item-divider>
      <ion-button size="small" color="main" (click)="selectImageSource()" [disabled]="postImages.length >= 3" slot="start">
-      <div class="ion-padding">{{ 'AddPhoto' | translate }}</div> 
+      <!-- <div class="ion-padding">{{ 'AddPhoto' | translate }}</div>  -->
      <ion-icon name="camera-outline"></ion-icon>
+     <ion-text class="camera-btn">+</ion-text>
      </ion-button> 
    </ion-item-divider>
    <ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">

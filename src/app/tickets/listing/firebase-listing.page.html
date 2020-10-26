@@ -5,8 +5,8 @@
     </ion-buttons>
     <ion-searchbar search-icon="undefined" animated class="items-searchbar" [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
   </ion-toolbar>
-<ion-toolbar>
-  <ion-segment [(ngModel)]="segmentValue" color="main" *ngIf="userIsAdmin">
+<ion-toolbar *ngIf="(!items.isShell) && (items?.length > 0) && userIsAdmin">
+  <ion-segment [(ngModel)]="segmentValue" color="main">
     <ion-segment-button value="active">
       <ion-label>{{ 'ActiveTickets' | translate }}</ion-label>
     </ion-segment-button>

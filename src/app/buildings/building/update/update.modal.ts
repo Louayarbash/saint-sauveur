@@ -58,24 +58,17 @@ export class UpdateBuildingModal implements OnInit {
     this.enableTicket = this.item.enableTicket;
     this.enableDeal = this.item.enableDeal;
 
-/*     console.log("par", this.parkingsU);
-    console.log("ser", this.servicesU);
-    
-    console.log("enableTicket", this.enableTicketU);
-    console.log("enableDeal", this.enableDealU); */
-
     this.updateItemForm = new FormGroup({
       name: new FormControl(this.item.name,Validators.required),
       address: new FormControl(this.item.address),
       details: new FormControl(this.item.details),
       postalCode: new FormControl(this.item.postalCode),
-      // parkings: new FormControl(this.itemU.parkings),
-      // services: new FormControl(this.itemU.services),
       enableSale: new FormControl(this.item.enableSale),
       enableRentSale: new FormControl(this.item.enableRentSale),
       enableLostFound: new FormControl(this.item.enableLostFound),
       enableTicket: new FormControl(this.item.enableTicket),
       enablePublication: new FormControl(this.item.enablePublication),
+      enableEvent: new FormControl(this.item.enableEvent),
       enableDeal: new FormControl(this.item.enableDeal),
       status: new FormControl(this.item.status, Validators.required)
     } ,
@@ -140,6 +133,7 @@ export class UpdateBuildingModal implements OnInit {
     this.item.enableLostFound = this.updateItemForm.value.enableLostFound;
     this.item.enableTicket = this.updateItemForm.value.enableTicket;
     this.item.enablePublication = this.updateItemForm.value.enablePublication;
+    this.item.enableEvent = this.updateItemForm.value.enableEvent;
     this.item.enableDeal = this.updateItemForm.value.enableDeal;
     // this.item.typeId = this.updateItemForm.value.typeId;
     //console.log(this.item);

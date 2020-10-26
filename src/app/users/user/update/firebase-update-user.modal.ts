@@ -87,6 +87,7 @@ export class FirebaseUpdateUserModal implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
+      enableNotifications: new FormControl(this.user.enableNotifications),
       status : new FormControl(this.user.status, Validators.required)
     }/* ,
     {validators: this.parkingValidator} */
@@ -226,6 +227,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.userData.role= this.updateUserForm.value.role;
     this.userData.apartment= this.updateUserForm.value.apartment;
     this.userData.language= this.updateUserForm.value.language;
+    this.userData.enableNotifications= this.updateUserForm.value.enableNotifications;
     this.userData.status= this.updateUserForm.value.status;
     this.selectedParking = [];
     

@@ -76,7 +76,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           switchMap((filters) => {
             // Send a shell until we have filtered data from Firebase
             const searchingShellModel = [
-              new FirebaseListingItemModel(),
               new FirebaseListingItemModel()
             ];
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
@@ -123,7 +122,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   default:
                     item.statusTranslation = "Undefined";
                 } 
-                console.log("booo",item.subject)
+                
                 switch (item.subject) {
                   case "ElevatorBooking" : item.subjectTranslation = this.featureService.translations.ElevatorBooking;
                   break;
@@ -138,7 +137,6 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               let archivedList= this.items;
 
               if(this.userIsAdmin){
-                // this.ticketsList = this.items;
                 this.activeList = activeList.filter(item => item.status === 'active');
                 this.archivedList = archivedList.filter(item => item.status !== 'active');
                 console.log("activeList", this.activeList);

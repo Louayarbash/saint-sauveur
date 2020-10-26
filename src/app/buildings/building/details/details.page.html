@@ -78,6 +78,11 @@
               <ion-toggle [checked]="item.enablePublication" color="main" disabled slot="end"></ion-toggle>
             </ion-item>
             <ion-item>
+              <ion-text slot="start">{{ 'EventsMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableEvent }}</ion-text>
+              <ion-toggle [checked]="item.enableEvent" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ion-item>
               <ion-text slot="start">{{ 'TicketsMenu' | translate }}</ion-text>
               <ion-text slot="end">{{ enableTicket }}</ion-text>
               <ion-toggle color="main" [checked]="item.enableTicket" disabled slot="end"></ion-toggle>

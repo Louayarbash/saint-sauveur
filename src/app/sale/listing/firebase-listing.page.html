@@ -5,7 +5,7 @@
       <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar>
     </ion-buttons>
   </ion-toolbar>
-    <ion-toolbar>
+    <ion-toolbar *ngIf="(!items.isShell) && (items?.length > 0)">
         <ion-segment [(ngModel)]="segmentValue" color="main">
           <ion-segment-button value="sale">
             <ion-label>{{ 'ForSale' | translate }}</ion-label>
@@ -15,7 +15,6 @@
           </ion-segment-button>
       </ion-segment>
       </ion-toolbar>
-
 </ion-header>
 <ion-content>
   <ng-container *ngIf="items.isShell">

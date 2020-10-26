@@ -22,9 +22,6 @@ export class CreateBuildingModal implements OnInit {
   itemData: BuildingModel = new BuildingModel();
   parkings: Parkings[];
   services: Services[];
-/*   enableSale= true;
-  enableRentSale= true;
-  enableLostFound= true; */
   enableTicket= true;
   enableDeal= true;
   nameChanging = [{ naming: false }, { naming: false }, { naming: false }];
@@ -56,6 +53,7 @@ export class CreateBuildingModal implements OnInit {
       enableLostFound: new FormControl(true),
       enableTicket: new FormControl(true),
       enablePublication: new FormControl(true),
+      enableEvent: new FormControl(true),
       enableDeal: new FormControl(true),
       status: new FormControl('active',Validators.required)
     } ,
@@ -89,6 +87,7 @@ export class CreateBuildingModal implements OnInit {
     this.itemData.enableLostFound = this.createItemForm.value.enableLostFound;
     this.itemData.enableTicket = this.createItemForm.value.enableTicket;
     this.itemData.enablePublication = this.createItemForm.value.enablePublication;
+    this.itemData.enablePublication = this.createItemForm.value.enableEvent;
     this.itemData.enableDeal = this.createItemForm.value.enableDeal;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();

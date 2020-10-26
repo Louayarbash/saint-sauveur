@@ -76,6 +76,7 @@ export class FirebaseCreateUserModal implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
+      enableNotifications: new FormControl(true),
       status: new FormControl('active',Validators.required)
     }/* ,
     {validators: this.parkingValidator} */
@@ -140,6 +141,7 @@ export class FirebaseCreateUserModal implements OnInit {
     this.userData.role =this.createUserForm.value.role;
     this.userData.apartment =this.createUserForm.value.apartment;
     this.userData.language =this.createUserForm.value.language;
+    this.userData.enableNotifications =this.createUserForm.value.enableNotifications;
     this.userData.buildingId = this.loginService.getBuildingId();
     this.userData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.userData.createdBy = this.loginService.getLoginID();

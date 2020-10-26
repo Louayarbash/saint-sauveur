@@ -14,10 +14,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-update-item',
-  templateUrl: './firebase-update-item.modal.html',
-  styleUrls: [
-    './styles/firebase-update-item.modal.scss'
-  ],
+  templateUrl: './firebase-update-item.modal.html'
 })
 
 export class FirebaseUpdateItemModal implements OnInit {
