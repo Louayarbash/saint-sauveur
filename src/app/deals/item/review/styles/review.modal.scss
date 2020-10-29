@@ -10,13 +10,6 @@
 
 @import "../../../../../theme/mixins/inputs/checkbox-tag";
 
-:host {
-  --page-margin: var(--app-fair-margin);
-  --page-background: var(--app-background);
-
-  --page-background-shade: var(--app-background-shade);
-  --page-tags-gutter: 5px;
-}
 .header{
   padding: 10px;
   border-radius:10px;

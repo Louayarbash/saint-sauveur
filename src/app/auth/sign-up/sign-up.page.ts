@@ -183,6 +183,7 @@ export class SignUpPage implements OnInit {
       this.createProfile(userId);
     })
     .catch(error => {
+      this.dismissLoading();
       this.submitError = error.message;
       this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
     });
@@ -225,9 +226,11 @@ export class SignUpPage implements OnInit {
           console.log(err);
           this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)});
       }).catch((err) => { 
+        this.dismissLoading();
         console.log(err);
         this.featureService.presentToast(this.featureService.translations.AddingUserErrors, 2000);}); 
     }).catch((err) => { 
+      this.dismissLoading();
       console.log(err);
       this.featureService.presentToast(this.featureService.translations.AddingBuildingErrors, 2000);});  
   }

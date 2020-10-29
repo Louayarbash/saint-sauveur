@@ -127,11 +127,9 @@ export class FirebaseCreateItemModal implements OnInit {
   initValues(){
 
   this.today = dayjs().add(30,"minute").toISOString(); 
-  //console.log("resetDate", dayjs().toISOString());
   this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
   this.maxDate = dayjs().add(1,"month").toISOString();
   this.minStartDate = dayjs().add(30,"minute").format('HH:mm');
-  //console.log("minStartDate",this.minStartDate)
   this.duration = 0;
   this.previousCounterValue = 0;  
   }
@@ -220,8 +218,6 @@ export class FirebaseCreateItemModal implements OnInit {
       this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
       this.itemData.endDate = this.createItemForm.get('endDate').value;
       this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
-
-
     this.itemData.subject = this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
     this.itemData.buildingId = this.loginService.getBuildingId();
@@ -246,23 +242,4 @@ export class FirebaseCreateItemModal implements OnInit {
   dismissModal() {
      this.modalController.dismiss();
    }
-
-  /*
-  // cant open cloud decide not to use it
-  async openFile(i : number){
-     let uri;
-     console.log("PDFs: ",this.files);
-     try {
-      uri = await this.filePath.resolveNativePath(this.files[i].filePath); // only android
-      console.log("uri",uri);
-     } catch (err) {
-      console.log("error",err)
-      this.featureService.presentToast("Error opening file: " + err,2000);
-     }
-    this.fileOpener.open(uri,'application/pdf')
-    .then(() => console.log('File is opened'))
-    .catch(e => {this.featureService.presentToast("Error opening file",2000); console.log('Error opening file', e)});
-   }
-   */
-  //END
 }

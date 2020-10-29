@@ -133,7 +133,7 @@ export class SignInPage implements OnInit {
 
    async dismissLoading() {
     if (this.redirectLoader) {
-      console.log('Bonga');
+      // console.log('Bonga');
        return this.redirectLoader.dismiss();
     }
   }
@@ -160,10 +160,13 @@ export class SignInPage implements OnInit {
   signInWithEmail() {
     this.presentLoading();
     this.resetSubmitError();
+    console.log(this.loginForm.value['email']);
+    console.log(this.loginForm.value['password']);
+    this.loginForm.value['email'], this.loginForm.value['password']
     this.authService.signInWithEmail(this.loginForm.value['email'], this.loginForm.value['password'])
     .then(user => {
     
-      console.log("inside signInWithEmail");
+      console.log("inside signInWithEmail", user);
       this.loginService.initializeApp(user.user.uid).then(canAccessApp => {
         if(canAccessApp){
           this.authService.canAccessApp.next(true);

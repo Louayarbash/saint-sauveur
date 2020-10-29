@@ -1,14 +1,11 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ModalController, AlertController , IonContent } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { ModalController, AlertController , IonContent, ActionSheetController } from '@ionic/angular';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
-//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { UserModel } from '../user.model';
-//import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-//import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
@@ -25,7 +22,8 @@ export class FirebaseUpdateUserModal implements OnInit {
   @Input() user: UserModel;
   @Input() parkingInfo: ParkingInfo[];
   // myProfileImage = "./assets/images/video-playlist/big_buck_bunny.png";
-  emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+  // emptyPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+  emptyPhoto = '../../assets/sample-images/avatar.png';
   myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
   userData: UserModel = new UserModel();
@@ -43,17 +41,16 @@ export class FirebaseUpdateUserModal implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    //public alertController: AlertController,
     public firebaseService: FirebaseService,
     public router: Router,
     private alertController: AlertController,
     private camera: Camera,
-    //private _angularFireSrore :AngularFirestore,
     private featureService : FeatureService,
     private loginService : LoginService,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private actionSheetController : ActionSheetController
   ) { 
-    //console.log("userId",this.user);
+
     this.showHideParking2 = true;
     this.showHideParking3 = true;
     this.parking1selected = false;
@@ -266,65 +263,66 @@ export class FirebaseUpdateUserModal implements OnInit {
   }
   //LA_2019_11
   async selectImageSource(){
-    const cameraOptions: CameraOptions = {
-      quality:100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-	    cameraDirection : this.camera.Direction.FRONT,											
-      // targetHeight:200,		 
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.CAMERA
-    };
-
-    const galleryOptions: CameraOptions = {
-	  
-      quality:100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      // targetHeight:200,
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
-    };
-    const alert = await this.alertController.create({
-      header: this.featureService.translations.SelectSourceHeader,
-      message: this.featureService.translations.SelectSourceMessage,
-      buttons: [
-        {
-          text: this.featureService.translations.Camera,
-          handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageURI)=> {
-              this.featureService.cropImage(imageURI)
-              .then(base64 => {
-                if(base64)
-                  this.selectedPhoto = base64;
-                })
-              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
-              }
-             )
-             .catch(err=> console.log('problem getting photo', err));
-          }
-        },
-        {
-          text: this.featureService.translations.PhotoGallery,
-          handler: ()=> {
-            this.camera.getPicture(galleryOptions).then((imageURI)=> {
-              this.featureService.cropImage(imageURI)
-              .then(base64 => {
-                if(base64)
-                  this.selectedPhoto = base64;
-                })
-              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
-              }
-             )
-             .catch(err=> console.log('problem getting photo', err));
-          }
+    const cameraOptions : CameraOptions = {
+      allowEdit:true,
+        quality:100,
+        destinationType: this.camera.DestinationType.FILE_URI,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        cameraDirection : this.camera.Direction.FRONT,
+        correctOrientation:true,
+        sourceType:this.camera.PictureSourceType.CAMERA
+      };
+  
+      const galleryOptions : CameraOptions = {
+        quality:100,
+        destinationType: this.camera.DestinationType.FILE_URI,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
+      };
+    const actionSheet = await this.actionSheetController.create({
+      header: this.featureService.translations.SelectImagesSource,
+      buttons: [{
+        text: this.featureService.translations.PhotoGallery,
+        icon: 'images',
+        handler: () => {
+              this.camera.getPicture(cameraOptions).then((imageURI)=> {
+                this.featureService.cropImage(imageURI)
+                .then(base64 => {
+                  if(base64)
+                    this.selectedPhoto = base64;
+                  })
+                .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+                }
+               )
+               .catch(err=> console.log('problem getting photo', err));
+            }
+          }, {
+        text: this.featureService.translations.Camera,
+        icon: 'camera',
+        handler: () => {
+              this.camera.getPicture(galleryOptions).then((imageURI)=> {
+                this.featureService.cropImage(imageURI)
+                .then(base64 => {
+                  if(base64)
+                    this.selectedPhoto = base64;
+                  })
+                .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+                }
+               )
+               .catch(err=> console.log('problem getting photo', err));
+            }
+          }, {
+        text: this.featureService.translations.Cancel,
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
         }
-      ]
-    });
-
-    await alert.present();
+      }]
+      });
+      await actionSheet.present();
   }
   showHideParkingValidate2(){
     this.showHideParking2 = this.showHideParking2 ? false : true;

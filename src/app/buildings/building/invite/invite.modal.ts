@@ -79,7 +79,7 @@ export class InviteModal implements OnInit {
       let emailsListUpdated = this.emailsList.replace(';',',');
       console.log('after replace', emailsListUpdated);
       let mailOptions = {
-          from: '"Fred Foo 👻" <foo@example.com>', // sender address
+          from: '"Parkondo" <marcelouay@gmail.com>', // sender address
           to: this.emailsList, // list of receivers
           subject: "Invitation to join Parkondo building managment app", // Subject line
           text: this.InvitationMsg, // plain text body

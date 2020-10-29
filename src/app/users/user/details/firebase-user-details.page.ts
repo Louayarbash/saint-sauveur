@@ -1,10 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { ModalController, IonRouterOutlet, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { FirebaseService } from '../../firebase-integration.service';
 import { UserModel } from '../user.model';
-// import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
 import { ChatModal } from '../chat/chat.modal';
 import { DataStore } from '../../../shell/data-store';
@@ -12,7 +10,6 @@ import dayjs from 'dayjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import { AuthService } from '../../../auth/auth.service';
-// import { userModel } from 'src/app/deals/item/firebase-item.model';
 import { ParkingInfo } from '../../../type';
 
 @Component({
@@ -22,6 +19,7 @@ import { ParkingInfo } from '../../../type';
     './styles/firebase-user-details.page.scss'
   ],
 })
+
 export class FirebaseUserDetailsPage implements OnInit {
   user: UserModel;
   userIsAdmin: boolean= false;

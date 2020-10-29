@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
@@ -75,7 +75,7 @@ export class AppComponent {
   constructor(
     private translate: TranslateService,
     private platform: Platform,
-    private splashScreen: SplashScreen,
+  //  private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private fcmService : FcmService,
     public languageService : LanguageService,

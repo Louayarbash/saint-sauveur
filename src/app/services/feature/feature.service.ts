@@ -3,11 +3,9 @@ import { ToastController,LoadingController, ActionSheetController, AlertControll
 import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-//import { RatingUser } from 'app/deal/item/firebase-item.model';
 import { RatingUser } from '../../deals/item/firebase-item.model';
 import { VotingPublication } from '../../publications/item/firebase-item.model';
 import { Observable } from 'rxjs';
-//import { map } from 'rxjs/operators';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Images} from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -15,11 +13,10 @@ import { ImagePickerOptions, ImagePicker } from '@ionic-native/image-picker/ngx'
 import { File } from "@ionic-native/file/ngx";
 import { FormGroup } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { Parkings, Services } from '../../type';
 import { LanguageService } from '../../language/language.service';
 import { first } from 'rxjs/operators';
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
-// const nodemailer = require('nodemailer');
+
 
 @Injectable({
   providedIn: 'root'
@@ -172,7 +169,7 @@ async selectImageSource(maxLength: number, currentLength: number, postImages: Im
 
   const actionSheet = await this.actionSheetController.create({
     header: this.translations.SelectImagesSource,
-    cssClass: 'my-custom-class',
+    // cssClass: 'my-custom-class',
     buttons: [{
       text: this.translations.PhotoGallery,
       icon: 'images',

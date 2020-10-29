@@ -11,7 +11,6 @@ import { LoginService } from '../../services/login/login.service';
 import { BuildingModel } from '../../buildings/building/building.model';
 import { UserModel } from '../../users/user/user.model';
 import firebase from 'firebase/app';
-// import { sendInvitationEmails } from 'functions/src';
 
 @Component({
   selector: 'app-sign-up1',
@@ -20,6 +19,7 @@ import firebase from 'firebase/app';
     './styles/sign-up1.page.scss'
   ]
 })
+
 export class SignUp1Page implements OnInit {
   signup1Form: FormGroup;
   matching_passwords_group: FormGroup;
@@ -191,6 +191,7 @@ export class SignUp1Page implements OnInit {
         this.createUserProfile(userId);
       })
       .catch(error => {
+        this.dismissLoading();
         this.submitError = error.message;
         this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
       });
@@ -204,6 +205,7 @@ export class SignUp1Page implements OnInit {
     this.userData.email= this.signup1Form.value.email;
     this.userData.role= 'user';
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
+    this.userData.photo = '../../assets/sample-images/avatar.png';
 
     this.featureService.createItem('users', this.userData, uid)
      .then(() => {
@@ -231,6 +233,7 @@ export class SignUp1Page implements OnInit {
         this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)}
       );
     }).catch((err) => { 
+      this.dismissLoading();
       console.log(err);
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);}); 
   }

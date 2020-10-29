@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController,AlertController, IonContent } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, ValidationErrors } from '@angular/forms';
+import { ModalController, IonContent, ActionSheetController } from '@ionic/angular';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
-//import { CheckboxCheckedValidator } from '../../../validators/checkbox-checked.validator';
 import { FirebaseService } from '../../firebase-integration.service';
 import { UserModel } from '../user.model';
-//import { SelectUserImageModal } from '../select-image/select-user-image.modal';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-//import { AngularFirestore } from '@angular/fire/firestore';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import firebase from 'firebase/app';
@@ -41,7 +38,7 @@ export class FirebaseCreateUserModal implements OnInit {
     private modalController: ModalController,
     public firebaseService: FirebaseService,
     private camera: Camera,
-    private alertController: AlertController,
+    private actionSheetController : ActionSheetController,
     private featureService: FeatureService,
     private loginService: LoginService
   ) { 
@@ -54,7 +51,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   ngOnInit() {
     this.buildingParkings= this.loginService.getBuildingParkings();
-    this.selectedPhoto = 'https://s3-us-west-2.amazonaws.com/ionicthemes/otros/avatar-placeholder.png';
+    this.selectedPhoto = '../../assets/sample-images/avatar.png';
     this.createUserForm = new FormGroup({
       firstname: new FormControl('',Validators.required),
       lastname: new FormControl('',Validators.required),
@@ -83,8 +80,6 @@ export class FirebaseCreateUserModal implements OnInit {
     );
 
 }
-
-
   parking1Changed(ev:any) {
     console.log(ev.detail.value);
     if(ev.detail.value !== '1000'){
@@ -195,65 +190,65 @@ export class FirebaseCreateUserModal implements OnInit {
   // LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
-      quality:100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      cameraDirection : this.camera.Direction.FRONT,
-      // targetHeight:200,
-      // targetWidth:200,
-      correctOrientation:true,
-      sourceType:this.camera.PictureSourceType.CAMERA
-    };
-
-    const galleryOptions : CameraOptions = {
-      
-      quality:100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      // targetHeight:200,
-      // targetWidth:200,
-      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
-    };
-    const alert = await this.alertController.create({
-      header: this.featureService.translations.SelectSourceHeader,
-      message: this.featureService.translations.SelectSourceMessage,
-      buttons: [
-        {
-          text: this.featureService.translations.Camera,
-          handler: ()=> {
-            this.camera.getPicture(cameraOptions).then((imageURI)=> {
-              this.featureService.cropImage(imageURI)
-              .then(base64 => {
-                if(base64)
-                  this.selectedPhoto = base64;
-                })
-              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
-              }
-             )
-             .catch(err=> console.log('problem getting photo', err));
-          }
-        },
-        {
-          text: this.featureService.translations.PhotoGallery,
-          handler: ()=> {
-            this.camera.getPicture(galleryOptions).then((imageURI)=> {
-              this.featureService.cropImage(imageURI)
-              .then(base64 => {
-                if(base64)
-                  this.selectedPhoto = base64;
-                })
-              .catch( err=> console.log(err,'Error in croppedImageToBase64'));
-              }
-             )
-             .catch(err=> console.log('problem getting photo', err));
-          }
+      allowEdit:true,
+        quality:100,
+        destinationType: this.camera.DestinationType.FILE_URI,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        cameraDirection : this.camera.Direction.FRONT,
+        correctOrientation:true,
+        sourceType:this.camera.PictureSourceType.CAMERA
+      };
+  
+      const galleryOptions : CameraOptions = {
+        quality:100,
+        destinationType: this.camera.DestinationType.FILE_URI,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
+      };
+    const actionSheet = await this.actionSheetController.create({
+      header: this.featureService.translations.SelectImagesSource,
+      buttons: [{
+        text: this.featureService.translations.PhotoGallery,
+        icon: 'images',
+        handler: () => {
+              this.camera.getPicture(cameraOptions).then((imageURI)=> {
+                this.featureService.cropImage(imageURI)
+                .then(base64 => {
+                  if(base64)
+                    this.selectedPhoto = base64;
+                  })
+                .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+                }
+               )
+               .catch(err=> console.log('problem getting photo', err));
+            }
+          }, {
+        text: this.featureService.translations.Camera,
+        icon: 'camera',
+        handler: () => {
+              this.camera.getPicture(galleryOptions).then((imageURI)=> {
+                this.featureService.cropImage(imageURI)
+                .then(base64 => {
+                  if(base64)
+                    this.selectedPhoto = base64;
+                  })
+                .catch( err=> console.log(err,'Error in croppedImageToBase64'));
+                }
+               )
+               .catch(err=> console.log('problem getting photo', err));
+            }
+          }, {
+        text: this.featureService.translations.Cancel,
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
         }
-      ]
-    });
-
-    await alert.present();
+      }]
+      });
+      await actionSheet.present();
   }
 
   showHideParkingValidate2(){

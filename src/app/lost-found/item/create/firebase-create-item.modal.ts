@@ -112,6 +112,6 @@ doReorder(ev: any) {
 }
 
 selectImageSource() {
-  this.featureService.selectImageSource(10, this.postImages.length, this.postImages, null)
+  this.featureService.selectImageSource(3, this.postImages.length, this.postImages, null)
 }
 }

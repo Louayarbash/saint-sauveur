@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="filters-toolbar" >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
-      <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar>
     </ion-buttons>
+    <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar>
   </ion-toolbar>
     <ion-toolbar *ngIf="(!items.isShell) && (items?.length > 0)">
         <ion-segment [(ngModel)]="segmentValue" color="main">

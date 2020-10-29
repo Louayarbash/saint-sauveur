@@ -51,40 +51,4 @@ ion-icon {
       }
     }
   }
-
-  //check box
-	.checkbox-tags {
-		padding: calc(var(--page-margin) / 2) calc(var(--page-margin) - var(--page-tags-gutter));
-
-		@include checkbox-tag();
-
-    .checkbox-tag {
-      padding: 10px var(--page-tags-gutter);
-      margin: var(--page-tags-gutter) 0px;
-    }
-
-    // Add a deeper selector to override default colors
-    &.square-checkbox-tags {
-      background-color: var(--page-background);
-
-      .checkbox-tag {
-        --checkbox-tag-color: var(--ion-color-medium);
-        --checkbox-tag-background: var(--ion-color-lightest);
-        --checkbox-tag-active-color: var(--ion-color-lightest);
-        --checkbox-tag-active-background: var(--ion-color-secondary);
-      }
-    }
-
-    // Add a deeper selector to override default colors
-    &.rounded-checkbox-tags {
-  		background-color: var(--ion-color-lightest);
-
-      .checkbox-tag {
-        --checkbox-tag-color: var(--ion-color-lightest);
-        --checkbox-tag-background: var(--ion-color-light-shade);
-        --checkbox-tag-active-color: var(--ion-color-lightest);
-        --checkbox-tag-active-background: var(--ion-color-secondary);
-      }
-    }
-  }
 }

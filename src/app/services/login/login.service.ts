@@ -177,6 +177,9 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     try {
       
       const user= await this.afs.firestore.collection("users").doc(uid).get({source: 'server'});
+      if(!user.data()){
+        return false;
+      }
       console.log(user.data());
       let userData= user.data() as UserModel;
       this.userInfo.id= uid;

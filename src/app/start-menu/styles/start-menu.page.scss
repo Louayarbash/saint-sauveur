@@ -4,11 +4,13 @@
 // Note:  These ones were added by us and have nothing to do with Ionic CSS Custom Properties
 :host {
   --page-margin: var(--app-narrow-margin);
-
   --page-categories-gutter: calc(var(--page-margin) / 4);
-
   --page-category-background: var(--ion-color-medium);
   --page-category-background-rgb: var(--ion-color-medium-rgb);
+}
+
+ion-content{
+  --background:#e05c0e;
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
@@ -23,8 +25,9 @@
   @include hide-scrollbars();
 
   .category-item {
-    --page-category-background: #e05c0e;
+    --page-category-background: #e05c0e; // e05c0e;
     --page-category-background-rgb: 224, 92, 14;
+    
 
     .category-anchor {
       height: 100%;
@@ -36,13 +39,15 @@
       .category-title {
         margin: auto;
         text-transform: uppercase;
-        font-weight: 400;
+        font-weight: bold;
         font-size: 12px;
         letter-spacing: 1px;
         padding: calc((var(--page-margin) / 4) * 3) var(--page-margin);
+        // color: var(--ion-color-lightest);
         color: var(--ion-color-lightest);
         background-color: var(--page-category-background);
         border-radius: var(--app-fair-radius);
+        // opacity: 0.5;
       }
     }
   }
