@@ -1,16 +1,16 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'ParkingRequests' | translate }}-{{ loginId }}{{ loginName }}</ion-title>
+    <ion-title>{{ 'ParkingRequests' | translate }} - {{ loginId }}{{ loginName }}</ion-title>
 <!--     <ion-buttons slot="end">
       <ion-button (click)="chooseType()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons> -->
   </ion-toolbar>
-<ion-toolbar>
+  <ion-toolbar>
     <ion-segment [(ngModel)]="segmentValue" color="main">
         <ion-segment-button value="newRequests">
           <ion-label>{{ 'NewRequests' | translate }}</ion-label>
@@ -85,11 +85,7 @@
             </ion-row>
             </ion-col>
               <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
-<!--               <ng-container *ngIf="(item?.status == 'expired')">
-                <span class="item-description">
-                  <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
-                </span>
-              </ng-container> -->
+
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
                 <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
@@ -158,11 +154,7 @@
 
             </ion-col>
               <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
- <!--              <ng-container *ngIf="(item?.status == 'expired')">
-                <span class="item-description">
-                  <app-text-shell [data]="(item?.startTimeCounter | appTimeAgo)"></app-text-shell>
-                </span>
-              </ng-container> -->
+
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
                 <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >

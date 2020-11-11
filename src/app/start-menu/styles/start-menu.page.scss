@@ -15,16 +15,16 @@ ion-content{
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
 .categories-list {
-  --ion-grid-column-padding: var(--page-categories-gutter);
-
-  padding: calc(var(--page-categories-gutter) * 3);
+  --ion-grid-column-padding: 10px;// var(--page-categories-gutter);
+  padding: 10px;// calc(var(--page-categories-gutter) * 3);
   height: 100%;
   align-content: flex-start;
-  overflow: scroll;
+  overflow: scroll; 
 
   @include hide-scrollbars();
 
   .category-item {
+    padding: 0px 0px 10px 0px;
     --page-category-background: #e05c0e; // e05c0e;
     --page-category-background-rgb: 224, 92, 14;
     

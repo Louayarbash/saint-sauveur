@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="updateItemForm" (ngSubmit)="updateItem()">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="main">
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -15,11 +15,11 @@
         <!-- <ion-list lines="full"> -->
           <ion-item>
             <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
-            <ion-input type="text" formControlName="subject"></ion-input>
+            <ion-input autocapitalize type="text" formControlName="subject"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
-            <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
+            <ion-textarea autocapitalize rows="6" cols="20" formControlName="details"></ion-textarea>
           </ion-item>
           <ng-container *ngIf="item.category == 'announcement'">
             <ion-item>

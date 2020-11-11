@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar class="filters-toolbar" >
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
@@ -38,10 +38,12 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        <ion-text>{{item.object}}</ion-text>
+        
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>
+        <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text>
+            
       </ion-col>
     </ion-row>
     </ion-card-title>
@@ -67,10 +69,12 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.object"></app-text-shell>
+        <ion-text>{{item.object}}</ion-text>
+            
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.price ? '$'.concat(item.price) : null"></app-text-shell>
+        <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text>
+            
       </ion-col>
     </ion-row>
     </ion-card-title>

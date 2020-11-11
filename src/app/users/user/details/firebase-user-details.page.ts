@@ -82,6 +82,7 @@ export class FirebaseUserDetailsPage implements OnInit {
       if(this.user.parkings){
         this.parkingInfo= this.loginService.getParkingInfo(this.user.parkings);
       }
+      else this.parkingInfo = [];
     }
     });
   });

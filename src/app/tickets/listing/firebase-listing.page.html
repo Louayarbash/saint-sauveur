@@ -1,9 +1,10 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-searchbar search-icon="undefined" animated class="items-searchbar" [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
+    <!-- <ion-searchbar placeholder="Search Favorites"></ion-searchbar> -->
+    <ion-searchbar search-icon="undefined" class="items-searchbar" [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
   </ion-toolbar>
 <ion-toolbar *ngIf="(!items.isShell) && (items?.length > 0) && userIsAdmin">
   <ion-segment [(ngModel)]="segmentValue" color="main">
@@ -28,7 +29,7 @@
   <div *ngIf="activeList?.length > 0">
       <ion-card class="itemCard" *ngFor="let item of activeList" [routerLink]="['/tickets/details', item.id]">
         <ion-item *ngIf="item.subject" color="main">
-          <ion-icon name="build-outline" slot="start"></ion-icon>
+          <ion-icon name="build-outline" slot="end"></ion-icon>
           <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
         </ion-item>
         <ion-card-header>
@@ -38,17 +39,15 @@
           <ion-card-title>    
           <ion-row>
             <ion-col class="ion-no-padding">
-              <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+              <ion-text>{{ item.subjectTranslation }}</ion-text>
             </ion-col>
             <ion-col class="ion-no-padding ion-text-right">
-              <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+              <ion-text>{{ item.statusTranslation }}</ion-text>
             </ion-col>
           </ion-row>
           </ion-card-title>
         </ion-card-header>
-<!--         <ion-card-content>
-          <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
-        </ion-card-content> -->
+
       </ion-card>
   </div>
   <h3 *ngIf="activeList?.length == 0" class="empty-list-message">
@@ -69,17 +68,15 @@
           <ion-card-title>    
           <ion-row>
             <ion-col class="ion-no-padding">
-              <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+              <ion-text>{{ item.subjectTranslation }}</ion-text>
             </ion-col>
             <ion-col class="ion-no-padding ion-text-right">
-              <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+              <ion-text>{{ item.statusTranslation }}</ion-text>
             </ion-col>
           </ion-row>
           </ion-card-title>
         </ion-card-header>
-<!--         <ion-card-content>
-          <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
-        </ion-card-content> -->
+
       </ion-card>
   </div>
   <h3 *ngIf="archivedList?.length == 0" class="empty-list-message">
@@ -106,17 +103,14 @@
         <ion-card-title>    
         <ion-row>
           <ion-col class="ion-no-padding">
-            <app-text-shell animation="bouncing" [data]="item.subjectTranslation"></app-text-shell>
+            <ion-text>{{ item.subjectTranslation }}</ion-text>
           </ion-col>
           <ion-col class="ion-no-padding ion-text-right">
-            <app-text-shell animation="bouncing" [data]="item.statusTranslation"></app-text-shell>
+            <ion-text>{{ item.statusTranslation }}</ion-text>
           </ion-col>
         </ion-row>
         </ion-card-title>
       </ion-card-header>
-<!--       <ion-card-content>
-        <app-text-shell animation="bouncing" [data]="item.details"></app-text-shell>
-      </ion-card-content> -->
     </ion-card>
 </div>
 <h3 *ngIf="ticketsList?.length == 0" class="empty-list-message">

@@ -5,19 +5,27 @@ ion-title {
   letter-spacing: 0.4px;
 }
 
+ion-searchbar {
+  input {
+    border-radius: 30px !important;
+  }
+}
+
 ion-searchbar.items-searchbar {
-  padding: 0px;
+  padding: 10px;
   // override Ionic fixed height
   height: 100%;
   // Learn more about CSS contain property here: https://termvader.github.io/css-contain/
   contain: content;
+  //border-radius: 40px;
 }
 
 .searchbar-input.sc-ion-searchbar-md {
-  padding-left: 0px;
+  background-color: #F2F2F2;
+  padding-left: 20px;
 }
 
-.sliderModal .modal-wrapper{
+.sliderModal .modal-wrapper {
   --background: transparent !important;
 } 
 

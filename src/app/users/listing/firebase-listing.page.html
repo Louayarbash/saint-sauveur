@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'Users' | translate }}<ion-text color="medium" *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
+    <ion-title>{{ 'Users' | translate }}<ion-text *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
   </ion-toolbar>
-  <ion-toolbar class="filters-toolbar11">
-    <ion-row class="searchbar-row11">
+  <ion-toolbar color="main">
+    <ion-row>
       <ion-col>
         <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarUsers' | translate }}"></ion-searchbar>
       </ion-col>
@@ -28,31 +28,9 @@
       </ion-avatar>
       <ion-label>{{ item.firstname?.concat(' ').concat(item.lastname) }}</ion-label>
       <!-- <ion-text color="medium" *ngIf="!items.isShell"> {{ ('#').concat(item.app) }}</ion-text> -->
-      <!-- <app-text-shell animation="bouncing" [data]="item.app"></app-text-shell> -->
+   
     </ion-item>
-<!--     <ion-item class="list-item" *ngFor="let item of items" [routerLink]="['/users/details', item.id]">
-      <ion-row class="user-row">
-        <ion-col size="3" class="user-image-wrapper">
-          <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-            <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.photo" [alt]="'item image'"></app-image-shell>
-          </app-aspect-ratio>
-        </ion-col>
-        <ion-col class="user-data-wrapper">
-          <div class="user-info">
-            <h3 class="user-name">
-              <app-text-shell animation="bouncing" [data]="item.firstname?.concat(' ').concat(item.lastname)"></app-text-shell>
-            </h3>
-            <h5 class="user-info">
-              <ion-row>
-          <ion-col>
-              <app-text-shell animation="bouncing" [data]="('#').concat(item?.app)"></app-text-shell>
-          </ion-col>
-          </ion-row>
-        </h5>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-item> -->
+
   </ion-list>
 </ng-container>
   <ng-container *ngIf="items?.length == 0">

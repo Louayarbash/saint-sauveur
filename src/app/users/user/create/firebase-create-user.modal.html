@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="createUserForm" (ngSubmit)="createUser()">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="main">
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -27,11 +27,11 @@
       <ion-list lines="full">
         <ion-item >
           <ion-label  position="floating">{{ 'FirstName' | translate }}</ion-label>
-          <ion-input type="text" formControlName="firstname"></ion-input>
+          <ion-input autocapitalize type="text" formControlName="firstname"></ion-input>
         </ion-item>
         <ion-item >
           <ion-label  position="floating">{{ 'LastName' | translate }}</ion-label>
-          <ion-input type="text" formControlName="lastname"></ion-input>
+          <ion-input autocapitalize type="text" formControlName="lastname"></ion-input>
         </ion-item>
         <ion-item >
             <ion-label position="floating">{{ 'Email' | translate }}</ion-label>

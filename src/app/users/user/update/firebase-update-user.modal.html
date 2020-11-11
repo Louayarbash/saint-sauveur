@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="updateUserForm" (ngSubmit)="updateUser()">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="main">
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -11,9 +11,7 @@
       <ion-title>{{ 'Update' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
-
   <ion-content class="update-user-content">
-
     <ion-row class="select-user-image-row">
       <ion-col class="user-image-col" size="5">
         <app-aspect-ratio [ratio]="{w: 1, h: 1}">
@@ -24,17 +22,16 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
-
     <section>
       <ion-list lines="full">
         <ion-item >
-          <ion-label  position="floating">{{ 'FirstName' | translate }}</ion-label>
-          <ion-input type="text" formControlName="firstname"></ion-input>
+          <ion-label position="floating">{{ 'FirstName' | translate }}</ion-label>
+          <!-- <ion-input autocapitalize="words" formControlName="firstname"></ion-input> -->
+          <ion-input autocapitalize formControlName="firstname"></ion-input>
         </ion-item>
         <ion-item >
           <ion-label  position="floating">{{ 'LastName' | translate }}</ion-label>
-          <ion-input type="text" formControlName="lastname"></ion-input>
+          <ion-input autocapitalize type="text" formControlName="lastname"></ion-input>
         </ion-item>
         <ion-item >
             <ion-label position="floating">{{ 'Email' | translate }}</ion-label>
@@ -45,8 +42,8 @@
           <ion-datetime display-format="DD/MM/YYYY" picker-format="DD MMMM YYYY" formControlName="birthdate"></ion-datetime>
         </ion-item>
         <ion-item >
-          <ion-label  position="floating">{{ 'Phone' | translate }}</ion-label>
-          <ion-input type="text" formControlName="phone"></ion-input>
+          <ion-label position="floating">{{ 'Phone' | translate }}</ion-label>
+          <ion-input inputmode="tel" type="tel" formControlName="phone"></ion-input>
         </ion-item>
 <!--         <ion-item >
           <ion-label  position="floating">{{ 'Building' | translate }}</ion-label>
@@ -186,6 +183,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+{{selectedParking}}
 <ion-item-divider lines="none" >
   <ion-label>{{ 'Parking' | translate }}</ion-label>
   </ion-item-divider>
@@ -193,7 +191,7 @@
     <ion-row class="ion-align-items-center">
 <ion-col size="5">
   <ion-item lines=“none”>
-    <ion-label position="stacked">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
+    <ion-label position="floating">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
     <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
       <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
@@ -270,6 +268,27 @@
   </ion-content>
 
   <ion-footer>
+    <ng-container *ngIf="updateUserForm.get('parking1Number').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('parking1Number').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'Parking1NameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateUserForm.get('parking2Number').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('parking2Number').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'Parking2NameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateUserForm.get('parking3Number').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('parking3Number').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'Parking3NameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
     <ng-container *ngIf="updateUserForm.get('firstname').invalid && (updateUserForm.dirty || updateUserForm.touched)">
       <ion-row *ngIf="updateUserForm.get('firstname').errors.required">
         <ion-col>

@@ -1,11 +1,11 @@
 //import * as functions from 'firebase-functions';
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-import functions = require('firebase-functions');
-// The Firebase Admin SDK to access the Firebase Realtime Database.
-import admin = require('firebase-admin');
 //import  CloudTasksClient  = require('@google-cloud/tasks');
 //import { CloudTasksClient } from '@google-cloud/tasks';
 //import * as dayjs from 'dayjs';
+// The Firebase Admin SDK to access the Firebase Realtime Database.
+import admin = require('firebase-admin');
+import functions = require('firebase-functions');
 const { CloudTasksClient } = require('@google-cloud/tasks');
 const nodemailer = require('nodemailer');
 const cors = require("cors");
@@ -77,8 +77,6 @@ exports.onNewRequest = functions.firestore
       }
     }
 
-    // ref to the device collection for the user
-    //const db = admin.firestore()
     const devicesRef = db.collection('devices').where('userId', '==', createdBy)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
@@ -92,17 +90,16 @@ exports.onNewRequest = functions.firestore
       tokens.push( token )
     })
 
-
-      /* 2 */
-      /* Cretate task to change status to expired */
-      const dataFortask = data as InfoDocumentData;
-      const { expiresIn } = dataFortask;
+    /* 2 */
+    /* Cretate task to change status to expired */
+    const dataFortask = data as InfoDocumentData;
+    const { expiresIn } = dataFortask;
       
-      let expiresAtSeconds: number | undefined;
+    let expiresAtSeconds: number | undefined;
       
-      if (expiresIn) {
+    if (expiresIn) {
         expiresAtSeconds = admin.firestore.Timestamp.now().seconds + expiresIn;
-      }
+    }
        
       //console.log("Louay startDateTS",startDateTS);
       console.log("Louay expiresAtSeconds",expiresAtSeconds);

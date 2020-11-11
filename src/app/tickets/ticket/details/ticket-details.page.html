@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tickets/listing"></ion-back-button>
     </ion-buttons>
@@ -9,6 +9,14 @@
         {{ 'Edit' | translate }}
       </ion-button>
     </ion-buttons>
+<!--     <ion-buttons slot="secondary">
+      <ion-button>
+        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -21,19 +29,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!item.isShell">
-<!--   <ion-row class="user-info-row">
-    <ion-col class="user-image-col" size="5">
-      <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-        <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="user.photo" [alt]="'item image'">
-        </app-image-shell>
-      </app-aspect-ratio>
-    </ion-col>
-    <ion-col class="user-details-col" size="12">
-      <h2 class="user-name">
-        <app-text-shell animation="bouncing" [data]="user.firstname?.concat(' ').concat(user.lastname)"></app-text-shell>
-      </h2>
-    </ion-col>
-    </ion-row> -->
+
     
     <ion-card class="itemCard" *ngIf="bookingSection">
       <ion-item *ngIf="item.reference" color="main">
@@ -47,12 +43,12 @@
       <ion-item *ngIf="item.createDate">    
         <ion-label>{{ 'TicketDate' | translate }}</ion-label>
         {{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}
-        <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
+        
       </ion-item>
       <ion-item *ngIf="item.creatorDetails">    
         <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
         <!-- {{item.creatorDetails.firstname.concat(" ").concat(item.creatorDetails.lastname)}} -->
-         <!-- <app-text-shell animation="bouncing" [data]="item.creatorDetails.firstname"></app-text-shell> -->
+        
          <ion-text>{{item.creatorDetails.firstname}}</ion-text> 
       </ion-item>
       <ion-item>
@@ -89,13 +85,8 @@
         <ion-item *ngIf="item.creatorDetails">    
           <ion-label>{{ 'TicketCreator' | translate }}</ion-label>
           {{item.creatorDetails.firstname}}
-          <!-- <app-text-shell animation="bouncing" [data]="date"></app-text-shell> -->
+          
         </ion-item>
-<!--       <ion-item *ngIf="item.typeId">
-        <ion-label>{{ 'TicketType' | translate }}</ion-label>
-        <ion-text>{{type}}</ion-text>
-        <app-text-shell animation="bouncing" [data]="type"></app-text-shell>                  
-       </ion-item> -->
 
             <ion-item *ngIf="item.status">
               <ion-label>{{ 'TicketStatus' | translate }}</ion-label>

@@ -7,8 +7,7 @@ import { LoginService } from '../services/login/login.service';
   templateUrl: './start-menu.page.html',
   styleUrls: [
     './styles/start-menu.page.scss',
-    './styles/start-menu.shell.scss',
-    './styles/start-menu.responsive.scss'
+    './styles/start-menu.shell.scss'
   ]
 })
 export class StartMenuPage implements OnInit {
@@ -30,7 +29,7 @@ export class StartMenuPage implements OnInit {
     public menu: MenuController
   ) {
     console.log('start menu constructor');
-    this.menu.enable(true);
+    this.menu.enable(true); 
     
   }
 

@@ -213,7 +213,7 @@ export class FirebaseCreateUserModal implements OnInit {
         text: this.featureService.translations.PhotoGallery,
         icon: 'images',
         handler: () => {
-              this.camera.getPicture(cameraOptions).then((imageURI)=> {
+              this.camera.getPicture(galleryOptions).then((imageURI)=> {
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)
@@ -228,7 +228,7 @@ export class FirebaseCreateUserModal implements OnInit {
         text: this.featureService.translations.Camera,
         icon: 'camera',
         handler: () => {
-              this.camera.getPicture(galleryOptions).then((imageURI)=> {
+              this.camera.getPicture(cameraOptions).then((imageURI)=> {
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)

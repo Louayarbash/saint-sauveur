@@ -17,7 +17,7 @@
       <div class="time-other" text-right><br>
         {{message.date?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
       </div>
-      <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
+      
       </ion-col>
       <ion-col offset="3" size="9" *ngIf="loginId === message.userId" class="message my-message">
         <b>{{ userName }}</b><br>
@@ -26,7 +26,7 @@
         <!-- {{message.createdAt?.seconds * 1000 | date:'short'}}<br> -->
         {{message.date?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
         </div>
-        <!-- <app-text-shell animation="bouncing" [data]="message.text1"></app-text-shell> -->
+        
        </ion-col>
     </ion-row>
    </ion-grid> 
@@ -38,7 +38,7 @@
       <ion-grid>
       <ion-row class="ion-align-items-center">
         <ion-col size="10">
-          <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="msgText" class="message-input ion-no-margin"></ion-textarea>
+          <ion-textarea autocapitalize auto-grow="true" spellcheck="true" [(ngModel)]="msgText" class="message-input ion-no-margin"></ion-textarea>
         </ion-col>
         <ion-col size="2" class="msg-btn ion-text-center">
           <ion-button (click)="sendMessage()" fill="clear" color="dark" [disabled]="msgText === ''" class="msg-btn">

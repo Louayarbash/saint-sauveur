@@ -98,6 +98,7 @@ export class FirebaseUpdateUserModal implements OnInit {
 
       this.updateUserForm.controls['parking1Level'].setValue(this.parkingInfo[0].id);
       this.updateUserForm.controls['parking1Number'].setValue(this.parkingInfo[0].number);
+      this.updateUserForm.controls['parking1Number'].setValidators(Validators.required);
       this.changeRef.detectChanges();
 
     }
@@ -109,6 +110,7 @@ export class FirebaseUpdateUserModal implements OnInit {
 
       this.updateUserForm.controls['parking2Level'].setValue(this.parkingInfo[1].id);
       this.updateUserForm.controls['parking2Number'].setValue(this.parkingInfo[1].number);
+      this.updateUserForm.controls['parking2Number'].setValidators(Validators.required);
       this.changeRef.detectChanges();
     }
     else{
@@ -121,6 +123,7 @@ export class FirebaseUpdateUserModal implements OnInit {
       
       this.updateUserForm.controls['parking3Level'].setValue(this.parkingInfo[2].id);
       this.updateUserForm.controls['parking3Number'].setValue(this.parkingInfo[2].number);
+      this.updateUserForm.controls['parking3Number'].setValidators(Validators.required);
       this.changeRef.detectChanges();
     }
     else{
@@ -287,7 +290,7 @@ export class FirebaseUpdateUserModal implements OnInit {
         text: this.featureService.translations.PhotoGallery,
         icon: 'images',
         handler: () => {
-              this.camera.getPicture(cameraOptions).then((imageURI)=> {
+              this.camera.getPicture(galleryOptions).then((imageURI)=> {
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)
@@ -302,7 +305,7 @@ export class FirebaseUpdateUserModal implements OnInit {
         text: this.featureService.translations.Camera,
         icon: 'camera',
         handler: () => {
-              this.camera.getPicture(galleryOptions).then((imageURI)=> {
+              this.camera.getPicture(cameraOptions).then((imageURI)=> {
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)

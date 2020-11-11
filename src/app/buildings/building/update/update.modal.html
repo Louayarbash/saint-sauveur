@@ -2,7 +2,7 @@
 <!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
 <form class="ion-page" [formGroup]="updateItemForm" (ngSubmit)="updateItem()">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="main">
       <ion-buttons slot="end">
         <ion-button (click)="dismissModal()">
           <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -19,11 +19,11 @@
         </ion-item-divider>   
       <ion-item>
         <ion-label  position="floating">{{ 'BuildingName' | translate }}</ion-label>
-        <ion-input type="text" formControlName="name"></ion-input>
+        <ion-input autocapitalize type="text" formControlName="name"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label  position="floating">{{ 'Address' | translate }}</ion-label>
-        <ion-input type="text" formControlName="address"></ion-input>
+        <ion-input autocapitalize type="text" formControlName="address"></ion-input>
       </ion-item>
     <ion-item>
       <ion-label  position="floating">{{ 'PostalCode' | translate }}</ion-label>
@@ -31,7 +31,7 @@
     </ion-item>
     <ion-item>
       <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
-      <ion-textarea rows="6" cols="20" formControlName="details"></ion-textarea>
+      <ion-textarea autocapitalize rows="6" cols="20" formControlName="details"></ion-textarea>
     </ion-item>
 	 </ion-card>
               <ion-card class="itemCard">

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="users/listing"></ion-back-button>
     </ion-buttons>
@@ -25,7 +25,8 @@
     </ion-col>
     <ion-col class="user-details-col" size="12">
       <h2 class="user-name">
-        <app-text-shell animation="bouncing" [data]="user.firstname?.concat(' ').concat(user.lastname)"></app-text-shell>
+        <ion-text>{{user.firstname?.concat(' ').concat(user.lastname)}}</ion-text>
+        
       </h2>
     </ion-col>
     </ion-row>

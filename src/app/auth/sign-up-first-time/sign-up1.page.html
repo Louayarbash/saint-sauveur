@@ -32,10 +32,10 @@
       </div>
       <ng-container *ngIf="emailFound">
       <ion-item class="input-item">
-        <ion-input type="text" placeholder="{{ 'Firstname' | translate }}" formControlName="firstname" clearInput></ion-input>
+        <ion-input autocapitalize type="text" placeholder="{{ 'Firstname' | translate }}" formControlName="firstname" clearInput></ion-input>
       </ion-item>
       <ion-item class="input-item">
-        <ion-input type="text" placeholder="{{ 'Lastname' | translate }}" formControlName="lastname" clearInput></ion-input>
+        <ion-input autocapitalize type="text" placeholder="{{ 'Lastname' | translate }}" formControlName="lastname" clearInput></ion-input>
       </ion-item>
       <div formGroupName="matching_passwords">
         <ion-item class="input-item">

@@ -1,7 +1,7 @@
 //reference https://angularfirebase.com/lessons/ionic-native-with-firebase-fcm-push-notifications-ios-android/
 import { Injectable } from '@angular/core';
 //import { Firebase } from '@ionic-native/firebase/ngx';
-//import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FCM } from '@ionic-native/fcm/ngx';
 //import { AngularFireAuth } from '@angular/fire/auth';
@@ -10,32 +10,32 @@ import { LoginService } from "../login/login.service"
 // import { mergeMapTo,mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class FcmService {
 
   constructor(
-    //public messaging : AngularFireMessaging,
     private fcm : FCM, 
     public afs: AngularFirestore,
     private loginService : LoginService,
     private platform: Platform,
     private router : Router,
     private alertController: AlertController
-    //private ngZone: NgZone,
-    //private changeRef : ChangeDetectorRef
   ) {
      
   }
   // Save the token to firestore
   // Get permission from the user
-   async getToken() { 
+   async getToken() {
      
     let token: string;
 
     if (this.platform.is('android')) {
+      console.log("android");
       token = await this.fcm.getToken();
+      
     } 
   
     if (this.platform.is('ios')) {
@@ -46,7 +46,9 @@ export class FcmService {
   }
   
   private saveTokenToFirestore(token) {
+    console.log("token", token);
     if (!token) return;
+    
   
     const devicesRef = this.afs.collection('devices')
     let userId = ""; 
