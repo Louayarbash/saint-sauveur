@@ -31,7 +31,7 @@
           <ion-col>
           <ion-item lines=“none”>
             <ion-label >{{ 'TicketType' | translate }}</ion-label>
-            <ion-select [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="typeId" color="main">
+            <ion-select interface="alert" [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="typeId" color="main">
               <ion-select-option *ngFor="let type of ticketTypes" [value]="type.id">{{ type.description | translate }}</ion-select-option>
               <ion-select-option value="1000">{{ 'Other' | translate }}</ion-select-option>
             </ion-select>
@@ -132,6 +132,13 @@
       <ion-row *ngIf="createItemForm.get('subject').errors.required">
         <ion-col>
         <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="createItemForm.get('startDate').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row>
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'PleaseCorrectStartDate' | translate }}</ion-text>
         </ion-col>
       </ion-row>
     </ng-container>

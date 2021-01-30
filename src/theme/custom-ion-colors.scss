@@ -43,7 +43,8 @@
   --ion-color-main-tint: #d12f35;
 } */
 @include ion-color('main') {
---ion-color-main: #e05c0e;
+//--ion-color-main: #e05c0e;
+--ion-color-main: #e15b0ed0;
 --ion-color-main-rgb: 224,92,14;
 --ion-color-main-contrast: #ffffff;
 --ion-color-main-contrast-rgb: 255,255,255;

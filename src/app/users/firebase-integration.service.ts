@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import * as dayjs from 'dayjs';
 import { DataStore } from '../shell/data-store';
-
 import { FirebaseListingItemModel } from './listing/firebase-listing.model';
 import { UserModel } from './user/user.model';
 //import { UserImageModel } from './user/select-image/user-image.model';
 import { LoginService } from '../services/login/login.service';
-import { LoginCredential } from '../type';
+import { FcmService } from '../services/fcm/fcm.service';
+
+
 
 @Injectable()
 export class FirebaseService {
@@ -25,7 +26,7 @@ export class FirebaseService {
   //private avatarsDataStore: DataStore<Array<UserImageModel>>;
   
 
-  constructor(private afs: AngularFirestore, private loginService: LoginService) {}
+  constructor(private afs: AngularFirestore, private loginService: LoginService, private fcmService: FcmService) {}
 
   /*
     Firebase User Listing Page
@@ -176,8 +177,26 @@ export class FirebaseService {
   /*
     Firebase Update User Modal
   */
-  public updateUser(userData: any): Promise<void> {
+  public async updateUser(userData: any): Promise<void> {
     console.log("updateUser", userData);
+
+    const tokens: string | any[] = [];
+    
+    if(userData.enableNotifications == false){
+      let results = await this.afs.firestore.collection('devices').where('userId', '==', userData.id).get();
+      results.forEach(result => {
+        const id = result.id;
+        this.afs.collection('devices').doc(id).delete();
+      });
+      
+    }
+    else if((userData.enableNotifications == true) && (userData.id == this.loginService.getLoginID()) && !(this.loginService.notificationsAllowed())){
+      console.log(userData.enableNotifications == true);
+      console.log(userData.id == this.loginService.getLoginID());
+      console.log(!(this.loginService.notificationsAllowed()));
+      this.fcmService.get_save_Token();
+      this.fcmService.listenToNotifications();
+    }
     return this.afs.collection('users').doc(userData.id).update({...userData});
   }
 

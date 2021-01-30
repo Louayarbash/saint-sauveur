@@ -33,6 +33,7 @@ interface RequestTaskPayload {
     actionTask?: string
 } */
 interface InfoDocumentData extends admin.firestore.DocumentData {
+    type?: string
     expiresIn?: number
     startDateTS?: number//admin.firestore.Timestamp
     endDateTS?: number//admin.firestore.Timestamp
@@ -42,6 +43,7 @@ interface InfoDocumentData extends admin.firestore.DocumentData {
     status?: string
     responseBy? : string
     createdBy? : string
+    buildingId? : string 
     actionTaskReminder?: admin.firestore.FieldValue//string
     actionTaskStarted?: admin.firestore.FieldValue//string
     actionTaskEnded?: admin.firestore.FieldValue//string
@@ -61,14 +63,14 @@ exports.onNewRequest = functions.firestore
     const /*let*/ id = item.id
     if (data && data.status === "new"){
         //const id = data.id
-        const createdBy = data.createdBy;
+        //const createdBy = data.createdBy;
     
     // Notification content
     const payload = {
       notification: {
           title: '',
-          body: `${createdBy} - Your building asking for parking check to see if you can help!`,
-          icon: 'https://goo.gl/Fz9nrQ',
+          body: `Someone in your building is asking for parking, check to see if you can help!`,
+          //icon: 'https://goo.gl/Fz9nrQ',
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
@@ -77,7 +79,7 @@ exports.onNewRequest = functions.firestore
       }
     }
 
-    const devicesRef = db.collection('devices').where('userId', '==', createdBy)
+    const devicesRef = db.collection('devices').where('buildingId', '==', data.buildingId)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
 
@@ -127,65 +129,16 @@ exports.onNewRequest = functions.firestore
       const actionTaskExpired = responseExpired.name
       const update: InfoDocumentData = { actionTaskExpired , serverStatingTime : expiresAtSeconds }
       await item.ref.update(update);
-      return admin.messaging().sendToDevice(tokens, payload);
+      admin.messaging().sendToDevice(tokens, payload).then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
 }
 return
 });
-
-/*code for the time scheduling task*/
-
-/* export const onCreateRequest =
-functions.firestore.document('/deals-requests/{id}').onCreate(async item => {
-    const data = item.data()! as TimingDocumentData
-    const { actionIn, actionAt } = data
-
-    let actionAtSeconds: number | undefined
-    if (actionIn && actionIn > 0) {
-        actionAtSeconds = Date.now() / 1000 + actionIn
-    }
-    else if (actionAt) {
-        actionAtSeconds = actionAt.seconds
-    }
-
-    if (!actionAtSeconds) {
-        // No expiration set on this document, nothing to do
-        return
-    }
-
-    // Get the project ID from the FIREBASE_CONFIG env var
-    const project = JSON.parse(process.env.FIREBASE_CONFIG!).projectId
-    const location = 'northamerica-northeast1'
-    //const location = 'us-central1'
-    const queue = 'queue-firebase'
-
-    const tasksClient = new CloudTasksClient()
-    const queuePath: string = tasksClient.queuePath(project, location, queue)
-
-    //const url = `https://${location}-${project}.cloudfunctions.net/changeRequestStatus`
-    const url = `https://us-central1-${project}.cloudfunctions.net/changeRequestStatus`
-    const docPath = item.ref.path
-    const payload: RequestTaskPayload = { docPath }
-
-    const task = {
-        httpRequest: {
-            httpMethod: 'POST',
-            url,
-            body: Buffer.from(JSON.stringify(payload)).toString('base64'),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        },
-        scheduleTime: {
-            seconds: actionAtSeconds
-        }
-    }
-
-    const [ response ] = await tasksClient.createTask({ parent: queuePath, task })
-
-    const actionTask = response.name
-    const update: TimingDocumentData = { actionTask }
-    await item.ref.update(update)
-}) */
 
 export const changeRequestStatusToStarted = functions.https.onRequest(async (req, res) => {
     const payload = req.body as RequestTaskPayload
@@ -227,6 +180,7 @@ export const changeRequestStatusToExpired = functions.https.onRequest(async (req
 export const reminderToLeave = functions.https.onRequest(async (req, res) => {
   try {  
     
+    let userId: any;
     const taskPayload = req.body as RequestTaskPayload
     const getItem= await admin.firestore().doc(taskPayload.docPath).get();
     const item = getItem.data() as InfoDocumentData;
@@ -234,14 +188,14 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
     console.log("inside reminder taskPayload", taskPayload);
     
     //res.send("Hello from Firebase!");
-    const createdBy = item.createdBy;
+    //const createdBy = item.createdBy;
     
     // Notification content
     const payload = {
       notification: {
           title: '',
-          body: "Reminder: please move your car in 5 mins!",
-          icon: 'https://goo.gl/Fz9nrQ',
+          body: "Reminder: Time to move your car",
+          //icon: 'https://goo.gl/Fz9nrQ',
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
@@ -249,8 +203,16 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
       }
     }
 
+    if(item.type === "request"){
+      userId = item.createdBy ?  item.createdBy : null
+    }
+    else { 
+      userId = item.responseBy ?  item.responseBy : null
+    }
+
+    if(userId){
     // ref to the device collection for the user
-    const devicesRef = db.collection('devices').where('userId', '==', createdBy)
+    const devicesRef = db.collection('devices').where('userId', '==', userId).where('buildingId', '==', item.buildingId)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
 
@@ -262,10 +224,17 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
       const token = result.data().token;
       tokens.push( token )
     })
-    admin.messaging().sendToDevice(tokens, payload).then(()=>{
-      res.send(200)
+    admin.messaging().sendToDevice(tokens, payload).then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      res.status(500)
+      console.log('Error sending message:', error);
+    });
+
     }
-    ).catch(err => res.status(500).send(err));
+    else res.status(500)
     }
     catch (error) {
         console.error(error)
@@ -275,37 +244,17 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
   }
   )
 
-
-
-/* export const onCancelRequest =
-functions.firestore.document('/deals-requests/{id}').onUpdate(async change => {
-    const before = change.before.data() as TimingDocumentData
-    const after = change.after.data() as TimingDocumentData
-
-    // Did the document lose its expiration?
-    const actionTask = after.actionTask
-    const removedActionAt = before.actionAt && !after.actionAt
-    const removedActionIn = before.actionIn && !after.actionIn
-    if (actionTask && (removedActionAt || removedActionIn)) {
-        const tasksClient = new CloudTasksClient()
-        await tasksClient.deleteTask({ name: actionTask })
-        await change.after.ref.update({
-            actionTask: admin.firestore.FieldValue.delete()
-        })
-    }
-}) */
-
 exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdate(async item => {
 //export const onUpdateRequest = functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
-
     const before = item.before.data() as InfoDocumentData
     const after = item.after.data() as InfoDocumentData
     //const data = item.data();//.after.data();
     const /*let*/ id = item.before.id
     //const id = data.id
     //console.log("createdBy",data.createdBy);
-    const responseBy = after.responseBy;
-    const createdBy = after.createdBy;
+    //const responseBy = after.responseBy;
+    
+    //const createdBy = after.createdBy;
   
     // Canceled (by creator) (OK)
     if ((before.status === "new") && (after.status === "canceled") && (after.actionTaskExpired)){
@@ -337,8 +286,8 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
     const payload = {
       notification: {
           title: '',
-          body: `Dear ${responseBy} - deal canceled by the creator!`,
-          icon: 'https://goo.gl/Fz9nrQ',
+          body: `Deal is canceled by the creator!`,
+          //icon: 'https://goo.gl/Fz9nrQ',
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
@@ -346,11 +295,17 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
         id: id
       }
     }
-    
+
+    //if(before.type = "request"){
+    //  userId = before.createdBy ? before.createdBy : null
+    // }
+    // else { 
+    // userId = before.responseBy? before.responseBy : null;
+    // }
+
+    if(before.createdBy){
     // ref to the device collection for the user
-
-    const devicesRef = db.collection('devices').where('userId', '==', responseBy)
-
+    const devicesRef = db.collection('devices').where('userId', '==', before.createdBy).where('buildingId', '==', before.buildingId)
     // get the user's tokens and send notifications
     const devices = await devicesRef.get();
 
@@ -360,17 +315,20 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
     // send a notification to each device token
     devices.forEach(result => {
       const token = result.data().token;
-
       tokens.push( token )
     })
+    admin.messaging().sendToDevice(tokens, payload).then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
 
-    return admin.messaging().sendToDevice(tokens, payload)
-    //.then(res => {
-        //console.log("Sent Successfully", res);
-      //})
-      //.catch(err => {
-      //  console.log(err);
-      //});
+    }
+    else return
+
+
     }
     // canceled by responder (OK)
     else if ((before.status === "accepted") && (after.status === "new")){
@@ -427,8 +385,8 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
     const payload = {
       notification: {
           title: '',
-          body: `Dear ${createdBy} - deal canceled by the responder!`,
-          icon: 'https://goo.gl/Fz9nrQ',
+          body: `Deal was canceled by the responder!`,
+          //icon: 'https://goo.gl/Fz9nrQ',
           click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
@@ -436,11 +394,10 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
           id: id
         }
       }
-      
-      // ref to the device collection for the user
-
-      const devicesRef = db.collection('devices').where('userId', '==', createdBy)
   
+      if(before.createdBy){
+      // ref to the device collection for the user
+      const devicesRef = db.collection('devices').where('userId', '==', before.createdBy).where('buildingId', '==', before.buildingId)
       // get the user's tokens and send notifications
       const devices = await devicesRef.get();
   
@@ -452,14 +409,17 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
         const token = result.data().token;
         tokens.push( token )
       })
+      admin.messaging().sendToDevice(tokens, payload).then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
   
-      return admin.messaging().sendToDevice(tokens, payload)
-      // .then(res => {
-          //console.log("Sent Successfully", res);
-      //  })
-      //  .catch(err => {
-      //    console.log(err);
-      //  });
+      }
+      else return
+
     }
     //Accepted (OK)
     else if (after.status === "accepted" && (before.status === "new") /*&& !(after.actionTaskStarted)*/ && (after.serverStatingTime) && (after.durationSeconds)){
@@ -548,12 +508,13 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
 
 /*send notification to creater*/
     
-      // Notification content
-      const message = {
+
+       // Notification content
+       const message = {
         notification: {
             title: '',
-            body: `Your request has been accepted by: ${responseBy}`,
-            icon: 'https://goo.gl/Fz9nrQ',
+            body: before.type === "request" ? `Your request has been accepted`:`Your offer has been accepted`,
+            //icon: 'https://goo.gl/Fz9nrQ',
             click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
@@ -561,29 +522,31 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
           id: id
         }
       }
-      
-      // ref to the device collection for the user
 
-      const devicesRef = db.collection('devices').where('userId', '==', createdBy)
+      if(before.createdBy){
+      // ref to the device collection for the user
+      const devicesRef = db.collection('devices').where('userId', '==',  before.createdBy).where('buildingId', '==', before.buildingId)
       // get the user's tokens and send notifications
       const devices = await devicesRef.get();
+  
       /*const tokens = [];*/
       const tokens: string | any[] = [];
   
       // send a notification to each device token
       devices.forEach(result => {
-      const token = result.data().token;
-  
+        const token = result.data().token;
         tokens.push( token )
       })
+      admin.messaging().sendToDevice(tokens, message).then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
   
-      return admin.messaging().sendToDevice(tokens, message)
-      //.then(res => {
-          //console.log("Sent Successfully", res);
-        //})
-        //.catch(err => {
-        //  console.log(err);
-        //});
+      }
+      else return
     }
     return;
 });
@@ -618,3 +581,4 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req, re
   }
   );
 })
+

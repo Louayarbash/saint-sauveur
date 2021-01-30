@@ -35,10 +35,10 @@
               <ion-toggle color="main" formControlName="votingResult"></ion-toggle>
             </ion-item>
           </ng-container>
-            <ion-item>          
-              <ion-button color="main" (click)="selectFile()" [disabled]="files.length >= 5">
-              <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-              </ion-button>
+            <ion-item>   
+              <ion-button (click)="selectFile()" [disabled]="files.length >= 5" color="main">PDF
+                <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
+              </ion-button>       
             </ion-item>
         <!-- </ion-list> -->
 

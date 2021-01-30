@@ -5,6 +5,10 @@ ion-title {
   letter-spacing: 0.4px;
 }
 
+.custom-alert{
+  --min-width: 90% !important;
+}
+
 ion-searchbar {
   input {
     border-radius: 30px !important;
@@ -229,6 +233,8 @@ ion-text.camera-btn{
       }
     }
   }
+
+
   
   .recover-message {
     color: var(--ion-color-medium);

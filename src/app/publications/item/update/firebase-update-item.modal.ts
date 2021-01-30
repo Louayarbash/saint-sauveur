@@ -43,11 +43,12 @@ export class FirebaseUpdateItemModal implements OnInit {
     {validators: this.changingNameValidator}
     );
 
+    this.voting= this.item.voting;
+    
     if(this.item.files){
       if(this.item.files.length > 0){
       //this.getPics(this.item.imagesFullPath);
       //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} ); 
-      
       this.files = [{fileName:"" , filePath:"", fileData:"", storagePath : ""}];
       this.item.files.map((res,index)=>{
           let file : Files = {fileName:"",filePath:"", fileData:"", storagePath:""};

@@ -6,12 +6,12 @@
     <ion-title>{{ 'RentSale' | translate }}</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-<!--     <ion-buttons slot="end">
+  <!--<ion-buttons slot="end">
       <ion-button (click)="openFirebaseCreateModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-    </ion-buttons> -->
-    <ion-segment [(ngModel)]="segmentValue" color="main">
+  </ion-buttons>-->
+  <ion-segment [(ngModel)]="segmentValue" color="main">
       <ion-segment-button value="rent">
         <ion-label>{{ 'ForRent' | translate }}</ion-label>
       </ion-segment-button>
@@ -45,7 +45,7 @@
   <section [hidden]="segmentValue !== 'rent'">
   <ng-container *ngIf="rentList?.length > 0">
 <ion-card button="true" class="itemCard" *ngFor="let item of rentList" [routerLink]="['/rent-sale/details', item.id]">
-  <app-aspect-ratio [ratio]="{w:64, h:50}">
+  <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
   <ion-card-header>
@@ -53,7 +53,7 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-        <ion-text>{{ object }}</ion-text>
+        <ion-text>{{ item.object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
         <ion-label>{{ 'Rent (Monthly)' | translate }}:</ion-label>
@@ -73,7 +73,7 @@
 <section [hidden]="segmentValue !== 'sale'">
   <ng-container *ngIf="saleList?.length > 0">
 <ion-card button="true" class="itemCard" *ngFor="let item of saleList" [routerLink]="['/rent-sale/details', item.id]">
-  <app-aspect-ratio [ratio]="{w:64, h:50}">
+  <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
   <ion-card-header>
@@ -81,7 +81,7 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-        <ion-text>{{ object }}</ion-text>
+        <ion-text>{{ item.object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
         
@@ -104,7 +104,7 @@
 <section [hidden]="segmentValue !== 'myList'">
   <ng-container *ngIf="myList?.length > 0">
 <ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/rent-sale/details', item.id]">
-  <app-aspect-ratio [ratio]="{w:64, h:50}">
+  <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
   <ion-card-header>
@@ -112,7 +112,7 @@
     <ion-card-title>  
       <ion-row>
       <ion-col class="ion-no-padding">
-        <ion-text>{{ object }}</ion-text>
+        <ion-text>{{ item.object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
         <ion-label *ngIf="item?.type == 'sale'">{{ 'Price' | translate }}</ion-label>
@@ -133,8 +133,8 @@
 </section>
 </ng-container>
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button color="main">
-    <ion-icon  name="add" (click)="openFirebaseCreateModal()"></ion-icon>
+  <ion-fab-button color="main" (click)="openFirebaseCreateModal()">
+    <ion-icon  name="add" ></ion-icon>
   </ion-fab-button>
 </ion-fab> 
 </ion-content>

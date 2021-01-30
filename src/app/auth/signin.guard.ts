@@ -9,6 +9,7 @@ import { LoginService } from '../services/login/login.service';
 import { FeatureService } from '../services/feature/feature.service';
 // import { BehaviorSubject } from 'rxjs';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { FcmService } from '../services/fcm/fcm.service';
 
 
 @Injectable()
@@ -19,8 +20,8 @@ export class SignInGuard implements CanLoad {
     private authService: AuthService,
     private router: Router,
     private loginService: LoginService,
-    private featureService: FeatureService
-    // private storage: Storage
+    private featureService: FeatureService,
+    private fcmService: FcmService
   ) {}
 
     canLoad(){
@@ -36,6 +37,12 @@ export class SignInGuard implements CanLoad {
           this.loginService.initializeApp(auth.uid).then(canAccessApp => {
           if(canAccessApp){
             this.splashScreen.hide();
+            console.log("notificationsAllowed", this.loginService.notificationsAllowed());
+            if(this.loginService.notificationsAllowed()){
+              this.fcmService.listenToNotifications();
+              this.fcmService.get_save_Token();
+
+            }
               this.authService.canAccessApp.next(true);
               this.router.navigate(['start-menu'], { replaceUrl: true });
             }

@@ -17,7 +17,6 @@
       <div class="time-other" text-right><br>
         {{message.createdAt?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
       </div>
-      
       </ion-col>
       <ion-col offset="3" size="9" *ngIf="currentUserId === message.userId" class="message my-message ion-margin-bottom">
         <b>{{userName}}</b><br>
@@ -26,13 +25,10 @@
         <!-- {{message.createdAt?.seconds * 1000 | date:'short'}}<br> -->
         {{message.createdAt?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
         </div>
-        
        </ion-col>
     </ion-row>
    </ion-grid> 
-
   </ion-content>
-
   <ion-footer>
     <ion-toolbar color="light">
       <ion-grid>

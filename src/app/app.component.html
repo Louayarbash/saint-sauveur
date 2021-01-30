@@ -10,11 +10,11 @@
               </app-aspect-ratio>
             </ion-col>
             <ion-col class="user-info-wrapper" size="8">
-              <h3 class="user-name">Condovision</h3>
+              <h3 class="user-name">Parkondo</h3>
               <h5 class="user-handle">@Condovision</h5>
             </ion-col>
           </ion-row>
-          <ion-row class="user-stats-wrapper user-details-wrapper">
+<!--           <ion-row class="user-stats-wrapper user-details-wrapper">
             <ion-col>
               <span class="user-stat-value">120</span>
               <span class="user-stat-name">Tenants</span>
@@ -23,30 +23,22 @@
               <span class="user-stat-value">50</span>
               <span class="user-stat-name">Owners</span>
             </ion-col>
-          </ion-row>
+          </ion-row> -->
         </ion-toolbar>
       </ion-header>
       <ion-content>
          <ion-list class="ion-no-padding">
           <ion-list-header>
-            <ion-label>Integrations</ion-label>
+            <ion-label>Louay Arbash</ion-label>
           </ion-list-header>
           <ion-menu-toggle auto-hide="false">
-            <ion-item [routerLink]="['/firebase/listing']">
-              <ion-icon slot="start" name="flame"></ion-icon>
-              <ion-label>
-                Firebase
-              </ion-label>
-            </ion-item>
-			      <ion-item [routerLink]="['/users/listing']">
-              <ion-icon slot="start" name="flame"></ion-icon>
-              <ion-label>
-                Users
-              </ion-label>
+            <ion-item>
+              <ion-label>{{ 'SignOut' | translate }}</ion-label>  
+                <ion-icon (click)="signOut()" name="log-out-outline"></ion-icon>
             </ion-item>
           </ion-menu-toggle>
           </ion-list>
-            <ion-list>
+<!--             <ion-list>
           <ion-list-header>
             <ion-label>Account</ion-label>
           </ion-list-header>
@@ -58,7 +50,7 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
+        </ion-list> -->
       </ion-content>
     </ion-menu>
     <!-- Main app content get's rendered in this router-outlet -->

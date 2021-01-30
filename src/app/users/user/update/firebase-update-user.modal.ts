@@ -37,6 +37,13 @@ export class FirebaseUpdateUserModal implements OnInit {
   parking3selected: boolean;
   selectOptions: any;
   userIsAdmin= this.loginService.isUserAdmin();
+  customAlertOptions: any = {
+    header: this.featureService.translations.SelectParkingLevel,
+    //subHeader: this.featureService.translations.OK,
+    //message: this.featureService.translations.YES,
+    translucent: true,
+    cssClass: 'custom-alert'
+  };
   @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
@@ -267,13 +274,13 @@ export class FirebaseUpdateUserModal implements OnInit {
   //LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
-      allowEdit:true,
+      // allowEdit:true,
         quality:100,
         destinationType: this.camera.DestinationType.FILE_URI,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         cameraDirection : this.camera.Direction.FRONT,
-        correctOrientation:true,
+        //correctOrientation:true,
         sourceType:this.camera.PictureSourceType.CAMERA
       };
   

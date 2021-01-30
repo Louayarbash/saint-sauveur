@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
 import { FcmService } from '../app/services/fcm/fcm.service';
 import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
+import { AuthService } from './auth/auth.service';
+import { Router } from '@angular/router';
+//import { LoginService } from './services/login/login.service';
 
 @Component({
   selector: 'app-root',
@@ -67,9 +70,11 @@ export class AppComponent {
       ionicIcon: 'alert-circle-outline'
     } */
   ];
+  
+
 
   available_languages = [];
-  translations;
+  translations: any;
   textDir = 'ltr';
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
@@ -80,6 +85,10 @@ export class AppComponent {
     private fcmService : FcmService,
     public languageService : LanguageService,
     private featureService : FeatureService,
+    private alertController: AlertController,
+    private authService: AuthService,
+    public router: Router,
+    //private loginService : LoginService
     ) {
 
     this.initializeApp();
@@ -87,6 +96,7 @@ export class AppComponent {
    async initializeApp() {
     
     this.platform.ready().then(() => {
+console.log("app.component initialize app")
 
       this.setLanguage();
       //this.statusBar.styleDefault();
@@ -96,9 +106,9 @@ export class AppComponent {
 
       // Get a FCM token
       //fcmService.requestPermission();
-      this.fcmService.getToken();
+      //this.fcmService.getToken();
 
-      this.fcmService.listenToNotifications();
+      //this.fcmService.listenToNotifications();
     });
   }
 
@@ -108,6 +118,36 @@ export class AppComponent {
     this.translate.onLangChange.subscribe((lang) => {
       this.featureService.getTranslations(lang);
     });
+  }
+
+  async signOut() {
+
+
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.LogOutHeader,
+      message: this.featureService.translations.LogOutMessage,
+      buttons: [
+        {
+          text: this.featureService.translations.Yes,
+          handler: ()=> {
+            this.authService.signOut().subscribe(() => {
+              // Sign-out successful.
+              // Replace state as we are no longer authorized to access profile page.
+              this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
+            }, (error) => {
+              console.log('signout error', error); 
+            });
+          }
+        }, {
+          text: this.featureService.translations.No,
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 

@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'ParkingRequests' | translate }} - {{ loginId }}{{ loginName }}</ion-title>
-<!--     <ion-buttons slot="end">
+    <ion-title>{{ 'ParkingRequests' | translate }} </ion-title>
+<!-- - {{ loginId }}{{ loginName }}    <ion-buttons slot="end">
       <ion-button (click)="chooseType()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
@@ -19,7 +19,7 @@
           <ion-label>{{ 'NewOffers' | translate }}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="myRequests">
-          <ion-label>{{ 'MyRequests' | translate }}</ion-label>
+          <ion-label>{{ 'MyList' | translate }}</ion-label>
         </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -156,7 +156,7 @@
               <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
 
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
-                <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
+                <span class="expiration-cta">{{ 'OfferExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>																											   
                 </ion-row>
@@ -276,7 +276,7 @@
             </ion-row>
               </ng-container> -->
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
-                <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
+                <span class="expiration-cta">{{ 'ExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>
                 </ion-row>
@@ -305,8 +305,8 @@
     </section>
   </ng-container>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="main">
-      <ion-icon  name="add" (click)="chooseType()"></ion-icon>
+    <ion-fab-button color="main" (click)="chooseType()">
+      <ion-icon  name="add" ></ion-icon>
     </ion-fab-button>
   </ion-fab> 
 </ion-content>

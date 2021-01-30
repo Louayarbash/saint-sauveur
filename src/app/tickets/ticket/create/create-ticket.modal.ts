@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController, IonContent } from '@ionic/angular';
-import { Validators, FormGroup, FormControl } from '@angular/forms';
+import { Validators, FormGroup, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 // import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
 import { TicketModel } from '../ticket.model';
@@ -39,6 +39,13 @@ export class CreateTicketModal implements OnInit {
   bookingSection: boolean;
   subjectSection: boolean;
   serviceType = 'other';
+  customAlertOptions: any = {
+    header: this.featureService.translations.SelectTicketType,
+    //subHeader: this.featureService.translations.OK,
+    //message: this.featureService.translations.YES,
+    translucent: true,
+    cssClass: 'custom-alert'
+  };
 
   constructor(
     private modalController: ModalController,
@@ -71,7 +78,7 @@ export class CreateTicketModal implements OnInit {
       typeId: new FormControl('1000',Validators.required),
       // status : new FormControl('active',Validators.required),
       date: new FormControl(this.today),
-      startDate : new FormControl(this.today),
+      startDate : new FormControl(this.today, this.startDateValidator),
       duration : new FormControl(0),
       endDate : new FormControl(this.today),
     }/* ,
@@ -84,6 +91,12 @@ export class CreateTicketModal implements OnInit {
   }); */
 
   this.onValueChanges();
+  }
+
+  startDateValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+
+    return (dayjs(control.value).unix() < dayjs(this.today).unix()) ? { 'wrongStartDate': true } : null;
+
   }
 
   private calculateEndDate(){
@@ -100,7 +113,7 @@ export class CreateTicketModal implements OnInit {
 
   private onValueChanges(): void {
     this.createItemForm.get('date').valueChanges.subscribe(newDate=>{
-      let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
+      let today = dayjs().format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
       if (today == date){
         this.createItemForm.get('startDate').setValue(this.today);
@@ -233,7 +246,7 @@ export class CreateTicketModal implements OnInit {
       this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
       this.itemData.endDate = dayjs(this.createItemForm.get('endDate').value).unix();  
     }
-    this.itemData.reference = this.loginService.getApaNumber() + "-" + Math.round(Math.random() * 1000).toString();
+    this.itemData.reference = this.loginService.getLoginName() + "-" + Math.round(Math.random() * 1000).toString();
     this.itemData.buildingId = this.loginService.getBuildingId();
     this.itemData.subject = this.createItemForm.value.subject == '' ? this.serviceType : this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;

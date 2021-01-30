@@ -1,6 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl } from '@angular/forms';
+import { Validators, FormGroup, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
 import { ItemModel} from '../firebase-item.model';
@@ -51,7 +51,7 @@ export class FirebaseCreateItemModal implements OnInit {
 
      this.createItemForm = new FormGroup({
       date: new FormControl(this.today, Validators.required),
-      startDate : new FormControl(this.today ,Validators.required),
+      startDate : new FormControl(this.today ,this.startDateValidator),
       duration : new FormControl(0, counterRangeValidatorMinutes(15, 1440)),
       endDate : new FormControl(this.today/*{value : this.today, disabled : true}*/, Validators.required),
       count : new FormControl(1, counterRangeValidator(1, 5)),
@@ -69,6 +69,13 @@ export class FirebaseCreateItemModal implements OnInit {
 
     this.onValueChanges();
   }
+
+  startDateValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+
+    return (dayjs(control.value).unix() < dayjs(this.today).unix()) ? { 'wrongStartDate': true } : null;
+
+  }
+  
   private onValueChanges(): void {
     this.createItemForm.get('date').valueChanges.subscribe(newDate=>{      
       // console.log("onDateChanges",newDate);

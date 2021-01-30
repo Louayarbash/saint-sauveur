@@ -11,19 +11,19 @@
       <ion-title>{{ 'NewEvent' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
+  
   <ion-content>
         <ion-item>
           <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
           <ion-input autocapitalize type="text" formControlName="subject"></ion-input>
         </ion-item>
-
           <ion-item>
             <ion-label>Date</ion-label>
             <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" [min]="minDate" [max]="maxDate"  formControlName="date" ></ion-datetime>          
           </ion-item>
           <ion-item>
             <ion-label>{{ 'FromTime' | translate }}</ion-label>
-            <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues = "0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate"  formControlName="startDate"></ion-datetime>
+            <ion-datetime display-format="HH:mm" picker-format="HH:mm" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" [min]="minStartDate" formControlName="startDate"></ion-datetime>
           </ion-item>
           <ion-item>
             <ion-grid class="ion-no-padding">
@@ -44,7 +44,6 @@
               <ion-label>{{ 'ToTime' | translate }}</ion-label>
               <ion-datetime display-format="DD, MMMM, YYYY HH:mm" formControlName="endDate" readonly></ion-datetime>
           </ion-item>
-
         <ion-item>
           <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
           <ion-textarea autocapitalize rows="6" cols="20" formControlName="details"></ion-textarea>
@@ -87,10 +86,22 @@
       <ion-text class="ion-padding-left validation">{{ 'PleaseConfirmNamingChange' | translate }}</ion-text>
     </ion-col>
     </ion-row>
+<!--     <ion-row *ngIf="createItemForm.errors?.wrongStartDate">
+      <ion-col>
+      <ion-text class="ion-padding-left validation">{{ 'PleaseCorrectStartDate' | translate }}</ion-text>
+    </ion-col>
+    </ion-row> -->
     <ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)">
       <ion-row *ngIf="createItemForm.get('subject').errors.required">
         <ion-col>
         <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="createItemForm.get('startDate').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row>
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'PleaseCorrectStartDate' | translate }}</ion-text>
         </ion-col>
       </ion-row>
     </ng-container>

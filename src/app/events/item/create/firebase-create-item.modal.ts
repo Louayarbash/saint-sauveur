@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 import { ReplaySubject } from 'rxjs';
 
-
 @Component({
   selector: 'app-firebase-create-item',
   templateUrl: './firebase-create-item.modal.html'
@@ -41,7 +40,6 @@ export class FirebaseCreateItemModal implements OnInit {
     private chooser: Chooser,
     private loginService : LoginService,
     private featureService : FeatureService
-
   ) { 
     
   }
@@ -55,11 +53,13 @@ export class FirebaseCreateItemModal implements OnInit {
       ]),
       details : new FormControl(''),
       date: new FormControl(this.today, Validators.required),
-      startDate : new FormControl(this.today, Validators.required),
+      startDate : new FormControl(this.today, this.startDateValidator),
       duration : new FormControl(0, counterRangeValidatorMinutes(15, 360)),
-      endDate : new FormControl(this.today, Validators.required),
+      endDate : new FormControl(this.today, Validators.required)
     },
-    {validators: this.changingNameValidator}
+    {
+      validators: this.changingNameValidator
+    }
     );
     this.onValueChanges();
   }
@@ -68,17 +68,20 @@ export class FirebaseCreateItemModal implements OnInit {
 
   changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     //const name = control.get('name');
-    
     return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
 
+  }
+
+  startDateValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    return (dayjs(control.value).unix() < dayjs(this.today).unix()) ? { 'wrongStartDate': true } : null;
   }
 
   private onValueChanges(): void {
     this.createItemForm.get('date').valueChanges.subscribe(newDate=>{      
       console.log("onDateChanges",newDate);
-      let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
+      let today = dayjs().format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
-      if (today == date){
+      if (today == date) {
         this.createItemForm.get('startDate').setValue(this.today);
         this.minStartDate = dayjs(this.today).format("HH:mm");
         this.createItemForm.get('endDate').setValue(this.today);
@@ -89,8 +92,9 @@ export class FirebaseCreateItemModal implements OnInit {
         this.createItemForm.get('startDate').setValue(newDateZeroTimeISO);
         this.createItemForm.get('endDate').setValue(newDateZeroTimeISO);
         this.minStartDate = "00:00";
+        console.log("minStartDate",this.minStartDate);
       }
-      if(this.duration > 0){
+      if(this.duration > 0) {
         this.calculateEndDate();
       }
     });
@@ -124,12 +128,12 @@ export class FirebaseCreateItemModal implements OnInit {
     });
 
   }
-  initValues(){
 
-  this.today = dayjs().add(30,"minute").toISOString(); 
-  this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
+  initValues(){
+  this.today = dayjs().toISOString(); 
+  this.minDate = dayjs().format('YYYY-MM-DD');
   this.maxDate = dayjs().add(1,"month").toISOString();
-  this.minStartDate = dayjs().add(30,"minute").format('HH:mm');
+  this.minStartDate = dayjs().format('HH:mm');
   this.duration = 0;
   this.previousCounterValue = 0;  
   }

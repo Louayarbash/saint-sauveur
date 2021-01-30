@@ -99,6 +99,15 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
+  notificationsAllowed(): boolean{
+    if(this.userInfo.enableNotifications){
+      return this.userInfo.enableNotifications;
+    }
+    else {
+      return false
+    }
+  }
+
   getBuildingParkings(){
     if(this.buildingInfo.parkings){
       return this.buildingInfo.parkings;

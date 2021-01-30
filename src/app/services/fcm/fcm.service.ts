@@ -28,7 +28,7 @@ export class FcmService {
   }
   // Save the token to firestore
   // Get permission from the user
-   async getToken() {
+   async get_save_Token() {
      
     let token: string;
 
@@ -36,34 +36,28 @@ export class FcmService {
       console.log("android");
       token = await this.fcm.getToken();
       
-    } 
-  
-    if (this.platform.is('ios')) {
+    } else if (this.platform.is('ios')) {
       token = await this.fcm.getToken();
-      await this.fcm.hasPermission();//grantPermission();
+      //await this.fcm.hasPermission();//grantPermission();
     }
-    return this.saveTokenToFirestore(token)
+    else token = await this.fcm.getToken();
+
+    if( token && this.loginService.getLoginID()) {
+      return this.saveTokenToFirestore(token);
+    }
+    return;
   }
   
   private saveTokenToFirestore(token) {
     console.log("token", token);
-    if (!token) return;
-    
-  
     const devicesRef = this.afs.collection('devices')
-    let userId = ""; 
-    if(this.loginService.getLoginID()){
-      userId = this.loginService.getLoginID();
-    }
-    else {
-      userId = "5MHn6X5lnOUDaYRH5oyvKrAtYbA3";
-    }
     const docData = { 
       token,
-      userId: userId
+      userId: this.loginService.getLoginID(),
+      buildingId: this.loginService.getBuildingId()
     }
   
-    return devicesRef.doc(userId).set(docData);
+    return devicesRef.add(docData);
   }
   // Listen to incoming FCM messages
 /*   listenToNotifications() {

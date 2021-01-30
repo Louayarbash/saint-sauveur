@@ -83,7 +83,7 @@ export class FirebaseUpdateItemModal implements OnInit {
   private onValueChanges(): void {
     this.updateItemForm.get('date').valueChanges.subscribe(newDate=>{      
       console.log("onDateChanges",newDate);
-      let today = dayjs().add(30,"minute").format('YYYY-MM-DD');
+      let today = dayjs().format('YYYY-MM-DD');
       let date = dayjs(newDate).format('YYYY-MM-DD');
       if (today == date){
         this.updateItemForm.get('startDate').setValue(this.today);
@@ -133,11 +133,11 @@ export class FirebaseUpdateItemModal implements OnInit {
 
   initValues(){
 
-  this.today = dayjs().add(30,"minute").toISOString(); 
+  this.today = dayjs().toISOString(); 
   //console.log("resetDate", dayjs().toISOString());
-  this.minDate = dayjs().add(30,"minute").format('YYYY-MM-DD');
+  this.minDate = dayjs().format('YYYY-MM-DD');
   this.maxDate = dayjs().add(1,"month").toISOString();
-  let todayDay = dayjs().add(30,"minute").format('YYYY-MM-DD');
+  let todayDay = dayjs().format('YYYY-MM-DD');
   let dateDay = dayjs(this.item.startDate).format('YYYY-MM-DD');
       if (todayDay == dateDay){
         this.minStartDate = dayjs(this.today).format("HH:mm"); // dayjs(this.item.startDate).add(30,"minute").format('HH:mm');

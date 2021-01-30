@@ -33,11 +33,11 @@
         </ion-item>
       <ion-item *ngIf="item.startDateTS">    
         <ion-label>{{ 'FromTime' | translate }}</ion-label>
-        {{item.startDateTS * 1000 | date:'HH:mm'}}
+        {{item.startDateTS * 1000 | date:'hh:mm a'}}
       </ion-item>
       <ion-item *ngIf="item.endDateTS">    
         <ion-label>{{ 'ToTime' | translate }}</ion-label>
-        {{item.endDateTS * 1000 | date:'HH:mm a'}}
+        {{item.endDateTS * 1000 | date:'hh:mm a'}}
       </ion-item>
 
     <ion-list *ngIf="item.details">

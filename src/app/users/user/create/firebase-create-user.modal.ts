@@ -32,6 +32,13 @@ export class FirebaseCreateUserModal implements OnInit {
   parking2selected: boolean;
   parking3selected: boolean;
   selectOptions: any;
+  customAlertOptions: any = {
+    header: this.featureService.translations.SelectParkingLevel,
+    //subHeader: this.featureService.translations.OK,
+    //message: this.featureService.translations.YES,
+    translucent: true,
+    cssClass: 'custom-alert'
+  };
   @ViewChild(IonContent, {static:true}) content: IonContent;
 
   constructor(
@@ -190,13 +197,13 @@ export class FirebaseCreateUserModal implements OnInit {
   // LA_2019_11
   async selectImageSource(){
     const cameraOptions : CameraOptions = {
-      allowEdit:true,
+        // allowEdit:true,
         quality:100,
         destinationType: this.camera.DestinationType.FILE_URI,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
         cameraDirection : this.camera.Direction.FRONT,
-        correctOrientation:true,
+        //correctOrientation:true,
         sourceType:this.camera.PictureSourceType.CAMERA
       };
   
@@ -270,6 +277,7 @@ export class FirebaseCreateUserModal implements OnInit {
     },400); 
   }
 }
+
 showHideParkingValidate3(){
     this.showHideParking3 = this.showHideParking3 ? false : true;
     if(this.showHideParking3 === false){

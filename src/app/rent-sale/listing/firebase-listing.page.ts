@@ -11,10 +11,7 @@ import { FeatureService } from '../../services/feature/feature.service';
 
 @Component({
   selector: 'app-firebase-listing',
-  templateUrl: './firebase-listing.page.html',
-  styleUrls: [
-    './styles/firebase-listing.page.scss'
-  ],
+  templateUrl: './firebase-listing.page.html'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   // rangeForm: FormGroup;
@@ -142,11 +139,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               } 
               
               switch ( item.object) {
-                case "condo" : this.object = this.featureService.translations.Apartment;
+                case "condo" : item.object = this.featureService.translations.Apartment;
                 break;
-                case "parking" : this.object = this.featureService.translations.Parking;
+                case "parking" : item.object = this.featureService.translations.Parking;
                 break;
-                case "locker" : this.object = this.featureService.translations.Locker;
+                case "locker" : item.object = this.featureService.translations.Locker;
                 break;
                 default:
                   this.object = '';

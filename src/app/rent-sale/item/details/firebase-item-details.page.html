@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="rent-sale/listing"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'RentSale' | translate }} - {{ 'Details' | translate }}</ion-title>
+    <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsCreator">
         <ion-button (click)="openFirebaseUpdateModal()">
           {{ 'Edit' | translate }}

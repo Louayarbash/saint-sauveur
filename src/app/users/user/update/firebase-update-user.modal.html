@@ -39,7 +39,7 @@
           </ion-item>
         <ion-item >
           <ion-label position="floating">{{ 'DateOfBirth' | translate }}</ion-label>
-          <ion-datetime display-format="DD/MM/YYYY" picker-format="DD MMMM YYYY" formControlName="birthdate"></ion-datetime>
+          <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" formControlName="birthdate"></ion-datetime>
         </ion-item>
         <ion-item >
           <ion-label position="floating">{{ 'Phone' | translate }}</ion-label>
@@ -183,82 +183,73 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-{{selectedParking}}
+
 <ion-item-divider lines="none" >
   <ion-label>{{ 'Parking' | translate }}</ion-label>
   </ion-item-divider>
   <ion-grid class="ion-no-margin ion-no-padding">          
     <ion-row class="ion-align-items-center">
-<ion-col size="5">
-  <ion-item lines=“none”>
-    <ion-label position="floating">{{ 'Parking' | translate }} 1 {{ 'level' | translate }}</ion-label>
-    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
+<ion-col size="4">
+    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
       <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
-  </ion-item>
   </ion-col>
-  <ion-col *ngIf="parking1selected" size="4">
-      <ion-item>
-      <ion-label position="floating">{{ 'Parking' | translate }} 1 #</ion-label>
+  <ion-col *ngIf="parking1selected" size="4"> 
+    <ion-item>
+        <ion-label>{{ 'Number' | translate }}:</ion-label>
       <ion-input type="text" formControlName="parking1Number"></ion-input>
-      </ion-item>
+    </ion-item>
   </ion-col>
-  <ion-col *ngIf="parking1selected" size="3" class="ion-text-center">
-
-      <ion-button color="main" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"><ion-icon name="add-outline"></ion-icon></ion-button>
-
+    <ion-col *ngIf="parking1selected" size="4">
+        <ion-icon color="main" name="add-outline" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"></ion-icon>
   </ion-col>
    </ion-row>
   </ion-grid>
   <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking2">          
-      <ion-row class="ion-align-items-center">
-<ion-col size="5">
-    <ion-item>
-    <ion-label position="floating">{{ 'Parking' | translate }} 2 {{ 'level' | translate }}</ion-label>
-    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
+  <ion-row class="ion-align-items-center">
+  <ion-col size="4">
+    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
       <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
-  </ion-item>
-</ion-col>
+  </ion-col>
 <ion-col *ngIf="parking2selected" size="4">
     <ion-item>
-    <ion-label position="floating">{{ 'Parking' | translate }} 2 #</ion-label>
+      <ion-label>{{ 'Number' | translate }}:</ion-label>
     <ion-input type="text" formControlName="parking2Number"></ion-input>
   </ion-item>
 </ion-col>
-<ion-col *ngIf="parking2selected" size="3">
-<ion-row class="ion-justify-content-center">
-  <ion-col *ngIf="showHideParking2" class="ion-text-center" size="6">
-    <ion-button color="main" (click)="showHideParkingValidate2()"><ion-icon name="remove-outline"></ion-icon></ion-button>
-</ion-col>
-<ion-col *ngIf="!showHideParking3" class="ion-text-center" size="6">
-  <ion-button color="main" (click)="showHideParkingValidate3()"><ion-icon name="add-outline"></ion-icon></ion-button>
-</ion-col>
-</ion-row>
+<ion-col *ngIf="parking2selected" size="4">
+  <ion-row >
+    <ion-col *ngIf="showHideParking2" size="6">
+        <ion-icon color="main" name="trash-outline" (click)="showHideParkingValidate2()"></ion-icon>
+  </ion-col>
+  <ion-col *ngIf="!showHideParking3" size="6">
+      <ion-icon color="main" name="add-outline" (click)="showHideParkingValidate3()"></ion-icon>
+  </ion-col>
+  </ion-row>
 </ion-col>
  </ion-row>
   </ion-grid>
   <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking3">          
   <ion-row class="ion-align-items-center">
-<ion-col size="5">
-<ion-item>
-<ion-label position="floating">{{ 'Parking' | translate }} 3 {{ 'level' | translate }}</ion-label>
-    <ion-select okText="Okay" cancelText="Dismiss" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
+<ion-col size="4">
+
+    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
       <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
       <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
     </ion-select>
-  </ion-item>
+
 </ion-col>
 <ion-col *ngIf="parking3selected" size="4">
     <ion-item>
-    <ion-label position="floating">{{ 'Parking' | translate }} 3 #</ion-label>
+      <ion-label>{{ 'Number' | translate }}:</ion-label>
     <ion-input type="text" formControlName="parking3Number"></ion-input>
   </ion-item>
 </ion-col>
-<ion-col *ngIf="parking3selected" size="3" class="ion-text-center">
-  <ion-button color="main" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"><ion-icon name="remove-outline"></ion-icon></ion-button>
+<ion-col *ngIf="parking3selected" size="4">
+    <ion-icon color="main" name="trash-outline" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"></ion-icon>
 </ion-col>
 </ion-row>
 </ion-grid>
