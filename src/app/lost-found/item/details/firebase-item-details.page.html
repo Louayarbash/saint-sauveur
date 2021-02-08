@@ -28,7 +28,7 @@
           <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
             <ion-row class="slide-inner-row">
                 <app-image-shell [display]="'cover'" animation="gradient" class="showcase-image" [ngClass]="centered-image" [src]="image">
-                <app-aspect-ratio [ratio]="{w:64, h:50}"> 
+                <app-aspect-ratio [ratio]="{w:50, h:50}"> 
                 </app-aspect-ratio>
               </app-image-shell>
             </ion-row>

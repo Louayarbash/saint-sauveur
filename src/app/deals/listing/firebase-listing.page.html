@@ -87,7 +87,7 @@
               <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
 
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
-                <span class="expiration-cta">{{ 'RequestExpiresIn' | translate }}</span>
+                <span class="expiration-cta">{{ 'ExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>																											   
                 </ion-row>
@@ -156,7 +156,7 @@
               <ion-col class="time-left-wrapper item-description" [ngClass]="{'countdown-active': (item?.status == 'new')}">
 
               <ng-container *ngIf="(item?.status == 'new') && ((item?.startTimeCounter | appTimeDifference) > 0)" >
-                <span class="expiration-cta">{{ 'OfferExpiresIn' | translate }}</span>
+                <span class="expiration-cta">{{ 'ExpiresIn' | translate }}</span>
                 <ion-row class="countdown-wrapper" >
                   <app-countdown-timer class="item-countdown" fill="inner-time" [end]="item?.startTimeCounter" [units]="{from: 'day', to: 'second'}"></app-countdown-timer>																											   
                 </ion-row>
