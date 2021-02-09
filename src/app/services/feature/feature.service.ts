@@ -144,8 +144,9 @@ sendEmail(email : any){
 
 async selectImageSource(maxLength: number, currentLength: number, postImages: Images[], form: FormGroup) {
   const cameraOptions: CameraOptions = {
-    allowEdit:true,
+    //allowEdit:true,
     quality: 100,
+    cameraDirection: this.camera.Direction.BACK,
     // targetWidth: 500,
     // targetHeight: 600,
     // destinationType: this.camera.DestinationType.DATA_URL,
