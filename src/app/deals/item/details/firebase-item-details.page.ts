@@ -8,7 +8,7 @@ import { DataStore } from '../../../shell/data-store';
 import dayjs from 'dayjs';
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
-import { CallNumber } from '@ionic-native/call-number/ngx';
+//import { CallNumber } from '@ionic-native/call-number/ngx';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -78,7 +78,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     private alertController : AlertController,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private callNumber: CallNumber,
+    //private callNumber: CallNumber,
     private socialSharing : SocialSharing,
     private routerOutlet: IonRouterOutlet
   ) { 
@@ -202,10 +202,10 @@ export class FirebaseItemDetailsPage implements OnInit {
 
   
   call(number : string) {
-    console.log(number);
+/*     console.log(number);
   this.callNumber.callNumber(number, true)
   .then(res => console.log('Launched dialer!', res))
-  .catch(err => console.log('Error launching dialer', err));
+  .catch(err => console.log('Error launching dialer', err)); */
   }
 
   async openChatModal() {

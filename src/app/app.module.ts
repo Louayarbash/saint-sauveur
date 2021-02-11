@@ -26,7 +26,7 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
-import { CallNumber } from '@ionic-native/call-number/ngx';
+//import { CallNumber } from '@ionic-native/call-number/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { AngularFireModule } from '@angular/fire';
@@ -80,7 +80,7 @@ export function createTranslateLoader(http: HttpClient) {
     LanguageService,
     FilePath,
     FCM	 ,
-    CallNumber,
+  //  CallNumber,
     EmailComposer,
     SocialSharing,
     AuthService,
