@@ -8,6 +8,11 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { ReplaySubject } from 'rxjs';
+import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+import { File } from "@ionic-native/file/ngx";
+import { Plugins } from '@capacitor/core';
+
+const { Filesystem } = Plugins;
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -27,7 +32,8 @@ export class FirebaseCreateItemModal implements OnInit {
     public firebaseService: FirebaseService,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+
   ) { }
 
   ngOnInit() {
@@ -97,6 +103,7 @@ doReorder(ev: any) {
 
  selectImageSource() {
    this.featureService.selectImageSource(3, this.postImages.length, this.postImages, null)
+   
 }
 
 }

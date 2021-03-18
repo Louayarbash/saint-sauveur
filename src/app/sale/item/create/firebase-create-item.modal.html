@@ -73,7 +73,7 @@
   <ion-button size="small" color="main" (click)="selectImageSource()" [disabled]="postImages.length >= 3" slot="start">
    <!-- <div class="ion-padding">{{ 'AddPhoto' | translate }}</div>  -->
   <ion-icon name="camera-outline"></ion-icon>
-  <ion-text class="camera-btn">+</ion-text>
+  <ion-text class="camera-btn"></ion-text>
   </ion-button> 
 </ion-item-divider>
 
@@ -119,6 +119,7 @@
     </ng-container>
     <ion-row>
       <ion-col>
+        {{  postImages.length }}
         <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'CREATE' | translate }}</ion-button>
       </ion-col>
     </ion-row>

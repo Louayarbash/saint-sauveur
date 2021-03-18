@@ -16,6 +16,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LanguageService } from '../../language/language.service';
 import { first } from 'rxjs/operators';
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
+import { Plugins } from '@capacitor/core';
+
+const { Filesystem } = Plugins;
 
 
 @Injectable({
@@ -158,6 +161,7 @@ async selectImageSource(maxLength: number, currentLength: number, postImages: Im
   };
   
   const pickerOptions: ImagePickerOptions = {
+    
     maximumImagesCount: maxLength - currentLength,
     outputType: 0,
     quality: 100,
@@ -175,51 +179,56 @@ async selectImageSource(maxLength: number, currentLength: number, postImages: Im
       text: this.translations.PhotoGallery,
       icon: 'images',
       handler: () => {
+        //console.log("louay debug camera11", postImages);
         // if((3 - this.postImages.length) !== 1 ){            
           //this.imagePicker.hasReadPermission().then((permission)=> {console.log('Louay',permission);});
            this.imagePicker.getPictures(pickerOptions).then( async (imageData : string[]) => {
              //console.log(imageData) 
             //const loading = this.featureService.presentLoadingWithOptions(5000);
              for (let i = 0; i < imageData.length; i++) {
-                const filename = imageData[i].substring(imageData[i].lastIndexOf('/') + 1);
-                const path = imageData[i].substring(0,imageData[i].lastIndexOf('/') + 1);
+                //const filename = imageData[i].substring(imageData[i].lastIndexOf('/') + 1);
+                //const path = imageData[i].substring(0,imageData[i].lastIndexOf('/') + 1);
                 //console.log("filename",filename)
                 //console.log("path",path)
-                  await this.file.readAsDataURL(path, filename).then((image)=> {
+                  let contents = await Filesystem.readFile({
+                    path: imageData[i]
+                  });
                   const photos : Images = {isCover:false, photoData: '', storagePath:''};
                   photos.isCover = false;
-                  photos.photoData = image;
+                  photos.photoData = "data:image/jpeg;base64," + contents.data;
                   postImages[postImages.length] = photos;
+                  console.log("Louay ", photos.photoData)
                   if(form){
                     form.markAsDirty();
                   }
                 }
-              ).catch(err => console.log(err));
-            }
-            
-          // this.changeRef.detectChanges(); // Louay
-          // loading.then(res=>res.dismiss());
-          }, (err) => { console.log('Error get pics',err);}
-        );  
+          }
+        ).catch((err) => { console.log('Error get pics',err)});  
     }
   }, {
       text: this.translations.Camera,
       icon: 'camera',
       handler: () => {
+        
         this.camera.getPicture(cameraOptions).then(async (imageData: string)=> {
-          const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
-          const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
-          await this.file.readAsDataURL(path, filename).then((image)=> {
+          //const filename = imageData.substring(imageData.lastIndexOf('/') + 1);
+          //const path = imageData.substring(0,imageData.lastIndexOf('/') + 1);
+          //let image = await this.file.readAsDataURL(path, filename);//.then((image)=> {
+          //let image = await this.file.readAsDataURL(path, filename);
+            let contents = await Filesystem.readFile({
+              path: imageData
+            });
             const photos : Images = {isCover:false, photoData:'', storagePath:''};
             photos.isCover = false;
-            photos.photoData = image;
+            photos.photoData = "data:image/jpeg;base64," + contents.data;
             postImages[postImages.length] = photos;
+            console.log("louay postImages", postImages);
             if(form){
               form.markAsDirty();
             }
             // this.changeRef.detectChanges(); // Louay
         }).catch(err => console.log(err));
-      })
+      
     }
     }, {
       text: this.translations.Cancel,
