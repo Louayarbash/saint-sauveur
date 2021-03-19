@@ -39,8 +39,8 @@ export class SignInGuard implements CanLoad {
             this.splashScreen.hide();
             console.log("notificationsAllowed", this.loginService.notificationsAllowed());
             if(this.loginService.notificationsAllowed()){
-              this.fcmService.listenToNotifications();
-              this.fcmService.get_save_Token();
+              //removeFCM this.fcmService.listenToNotifications();
+              //removeFCM this.fcmService.get_save_Token();
 
             }
               this.authService.canAccessApp.next(true);

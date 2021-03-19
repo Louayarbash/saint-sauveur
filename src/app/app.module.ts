@@ -20,7 +20,7 @@ import { File } from "@ionic-native/file/ngx";
 import { ImagePicker } from '@ionic-native/image-picker/ngx'; 
 //import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
+//import { FCM } from '@ionic-native/fcm/ngx';
 import { LanguageService } from './language/language.service';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
@@ -79,7 +79,7 @@ export function createTranslateLoader(http: HttpClient) {
     Chooser,
     LanguageService,
     FilePath,
-    FCM	 ,
+    //FCM	 ,
   //  CallNumber,
     EmailComposer,
     SocialSharing,

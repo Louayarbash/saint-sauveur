@@ -194,8 +194,8 @@ export class FirebaseService {
       console.log(userData.enableNotifications == true);
       console.log(userData.id == this.loginService.getLoginID());
       console.log(!(this.loginService.notificationsAllowed()));
-      this.fcmService.get_save_Token();
-      this.fcmService.listenToNotifications();
+      //removeFCM this.fcmService.get_save_Token();
+      //removeFCM this.fcmService.listenToNotifications();
     }
     return this.afs.collection('users').doc(userData.id).update({...userData});
   }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 //import { Firebase } from '@ionic-native/firebase/ngx';
 // import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FCM } from '@ionic-native/fcm/ngx';
+//import { FCM } from '@ionic-native/fcm/ngx';
 //import { AngularFireAuth } from '@angular/fire/auth';
 import { Platform, AlertController } from '@ionic/angular';
 import { LoginService } from "../login/login.service"
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class FcmService {
 
   constructor(
-    private fcm : FCM, 
+    //private fcm : FCM, 
     public afs: AngularFirestore,
     private loginService : LoginService,
     private platform: Platform,
@@ -28,7 +28,7 @@ export class FcmService {
   }
   // Save the token to firestore
   // Get permission from the user
-   async get_save_Token() {
+/*    async get_save_Token() {
      
     let token: string;
 
@@ -60,9 +60,9 @@ export class FcmService {
     return devicesRef.add(docData);
   }
   // Listen to incoming FCM messages
-/*   listenToNotifications() {
-    return this.fcm.onNotification();
-  } */
+   //listenToNotifications() {
+    //return this.fcm.onNotification();
+  //} 
 
    listenToNotifications() {
       return this.fcm.onNotification()
@@ -119,5 +119,5 @@ export class FcmService {
       ]
     });
     await alert.present();
-  }
+  } */
 }
