@@ -291,7 +291,7 @@ export class FirebaseUpdateUserModal implements OnInit {
         destinationType: this.camera.DestinationType.FILE_URI,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
-        sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
+        sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
       };
     const actionSheet = await this.actionSheetController.create({
       header: this.featureService.translations.SelectImagesSource,

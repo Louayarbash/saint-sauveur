@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, IonContent, ActionSheetController } from '@ionic/angular';
+import { ModalController, IonContent, ActionSheetController, Platform } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import dayjs from 'dayjs';
 import { FirebaseService } from '../../firebase-integration.service';
@@ -47,7 +47,8 @@ export class FirebaseCreateUserModal implements OnInit {
     private camera: Camera,
     private actionSheetController : ActionSheetController,
     private featureService: FeatureService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private platform: Platform
   ) { 
     this.showHideParking2 = false;
     this.showHideParking3 = false;
@@ -221,6 +222,16 @@ export class FirebaseCreateUserModal implements OnInit {
         icon: 'images',
         handler: () => {
               this.camera.getPicture(galleryOptions).then((imageURI)=> {
+
+                if (this.platform.is('ios')) {
+                  return imageURI
+                } else if (this.platform.is('android')) {
+                  // Modify fileUri format, may not always be necessary
+                  imageURI = 'file://' + imageURI;
+        
+                  /* Using cordova-plugin-crop starts here */
+                }
+
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)
