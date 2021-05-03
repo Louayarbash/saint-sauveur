@@ -3,6 +3,11 @@
   "appName": "parkondo",
   "webDir": "www",
   "npmClient": "npm",
+  "plugins":{
+    "PushNotifications": {
+      "presentationOptions": ["badge","sound","alert"]
+    } 
+  },
   "cordova": {
     "preferences": {
       "ScrollEnabled": "false",

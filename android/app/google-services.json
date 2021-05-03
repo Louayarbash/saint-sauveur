@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "373200357220",
+    "firebase_url": "https://parkondo.firebaseio.com",
+    "project_id": "parkondo",
+    "storage_bucket": "parkondo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373200357220:android:c107f5f35573e416b6dc71",
+        "android_client_info": {
+          "package_name": "louay.arbash.parkondo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373200357220-6n6crjl8d9bj5m6ncerhedhfiohks42k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRpxhzqoSGLYF2fV63E4h37_xqHAw8AtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373200357220-6n6crjl8d9bj5m6ncerhedhfiohks42k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,6 +9,14 @@ import { Platform, AlertController } from '@ionic/angular';
 import { LoginService } from "../login/login.service"
 // import { mergeMapTo,mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import {
+  Plugins,
+  PushNotification,
+  PushNotificationToken,
+  PushNotificationActionPerformed,
+} from '@capacitor/core';
+
+const { PushNotifications } = Plugins;
 
 
 @Injectable({
@@ -20,51 +28,109 @@ export class FcmService {
     //private fcm : FCM, 
     public afs: AngularFirestore,
     private loginService : LoginService,
-    private platform: Platform,
+    //private platform: Platform,
     private router : Router,
     private alertController: AlertController
   ) {
+
+    // alert('Initializing HomePage test push notifications app comp');
+    // console.log('Initializing HomePage test push notifications');
+  
+
+
      
   }
   // Save the token to firestore
   // Get permission from the user
-/*    async get_save_Token() {
-     
-    let token: string;
+    async initPushNotification() {
 
-    if (this.platform.is('android')) {
-      console.log("android");
-      token = await this.fcm.getToken();
-      
-    } else if (this.platform.is('ios')) {
-      token = await this.fcm.getToken();
-      //await this.fcm.hasPermission();//grantPermission();
-    }
-    else token = await this.fcm.getToken();
+    PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {
+        //alert('Initializing HomePage test push notifications FAILED');
+        // Show some error
+      }
+    }); 
 
-    if( token && this.loginService.getLoginID()) {
-      return this.saveTokenToFirestore(token);
-    }
-    return;
+    PushNotifications.addListener(
+      'registration',
+      (token: PushNotificationToken) => {
+        // alert('Push registration success, token: ' + token.value);
+        
+        if( token.value && this.loginService.getLoginID()) {
+           this.saveTokenToFirestore(token.value);
+        }
+      },
+    );
+  
+    PushNotifications.addListener('registrationError', (error: any) => {
+      // alert('Error on registration: ' + JSON.stringify(error));
+    });
+
+    PushNotifications.addListener(
+      'pushNotificationReceived',
+      (notification: PushNotification) => {
+        alert('Push received: ' + JSON.stringify(notification));
+        this.router.navigate(['deal/listing']);
+      },
+    );
+
+    //PushNotifications.addListener(
+      //'pushNotificationActionPerformed',
+      //(notification: PushNotificationActionPerformed) => {
+    // alert('Push action performed: ' + JSON.stringify(notification));
+    // },
+    // );
+
+    PushNotifications.addListener(
+      'pushNotificationActionPerformed',
+       (notification: PushNotificationActionPerformed) => {
+        alert('Push action performed: ' + JSON.stringify(notification));
+        alert('Push action performed: ' + JSON.stringify(notification.actionId));
+        alert('Push action performed: ' + JSON.stringify(notification.notification.data.landing_page));
+        alert('Push action performed: ' + JSON.stringify(notification.notification.data.actionId));
+        //alert('Push action performed landing page: ' + JSON.stringify(notification.notification.data.landing_page));
+        //alert('Push action performed id: ' + JSON.stringify(notification.notification.data.id));
+        this.router.navigate(['deal/listing']);
+      },
+    );
   }
   
-  private saveTokenToFirestore(token) {
+  private saveTokenToFirestore(token:string) {
     console.log("token", token);
-    const devicesRef = this.afs.collection('devices')
-    const docData = { 
-      token,
-      userId: this.loginService.getLoginID(),
-      buildingId: this.loginService.getBuildingId()
+    // alert('saveTokenToFirestore' + this.loginService.getUserTokens());
+    let tokens = this.loginService.getUserTokens();
+if(tokens){
+  if(tokens.indexOf(token) == -1) {
+    tokens.push(token)
+    const docData = {
+      tokens : tokens
+      // userId: this.loginService.getLoginID(),
+      // buildingId: this.loginService.getBuildingId()
     }
-  
-    return devicesRef.add(docData);
-  }
-  // Listen to incoming FCM messages
-   //listenToNotifications() {
-    //return this.fcm.onNotification();
-  //} 
+    const userRef = this.afs.collection('users').doc(this.loginService.getLoginID())
+    userRef.update(docData);
+    // alert('update done ' + this.loginService.getUserTokens());
+    }
 
-   listenToNotifications() {
+}
+else{
+  alert('update done ' + this.loginService.getUserTokens());
+    const docData = {
+      tokens : [token]
+      // userId: this.loginService.getLoginID(),
+      // buildingId: this.loginService.getBuildingId()
+    }
+    const userRef = this.afs.collection('users').doc(this.loginService.getLoginID())
+    userRef.update(docData);
+
+}
+
+    }
+
+/*     listenToNotifications() {
       return this.fcm.onNotification()
        .subscribe(data => {
         console.log("inside listenToNotifications...data.wasTapped value is: ",data.wasTapped);
@@ -84,20 +150,8 @@ export class FcmService {
         }
       }
       ); 
-    }
-  onTokenRefresh() {
-    this.fcm.onTokenRefresh().subscribe(token => {
-      //backend.registerToken(token);
-    });
-  }
+    }  */
 
-  subscribe(){
-    this.fcm.subscribeToTopic('marketing');
-  }
-
-  unSubscribe(){
-    this.fcm.unsubscribeFromTopic('marketing');
-  }
   async navigateToLisingRequests(header,message){
     const alert = await this.alertController.create({
       header: header,
@@ -119,5 +173,5 @@ export class FcmService {
       ]
     });
     await alert.present();
-  } */
+  } 
 }

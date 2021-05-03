@@ -9,6 +9,7 @@ import { FeatureService } from '../../services/feature/feature.service';
 import { AuthService } from '../auth.service';
 import { LoginService } from '../../services/login/login.service';
 // import { map } from 'rxjs/operators';
+import { FcmService } from '../../services/fcm/fcm.service';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class SignInPage implements OnInit {
     public loadingController: LoadingController,
     public location: Location,
     private featureService: FeatureService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private fcmService: FcmService
   //  public historyHelper: HistoryHelperService
   ) {
     /* this.authService.angularFire.onAuthStateChanged((user) => {
@@ -169,6 +171,12 @@ export class SignInPage implements OnInit {
       console.log("inside signInWithEmail", user);
       this.loginService.initializeApp(user.user.uid).then(canAccessApp => {
         if(canAccessApp){
+
+          if(this.loginService.notificationsAllowed()){
+            //alert('notificationsAllowed()' + this.loginService.notificationsAllowed());
+            this.fcmService.initPushNotification();
+          }
+
           this.authService.canAccessApp.next(true);
           console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.getValue());
           console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.value);

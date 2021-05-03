@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ModalController, AlertController , IonContent, ActionSheetController } from '@ionic/angular';
+import { ModalController, AlertController , IonContent, ActionSheetController, Platform } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -45,6 +45,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     cssClass: 'custom-alert'
   };
   @ViewChild(IonContent, {static:true}) content: IonContent;
+  
 
   constructor(
     private modalController: ModalController,
@@ -55,7 +56,8 @@ export class FirebaseUpdateUserModal implements OnInit {
     private featureService : FeatureService,
     private loginService : LoginService,
     private changeRef: ChangeDetectorRef,
-    private actionSheetController : ActionSheetController
+    private actionSheetController : ActionSheetController,
+    private platform: Platform
   ) { 
 
     this.showHideParking2 = true;
@@ -289,7 +291,7 @@ export class FirebaseUpdateUserModal implements OnInit {
         destinationType: this.camera.DestinationType.FILE_URI,
         encodingType: this.camera.EncodingType.JPEG,
         mediaType: this.camera.MediaType.PICTURE,
-        sourceType:this.camera.PictureSourceType.PHOTOLIBRARY
+        sourceType:this.camera.PictureSourceType.SAVEDPHOTOALBUM
       };
     const actionSheet = await this.actionSheetController.create({
       header: this.featureService.translations.SelectImagesSource,
@@ -298,10 +300,21 @@ export class FirebaseUpdateUserModal implements OnInit {
         icon: 'images',
         handler: () => {
               this.camera.getPicture(galleryOptions).then((imageURI)=> {
+
+                if (this.platform.is('ios')) {
+                  return imageURI
+                } else if (this.platform.is('android')) {
+                  // Modify fileUri format, may not always be necessary
+                  imageURI = 'file://' + imageURI;
+        
+                  /* Using cordova-plugin-crop starts here */
+                }
+
                 this.featureService.cropImage(imageURI)
                 .then(base64 => {
                   if(base64)
                     this.selectedPhoto = base64;
+                    this.updateUserForm.markAsDirty();
                   })
                 .catch( err=> console.log(err,'Error in croppedImageToBase64'));
                 }
@@ -317,6 +330,7 @@ export class FirebaseUpdateUserModal implements OnInit {
                 .then(base64 => {
                   if(base64)
                     this.selectedPhoto = base64;
+                    this.updateUserForm.markAsDirty();
                   })
                 .catch( err=> console.log(err,'Error in croppedImageToBase64'));
                 }

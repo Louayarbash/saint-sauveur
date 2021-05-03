@@ -36,12 +36,12 @@ export class SignInGuard implements CanLoad {
          else {
           this.loginService.initializeApp(auth.uid).then(canAccessApp => {
           if(canAccessApp){
+            //alert('canAccessApp' + canAccessApp);
             this.splashScreen.hide();
             console.log("notificationsAllowed", this.loginService.notificationsAllowed());
             if(this.loginService.notificationsAllowed()){
-              //removeFCM this.fcmService.listenToNotifications();
-              //removeFCM this.fcmService.get_save_Token();
-
+              //alert('notificationsAllowed()' + this.loginService.notificationsAllowed());
+              this.fcmService.initPushNotification();
             }
               this.authService.canAccessApp.next(true);
               this.router.navigate(['start-menu'], { replaceUrl: true });
@@ -59,13 +59,12 @@ export class SignInGuard implements CanLoad {
           }
           )
           .catch((err )=> { this.featureService.presentToast('problem while verifying building or user info. from sign in guard error: '+ err, 2000); return true;})
-        }
-        
-        }
-        )
-        )  
-      }
-        }
+    }
+    }
+    )
+    )  
+  }
+}
    
 /*   canActivate(): boolean {
 

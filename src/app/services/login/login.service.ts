@@ -68,6 +68,15 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
+  getUserTokens(){
+    if(this.userInfo.tokens){
+      return this.userInfo.tokens;
+    }
+    else {
+      return null;
+    }
+  }
+
   getApaNumber(): string{
     if(this.userInfo.apartment){
       return this.userInfo.apartment;

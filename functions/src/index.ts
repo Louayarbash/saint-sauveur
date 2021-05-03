@@ -68,29 +68,47 @@ exports.onNewRequest = functions.firestore
     // Notification content
     const payload = {
       notification: {
-          title: '',
+          title: 'Test',
           body: `Someone in your building is asking for parking, check to see if you can help!`,
           //icon: 'https://goo.gl/Fz9nrQ',
-          click_action:"FCM_PLUGIN_ACTIVITY"
+          //click_action:"FCM_PLUGIN_ACTIVITY",
+          //collapse_key:"com.enappd.IonicReactPush"
       },
       data: {
+        //actionId:"tap",
         landing_page: "deal",
-        id: id
+        id: id,
+        //collapse_key:"com.enappd.IonicReactPush"
       }
     }
 
-    const devicesRef = db.collection('devices').where('buildingId', '==', data.buildingId)
+    const usersRef = db.collection('users').where('buildingId', '==', data.buildingId);
     // get the user's tokens and send notifications
-    const devices = await devicesRef.get();
+    const users = await usersRef.get();
 
     /*const tokens = [];*/
-    const tokens: string | any[] = [];
+    //const tokens: string | any[] = [];
+    const tokens: string[] = [];
 
     // send a notification to each device token
-    devices.forEach(result => {
-      const token = result.data().token;
-      tokens.push( token )
-    })
+    if(users.size > 0){
+      users.forEach(result => {
+        console.log("tokens",result.data().tokens);
+        if(result.data().tokens){
+          result.data().tokens.forEach((res: string) => {tokens.push( res )})
+        }
+      })
+      admin.messaging().sendToDevice(tokens, payload).then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
+    }
+
+
+    console.log("Louay tokens array",tokens);
 
     /* 2 */
     /* Cretate task to change status to expired */
@@ -129,13 +147,7 @@ exports.onNewRequest = functions.firestore
       const actionTaskExpired = responseExpired.name
       const update: InfoDocumentData = { actionTaskExpired , serverStatingTime : expiresAtSeconds }
       await item.ref.update(update);
-      admin.messaging().sendToDevice(tokens, payload).then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
+
 }
 return
 });

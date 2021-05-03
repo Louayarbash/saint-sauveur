@@ -183,19 +183,20 @@ export class FirebaseService {
     const tokens: string | any[] = [];
     
     if(userData.enableNotifications == false){
-      let results = await this.afs.firestore.collection('devices').where('userId', '==', userData.id).get();
-      results.forEach(result => {
+
+      userData.tokens = null;
+      /*let results = await this.afs.firestore.collection('devices').where('userId', '==', userData.id).get();
+        results.forEach(result => {
         const id = result.id;
         this.afs.collection('devices').doc(id).delete();
-      });
-      
+      });*/
     }
+    
     else if((userData.enableNotifications == true) && (userData.id == this.loginService.getLoginID()) && !(this.loginService.notificationsAllowed())){
-      console.log(userData.enableNotifications == true);
-      console.log(userData.id == this.loginService.getLoginID());
-      console.log(!(this.loginService.notificationsAllowed()));
-      //removeFCM this.fcmService.get_save_Token();
-      //removeFCM this.fcmService.listenToNotifications();
+      // console.log(userData.enableNotifications == true);
+      // console.log(userData.id == this.loginService.getLoginID());
+      // console.log(!(this.loginService.notificationsAllowed()));
+      this.fcmService.initPushNotification();
     }
     return this.afs.collection('users').doc(userData.id).update({...userData});
   }

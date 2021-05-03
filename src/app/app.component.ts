@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
-import { FcmService } from '../app/services/fcm/fcm.service';
+//import { FcmService } from '../app/services/fcm/fcm.service';
 import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
 import { AuthService } from './auth/auth.service';
@@ -82,7 +82,7 @@ export class AppComponent {
     private platform: Platform,
   //  private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private fcmService : FcmService,
+    //private fcmService : FcmService,
     public languageService : LanguageService,
     private featureService : FeatureService,
     private alertController: AlertController,
@@ -96,11 +96,13 @@ export class AppComponent {
    async initializeApp() {
     
     this.platform.ready().then(() => {
-console.log("app.component initialize app")
+    console.log("app.component initialize app")
 
       this.setLanguage();
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
+
+
       
       // this.splashScreen.hide();
 

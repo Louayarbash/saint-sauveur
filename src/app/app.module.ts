@@ -39,6 +39,7 @@ import { SignInGuard } from './auth/signin.guard';
 import { IntroGuard } from './auth/intro.guard';
 import { IonicStorageModule } from '@ionic/storage';
 
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -91,6 +92,6 @@ export function createTranslateLoader(http: HttpClient) {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-
+  
 
 }

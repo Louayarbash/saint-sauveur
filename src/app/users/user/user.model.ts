@@ -16,6 +16,7 @@ export class UserModel extends ShellModel {
   birthdate: number;
   language: string;
   enableNotifications: boolean;
+  tokens: string[];
   status: string;
   createDate : firebase.firestore.FieldValue;
   createdBy: string;

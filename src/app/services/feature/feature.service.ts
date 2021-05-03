@@ -153,7 +153,7 @@ async selectImageSource(maxLength: number, currentLength: number, postImages: Im
     // targetWidth: 500,
     // targetHeight: 600,
     // destinationType: this.camera.DestinationType.DATA_URL,
-    destinationType: this.camera.DestinationType.FILE_URI, 
+    destinationType: this.camera.DestinationType.FILE_URI,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
     correctOrientation: true,
@@ -442,6 +442,7 @@ checkEmail(email: string): Observable<any> {
 cropImage(imgPath) {
     
   const cropOptions: CropOptions = {
+    
     quality: 25
 //      targetHeight: 100,
 //      targetWidth : 150
@@ -455,21 +456,26 @@ cropImage(imgPath) {
       error => {
         console.log('Error cropping image' + error);
       }  
-    );
+    ).catch(err => console.log("error catch", err));
     
 }
 
-croppedImageToBase64(ImagePath) {
+async croppedImageToBase64(ImagePath) {
 
-  //this.isLoading = true;
-  let copyPath = ImagePath;
+  // old code
+  /*let copyPath = ImagePath;
   const splitPath = copyPath.split('/');
   const imageName = splitPath[splitPath.length - 1];
   const filePath = ImagePath.split(imageName)[0];
 
-  return this.file.readAsDataURL(filePath, imageName)
-  //.then(base64 => {
-  //  this.selectedPhoto = base64;
-  //}).catch( err=> console.log(err,'Error in croppedImageToBase64'));
+  return this.file.readAsDataURL(filePath, imageName)*/
+  // end old code
+
+      let contents = await Filesystem.readFile({
+        path: ImagePath
+      });
+      
+      return "data:image/jpeg;base64," + contents.data;
+
 }
 }

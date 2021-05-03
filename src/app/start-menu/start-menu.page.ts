@@ -1,6 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { LoginService } from '../services/login/login.service';
+import {
+  Plugins//,
+  //PushNotification,
+  //PushNotificationToken,
+  //PushNotificationActionPerformed,
+} from '@capacitor/core';
+//import { AngularFireModule } from '@angular/fire';
+//import { environment } from '../../environments/environment';
+
+const { PushNotifications } = Plugins;
 
 @Component({
   selector: 'app-categories',
@@ -34,7 +44,49 @@ export class StartMenuPage implements OnInit {
   }
 
   ngOnInit() {
+  
+    // Request permission to use push notifications
+    // iOS will prompt user and return if they granted permission or not
+    // Android will just grant without prompting
+/*     PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        // Register with Apple / Google to receive push via APNS/FCM
+        PushNotifications.register();
+      } else {
+        alert('Initializing HomePage test push notifications FAILED');
+        // Show some error
+      }
+    }); 
+
     
+    console.log('Initializing HomePage test push notifications 123');
+    alert('Initializing HomePage test push notifications after register');
+  
+    PushNotifications.addListener(
+      'registration',
+      (token: PushNotificationToken) => {
+        alert('Push registration success, token: ' + token.value);
+      },
+    );
+  
+    PushNotifications.addListener('registrationError', (error: any) => {
+      alert('Error on registration: ' + JSON.stringify(error));
+    });
+  
+    PushNotifications.addListener(
+      'pushNotificationReceived',
+      (notification: PushNotification) => {
+        alert('Push received: ' + JSON.stringify(notification));
+      },
+    );
+  
+    PushNotifications.addListener(
+      'pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        alert('Push action performed: ' + JSON.stringify(notification));
+      },
+    );
+    */
     this.loginService.currentUserInfo.subscribe(
       userInfo => {
         this.username = userInfo.firstname;
