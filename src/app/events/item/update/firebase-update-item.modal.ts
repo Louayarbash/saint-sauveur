@@ -220,12 +220,12 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.featureService.deleteItem(this.item.files, this.item.id, 'publication')
+            this.featureService.deleteItem(this.item.files, this.item.id, 'events')
             .then(
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['publication/listing']);
+                this.router.navigate(['events/listing']);
               },
               err => { 
                 console.log(err);
@@ -269,7 +269,7 @@ export class FirebaseUpdateItemModal implements OnInit {
          console.log("before",this.item);
          this.item.files.splice(index,1);
          console.log("after",this.item);
-         this.featureService.updateItemWithoutOptions(this.item, 'publication').then(()=> {
+         this.featureService.updateItemWithoutOptions(this.item, 'events').then(()=> {
           this.files.splice(index,1); 
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);}
           ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
