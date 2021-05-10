@@ -72,9 +72,9 @@ export class FcmService {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotification) => {
-        alert('Push received1: ' + JSON.stringify(notification));
+        //alert('Push received1: ' + JSON.stringify(notification));
         //alert('Push received2: ' + JSON.stringify(notification.click_action));
-        alert('Push received3: ' + JSON.stringify(notification.notification));
+        //alert('Push received3: ' + JSON.stringify(notification.notification));
         this.router.navigate(['deal/listing']);
       },
     );
@@ -89,9 +89,9 @@ export class FcmService {
     PushNotifications.addListener(
       'pushNotificationActionPerformed',
        (notification: PushNotificationActionPerformed) => {
-        alert('Push action performed1: ' + JSON.stringify(notification));
-        alert('Push action performed2: ' + JSON.stringify(notification.actionId));
-        alert('Push action performed3: ' + JSON.stringify(notification.notification.data.landing_page));
+        //alert('Push action performed1: ' + JSON.stringify(notification));
+        //alert('Push action performed2: ' + JSON.stringify(notification.actionId));
+        //alert('Push action performed3: ' + JSON.stringify(notification.notification.data.landing_page));
         //alert('Push action performed: ' + JSON.stringify(notification.notification.data.actionId));
         //alert('Push action performed landing page: ' + JSON.stringify(notification.notification.data.landing_page));
         //alert('Push action performed id: ' + JSON.stringify(notification.notification.data.id));
