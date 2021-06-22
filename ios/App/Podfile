@@ -13,6 +13,11 @@ def capacitor_pods
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
   pod 'CordovaPluginsResources', :path => '../capacitor-cordova-ios-plugins'
   # Do not delete
+  #Louay qs per firebqse configure ios
+  pod 'FirebaseCore'
+  #pod 'FirebaseInstanceID'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging'
 end
 
 target 'App' do
