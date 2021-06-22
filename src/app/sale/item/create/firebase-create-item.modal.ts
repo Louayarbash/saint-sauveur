@@ -8,8 +8,8 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { ReplaySubject } from 'rxjs';
-import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-import { File } from "@ionic-native/file/ngx";
+//import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+//import { File } from "@ionic-native/file/ngx";
 import { Plugins } from '@capacitor/core';
 
 const { Filesystem } = Plugins;

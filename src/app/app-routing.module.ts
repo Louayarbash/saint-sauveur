@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'buildings', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'lost-found', loadChildren: () => import('./lost-found/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
-  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canLoad: [IntroGuard, SignInGuard] },				
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), canLoad: [/*IntroGuard,*/ SignInGuard] },				
   { path: 'publication', loadChildren: () => import('./publications/firebase-integration.module').then(m => m.FirebaseIntegrationModule) , canLoad: [PageGuard] },
   { path: 'events', loadChildren: () => import('./events/firebase-integration.module').then(m => m.FirebaseIntegrationModule) , canLoad: [PageGuard] },																				  
   { path: 'auth/forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule) },

@@ -10,7 +10,7 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Images} from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { ImagePickerOptions, ImagePicker } from '@ionic-native/image-picker/ngx';
-import { File } from "@ionic-native/file/ngx";
+//import { File } from "@ionic-native/file/ngx";
 import { FormGroup } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LanguageService } from '../../language/language.service';
@@ -43,7 +43,7 @@ export class FeatureService {
     private camera: Camera,  
     private actionSheetController : ActionSheetController,
     private imagePicker : ImagePicker,
-    private file: File,
+    //private file: File,
     private http: HttpClient,
     private alertController: AlertController,
     public languageService : LanguageService,

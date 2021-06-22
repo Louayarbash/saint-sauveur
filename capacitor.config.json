@@ -1,7 +1,7 @@
 {
   "appId": "louay.arbash.parkondo",
   "appName": "parkondo",
-  "webDir": "www",
+  "webDir": "dist/app/browser",
   "npmClient": "npm",
   "plugins":{
     "PushNotifications": {
