@@ -197,6 +197,7 @@ export class SignUpPage implements OnInit {
     this.userData.lastname= this.signupForm.value.lastname;
     this.userData.email= this.signupForm.value.email;
     this.userData.role= 'admin';
+    this.userData.status= 'active';
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
     this.featureService.createItem('buildings', this.buildingData)
     .then((building: any) => {

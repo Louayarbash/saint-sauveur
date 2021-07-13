@@ -204,6 +204,7 @@ export class SignUp1Page implements OnInit {
     this.userData.lastname= this.signup1Form.value.lastname;
     this.userData.email= this.signup1Form.value.email;
     this.userData.role= 'user';
+    this.userData.status= 'active';
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
     this.userData.photo = '../../assets/sample-images/avatar.png';
 
