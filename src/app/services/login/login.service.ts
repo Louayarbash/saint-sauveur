@@ -199,15 +199,18 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
         return false;
       }
       console.log(user.data());
-      let userData= user.data() as UserModel;
-      this.userInfo.id= uid;
+      let userData= user.data() as UserModel;      
       this.userInfo= userData;
+      this.userInfo.id= uid;
+      
       if(userData.language !== this.featureService.translate.currentLang){
         this.featureService.changeLanguage(userData.language);
       }
       this.featureService.getItem('users', uid).subscribe(async item => {
         this.userInfo= item;
-        this.userInfoSource.next( item ); 
+        this.userInfo.id= uid;
+        this.userInfoSource.next( this.userInfo ); 
+        //this.userInfoSource.next( item ); 
         if(item.language !== this.featureService.translate.currentLang){
           this.featureService.changeLanguage(item.language);
         }
