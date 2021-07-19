@@ -206,7 +206,8 @@ export class SignUp1Page implements OnInit {
     this.userData.role= 'user';
     this.userData.createDate= firebase.firestore.FieldValue.serverTimestamp();
     this.userData.photo = '../../assets/sample-images/avatar.png';
-
+    this.userData.status = 'active';
+    this.userData.enableNotifications= true;
     this.featureService.createItem('users', this.userData, uid)
      .then(() => {
       // this.redirectLoggedUserToStartMenu();

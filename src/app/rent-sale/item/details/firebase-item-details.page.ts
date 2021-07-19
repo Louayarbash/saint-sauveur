@@ -6,7 +6,7 @@ import { FirebaseItemModel, FirebaseCombinedItemModel } from '../firebase-item.m
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
 import { SliderModal } from '../slider/slider.modal';
-import { DataStore, ShellModel } from '../../../shell/data-store';
+import { DataStore/*, ShellModel*/ } from '../../../shell/data-store';
 import { Observable } from 'rxjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
