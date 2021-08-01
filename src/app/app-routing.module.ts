@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PageGuard } from './auth/page.guard';
 import { SignInGuard } from './auth/signin.guard';
-import { IntroGuard } from './auth/intro.guard';
+// import { IntroGuard } from './auth/intro.guard';
 
 
 const routes: Routes = [

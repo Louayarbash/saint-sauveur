@@ -1,7 +1,7 @@
 import UIKit
 import Capacitor
 import FirebaseCore
-import FirebaseInstanceID // Add this line after import FirebaseCore
+//import FirebaseInstanceID // Add this line after import FirebaseCore
 import FirebaseMessaging
 
 @UIApplicationMain
@@ -67,8 +67,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   // func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
   // NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
   // }
+  
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+      Messaging.messaging().apnsToken = deviceToken
+      Messaging.messaging().token { (token, error) in
+          if let error = error {
+              NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
+          } else if let token = token {
+              NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: token)
+          }
+      }
+  }
 
-   func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+   /*func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
@@ -77,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: result.token)
             }
         }
-    }
+    }*/
 
   func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
     NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)

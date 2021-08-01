@@ -68,6 +68,10 @@ exports.onNewRequest = functions.firestore
     // Notification content
     const payload = {
       notification: {
+<<<<<<< HEAD
+          title: '',
+=======
+>>>>>>> 91f5c365c9af60c4073acb4a4ab27dd0c147acd5
           body: `Someone in your building is asking for parking, check to see if you can help!`,
           //icon: 'https://goo.gl/Fz9nrQ',
           //click_action:"FCM_PLUGIN_ACTIVITY",
