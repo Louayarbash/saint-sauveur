@@ -95,6 +95,15 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
+  getLoginEmail(): string{
+    if(this.userInfo.email){
+      return this.userInfo.email;
+    }
+    else {
+      return 'userEmailNull'
+    }
+  }
+
 /*   getAuthID(){
     return this.authService.getUserId()
   }

@@ -123,5 +123,15 @@
         </app-aspect-ratio>
       </app-image-shell>
     </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="userIsAdmin">
+      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
+      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"> -->
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <a class="category-anchor" [routerLink]="['/buildings/invite']">
+            <h2 class="category-title">{{ 'Invite' | translate }}</h2>
+          </a>
+        </app-aspect-ratio>
+      </app-image-shell>
+    </ion-col>
   </ion-row>
 </ion-content>

@@ -256,7 +256,7 @@ export class SignUp1Page implements OnInit {
         console.log("result", result.length); 
         // this.emailIsValid= true; 
         this.emailFound= true;
-        this.featureService.presentToast(this.featureService.translations.EmailFound + this.buildingId, 2000);
+        this.featureService.presentToast(this.featureService.translations.EmailFound, 2000);
       }
       else{
         this.featureService.presentToast(this.featureService.translations.NoInvitaionFound, 2000);

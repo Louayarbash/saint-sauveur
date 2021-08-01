@@ -190,11 +190,12 @@ ion-text.camera-btn{
   }
 
   .message-input{
+    color: black;
     // box-shadow: lightgrey;
   width:100%;
-  border:1px solid var(--ion-color-medium);
+  //border:1px solid var(--ion-color-medium);
   border-radius : 10px;
-  //background:#fff;
+  background:#fff;
   resize:none;
   //padding-left:10px;
   //padding-right:10px;
@@ -206,9 +207,9 @@ ion-text.camera-btn{
   
   }
 
-  .footerInvite{
-    --background: var(--ion-color-light-shade);
-  }
+/*    .footerInvite{
+    --border-color: var(--ion-color-secondary);
+  }  */
 
   .rowInvite{
     padding: 0px 16px 0px 16px;    

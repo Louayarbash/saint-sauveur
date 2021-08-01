@@ -1,4 +1,8 @@
 {
+  "DescriptionRequired": "Description requise",
+  "ProblemDescription" : "Description du problème",
+  "PhoneModel": "Modèle de téléphone",
+  "ReportProblem": "Signaler un problème",
   "Number": "Numéro",
   "SelectTicketType": "Sélectionnez le type de billet",
   "SelectParkingLevel": "Sélectionnez le niveau de stationnement",
@@ -48,6 +52,7 @@
   "SignUp": "S'inscrire",
   "SignIn": "Se connecter",
   "LogIn": "Se connecter",
+  "SignOut": "Se déconnecter",
   "InvitationMsg": "Je voudrais vous inviter à nous rejoindre et à commencer à utiliser notre application mobile de création",
   "InvitationForm": "Formulaire d'invitation",
   "InvitationsSent": "Invitation envoyée",

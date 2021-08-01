@@ -7,7 +7,7 @@ import { RatingUser } from '../../deals/item/firebase-item.model';
 import { VotingPublication } from '../../publications/item/firebase-item.model';
 import { Observable } from 'rxjs';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
-import { Images} from '../../type';
+import { Images } from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { ImagePickerOptions, ImagePicker } from '@ionic-native/image-picker/ngx';
 //import { File } from "@ionic-native/file/ngx";
@@ -16,6 +16,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LanguageService } from '../../language/language.service';
 import { first } from 'rxjs/operators';
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
+//import { Camera, CameraDirection, CameraOptions } from '@capacitor/core';
 import { Plugins } from '@capacitor/core';
 
 const { Filesystem } = Plugins;
@@ -147,6 +148,7 @@ sendEmail(email : any){
 
 async selectImageSource(maxLength: number, currentLength: number, postImages: Images[], form: FormGroup) {
   const cameraOptions: CameraOptions = {
+
     //allowEdit:true,
     quality: 100,
     cameraDirection: this.camera.Direction.BACK,
@@ -383,7 +385,7 @@ public updateItem(tableName: string, id: string, itemData: any): Promise<void> {
   const requestOptions = {                                                                                                                                                                                
     headers: new HttpHeaders(headerDict)
   };
-   return this.http.post('https://us-central1-parkondo.cloudfunctions.net/sendInvitationEmails', mailOptions/*, requestOptions*/);
+   return this.http.post('https://us-central1-parkondo.cloudfunctions.net/sendInvitationEmails', mailOptions, requestOptions);
 }
 
 async openLanguageChooser() {
@@ -427,6 +429,7 @@ changeLanguage(lang: string){
 }
 
 checkEmail(email: string): Observable<any> {
+  console.log(email);
   //console.log("getItem", itemId);
   return this.afs.collection('invitations', ref => ref.where('emails', 'array-contains', email).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' }).pipe(first());
   

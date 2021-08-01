@@ -1,7 +1,8 @@
   <ion-header>
     <ion-toolbar color="main">
       <ion-buttons slot="end">
-        <ion-button (click)="dismissModal()">
+        <ion-button [routerLink]="['/start-menu']">
+          <!-- <ion-back-button defaultHref="start-menu"></ion-back-button> -->
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -22,19 +23,18 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-
       </ion-card-content>
   </ion-card> 
   </ion-content>
-  <ion-footer class="footerInvite">
-    <ion-toolbar>
+  <ion-footer>
+    <ion-toolbar color="main">
       <ion-title class="ion-padding">{{ 'InvitationForm' | translate }}</ion-title>
     
     <!-- <ion-toolbar> -->
       <!-- <ion-grid> -->
         <ion-row class="rowInvite">
           <ion-col>
-            <ion-text>{{ 'EmailsListHeader' | translate }}</ion-text>
+            <ion-text >{{ 'EmailsListHeader' | translate }}</ion-text>
             <ion-textarea auto-grow="false" spellcheck="true" [(ngModel)]="emailsList" class="message-input"></ion-textarea>
           </ion-col>
           </ion-row> 
@@ -49,7 +49,7 @@
           </ion-row> 
           <ion-row class="rowInvite">
             <ion-col>
-              <ion-button class="ion-no-margin btnInvite" expand="block" color="main" type="submit" fill="solid" [disabled]="!emailsList" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
+              <ion-button class="ion-no-margin btnInvite" expand="block" color="dark" type="submit" fill="solid" [disabled]="!emailsList" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
             </ion-col>
           </ion-row>
     <!-- </ion-grid> -->

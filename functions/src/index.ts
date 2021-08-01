@@ -567,19 +567,41 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req, re
     corsHandler(req, res, async() => {
     try {  
       const mailOptions = req.body
-      const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      const transporter = nodemailer.createTransport(
+        /* {host: "smtp.gmail.com",
       // service: 'gmail',
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
         user: 'marcelouay@gmail.com',
         pass: 'li2annalahama3ana'
-      }/* ,
-      tls: {
-        rejectUnauthorized:false
-      } */
-    });
+      }/*
+      // ,
+      //tls: {
+      //rejectUnauthorized:false
+      //} 
+    } */
+    
+    {
+    host: "p3plzcpnl470352.prod.phx3.secureserver.net",
+    //host: "mail.parkondo.com",
+    // service: 'gmail',
+    //service: 'Godaddy',
+    //secureConnection: false,
+    port: 465,
+    //tls: {
+    //  rejectUnauthorized: false
+    //},
+    //requireTLS:true,
+    //port: 587,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: 'donotreply@parkondo.com',
+      pass: 'Lakecomo82'
+    }
+  }
+
+    );
   
     const info = await transporter.sendMail(mailOptions);
     console.log("Message sent: %s", info.messageId);

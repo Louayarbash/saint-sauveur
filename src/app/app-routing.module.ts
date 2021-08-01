@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'start-menu', loadChildren: () => import('./start-menu/start-menu.module').then(m => m.StartMenuPageModule), canLoad: [PageGuard] },
   { path: 'users', loadChildren: () => import('./users/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'sale', loadChildren: () => import('./sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
+  { path: 'reportproblem', loadChildren: () => import('./reportproblem/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
+  //{ path: 'invite', loadChildren: () => import('./buildings/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'rent-sale', loadChildren: () => import('./rent-sale/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'deal', loadChildren: () => import('./deals/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },
   { path: 'tickets', loadChildren: () => import('./tickets/firebase-integration.module').then(m => m.FirebaseIntegrationModule), canLoad: [PageGuard] },

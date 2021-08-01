@@ -10,7 +10,8 @@
 }
 
 ion-content{
-  --background:#e05c0e;
+  //--background:#e05c0e;e15b0e
+  --background:#e15b0e;
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
@@ -25,14 +26,14 @@ ion-content{
 
   .category-item {
     padding: 0px 0px 10px 0px;
-    --page-category-background: #e05c0e;
+    --page-category-background: #e15b0e;
     --page-category-background-rgb: 224, 92, 14;
     
   }
 
   .category-item-small-right {
     padding: 0px 10px 10px 0px;
-    --page-category-background: #e05c0e;
+    --page-category-background: #e15b0e;
     --page-category-background-rgb: 224, 92, 14;
     
   }

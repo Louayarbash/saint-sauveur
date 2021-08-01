@@ -72,16 +72,18 @@ export class InviteModal implements OnInit {
     invitation.invitationMessage = this.InvitationMsg;
     invitation.createDate = firebase.firestore.FieldValue.serverTimestamp();
     invitation.userId = this.loginId;
-    invitation.emails= this.emailsList.split(';')
+    //console.log("1",this.emailsList);
+    this.emailsList = this.emailsList.toLowerCase().replace(/\s/g,'').replace(/;/g,',');
+    invitation.emails= this.emailsList.toLowerCase().replace(/\s/g,'').split(',')
     invitation.buildingId= this.buildingId;
-
+    //console.log("2",invitation.emails);
     if(this.emailsList){
-      let emailsListUpdated = this.emailsList.replace(';',',');
-      console.log('after replace', emailsListUpdated);
+      //let emailsListUpdated = this.emailsList.replace(/;/g,',');
+      //console.log('after replace', this.emailsList);
       let mailOptions = {
-          from: '"Parkondo" <marcelouay@gmail.com>', // sender address
+          from: '"Parkondo App" <donotreply@parkondo.com>', // sender address
           to: this.emailsList, // list of receivers
-          subject: "Invitation to join Parkondo building managment app", // Subject line
+          subject: "Invitation to join Parkondo App", // Subject line
           text: this.InvitationMsg, // plain text body
           html: "<b>" + this.InvitationMsg + "</b>" // html body
       };
@@ -119,7 +121,7 @@ export class InviteModal implements OnInit {
       }, 
       err => {        
         console.log("response error",err);
-        this.featureService.presentToast('Emails sent with errors' + err.error, 10000);
+        this.featureService.presentToast('Emails sent with errors' + err.error, 2000);
       }, () => {
         console.log("complete");
       }); 

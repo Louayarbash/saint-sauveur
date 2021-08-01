@@ -24,6 +24,10 @@ const firebaseRoutes: Routes = [
   {
     path: 'details/:id',
     loadChildren: () => import('./building/details/details.module').then(m => m.BuildingDetailsPageModule)
+  },
+  {
+    path: 'invite',
+    loadChildren: () => import('./building/invite/invite.module').then(m => m.InvitePageModule)
   }
 ];
 

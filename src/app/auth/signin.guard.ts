@@ -8,15 +8,18 @@ import { AuthService } from './auth.service';
 import { LoginService } from '../services/login/login.service';
 import { FeatureService } from '../services/feature/feature.service';
 // import { BehaviorSubject } from 'rxjs';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+//import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { FcmService } from '../services/fcm/fcm.service';
+import { Plugins } from '@capacitor/core';
+
+const { SplashScreen } = Plugins;
 
 
 @Injectable()
 export class SignInGuard implements CanLoad {
 // a= new BehaviorSubject(true);
   constructor(
-    private splashScreen: SplashScreen,
+    //private splashScreen: SplashScreen,
     private authService: AuthService,
     private router: Router,
     private loginService: LoginService,
@@ -37,7 +40,8 @@ export class SignInGuard implements CanLoad {
           this.loginService.initializeApp(auth.uid).then(canAccessApp => {
           if(canAccessApp){
             //alert('canAccessApp' + canAccessApp);
-            this.splashScreen.hide();
+            //this.splashScreen.hide();
+            SplashScreen.hide();
             console.log("notificationsAllowed", this.loginService.notificationsAllowed());
             if(this.loginService.notificationsAllowed()){
               //alert('notificationsAllowed()' + this.loginService.notificationsAllowed());

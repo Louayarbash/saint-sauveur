@@ -1,4 +1,8 @@
 {
+  "DescriptionRequired": "Description is required",
+  "ProblemDescription" : "Problem description",
+  "PhoneType": "Phone type",
+  "ReportProblem": "Report a problem",
   "Number": "Number",
   "SelectTicketType": "Select ticket type",
   "SelectParkingLevel": "SelectParkingLevel",
@@ -47,6 +51,7 @@
   "BuildingNameSignUp": "Building name",
   "SignUp": "Sign Up",
   "SignIn": "Sign In",
+  "SignOut": "Sign Out",
   "LogIn": "Login",
   "InvitationMsg": "I would like to invite you to join us and start using our building mobile app",
   "InvitationForm": "Invitation form",

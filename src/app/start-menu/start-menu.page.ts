@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { LoginService } from '../services/login/login.service';
-import {
-  Plugins//,
-  //PushNotification,
-  //PushNotificationToken,
-  //PushNotificationActionPerformed,
-} from '@capacitor/core';
 //import { AngularFireModule } from '@angular/fire';
 //import { environment } from '../../environments/environment';
 
-const { PushNotifications } = Plugins;
+//const { PushNotifications } = Plugins;
 
 @Component({
   selector: 'app-categories',
@@ -38,12 +32,14 @@ export class StartMenuPage implements OnInit {
     private loginService: LoginService,
     public menu: MenuController
   ) {
-    console.log('start menu constructor');
+    //this.backButtonHandler = Plugins.App.addListener('backButton', Plugins.App.exitApp)    
+    //console.log('start menu constructor');
     this.menu.enable(true); 
     
   }
 
   ngOnInit() {
+    console.log("oninit Louay");
   
     // Request permission to use push notifications
     // iOS will prompt user and return if they granted permission or not
@@ -115,4 +111,5 @@ export class StartMenuPage implements OnInit {
 
 
   }
+
 }

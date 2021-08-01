@@ -1,0 +1,100 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
+  <ion-header>
+    <ion-toolbar color="main">
+      <ion-buttons slot="end">
+        <ion-button [routerLink]="['/start-menu']">
+          <!-- <ion-back-button defaultHref="start-menu"></ion-back-button> -->
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'ReportProblem' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <section>
+       <!-- <ion-list lines="full"> -->
+<!--         <ion-item>
+          <ion-label position="floating">{{ 'Object' | translate }}</ion-label>
+          <ion-input autocapitalize type="text" formControlName="object" required></ion-input>
+        </ion-item> -->
+        <ion-item>
+          <ion-label position="floating">{{ 'Description' | translate }}</ion-label>
+          <ion-textarea autocapitalize rows="6" cols="20" formControlName="description"></ion-textarea>
+        </ion-item>
+<!--         <ion-item>
+          <ion-label>{{ 'PhoneType' | translate }}</ion-label>
+          <ion-radio-group formControlName="phone">
+            <ion-row class="radio-tags">
+              <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Android' | translate }}</ion-label>
+                <ion-radio value="android"></ion-radio>
+              </ion-item>
+            </ion-col>
+              <ion-col>
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'iPhone' | translate }}</ion-label>
+                  <ion-radio value="iphone"></ion-radio>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-radio-group>
+        </ion-item> -->
+<!--         <ion-item>
+          <ion-label position="floating">{{ 'PhoneModel' | translate }}</ion-label>
+          <ion-input autocapitalize type="text" formControlName="model" required></ion-input>
+        </ion-item> -->
+      <!-- </ion-list>  -->
+    </section>
+<ion-item-divider>
+  <ion-button size="small" color="main" (click)="selectImageSource()" [disabled]="postImages.length >= 3" slot="start">
+   <!-- <div class="ion-padding">{{ 'AddPhoto' | translate }}</div>  -->
+  <ion-icon name="camera-outline"></ion-icon>
+  <ion-text class="camera-btn">+</ion-text>
+  </ion-button> 
+</ion-item-divider>
+
+<ion-reorder-group disabled="false" (ionItemReorder)="doReorder($event)">
+  <ion-item *ngFor="let image of postImages">
+<!-- <ion-row  class="ion-align-items-center"> -->
+  <ion-col class="ion-padding">
+    <app-image-shell class="item-image" [display]="'cover'" animation="spinner" [src]="image.photoData">
+     <app-aspect-ratio [ratio]="{w:64, h:50}">
+     </app-aspect-ratio>
+   </app-image-shell>
+  </ion-col> 
+  <ion-col>
+    <ion-button color="medium" (click)="deletePhoto(postImages.indexOf(image))">          
+      <ion-icon slot="icon-only" name="trash"></ion-icon>      
+    </ion-button>  
+  </ion-col>
+  <ion-col>
+    <ion-button color="main" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
+      {{ 'CoverPhoto' | translate }}
+    </ion-button> 
+  </ion-col>
+<!-- </ion-row> -->
+<ion-reorder slot="end"></ion-reorder>
+</ion-item>
+</ion-reorder-group>
+  </ion-content>
+
+  <ion-footer>
+    <ion-toolbar>
+    <ng-container *ngIf="createItemForm.get('description').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row *ngIf="createItemForm.get('description').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'DescriptionRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'CREATE' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+  </ion-footer>
+</form>

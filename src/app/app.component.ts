@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { Location } from '@angular/common';
+//import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
@@ -80,6 +81,7 @@ export class AppComponent {
   constructor(
     private translate: TranslateService,
     private platform: Platform,
+    private location: Location,
   //  private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     //private fcmService : FcmService,
@@ -112,12 +114,66 @@ export class AppComponent {
 
       //this.fcmService.listenToNotifications();
     });
+
+    this.platform.backButton.subscribeWithPriority(10, (processNextHandler) => {
+      console.log('Back press handler!');
+      if (this.location.isCurrentPathEqualTo('/start-menu')) {
+
+        // Show Exit Alert!
+        console.log('Show Exit Alert!');
+        this.showExitConfirm();
+        processNextHandler()        
+      } else {
+
+        // Navigate to back page
+        console.log('Navigate to back page');
+        this.location.back();
+
+      }
+
+    });
+    
+
+    this.platform.backButton.subscribeWithPriority(5, () => {
+      console.log('Handler called to force close!');
+      this.alertController.getTop().then(r => {
+        if (r) {
+          navigator['app'].exitApp();
+        }
+      }).catch(e => {
+        console.log(e);
+      })
+    });
+
+  }
+
+  showExitConfirm() {
+    this.alertController.create({
+      header: 'App termination',
+      message: 'Do you want to close the app?',
+      backdropDismiss: false,
+      buttons: [{
+        text: 'Stay',
+        role: 'cancel',
+        handler: () => {
+          console.log('Application exit prevented!');
+        }
+      }, {
+        text: 'Exit',
+        handler: () => {
+          navigator['app'].exitApp();
+        }
+      }]
+    })
+      .then(alert => {
+        alert.present();
+      });
   }
 
   async setLanguage() {
     this.translate.setDefaultLang('en');
     this.translate.use('en');
-    this.translate.onLangChange.subscribe((lang) => {
+    this.translate.onLangChange.subscribe((lang: any) => {
       this.featureService.getTranslations(lang);
     });
   }
