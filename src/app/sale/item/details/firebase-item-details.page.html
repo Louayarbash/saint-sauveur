@@ -12,6 +12,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+<!--   <div *ngIf="!(online | async)">
+    <b>Please check your internet connection, then try again</b>
+</div> -->
   <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
       <ion-spinner></ion-spinner>

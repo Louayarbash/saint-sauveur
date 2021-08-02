@@ -5,7 +5,6 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { RatingUser } from '../../deals/item/firebase-item.model';
 import { VotingPublication } from '../../publications/item/firebase-item.model';
-import { Observable } from 'rxjs';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Images } from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -18,6 +17,8 @@ import { first } from 'rxjs/operators';
 import { Crop, CropOptions } from '@ionic-native/crop/ngx';
 //import { Camera, CameraDirection, CameraOptions } from '@capacitor/core';
 import { Plugins } from '@capacitor/core';
+import { Observable, fromEvent, merge, of } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
 
 const { Filesystem } = Plugins;
 
@@ -30,7 +31,7 @@ export class FeatureService {
   userLanguage: any;
   buildingLevels: any;
   availableLanguages = [];
-  
+  online: Observable<boolean>; 
   // parking: Parkings[] =[{id: '1', description: 'P1', note: '', active: true}, {id: '2', description: 'P2', note: '', active: true}, {id: '3', description: 'P3', note: '', active: true}];
   // services: Services[]= [{id: '1', description: 'ElevatorBooking', active: true}, {id: '2', description: 'NewKeyRequest', active: true}];
 
@@ -53,8 +54,13 @@ export class FeatureService {
     // private Transporter: Transporter
     //private loginService : LoginService
     ) {
+      this.online = merge(
+        of(navigator.onLine),
+        fromEvent(window, 'online').pipe(mapTo(true)),
+        fromEvent(window, 'offline').pipe(mapTo(false))
+       );
     }
-    getCountryList() : any[] {
+  getCountryList() : any[] {
     return [
       {"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},
       {"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"},

@@ -1,4 +1,9 @@
 {
+  "ConnectionProblem" : "Connection problem!",
+  "PleaseCheckInternetConnection" : "Please check your internet connection",
+  "Stay" : "Stay",
+  "Exit" : "Exit",
+  "Retry" : "City",
   "CountryRequired": "Country is required",
   "CityRequired" :"City is required",
   "Country": "Country",

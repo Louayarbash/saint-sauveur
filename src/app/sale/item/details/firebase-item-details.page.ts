@@ -19,6 +19,7 @@ import { Images} from '../../../type'
 
 
 export class FirebaseItemDetailsPage implements OnInit {
+  online: any;
   noImage = 'images/no_image.jpeg';
   item: FirebaseCombinedItemModel;
   profileUrl: Observable<string | null>;
@@ -53,7 +54,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     }
 
   ngOnInit() {
-
+    //this.online = this.featureService.online;
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;

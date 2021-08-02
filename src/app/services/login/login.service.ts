@@ -12,7 +12,6 @@ import { ParkingInfo } from '../../type';
   providedIn: 'root'
 })
 export class LoginService {
-
 private userInfo: UserModel = new UserModel();
 private userInfoSource = new BehaviorSubject(this.userInfo);
 currentUserInfo = this.userInfoSource.asObservable();
@@ -28,9 +27,8 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     private featureService: FeatureService,
     private alertController: AlertController
     ) {
-      console.log('login service constructor');
-      this.userInfo.firstname= "HI";
-      
+      //console.log('login service constructor');
+      //this.userInfo.firstname= "to Parkondo";
    }
 /*    updateUserInfo(userInfo)
    {

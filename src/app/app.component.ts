@@ -9,6 +9,9 @@ import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
 import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
+import { Plugins, NetworkStatus } from '@capacitor/core';
+const { Network } = Plugins;
+
 //import { LoginService } from './services/login/login.service';
 
 @Component({
@@ -21,7 +24,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class AppComponent {
-
+  networkStatus: NetworkStatus;
   appPages = [
     {
       title: 'Categories',
@@ -92,19 +95,76 @@ export class AppComponent {
     public router: Router,
     //private loginService : LoginService
     ) {
-
+      
     this.initializeApp();
 }
-   async initializeApp() {
+async getStatus() {
+  try {
     
+    this.networkStatus = await Network.getStatus();
+    //console.log(this.networkStatus,"connected")
+    if (!this.networkStatus.connected){
+      this.alertController.create({
+        header: this.featureService.translations.ConnectionProblem,
+        message: this.featureService.translations.PleaseCheckInternetConnection,
+        backdropDismiss: false,
+        buttons: [{
+          text: this.featureService.translations.Retry,
+          role: 'cancel',
+          handler: () => {
+            this.getStatus();
+          }
+        }, {
+          text: this.featureService.translations.Exit,
+          handler: () => {
+            navigator['app'].exitApp();
+          }
+        }]
+      })
+        .then(alert => {
+          alert.present();
+        });
+      
+    }
+  } catch (e) { console.log("Error", e) }
+}
+
+checkConnection(){
+  this.featureService.online.subscribe(res => { console.log("status changed", res); if(!res) {
+    this.alertController.create({
+      header:  this.featureService.translations.ConnectionProblem,
+      message: this.featureService.translations.PleaseCheckInternetConnection,
+      backdropDismiss: false,
+      buttons: [{
+        text: this.featureService.translations.Retry,
+        role: 'cancel',
+        handler: () => {
+          this.getStatus();
+          console.log('Application exit prevented!');
+        }
+      }, {
+        text: this.featureService.translations.Exit,
+        handler: () => {
+          navigator['app'].exitApp();
+        }
+      }]
+    })
+      .then(alert => {
+        alert.present();
+      });
+  }})
+
+}
+   async initializeApp() {    
     this.platform.ready().then(() => {
     console.log("app.component initialize app")
-
+    this.checkConnection();
       this.setLanguage();
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
 
-
+      
+  
       
       // this.splashScreen.hide();
 
@@ -153,13 +213,13 @@ export class AppComponent {
       message: 'Do you want to close the app?',
       backdropDismiss: false,
       buttons: [{
-        text: 'Stay',
+        text: this.featureService.translations.Stay,
         role: 'cancel',
         handler: () => {
-          console.log('Application exit prevented!');
+          //console.log('Application exit prevented!');
         }
       }, {
-        text: 'Exit',
+        text: this.featureService.translations.Exit,
         handler: () => {
           navigator['app'].exitApp();
         }

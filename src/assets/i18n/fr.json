@@ -1,4 +1,9 @@
 {
+  "ConnectionProblem" : "Problème de connexion!",
+  "PleaseCheckInternetConnection" : "Veuillez vérifier votre connexion Internet",
+  "Stay" : "Rester",
+  "Exit" : "Quiter",
+  "Retry" : "Réessayez",
   "CountryRequired": "Pays est requis",
   "CityRequired" :"Ville est requise",
   "Country": "Pays",
@@ -209,7 +214,6 @@
   "MyRequests" : "Mes (demandes/offres)",
   "PleaseWait" : "Veuillez patienter...",
   "PleaseConfirm" : "Veuillez confirmer",
-  "ConnectionProblem" : "Problème de connexion!",
   "Category" : "Catégories",
   "NoRequestsFound" : "Pas de nouvelles demandes.",
   "NoOffersFound" : "Pas de nouvelles offres.",
