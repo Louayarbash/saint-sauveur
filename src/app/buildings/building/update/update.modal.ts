@@ -31,6 +31,14 @@ export class UpdateBuildingModal implements OnInit {
   enableLostFoundU: boolean; */
   enableTicket= false;
   enableDeal= false;
+    customAlertOptions: any = {
+    header: this.featureService.translations.SelectTicketType,
+    //subHeader: this.featureService.translations.OK,
+    //message: this.featureService.translations.YES,
+    translucent: true,
+    cssClass: 'custom-alert'
+  };
+  countryList: any[];
 
   constructor(
     private modalController: ModalController,
@@ -51,7 +59,7 @@ export class UpdateBuildingModal implements OnInit {
   }
 
   ngOnInit() {
-
+    this.countryList = this.featureService.getCountryList();
     this.parkings= this.item.parkings.map(item => Object.assign({}, item) )
     this.services= this.item.services.map(item => Object.assign({}, item) )
 
@@ -60,6 +68,8 @@ export class UpdateBuildingModal implements OnInit {
 
     this.updateItemForm = new FormGroup({
       name: new FormControl(this.item.name,Validators.required),
+      country: new FormControl(this.item.country,Validators.required),
+      city: new FormControl(this.item.city,Validators.required),
       address: new FormControl(this.item.address),
       details: new FormControl(this.item.details),
       postalCode: new FormControl(this.item.postalCode),
@@ -122,6 +132,8 @@ export class UpdateBuildingModal implements OnInit {
   updateItem() {
 
     this.item.name= this.updateItemForm.value.name
+    this.item.country= this.updateItemForm.value.country
+    this.item.city= this.updateItemForm.value.city
     this.item.address= this.updateItemForm.value.address
     this.item.postalCode= this.updateItemForm.value.postalCode
     this.item.details = this.updateItemForm.value.details;

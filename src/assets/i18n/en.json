@@ -1,4 +1,8 @@
 {
+  "CountryRequired": "Country is required",
+  "CityRequired" :"City is required",
+  "Country": "Country",
+  "City" : "City",
   "DescriptionRequired": "Description is required",
   "ProblemDescription" : "Problem description",
   "PhoneType": "Phone type",

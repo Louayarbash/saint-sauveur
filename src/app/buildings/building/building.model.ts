@@ -6,6 +6,8 @@ import { Parkings, Services } from '../../type';
 export class BuildingModel extends ShellModel {
   id: string;
   name: string;
+  country: string;
+  city: string;
   address: string;
   details: string;
   postalCode: string;

@@ -1,4 +1,8 @@
 {
+  "CountryRequired": "Pays est requis",
+  "CityRequired" :"Ville est requise",
+  "Country": "Pays",
+  "City" : "Ville",
   "DescriptionRequired": "Description requise",
   "ProblemDescription" : "Description du problème",
   "PhoneModel": "Modèle de téléphone",

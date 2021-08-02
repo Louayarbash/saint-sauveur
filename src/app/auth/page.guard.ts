@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-// import { LoginService } from '../services/login/login.service';
+import { LoginService } from '../services/login/login.service';
 
 @Injectable()
 export class PageGuard implements CanLoad {
@@ -10,7 +10,7 @@ export class PageGuard implements CanLoad {
   constructor(
     private authService: AuthService,
     private router: Router,
-    // private loginService: LoginService
+    private loginService: LoginService
   ) {}
 
 
@@ -20,7 +20,8 @@ export class PageGuard implements CanLoad {
       filter(res => res !== null),
       take(1),
       map((canAccessApp) => {
-        if(canAccessApp){
+        console.log(this.loginService.getLoginName(),"inside page guard",)
+        if(canAccessApp && this.loginService.getLoginID() !== "N/A"){
           console.log("canAccessApp if", canAccessApp);
           return true;
       }

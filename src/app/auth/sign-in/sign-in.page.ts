@@ -162,8 +162,8 @@ export class SignInPage implements OnInit {
   signInWithEmail() {
     this.presentLoading();
     this.resetSubmitError();
-    console.log(this.loginForm.value['email']);
-    console.log(this.loginForm.value['password']);
+    //console.log(this.loginForm.value['email']);
+    //console.log(this.loginForm.value['password']);
     this.loginForm.value['email'], this.loginForm.value['password']
     this.authService.signInWithEmail(this.loginForm.value['email'], this.loginForm.value['password'])
     .then(user => {
@@ -178,8 +178,8 @@ export class SignInPage implements OnInit {
           }
 
           this.authService.canAccessApp.next(true);
-          console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.getValue());
-          console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.value);
+          // console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.getValue());
+          // console.log("inside signInWithEmail canAccessApp true", this.authService.canAccessApp.value);
           // console.log(this.authService.canAccessApp.value);
           this.redirectLoggedUserToMainMenuPage();
         }

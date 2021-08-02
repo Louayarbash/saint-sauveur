@@ -30,6 +30,7 @@ export class BuildingDetailsPage implements OnInit {
   enableRentSale: string;
   enableTicket: string;
   userIsAdmin = false;
+  country: any;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -46,7 +47,7 @@ export class BuildingDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("louay",this.item);
+    //console.log("louay",this.item);
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
@@ -58,7 +59,7 @@ export class BuildingDetailsPage implements OnInit {
           this.item = state;
 
           if (!this.item.isShell){
-
+          this.country = this.featureService.getCountryName(this.item.country);
           this.enableDeal = this.item.enableDeal ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableLostFound = this.item.enableLostFound ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enablePublication = this.item.enablePublication ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;

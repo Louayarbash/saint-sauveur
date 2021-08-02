@@ -26,6 +26,14 @@ export class CreateBuildingModal implements OnInit {
   enableDeal= true;
   nameChanging = [{ naming: false }, { naming: false }, { naming: false }];
   @ViewChild(IonContent, {static:true}) content: IonContent;
+  customAlertOptions: any = {
+    header: this.featureService.translations.SelectTicketType,
+    //subHeader: this.featureService.translations.OK,
+    //message: this.featureService.translations.YES,
+    translucent: true,
+    cssClass: 'custom-alert'
+  };
+  countryList: any[];
   
   constructor(
     // private changeDetectorRef: ChangeDetectorRef,
@@ -38,11 +46,14 @@ export class CreateBuildingModal implements OnInit {
   }
 
   ngOnInit() {
+    this.countryList = this.featureService.getCountryList();
     this.parkings= [{id: '1', description: 'P1', note: '', active: true}, {id: '2', description: 'P2', note: '', active: true}, {id: '3', description: 'P3', note: '', active: true}];
     this.services= [{id: '1', description: 'ElevatorBooking', active: true}, {id: '2', description: 'NewKeyRequest', active: true}];
     
     this.createItemForm = new FormGroup({
       name: new FormControl('',Validators.required),
+      country: new FormControl('',Validators.required),
+      city: new FormControl('',Validators.required),
       address: new FormControl(''),
       details: new FormControl(''),
       postalCode: new FormControl(''),
@@ -76,6 +87,8 @@ export class CreateBuildingModal implements OnInit {
   createBuilding() {
 
     this.itemData.name= this.createItemForm.value.name
+    this.itemData.country= this.createItemForm.value.country
+    this.itemData.city= this.createItemForm.value.city
     this.itemData.address= this.createItemForm.value.address
     this.itemData.postalCode= this.createItemForm.value.postalCode
     this.itemData.details = this.createItemForm.value.details;

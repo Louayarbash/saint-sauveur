@@ -91,7 +91,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
       return this.userInfo.id;
     }
     else {
-      return 'userIdNull'
+      return 'N/A'
     }
   }
 
@@ -100,7 +100,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
       return this.userInfo.email;
     }
     else {
-      return 'userEmailNull'
+      return 'N/A'
     }
   }
 

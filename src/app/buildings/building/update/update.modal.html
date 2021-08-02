@@ -21,6 +21,23 @@
         <ion-label  position="floating">{{ 'BuildingName' | translate }}</ion-label>
         <ion-input autocapitalize type="text" formControlName="name"></ion-input>
       </ion-item>
+      <ion-grid class="ion-no-margin ion-no-padding">          
+        <ion-row class="ion-align-items-center">
+      <ion-col>
+      <ion-item lines=“none”>
+        <ion-label >{{ 'Country' | translate }}</ion-label>
+        <ion-select interface="alert" [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="country" color="main">
+          <ion-select-option *ngFor="let country of countryList" [value]="country.code3">{{ country.name | translate }}</ion-select-option>
+          <!-- <ion-select-option value="1000">{{ 'Other' | translate }}</ion-select-option> -->
+        </ion-select>
+      </ion-item>
+      </ion-col>
+       </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label  position="floating">{{ 'City' | translate }}</ion-label>
+        <ion-input autocapitalize type="text" formControlName="city"></ion-input>
+      </ion-item>
       <ion-item>
         <ion-label  position="floating">{{ 'Address' | translate }}</ion-label>
         <ion-input autocapitalize type="text" formControlName="address"></ion-input>
@@ -120,6 +137,20 @@
       <ion-row *ngIf="updateItemForm.get('name').errors.required">
         <ion-col>
         <ion-text class="ion-padding-left validation">{{ 'NameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateItemForm.get('country').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('country').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'CountryRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateItemForm.get('city').invalid && (updateItemForm.dirty || updateItemForm.touched)">
+      <ion-row *ngIf="updateItemForm.get('city').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'CityRequired' | translate }}</ion-text>
         </ion-col>
       </ion-row>
     </ng-container>
