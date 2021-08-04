@@ -20,7 +20,7 @@
           <ion-input autocapitalize type="text" formControlName="object" required></ion-input>
         </ion-item> -->
         <ion-item>
-          <ion-label position="floating">{{ 'Description' | translate }}</ion-label>
+          <ion-label position="floating">{{ 'ProblemDescription' | translate }}</ion-label>
           <ion-textarea autocapitalize rows="6" cols="20" formControlName="description"></ion-textarea>
         </ion-item>
 <!--         <ion-item>
@@ -70,11 +70,11 @@
       <ion-icon slot="icon-only" name="trash"></ion-icon>      
     </ion-button>  
   </ion-col>
-  <ion-col>
+<!--   <ion-col>
     <ion-button color="main" (click)="makeCover(postImages.indexOf(image))" [disabled]="image.isCover">          
       {{ 'CoverPhoto' | translate }}
     </ion-button> 
-  </ion-col>
+  </ion-col> -->
 <!-- </ion-row> -->
 <ion-reorder slot="end"></ion-reorder>
 </ion-item>
