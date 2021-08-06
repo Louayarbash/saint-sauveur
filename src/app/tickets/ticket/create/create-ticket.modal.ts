@@ -46,6 +46,7 @@ export class CreateTicketModal implements OnInit {
     translucent: true,
     cssClass: 'custom-alert'
   };
+  disableSubmit: boolean;
 
   constructor(
     private modalController: ModalController,
@@ -62,6 +63,7 @@ export class CreateTicketModal implements OnInit {
   }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.ticketTypes= this.loginService.getBuildingServices();
     this.bookingSection = false;
     this.subjectSection = true;
@@ -240,7 +242,7 @@ export class CreateTicketModal implements OnInit {
     });
   }
   createTicket() {
-
+    this.disableSubmit= true;
     if(this.serviceType == 'ElevatorBooking'){
       this.itemData.date = dayjs(this.createItemForm.get('date').value).unix();
       this.itemData.startDate = dayjs(this.createItemForm.get('startDate').value).unix();
@@ -263,6 +265,7 @@ export class CreateTicketModal implements OnInit {
       this.dismissModal();
       // loading.then(res=>res.dismiss());  
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       console.log(err);
      });      

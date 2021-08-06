@@ -1,5 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
@@ -8,7 +8,7 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { Plugins } from '@capacitor/core';
-//import { ReplaySubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -23,18 +23,19 @@ export class FirebaseCreateItemModal implements OnInit {
   selectedPhoto: string;
   uploadedImage: any;
   deviceInfo: string;
-
+  disableSubmit: boolean;
   constructor(
-    private modalController: ModalController,
+    //private modalController: ModalController,
     public firebaseService: FirebaseService,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
     private featureService : FeatureService,
-    private platform: Platform
-
+    private platform: Platform,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       //object: new FormControl('', Validators.required),
       description : new FormControl('', Validators.required),
@@ -43,14 +44,14 @@ export class FirebaseCreateItemModal implements OnInit {
     });
   }
 
-  dismissModal() {
+  /*dismissModal() {
    this.modalController.dismiss();
-  }
+  } */
 
    async createItem() {
-    
+    this.disableSubmit= true;
     this.itemData.description = this.createItemForm.value.description;
-    this.itemData.status = this.createItemForm.value.status;
+    this.itemData.status = 'active';
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
@@ -64,11 +65,12 @@ export class FirebaseCreateItemModal implements OnInit {
     this.featureService.createItemWithImages(itemData, this.postImages, 'problems')
     .then(() => {
       //this.segmentValueSubject.next('myList');
-      this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
+      this.featureService.presentToast(this.featureService.translations.ThankYouForContactingUs, 3000);      
+      this.router.navigate(['start-menu']);  // not needed inside catch to stay on same page while errors
       loading.then(res=>{res.dismiss();}) 
-      this.dismissModal();  // not needed inside catch to stay on same page while errors
     }).catch((err) => { 
-      this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
+      this.disableSubmit= false;
+      this.featureService.presentToast(this.featureService.translations.AddingErrors, 3000);
       loading.then(res=>{res.dismiss();})
       console.log(err);
      });     
@@ -80,7 +82,7 @@ export class FirebaseCreateItemModal implements OnInit {
           this.changeRef.detectChanges();
   }
 
-makeCover(index: number){
+/* makeCover(index: number){
   //this.postImages[index].isCover = true;
   this.postImages.forEach( (item, i) => {
     if(i === index) {
@@ -92,7 +94,7 @@ makeCover(index: number){
       item.isCover = false;
     }
   });
-}
+} */
 
 doReorder(ev: any) {
   const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  

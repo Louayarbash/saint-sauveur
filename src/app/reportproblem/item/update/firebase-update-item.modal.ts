@@ -46,7 +46,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     this.updateItemForm = new FormGroup({
       //object: new FormControl(this.item.object, Validators.required),
       description: new FormControl(this.item.description, Validators.required), 
-      status: new FormControl(this.item.status),
+      status: new FormControl(this.item.status)
       //model: new FormControl(this.item.model)
 
     }); 
@@ -121,14 +121,14 @@ makeCover(index: number){
 }
 
 updateItem() {
-  //this.item.object = this.updateItemForm.value.object;
+  this.item.status = this.updateItemForm.value.status;
   this.item.description = this.updateItemForm.value.description;
   //this.item.phone = this.updateItemForm.value.phone;
   //this.item.model =  this.updateItemForm.value.model;
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'problems')
+  this.featureService.updateItemWithoutOptions(itemData, 'problems')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     // loading.then(res=>{res.dismiss();})

@@ -23,7 +23,7 @@
   <ng-container *ngIf="!item.isShell">
   <ion-card class="itemCard">  
         <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
-  <ion-row class="slider-row">
+   <ion-row class="slider-row">
         <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
           <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
             <ion-row class="slide-inner-row">
@@ -34,7 +34,7 @@
             </ion-row>
           </ion-slide>
         </ion-slides>
-      </ion-row>
+      </ion-row> 
       
       <!-- <section> -->
 <!--           <ion-list-header lines="inset">
@@ -83,7 +83,7 @@
         </ng-container>
         
     </ng-container>
-       <ion-fab vertical="top" horizontal="end" slot="fixed" >
+<!--        <ion-fab vertical="top" horizontal="end" slot="fixed" >
         <ion-fab-button color="main" size="small"> 
           <ion-icon name="person-circle-outline"></ion-icon>
         </ion-fab-button>
@@ -91,9 +91,9 @@
           <ion-fab-button (click)="sendEmail()">
             <ion-icon name="mail"></ion-icon>
           </ion-fab-button>
-<!--           <ion-fab-button (click)="sendEmail()">
+           <ion-fab-button (click)="sendEmail()">
             <ion-icon name="call"></ion-icon>
-          </ion-fab-button> -->
+          </ion-fab-button> 
         </ion-fab-list>
-      </ion-fab> 
+      </ion-fab>  -->
 </ion-content>

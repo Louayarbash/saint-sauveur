@@ -10,9 +10,9 @@ import firebase from 'firebase/app';
 import { ReplaySubject } from 'rxjs';
 //import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 //import { File } from "@ionic-native/file/ngx";
-import { Plugins } from '@capacitor/core';
+//import { Plugins } from '@capacitor/core';
 
-const { Filesystem } = Plugins;
+//const { Filesystem } = Plugins;
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -26,6 +26,7 @@ export class FirebaseCreateItemModal implements OnInit {
   itemData: FirebaseItemModel= new FirebaseItemModel();
   selectedPhoto: string;
   uploadedImage: any;
+  disableSubmit: boolean;
 
   constructor(
     private modalController: ModalController,
@@ -37,6 +38,7 @@ export class FirebaseCreateItemModal implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
@@ -50,7 +52,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
-    
+    this.disableSubmit= true;
     this.itemData.object = this.createItemForm.value.object;
     this.itemData.description = this.createItemForm.value.description;
     this.itemData.price = this.createItemForm.value.price;
@@ -67,6 +69,7 @@ export class FirebaseCreateItemModal implements OnInit {
       loading.then(res=>{res.dismiss();}) 
       this.dismissModal();  // not needed inside catch to stay on same page while errors
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       loading.then(res=>{res.dismiss();})
       console.log(err);

@@ -29,7 +29,8 @@ export class FirebaseCreateItemModal implements OnInit {
   uploadedImage: any;
   typeSelected: string = 'sale';
   objectSelected: string = 'condo';
-
+  disableSubmit: boolean;
+  
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
@@ -45,6 +46,7 @@ export class FirebaseCreateItemModal implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       type : new FormControl('sale', Validators.required),
       object : new FormControl('condo', Validators.required),
@@ -64,6 +66,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
+    this.disableSubmit= true;
      if(this.objectSelected == 'condo'){
       this.itemData.bedRooms = this.createItemForm.value.bedRooms;
       this.itemData.bathRooms = this.createItemForm.value.bathRooms;
@@ -87,6 +90,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.dismissModal(); // not needed inside catch to stay on same page while errors
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
+       this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       loading.then(res=>res.dismiss());  
       console.log(err);
