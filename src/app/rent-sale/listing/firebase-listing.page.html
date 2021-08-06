@@ -50,13 +50,13 @@
   </app-aspect-ratio>
   <ion-card-header>
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
-    <ion-card-title>  
+    <ion-card-title style="font-size:20px">  
       <ion-row>
       <ion-col class="ion-no-padding">
         <ion-text>{{ item.object }}</ion-text>
       </ion-col>
       <ion-col  class="ion-no-padding ion-text-right">
-        <ion-label>{{ 'Rent (Monthly)' | translate }}:</ion-label>
+        <!-- <ion-label>{{ 'Rent (Monthly)' | translate }}:</ion-label> -->
         <ion-text> {{ (item.price) ? ''.concat(item.price).concat('  $') : '' }}</ion-text>
       </ion-col>
     </ion-row>
@@ -78,7 +78,8 @@
   </app-aspect-ratio>
   <ion-card-header>
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
-    <ion-card-title>  
+    
+      <ion-card-title style="font-size:20px">  
       <ion-row>
       <ion-col class="ion-no-padding">
         <ion-text>{{ item.object }}</ion-text>
@@ -109,7 +110,8 @@
   </app-aspect-ratio>
   <ion-card-header>
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
-    <ion-card-title>  
+
+      <ion-card-title style="font-size:20px">  
       <ion-row>
       <ion-col class="ion-no-padding">
         <ion-text>{{ item.object }}</ion-text>
