@@ -21,6 +21,7 @@ export class FirebaseCreateItemModal implements OnInit {
   nameChanging: boolean[] = [];
   voting: boolean;
   categorySelected: string = 'announcement';
+  disableSubmit: boolean;
 
   constructor(
     private modalController: ModalController,
@@ -31,7 +32,7 @@ export class FirebaseCreateItemModal implements OnInit {
   ) { }
 
   ngOnInit() {
-
+  this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       subject: new FormControl('',  [
         Validators.required
@@ -129,6 +130,7 @@ export class FirebaseCreateItemModal implements OnInit {
 }
 
    createItem() {
+    this.disableSubmit= true;
      if(this.categorySelected == 'announcement'){
       this.itemData.voting = this.createItemForm.value.voting;
       this.itemData.votingMessage = this.createItemForm.value.votingMessage;
@@ -148,6 +150,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.dismissModal();
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       loading.then(res=>res.dismiss());  
       console.log(err);

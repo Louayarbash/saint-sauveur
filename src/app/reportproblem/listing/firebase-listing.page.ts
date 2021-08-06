@@ -6,7 +6,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
-import { LoginService } from '../../services/login/login.service';
+//import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
 
 @Component({
@@ -37,7 +37,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public modalController: ModalController,
     private route: ActivatedRoute,
     private routerOutlet: IonRouterOutlet,
-    private loginService: LoginService
+    //private loginService: LoginService
   ) { 
 
   }
@@ -66,7 +66,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               new FirebaseListingItemModel()
             ];
             // Wait on purpose some time to ensure the shell animation gets shown while loading filtered data
-            const searchingDelay = 400;
+            //const searchingDelay = 400;
+            const searchingDelay = 0;
 
             //const dataSourceWithShellObservable = DataStore.AppendShell(filteredDataSource, searchingShellModel, searchingDelay);
             const dataSourceWithShellObservable = DataStore.AppendShell(this.listingDataStore.state, searchingShellModel, searchingDelay);

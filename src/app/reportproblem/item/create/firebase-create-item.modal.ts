@@ -1,5 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
@@ -23,9 +23,9 @@ export class FirebaseCreateItemModal implements OnInit {
   selectedPhoto: string;
   uploadedImage: any;
   deviceInfo: string;
-
+  disableSubmit: boolean;
   constructor(
-    private modalController: ModalController,
+    //private modalController: ModalController,
     public firebaseService: FirebaseService,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
@@ -35,6 +35,7 @@ export class FirebaseCreateItemModal implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       //object: new FormControl('', Validators.required),
       description : new FormControl('', Validators.required),
@@ -48,8 +49,9 @@ export class FirebaseCreateItemModal implements OnInit {
   } */
 
    async createItem() {
-    
+    this.disableSubmit= true;
     this.itemData.description = this.createItemForm.value.description;
+    this.itemData.status = 'active';
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     this.itemData.buildingId = this.loginService.getBuildingId();
@@ -67,6 +69,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.router.navigate(['start-menu']);  // not needed inside catch to stay on same page while errors
       loading.then(res=>{res.dismiss();}) 
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 3000);
       loading.then(res=>{res.dismiss();})
       console.log(err);

@@ -24,6 +24,10 @@ ion-content{
 
   @include hide-scrollbars();
 
+  .card-radius{
+    border-radius: 20px 20px 20px 20px;
+  }
+
   .category-item {
     padding: 0px 0px 10px 0px;
     --page-category-background: #e15b0e;
@@ -37,6 +41,14 @@ ion-content{
     --page-category-background-rgb: 224, 92, 14;
     
   }
+/* 
+  ion-card {
+    background-color: rgb(190, 41, 41);
+    width: 100%;
+    margin: 0;
+    margin-bottom: 25px;
+    position: relative;
+} */
 
   .category-anchor {
     height: 100%;

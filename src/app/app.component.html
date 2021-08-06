@@ -32,14 +32,20 @@
             <ion-label>Louay Arbash</ion-label>
           </ion-list-header>
           <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/reportproblem/create']">
+              <ion-label>{{ 'ReportProblem' | translate }}</ion-label>  
+<!--                 <ion-icon name="build-outline">
+              </ion-icon> -->
+              <ion-icon name="bug-outline"></ion-icon>
+            </ion-item>
+            <ion-item href="http://parkondo.com/#contact">
+              <ion-label>{{ 'ContactDev' | translate }}</ion-label>  
+                <ion-icon name="create-outline">
+              </ion-icon>              
+            </ion-item>
             <ion-item (click)="signOut()">
               <ion-label>{{ 'SignOut' | translate }}</ion-label>  
                 <ion-icon name="log-out-outline"></ion-icon>
-            </ion-item>
-            <ion-item [routerLink]="['/reportproblem/create']">
-              <ion-label>{{ 'ReportProblem' | translate }}</ion-label>  
-                <ion-icon name="build-outline">
-              </ion-icon>
             </ion-item>
           </ion-menu-toggle>
           </ion-list>

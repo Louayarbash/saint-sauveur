@@ -20,7 +20,7 @@ export class FirebaseCreateUserModal implements OnInit {
 
   // croppedImagepath = "";
   // isLoading = false;
-
+  disableSubmit: boolean;
   createUserForm: FormGroup;
   userData: UserModel = new UserModel();
   buildingParkings = [];
@@ -58,6 +58,7 @@ export class FirebaseCreateUserModal implements OnInit {
   }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.buildingParkings= this.loginService.getBuildingParkings();
     this.selectedPhoto = '../../assets/sample-images/avatar.png';
     this.createUserForm = new FormGroup({
@@ -132,7 +133,7 @@ export class FirebaseCreateUserModal implements OnInit {
   }
 
   createUser() {
-
+    this.disableSubmit= true;
     this.userData.photo = this.selectedPhoto;
     this.userData.firstname = this.createUserForm.value.firstname;
     this.userData.lastname = this.createUserForm.value.lastname;
@@ -176,7 +177,8 @@ export class FirebaseCreateUserModal implements OnInit {
   this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
   this.dismissModal();
   loading.then(res=>res.dismiss());  
-}).catch((err) => { 
+}).catch((err) => {
+  this.disableSubmit= false; 
   this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
   console.log(err);
  });     

@@ -151,7 +151,7 @@
     </ng-container>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="disableSubmit || !createItemForm.valid">{{ 'Create' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

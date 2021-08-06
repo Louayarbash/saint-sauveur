@@ -24,7 +24,8 @@ export class FirebaseCreateItemModal implements OnInit {
   selectedPhoto: string;
   uploadedImage: any;
   // typeSelected: string;
-
+  disableSubmit: boolean;
+  
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,
@@ -34,6 +35,7 @@ export class FirebaseCreateItemModal implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.createItemForm = new FormGroup({
       type : new FormControl(this.segmentValue, Validators.required),
       subject : new FormControl('', Validators.required),
@@ -47,7 +49,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
    createItem() {
-    
+    this.disableSubmit= true;
     this.segmentValue= this.createItemForm.value.type;
     this.itemData.type = this.createItemForm.value.type;
     this.itemData.subject = this.createItemForm.value.subject;
@@ -65,6 +67,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.dismissModal();
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       console.log(err);
      });     

@@ -32,7 +32,7 @@ export class FirebaseCreateItemModal implements OnInit {
   minStartDate : any;
   duration : any;
   previousCounterValue : any;//= 0;
-    
+  disableSubmit: boolean;
 
   constructor(
     private modalController: ModalController,
@@ -45,6 +45,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
   ngOnInit() {
+    this.disableSubmit= false;
     this.initValues();
     this.createItemForm = new FormGroup({
       subject: new FormControl('',  [
@@ -215,7 +216,7 @@ export class FirebaseCreateItemModal implements OnInit {
 }
 
    createItem() {
-
+    this.disableSubmit= true;
       this.itemData.date = this.createItemForm.get('date').value;
       this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
       this.itemData.startDate = this.createItemForm.get('startDate').value;
@@ -237,6 +238,7 @@ export class FirebaseCreateItemModal implements OnInit {
       this.dismissModal();
       loading.then(res=>res.dismiss());  
     }).catch((err) => { 
+      this.disableSubmit= false;
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
       loading.then(res=>res.dismiss());  
       console.log(err);

@@ -35,7 +35,8 @@ export class FirebaseCreateItemModal implements OnInit {
   hasMultipleParking : boolean = false;
   radioObjectFiltered: any[];
   selectedParking : string = '';
-
+  disableSubmit: boolean;
+  
   constructor(
     private modalController: ModalController,
     public firebaseService: FirebaseService,    
@@ -46,7 +47,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
   ngOnInit() {
-     
+    this.disableSubmit= false;
     this.initValues();
 
      this.createItemForm = new FormGroup({
@@ -152,6 +153,7 @@ export class FirebaseCreateItemModal implements OnInit {
   }
 
     createItem() {
+    this.disableSubmit= true;
     this.itemData.type = this.type;
     this.itemData.date = this.createItemForm.get('date').value;
     this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
@@ -209,6 +211,7 @@ export class FirebaseCreateItemModal implements OnInit {
               // this.featureService.presentToast(this.featureService.translations.RequestAddedSuccessfully, 2000);
               loading.then(res=>res.dismiss());
             }).catch(err => {
+              this.disableSubmit= false;
               // this.dismissModal();
               console.log(err)
               // this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);
