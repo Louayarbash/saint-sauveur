@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="main">
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="deal/listing"></ion-back-button>
     </ion-buttons>
@@ -90,13 +90,13 @@
                   {{ userNameCreator }}
                 </h4>
               </ion-row>
-                <ion-row>
+<!--                 <ion-row>
                 <ion-label>{{ 'Building' | translate }}: {{ item.userInfoCreator?.building }}
                 </ion-label>
-              </ion-row>
+              </ion-row> -->
                 <ion-row>
                 <ion-label>
-                  {{ 'Phone' | translate }}: {{ item.userInfoCreator?.phone }}
+                  {{ 'Email' | translate }}: {{ item.userInfoCreator?.email }}
                 </ion-label>
               </ion-row>
               </ion-col>
@@ -163,13 +163,13 @@
                 {{ userNameResponder }}
               </h4>
                </ion-row>
-              <ion-row>
+<!--               <ion-row>
               <ion-label>{{ 'Building' | translate }}: {{ item.userInfoResponder?.building }} 
               </ion-label>
-            </ion-row>
+            </ion-row> -->
             <ion-row>
               <ion-label>
-                {{ 'Phone' | translate }}: {{ item.userInfoResponder?.phone }}
+                {{ 'Email' | translate }}: {{ item.userInfoResponder?.email }}
               </ion-label>
             </ion-row>
             </ion-col>

@@ -27,7 +27,7 @@ export class ChatModal implements OnInit {
   @Input() item : combinedItemModel;
   @ViewChild(IonContent, {static:true}) content: IonContent;
   //@ViewChild(IonContent) content : IonContent;
-  msgText : string;
+  msgText : string = "";
   currentUserId : string = this.loginService.getLoginID();
   currentUserName : string = this.loginService.getLoginName();
   messages : any;

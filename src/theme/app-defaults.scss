@@ -33,6 +33,11 @@ ion-searchbar.items-searchbar {
   --background: transparent !important;
 } 
 
+app-image-shell {
+  width: 100%;
+  background-position: center center;
+}
+
 app-image-shell.user-image {
   --image-shell-border-radius: 50%;// var(--app-fair-radius);
 }
@@ -41,8 +46,13 @@ app-image-shell.item-image {
   --image-shell-border-radius: var(--app-fair-radius);
 }
 
+.itemCardTicket {
+  border-radius: 20px 20px 20px 20px;
+}
+
 .itemCard {
   border-radius: 20px 20px 20px 20px;
+  //--background: main;
 }
 
 .empty-list-message {

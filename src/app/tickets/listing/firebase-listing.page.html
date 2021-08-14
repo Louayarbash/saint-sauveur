@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="main">
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="start-menu"></ion-back-button>
     </ion-buttons>
@@ -27,7 +27,7 @@
 <ng-container *ngIf="userIsAdmin">
   <ng-container *ngIf="segmentValue == 'active'">
   <div *ngIf="activeList?.length > 0">
-      <ion-card class="itemCard" *ngFor="let item of activeList" [routerLink]="['/tickets/details', item.id]">
+      <ion-card class="itemCardTicket" *ngFor="let item of activeList" [routerLink]="['/tickets/details', item.id]">
         <ion-item *ngIf="item.subject" color="main">
           <ion-icon name="build-outline" slot="end"></ion-icon>
           <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
@@ -56,7 +56,7 @@
 </ng-container>
 <ng-container *ngIf="segmentValue == 'archive'">
   <div *ngIf="archivedList?.length > 0">
-      <ion-card class="itemCard" *ngFor="let item of archivedList" [routerLink]="['/tickets/details', item.id]">
+      <ion-card class="itemCardTicket" *ngFor="let item of archivedList" [routerLink]="['/tickets/details', item.id]">
         <ion-item *ngIf="item.subject" color="main">
           <ion-icon name="build-outline" slot="start"></ion-icon>
           <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
@@ -91,7 +91,7 @@
     </div>
   </ng-container>
   <div *ngIf="ticketsList?.length > 0">
-    <ion-card class="itemCard" *ngFor="let item of ticketsList" [routerLink]="['/tickets/details', item.id]">
+    <ion-card class="itemCardTicket" *ngFor="let item of ticketsList" [routerLink]="['/tickets/details', item.id]">
       <ion-item *ngIf="item.subject" color="main">
         <ion-icon name="build-outline" slot="start"></ion-icon>
         <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>

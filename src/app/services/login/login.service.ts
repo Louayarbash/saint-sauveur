@@ -27,18 +27,10 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     private featureService: FeatureService,
     private alertController: AlertController
     ) {
-      //console.log('login service constructor');
-      //this.userInfo.firstname= "to Parkondo";
-   }
-/*    updateUserInfo(userInfo)
-   {
-    this.userInfoSource.next(userInfo);
-   }
 
-   updateBuildingInfo(buildingInfo)
-   {
-    this.userInfoSource.next(buildingInfo);
-   } */
+
+
+   }
 
   isUserGlobalAdmin(){
     return this.userInfo.email == "louay.arbash@gmail.com" ? true : false; 
@@ -109,6 +101,15 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
   getBuildingId(): string{
     if(this.userInfo.buildingId){
       return this.userInfo.buildingId;
+    }
+    else {
+      return null
+    }
+  }
+
+  getBuildingName(): string{
+    if(this.buildingInfo.name){
+      return this.buildingInfo.name;
     }
     else {
       return null
@@ -269,6 +270,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
       console.log(this.userInfo.status == 'active' && this.buildingInfo.status =='active');
       console.log(this.userInfo.status);
       console.log(this.buildingInfo.status);
+      
       return  (this.userInfo.status == 'active' && this.buildingInfo.status =='active');
     } 
     catch (err) {

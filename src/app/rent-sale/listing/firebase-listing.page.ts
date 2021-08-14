@@ -139,11 +139,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               } 
               
               switch ( item.object) {
-                case "condo" : item.object = this.featureService.translations.Apartment;
+                case "condo" : item.objectTranslated = this.featureService.translations.Apartment;
                 break;
-                case "parking" : item.object = this.featureService.translations.Parking;
+                case "parking" : item.objectTranslated = this.featureService.translations.Parking;
                 break;
-                case "locker" : item.object = this.featureService.translations.Locker;
+                case "locker" : item.objectTranslated = this.featureService.translations.Locker;
                 break;
                 default:
                   this.object = '';

@@ -1,4 +1,6 @@
 {
+  "ExitMsg": "Do you want to close Parkondo?",
+  "Welcome": "Welcome",
   "ContactDev": "Contact developer",
   "Problems": "Problems",
   "ThankYouForContactingUs": "Thank you for contacting us, your opinion matters",
@@ -155,7 +157,7 @@
   "ParkingDealsMenu": "Parking deals",
   "RentSaleMenu": "Rent / Sale",
   "TicketsMenu": "Tickets",
-  "SaleMenu": "Sales",
+  "SaleMenu": "Garage sales",
   "UsersMenu": "Users",
   "VotingConfirmationMessageYes": "Are you sure you wanna vote YES?",
   "VotingConfirmationMessageNo": "Are you sure you wanna vote NO?",

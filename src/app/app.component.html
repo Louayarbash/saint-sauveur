@@ -11,7 +11,7 @@
             </ion-col>
             <ion-col class="user-info-wrapper" size="8">
               <h3 class="user-name">Parkondo</h3>
-              <h5 class="user-handle">@GestionGriffin</h5>
+              <h5 class="user-handle">@{{ buildingName }}</h5>
             </ion-col>
           </ion-row>
 <!--           <ion-row class="user-stats-wrapper user-details-wrapper">
@@ -29,7 +29,7 @@
       <ion-content>
          <ion-list class="ion-no-padding">
           <ion-list-header>
-            <ion-label>Louay Arbash</ion-label>
+            <ion-label>{{ userName }}</ion-label>
           </ion-list-header>
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/reportproblem/create']">

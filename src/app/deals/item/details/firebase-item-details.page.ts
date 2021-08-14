@@ -246,8 +246,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     let correctedParking : any[];
     userParking= this.loginService.getUserParking();
 
-      this.featureService.getItem('building', this.loginService.getBuildingId()).subscribe( async building => {
-      let levels = building.parking;
+      this.featureService.getItem('buildings', this.loginService.getBuildingId()).subscribe( async building => {
+      let levels = building.parkings;
       
       console.log("levels",levels);
       console.log("parking",userParking);
@@ -257,9 +257,9 @@ export class FirebaseItemDetailsPage implements OnInit {
           radioObject = userParking.map((parking: { id: number; number: string; }, index: number) => {
             let level = levels.find( (level: { id: number; }) => level.id === parking.id );
             if(level){
-              level.desc;
+              //level.desc;
               let checked = index == 0 ? true : false; 
-              return { id: parking.id, number : parking.number, name : level.desc , type : 'radio' , label : this.featureService.translations.Level + ": " + level.desc + ' #' + parking.number , value : {level : level.desc ,number : parking.number} ,checked: checked}
+              return { id: parking.id, number : parking.number, name : level.description , type : 'radio' , label : this.featureService.translations.Level + ": " + level.description + ' #' + parking.number , value : {level : level.description ,number : parking.number} ,checked: checked}
             }
           });
           radioObjectFiltered = radioObject.filter(function(res: {id : number; number : string}) {

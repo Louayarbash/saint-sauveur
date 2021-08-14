@@ -698,7 +698,7 @@ changeLanguage(lang: string){
 checkEmail(email: string): Observable<any> {
   console.log(email);
   //console.log("getItem", itemId);
-  return this.afs.collection('invitations', ref => ref.where('emails', 'array-contains', email).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' }).pipe(first());
+  return this.afs.collection('invitations', ref => ref.where('emails', 'array-contains', email.toLowerCase()).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' }).pipe(first());
   
 /*  .snapshotChanges()
    .pipe(

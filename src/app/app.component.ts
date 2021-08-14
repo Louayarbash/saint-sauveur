@@ -7,6 +7,7 @@ import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
 //import { FcmService } from '../app/services/fcm/fcm.service';
 import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
+import { LoginService } from './services/login/login.service';
 import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
 import { Plugins, NetworkStatus } from '@capacitor/core';
@@ -80,6 +81,9 @@ export class AppComponent {
   available_languages = [];
   translations: any;
   textDir = 'ltr';
+  buildingName: string;
+  userName: string;
+
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
     private translate: TranslateService,
@@ -93,9 +97,8 @@ export class AppComponent {
     private alertController: AlertController,
     private authService: AuthService,
     public router: Router,
-    //private loginService : LoginService
-    ) {
-      
+    private loginService : LoginService
+    ) {      
     this.initializeApp();
 }
 async getStatus() {
@@ -158,14 +161,23 @@ checkConnection(){
    async initializeApp() {    
     this.platform.ready().then(() => {
     console.log("app.component initialize app")
+
     this.checkConnection();
       this.setLanguage();
       //this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
 
-      
-  
-      
+      this.loginService.currentUserInfo.subscribe(
+        userInfo => {
+          this.userName= userInfo.firstname + " " + userInfo?.lastname;
+        }
+        );
+        this.loginService.currentBuildingInfo.subscribe(
+          buildingInfo => {
+            this.buildingName= buildingInfo.name;
+          }
+          );
+        
       // this.splashScreen.hide();
 
       // Get a FCM token
@@ -209,8 +221,8 @@ checkConnection(){
 
   showExitConfirm() {
     this.alertController.create({
-      header: 'App termination',
-      message: 'Do you want to close the app?',
+      //header: 'App termination',
+      message: this.featureService.translations.ExitMsg,
       backdropDismiss: false,
       buttons: [{
         text: this.featureService.translations.Stay,

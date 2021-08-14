@@ -1,150 +1,167 @@
 <ion-header>
-  <ion-toolbar color="main">
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      Welcome {{username}}
+      {{ 'Welcome' | translate }} {{username}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row class="categories-list">
-    <ion-col class="category-item" size="12" *ngIf="enablePublication">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/annoucement.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/publication/listing']">
-            <div class="category-title">{{ 'PublicationsMenu' | translate }}</div>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableEvent">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/events.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/events/listing']">
-            <h2 class="category-title">{{ 'EventsMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableLostFound">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/lostFound.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/lost-found/listing']">
-            <h2 class="category-title">{{ 'LostFoundMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableDeal">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parking.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/deal/listing']">
-            <h2 class="category-title">{{ 'ParkingDealsMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableRentSale">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/rentSale.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/rent-sale/listing']">
-            <h2 class="category-title">{{ 'RentSaleMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableTicket">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/tickets.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/tickets/listing']">
-            <h2 class="category-title">{{ 'TicketsMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="enableSale">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/sale.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/sale/listing']">
-            <h2 class="category-title">{{ 'SaleMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <ion-col class="category-item" size="12" *ngIf="userIsAdmin">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/users.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:4, h:2}">
-          <a class="category-anchor" [routerLink]="['/users/listing']">
-            <h2 class="category-title">{{ 'UsersMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-    <!-- <ion-row> -->
-    <ion-col class="category-item-small-right" size="6">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/userProfile.jpg'"> -->
+        <ion-col class="category-item" size="6" *ngIf="enableDeal">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/deal/listing']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <a class="category-anchor" [routerLink]="['/users/details', userId]">
-            <h2 class="category-title">{{ 'UserProfilMenu' | translate }}</h2>
-          </a>
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/parking.jpg'"></app-image-shell>
         </app-aspect-ratio>
-      </app-image-shell>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'ParkingDealsMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enablePublication">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/publication/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/annoucement.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'PublicationsMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enableSale">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/sale/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/sale.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'SaleMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enableEvent">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/events/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/events.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'EventsMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enableLostFound">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/lost-found/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/lostFound.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'LostFoundMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+
+    <ion-col class="category-item" size="6" *ngIf="enableRentSale">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/rent-sale/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/rentSale.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'RentSaleMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enableTicket">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/tickets/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/tickets.png'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'TicketsMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="userIsAdmin">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/buildings.jpg'"> -->
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/buildings/details', buildingId]">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <a class="category-anchor" [routerLink]="['/buildings/listing']">
-            <h2 class="category-title">{{ 'BuildingsMenu' | translate }}</h2>
-          </a>
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>
         </app-aspect-ratio>
-      </app-image-shell>
-    </ion-col>
-  <!-- </ion-row> -->
-    <ion-col class="category-item-small-right" size="6" *ngIf="userIsAdmin">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"> -->
-        <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <a class="category-anchor" [routerLink]="['/buildings/details', buildingId]">
-            <h2 class="category-title">{{ 'BuildingProfilMenu' | translate }}</h2>
-          </a>
-        </app-aspect-ratio>
-      </app-image-shell>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'BuildingProfilMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="userIsAdmin">
-      <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"> -->
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/users/listing']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <a class="category-anchor" [routerLink]="['/buildings/invite']">
-            <h2 class="category-title">{{ 'Invite' | translate }}</h2>
-          </a>
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/users.jpg'"></app-image-shell>
         </app-aspect-ratio>
-      </app-image-shell>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'UsersMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </ion-col>
-    <ion-col class="category-item-small-right ion-no-margin" size="6" *ngIf="userIsGlobalAdmin">
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/parkondo.png'"> -->
-      <!-- <app-image-shell [display]="'cover'" class="category-cover" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"> -->       
-          <ion-card class="card-radius ion-no-margin" [routerLink]="['/reportproblem/listing']">
-            <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <a class="category-anchor">
-            <h2 class="category-title">{{ 'Problems' | translate }}</h2>
-          </a>
+
+    <ion-col class="category-item" size="6" *ngIf="userIsAdmin">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/buildings/invite']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/invite.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        </ion-card>
-        <!-- </app-aspect-ratio> -->
-      <!-- </app-image-shell> -->
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'Invite' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
     </ion-col>
+    <ion-col class="category-item" size="6">
+      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/users/details', userId]">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/userProfile.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'UserProfilMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
+      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/reportproblem/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/problems.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'Problems' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
+      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/buildings/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'BuildingsMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+<!--     <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
+      <ion-card button="true" class="itemCard" [routerLink]="['/reportproblem/listing']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header>
+          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'Problems' | translate }}</ion-card-subtitle>           <ion-card-title class="ion-no-padding ion-text-center" style="font-size:20px">  
+            <ion-row>
+            <ion-col class="ion-no-padding ion-text-center">
+              <ion-text>{{ 'Problems' | translate }}</ion-text>
+            </ion-col>
+          </ion-row>
+          </ion-card-title> 
+        </ion-card-header>
+      </ion-card>
+    </ion-col> -->
+
+
+    
+
   </ion-row>
 </ion-content>

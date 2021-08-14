@@ -67,7 +67,18 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.postImages = this.item.photos;
           }
           else if((this.item.images.length == 0) && !(this.item.isShell)){
-            this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
+          
+            let profile: string;
+            if(this.item.object == 'locker'){
+              profile= 'images/locker.png'
+            }
+            else if (this.item.object == 'parking'){
+              profile= 'images/parking.png'
+            }
+            else { profile= 'images/no_image.jpeg' 
+          }
+
+            this.getPic(/*this.noImage*/profile).subscribe(a=>{this.photoSlider[0] = a});
             console.log("length === 0", this.photoSlider[0]);
             this.postImages = [];
           }

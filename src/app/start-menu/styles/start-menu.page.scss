@@ -5,13 +5,14 @@
 :host {
   --page-margin: var(--app-narrow-margin);
   --page-categories-gutter: calc(var(--page-margin) / 4);
-  --page-category-background: var(--ion-color-medium);
+  --page-category-background: var(--ion-color-main);
   --page-category-background-rgb: var(--ion-color-medium-rgb);
 }
 
 ion-content{
   //--background:#e05c0e;e15b0e
-  --background:#e15b0e;
+  //--background:#e15b0e;
+  --background:rgb(232, 232, 232);
 }
 
 // Note:  All the CSS variables defined below are overrides of Ionic elements CSS Custom Properties
@@ -29,7 +30,7 @@ ion-content{
   }
 
   .category-item {
-    padding: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
     --page-category-background: #e15b0e;
     --page-category-background-rgb: 224, 92, 14;
     

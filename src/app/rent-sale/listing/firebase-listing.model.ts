@@ -10,6 +10,7 @@ export class FirebaseListingItemModel extends ShellModel {
   createDate : number;
   price : string;
   object : string;
+  objectTranslated : string;
   description : string;
   coverPhotoData :string;
   images : Array<Images> = [];
