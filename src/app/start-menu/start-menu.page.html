@@ -114,7 +114,7 @@
       </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6">
-      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/users/details', userId]">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/users/details', userId]">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/userProfile.jpg'"></app-image-shell>
         </app-aspect-ratio>
@@ -124,7 +124,7 @@
       </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
-      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/reportproblem/listing']">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/reportproblem/listing']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/problems.jpg'"></app-image-shell>
         </app-aspect-ratio>
@@ -134,7 +134,7 @@
       </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
-      <ion-card button="true" color="primary" class="itemCard" [routerLink]="['/buildings/listing']">
+      <ion-card button="true" color="main" class="itemCard" [routerLink]="['/buildings/listing']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>
         </app-aspect-ratio>
