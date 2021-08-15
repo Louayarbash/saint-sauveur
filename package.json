@@ -6,7 +6,7 @@
   "contributors": [
     "louay.arbash@gmail.com"
   ],
-  "homepage": "https://parkondo.ca/",
+  "homepage": "https://parkondo.com/",
   "private": true,
   "scripts": {
     "ng": "ng",
