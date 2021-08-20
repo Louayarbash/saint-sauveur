@@ -1,10 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-  
+    <ion-buttons slot="start">  
       <ion-back-button defaultHref="app/start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-title>{{ 'Settings' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsAdmin">
       <ion-button (click)="updateModal()">
         {{ 'Edit' | translate }}

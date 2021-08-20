@@ -41,4 +41,4 @@ const routes: Routes = [
     FirebaseUpdateUserModal
   ]  
 })
-export class FirebaseUserDetailsPageModule {}
+export class UserProfilPageModule {}

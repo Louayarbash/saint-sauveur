@@ -8,12 +8,13 @@ const routes: Routes = [
   {
     path: '',
     component: TabsPage,
+    //canLoad: [PageGuard],
     children: [
-      {
+       {
         path: '',
         redirectTo: 'start-menu',
         pathMatch: 'full'
-      }, 
+      },  
       {
         path: 'start-menu',
         children: [
@@ -112,20 +113,20 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'profil',
+        path: 'profil/:id',
         children: [
           {
-            path: 'details/:id',
-            loadChildren: () => import('../users/user/profil/firebase-user-details.module').then(m => m.FirebaseUserDetailsPageModule), canLoad: [PageGuard] 
+            path: '',           
+            loadChildren: () => import('../users/user/profil/firebase-user-details.module').then(m => m.UserProfilPageModule), canLoad: [PageGuard] 
           }          
         ]
       },
       {
-        path: 'buildingProfil',
+        path: 'buildingProfil/:id',
         children: [
           {
-            path: 'details/:id',
-            loadChildren: () => import('../buildings/building/profil/details.module').then(m => m.BuildingDetailsPageModule), canLoad: [PageGuard] 
+            path: '',
+            loadChildren: () => import('../buildings/building/profil/details.module').then(m => m.BuildingProfilPageModule), canLoad: [PageGuard] 
           }          
         ]
       },
@@ -142,17 +143,17 @@ const routes: Routes = [
   }
 ];
 
-/* @NgModule({
+ @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
-}) */
+}) 
 
-@NgModule({
+/* @NgModule({
   imports: [
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule],
   providers: [ ]
-})
+}) */
 
 export class TabsPageRoutingModule {}

@@ -18,6 +18,10 @@ import { environment } from '../../environments/environment';
 
 const firebaseRoutes: Routes = [
   {
+    path: '',
+    loadChildren: () => import('./building/details/details.module').then(m => m.BuildingDetailsPageModule)
+  },
+  {
     path: 'listing',
     loadChildren: () => import('./listing/firebase-listing.module').then(m => m.FirebaseListingPageModule)
   },

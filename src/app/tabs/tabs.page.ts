@@ -26,9 +26,6 @@ export class TabsPage {
 
 
 }
-
-
-
 /* ionViewWillEnter() {
   this.menu.enable(true);
 }

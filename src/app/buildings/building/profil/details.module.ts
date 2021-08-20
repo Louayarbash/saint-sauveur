@@ -44,4 +44,4 @@ const routes: Routes = [
     InviteModal*/
   ] 
 })
-export class BuildingDetailsPageModule {}
+export class BuildingProfilPageModule {}

@@ -1,21 +1,17 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
+    <ion-buttons slot="start">  
       <ion-back-button defaultHref="app/start-menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'Details' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
+    <ion-title>{{ 'MyProfile' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
-<!--       <ion-button (click)="openChatModal()">
-        {{ 'Contact' | translate }}
-      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  
   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">
