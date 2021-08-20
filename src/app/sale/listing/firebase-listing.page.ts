@@ -108,19 +108,21 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     else{
                     this.getProfilePic(item.images[0].storagePath).then(res => item.coverPhotoData = res).catch(err => {
                       if(err.code === 'storage/object-not-found'){
-                        this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res)      
+                        //this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res) 
+                        item.coverPhotoData = "./assets/sample-images/no_image.jpeg"     
                       }
                       item.coverPhotoData = '' ;
                     });
                     }
                 }
                 else {
-                  this.getProfilePic('images/no_image.jpeg')
-                  .then(res => item.coverPhotoData = res)
-                  .catch( err => { 
-                    console.log(err); 
-                    item.coverPhotoData = '' ;} 
-                    );
+                  item.coverPhotoData ="./assets/sample-images/no_image.jpeg" 
+                  //this.getProfilePic('images/no_image.jpeg')
+                  //.then(res => item.coverPhotoData = res)
+                  //.catch( err => { 
+                  //  console.log(err); 
+                   // item.coverPhotoData = '' ;} 
+                   // );
               } 
               });
      

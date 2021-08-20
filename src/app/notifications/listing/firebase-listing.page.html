@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="primary">
+     <ion-buttons slot="start">
+  <ion-menu-button></ion-menu-button>
+    <!--  <ion-back-button defaultHref="/app/start-menu"></ion-back-button>-->
+    </ion-buttons> 
+    <!-- <ion-searchbar placeholder="Search Favorites"></ion-searchbar> -->
+    <ion-title>{{ 'Notifications' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+<ng-container *ngIf="items.isShell">
+  <div class="DivLoading">
+    <ion-spinner></ion-spinner>
+  </div>
+</ng-container>
+<ng-container *ngIf="!items.isShell">
+      <div  *ngIf="notificationsList?.length > 0">
+        <ion-item *ngFor="let item of notificationsList" [routerLink]="['/app/start-menu',item.type]">        
+      <ion-label>
+        <h3>{{ item.creatorName }} {{ 'NotificationMessageNewItem' | translate }} "{{ item.typeTranslation }}"</h3>
+        <p>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</p>
+      </ion-label>
+       
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            <!-- <img src="./assets/sample-images/categories/sale.jpg"> -->
+      
+        </ion-item>
+  
+    </div>
+
+  <h3 *ngIf="notificationsList?.length == 0" class="empty-list-message">
+    {{ 'NoItemFound' | translate }}
+  </h3>
+</ng-container>
+</ion-content>

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'RentSale' | translate }}</ion-title>
   </ion-toolbar>
@@ -44,7 +44,7 @@
   <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'rent'">
   <ng-container *ngIf="rentList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of rentList" [routerLink]="['/rent-sale/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of rentList" [routerLink]="['/app/start-menu/rent-sale/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -72,7 +72,7 @@
 </section>
 <section [hidden]="segmentValue !== 'sale'">
   <ng-container *ngIf="saleList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of saleList" [routerLink]="['/rent-sale/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of saleList" [routerLink]="['/app/start-menu/rent-sale/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -104,7 +104,7 @@
 </section>
 <section [hidden]="segmentValue !== 'myList'">
   <ng-container *ngIf="myList?.length > 0">
-<ion-card color="main" button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/rent-sale/details', item.id]">
+<ion-card color="main" button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/app/start-menu/rent-sale/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>

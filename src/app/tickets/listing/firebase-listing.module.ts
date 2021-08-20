@@ -10,6 +10,7 @@ import { FirebaseListingResolver } from './firebase-listing.resolver';
 import { TranslateModule } from '@ngx-translate/core';
 import { CreateTicketModal } from  '../ticket/create/create-ticket.modal';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -32,10 +33,12 @@ const routes: Routes = [
   ],
   declarations: [FirebaseListingPage, CreateTicketModal],
   providers: [
+    //ChatModal,
     FirebaseService,
     FirebaseListingResolver
   ],
   entryComponents: [
+    //ChatModal,
     CreateTicketModal
   ]
 })

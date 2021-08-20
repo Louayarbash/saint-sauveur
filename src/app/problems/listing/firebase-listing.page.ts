@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, Subscription, merge } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
-import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
+import { CreateProblemModal } from '../item/create/firebase-create-item.modal';
 //import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
 
@@ -109,19 +109,21 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     else{
                     this.getProfilePic(item.images[0].storagePath).then(res => item.coverPhotoData = res).catch(err => {
                       if(err.code === 'storage/object-not-found'){
-                        this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res)      
+                        //this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res) 
+                        item.coverPhotoData = "./assets/sample-images/no_image.jpeg"       
                       }
                       item.coverPhotoData = '' ;
                     });
                     }
                 }
                 else {
-                  this.getProfilePic('images/no_image.jpeg')
-                  .then(res => item.coverPhotoData = res)
-                  .catch( err => { 
-                    console.log(err); 
-                    item.coverPhotoData = '' ;} 
-                    );
+                  item.coverPhotoData ="./assets/sample-images/no_image.jpeg" 
+                  //this.getProfilePic('images/no_image.jpeg')
+                  //.then(res => item.coverPhotoData = res)
+                  //.catch( err => { 
+                  //  console.log(err); 
+                   // item.coverPhotoData = '' ;} 
+                   // );
               } 
               });
      
@@ -147,7 +149,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
 
   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
-      component: FirebaseCreateItemModal,
+      component: CreateProblemModal,
       componentProps: {
         segmentValueSubject: this.segmentValueSubject
       },

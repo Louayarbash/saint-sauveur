@@ -10,7 +10,7 @@ import { ComponentsModule } from '../components/components.module';
 
 const firebaseRoutes: Routes = [
   {
-    path: 'listing',
+    path: '',
     loadChildren: () => import('./listing/firebase-listing.module').then(m => m.FirebaseListingPageModule)
   },
   {

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'LostFound' | translate }}</ion-title>
   </ion-toolbar>
@@ -46,7 +46,7 @@
   <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'lost'">
   <ng-container *ngIf="lostList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of lostList" [routerLink]="['/lost-found/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of lostList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -69,7 +69,7 @@
 </section>
 <section [hidden]="segmentValue !== 'found'">
   <ng-container *ngIf="foundList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of foundList" [routerLink]="['/lost-found/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of foundList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -90,7 +90,7 @@
 </section>
 <section [hidden]="segmentValue !== 'stolen'">
   <ng-container *ngIf="stolenList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of stolenList" [routerLink]="['/lost-found/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of stolenList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -111,7 +111,7 @@
 </section>
 <section [hidden]="segmentValue !== 'myList'">
   <ng-container *ngIf="myList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/lost-found/details', item.id]">
+<ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>

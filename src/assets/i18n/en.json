@@ -1,4 +1,9 @@
 {
+  "Settings": "Settings",
+  "Categories": "Categories",
+  "MyProfile": "My profile",
+  "NotificationMessageNewItem": "added new item in category ",
+  "Notifications": "Notifications",
   "ExitMsg": "Do you want to close Parkondo?",
   "Welcome": "Welcome",
   "ContactDev": "Contact developer",

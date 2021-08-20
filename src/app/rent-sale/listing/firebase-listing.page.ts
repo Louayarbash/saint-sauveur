@@ -114,28 +114,35 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                     else{
                     this.getProfilePic(item.images[0].storagePath).then(res => item.coverPhotoData = res).catch(err => {
                       if(err.code === 'storage/object-not-found'){
-                        this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = res)      
+                        //this.getProfilePic('images/no_image.jpeg').then(res => item.coverPhotoData = ./assets/sample-images/categories/problems.jpgres)      
+                        item.coverPhotoData = "./assets/sample-images/no_image.jpeg"
                       }
                       item.coverPhotoData = '' ;
                     });
                     }
                 }
                 else {
-                  let profile: string;
+                  //let profile: string;
                   if(item.object == 'locker'){
-                    profile= 'images/locker.png'
+                    //profile= 'images/locker.png'
+                    item.coverPhotoData = "./assets/sample-images/locker.png" 
                   }
                   else if (item.object == 'parking'){
-                    profile= 'images/parking.png'
+                    //profile= 'images/parking.png'
+                    item.coverPhotoData = "./assets/sample-images/parking.png"
                   }
-                  else { profile= 'images/no_image.jpeg' 
+                  else { //profile= 'images/no_image.jpeg'
+                         item.coverPhotoData = "./assets/sample-images/no_image.jpeg" 
                 }
-                  this.getProfilePic(profile)
+
+                
+
+/*                   this.getProfilePic(profile)
                   .then(res => item.coverPhotoData = res)
                   .catch( err => { 
                     console.log(err); 
                     item.coverPhotoData = '' ;} 
-                    );
+                    ); */
               } 
               
               switch ( item.object) {

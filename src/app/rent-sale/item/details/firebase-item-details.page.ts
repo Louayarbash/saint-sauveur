@@ -68,18 +68,21 @@ export class FirebaseItemDetailsPage implements OnInit {
           }
           else if((this.item.images.length == 0) && !(this.item.isShell)){
           
-            let profile: string;
+            //let profile: string;
             if(this.item.object == 'locker'){
-              profile= 'images/locker.png'
+              //profile= 'images/locker.png'
+              this.photoSlider[0] = "./assets/sample-images/locker.jpeg"
             }
             else if (this.item.object == 'parking'){
-              profile= 'images/parking.png'
+              //profile= 'images/parking.png'
+              this.photoSlider[0] = "./assets/sample-images/parking.jpeg"
             }
-            else { profile= 'images/no_image.jpeg' 
+            else { //profile= 'images/no_image.jpeg' 
+              this.photoSlider[0] = "./assets/sample-images/no_image.jpeg"
           }
 
-            this.getPic(/*this.noImage*/profile).subscribe(a=>{this.photoSlider[0] = a});
-            console.log("length === 0", this.photoSlider[0]);
+            //this.getPic(/*this.noImage*/profile).subscribe(a=>{this.photoSlider[0] = a});
+            //console.log("length === 0", this.photoSlider[0]);
             this.postImages = [];
           }
 

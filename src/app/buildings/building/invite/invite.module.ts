@@ -5,7 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from '../../../components/components.module';
 import { InviteModal } from './invite.modal';
-import { FirebaseService } from '../../firebase-integration.service';
+//import { FirebaseService } from '../../firebase-integration.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 
@@ -29,13 +29,13 @@ const routes: Routes = [
     TranslateModule,
     ComponentsModule
   ],
-  /*declarations: [FirebaseCreateItemModal,FirebaseUpdateItemModal,SliderModal],*/
-  providers: [
-    FirebaseService//,
+  //declarations: [FirebaseCreateItemModal,FirebaseUpdateItemModal,SliderModal],*/
+  //providers: [
+    //FirebaseService//,
     //FirebaseItemDetailsResolver
-  ]/*,
-  entryComponents: [
-    FirebaseUpdateItemModal,SliderModal
-  ]*/
+  //],
+  //entryComponents: [
+   // FirebaseUpdateItemModal,SliderModal
+  //]*/
 })
 export class InvitePageModule {}

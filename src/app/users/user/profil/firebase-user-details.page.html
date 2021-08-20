@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="app/start-menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
+      <ion-button (click)="openFirebaseUpdateModal()">
+        {{ 'Edit' | translate }}
+      </ion-button>
+<!--       <ion-button (click)="openChatModal()">
+        {{ 'Contact' | translate }}
+      </ion-button> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  
+  <ion-row class="user-info-row">
+    <ion-col class="user-image-col" size="5">
+      <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+        <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="user.photo" [alt]="'item image'">
+        </app-image-shell>
+      </app-aspect-ratio>
+    </ion-col>
+    <ion-col class="user-details-col" size="12">
+      <h2 class="user-name">
+        <ion-text>{{user.firstname?.concat(' ').concat(user.lastname)}}</ion-text>
+        
+      </h2>
+    </ion-col>
+    </ion-row>
+      <section>
+          <!-- <ion-list> -->
+            <ion-item *ngIf="user.email">
+              <ion-label>{{ 'Email' | translate }}</ion-label>
+              <ion-text>{{ user.email }}</ion-text>                  
+            </ion-item>
+            <ion-item *ngIf="user.birthdate">    
+              <ion-label>{{ 'DateOfBirth' | translate }}</ion-label>
+              <ion-text>{{ birthdate }}</ion-text>
+                 
+            </ion-item>
+            <ion-item *ngIf="user.phone">
+              <ion-label>{{ 'Phone' | translate }}</ion-label>
+              <ion-text>{{ user.phone }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.apartment">
+              <ion-label>{{ 'Apartment' | translate }}</ion-label>
+              <ion-text>{{ user.apartment }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.code">    
+              <ion-label>{{ 'DoorCode' | translate }}</ion-label>
+              <ion-text>{{ user.code }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.type">    
+              <ion-label>{{ 'Type' | translate }}</ion-label>
+              <ion-text>{{ type }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.language">
+              <ion-label>{{ 'Language' | translate }}</ion-label>
+              <ion-text>{{ language }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.role">    
+              <ion-label>{{ 'Role' | translate }}</ion-label>
+              <ion-text>{{ role }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.status">    
+              <ion-label>{{ 'Status' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="enableNotifications">
+              <ion-text slot="start">{{ 'EnableNotifications' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableNotifications }}</ion-text>
+              <ion-toggle [checked]="user.enableNotifications" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ion-item *ngFor="let parking of parkingInfo; let index = index;">    
+              <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
+              {{ parking.description }}/#{{ parking.number }}
+            </ion-item>
+            <ion-item *ngIf="user.createDate">    
+              <ion-label>{{ 'CreateDate' | translate }}</ion-label>
+              <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="isLoggedInUser">
+              <ion-label>{{ 'SignOut' | translate }}</ion-label>  
+                <ion-icon (click)="signOut()" name="log-out-outline"></ion-icon>
+            </ion-item>
+          <!-- </ion-list> -->
+        </section>
+<!--       <ng-container *ngIf="user.createDate">
+        <ion-text color="dark" class="ion-padding-left createDate">{{user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+      </ng-container> -->
+</ion-content>

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
     </ion-buttons>
     <!-- <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar> -->
   </ion-toolbar>
@@ -28,9 +28,9 @@
   <ng-container *ngIf="!items.isShell">
     <section [hidden]="segmentValue !== 'new'">
     <ng-container *ngIf="newList?.length > 0">
-      <ion-card class="itemCard" *ngFor="let item of newList" [routerLink]="['/reportproblem/details', item.id]">
+      <ion-card class="itemCard" *ngFor="let item of newList" [routerLink]="['/app/start-menu/reportproblem/details', item.id]">
         <app-aspect-ratio [ratio]="{w:64, h:50}">
-          <app-image-shell animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+          <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
         </app-aspect-ratio>
 <!--         <ion-item *ngIf="item.createDate" color="main">
           <ion-icon name="build-outline" slot="end"></ion-icon>
@@ -62,9 +62,9 @@
 </section>
 <section [hidden]="segmentValue !== 'archive'">
   <ng-container *ngIf="archiveList?.length > 0">
-    <ion-card class="itemCard" *ngFor="let item of archiveList" [routerLink]="['/reportproblem/details', item.id]">
+    <ion-card class="itemCard" *ngFor="let item of archiveList" [routerLink]="['/app/start-menu/reportproblem/details', item.id]">
       <app-aspect-ratio [ratio]="{w:64, h:50}">
-        <app-image-shell animation="gradient" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
+        <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
       </app-aspect-ratio>
 <!--       <ion-item *ngIf="item.createDate" color="main">
         <ion-icon name="build-outline" slot="end"></ion-icon>

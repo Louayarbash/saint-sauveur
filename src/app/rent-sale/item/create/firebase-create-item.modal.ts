@@ -13,6 +13,7 @@ import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 import { ReplaySubject } from 'rxjs';
+import { NotificationItemModel } from '../../../services/feature/notification-item.model';
 
 @Component({
   selector: 'app-firebase-create-itemRentSale',
@@ -25,6 +26,7 @@ export class FirebaseCreateItemModal implements OnInit {
   postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemDataNotif: NotificationItemModel= new NotificationItemModel();
   selectedPhoto: string;
   uploadedImage: any;
   typeSelected: string = 'sale';
@@ -83,8 +85,19 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
+
+    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
+    this.itemDataNotif.type= "rent-sale" 
+    this.itemDataNotif.subType= this.itemData.type
+    this.itemDataNotif.action= "new"
+    this.itemDataNotif.status= this.itemData.status
+    this.itemDataNotif.creatorName= this.loginService.getLoginName();
+    this.itemDataNotif.createDate= this.itemData.createDate;
+    this.itemDataNotif.createdBy= this.itemData.createdBy;
+
     this.featureService.createItemWithImages(itemData, this.postImages, 'rent-sale')
     .then(() => {
+      this.featureService.createItem("notifications",this.itemDataNotif)
       this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal(); // not needed inside catch to stay on same page while errors

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Events' | translate }}</ion-title>
 <!--     <ion-buttons slot="end" *ngIf="userIsAdmin">
@@ -33,7 +33,7 @@
   <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'upcoming'">
   <ng-container *ngIf="items?.length > 0">
-    <ion-card class="itemCard" button="true" *ngFor="let item of upcomingList" [routerLink]="['/events/details', item.id]">
+    <ion-card class="itemCard" button="true" *ngFor="let item of upcomingList" [routerLink]="['/app/start-menu/events/details', item.id]">
       <ion-item *ngIf="item.subject" color="main">
         <ion-icon name="calendar-outline" slot="start"></ion-icon>
         <ion-label>{{item.subject}}</ion-label>
@@ -69,7 +69,7 @@
     </section>
     <section [hidden]="segmentValue !== 'archive'">
       <ng-container *ngIf="items?.length > 0">
-        <ion-card class="itemCard" button="true" *ngFor="let item of archiveList" [routerLink]="['/events/details', item.id]">
+        <ion-card class="itemCard" button="true" *ngFor="let item of archiveList" [routerLink]="['/app/start-menu/events/details', item.id]">
           <ion-item *ngIf="item.subject" color="main">
             <ion-icon name="file-tray-stacked-outline" slot="start"></ion-icon>
             <ion-label>{{item.subject}}</ion-label>

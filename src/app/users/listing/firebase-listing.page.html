@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Users' | translate }}<ion-text *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
   </ion-toolbar>
@@ -21,7 +21,7 @@
   </ng-container>
   <ng-container *ngIf="!items.isShell">
   <ion-list class="ion-no-padding" *ngIf="items?.length > 0">
-    <ion-item *ngFor="let item of items" [routerLink]="['/users/details', item.id]">
+    <ion-item *ngFor="let item of items" [routerLink]="['/app/start-menu/users/details', item.id]">
       <ion-avatar slot="start">
         <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
         <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.photo" [alt]="'item image'"></app-image-shell>

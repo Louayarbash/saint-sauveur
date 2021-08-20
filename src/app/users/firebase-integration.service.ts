@@ -245,16 +245,9 @@ export class FirebaseService {
     );
   }
 
-  getItem(tableName : string, itemId: string): Observable<any> {
+/*   getItem(tableName : string, itemId: string): Observable<any> {
     console.log("getItem", itemId);
     return this.afs.doc<any>( tableName + '/' + itemId).valueChanges();
-  /*  .snapshotChanges()
-     .pipe(
-      map(a => {
-        const postData = a.payload.data();
-        const id = a.payload.id;
-        return { id, ...postData };
-      })
-    ); */
-  }
+
+  } */
 }

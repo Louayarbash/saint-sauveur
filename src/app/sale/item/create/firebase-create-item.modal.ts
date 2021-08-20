@@ -6,13 +6,9 @@ import { FirebaseItemModel} from '../firebase-item.model';
 import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
+import { NotificationItemModel } from '../../../services/feature/notification-item.model';
 import firebase from 'firebase/app';
 import { ReplaySubject } from 'rxjs';
-//import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
-//import { File } from "@ionic-native/file/ngx";
-//import { Plugins } from '@capacitor/core';
-
-//const { Filesystem } = Plugins;
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -24,6 +20,7 @@ export class FirebaseCreateItemModal implements OnInit {
   postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel= new FirebaseItemModel();
+  itemDataNotif: NotificationItemModel= new NotificationItemModel();
   selectedPhoto: string;
   uploadedImage: any;
   disableSubmit: boolean;
@@ -62,11 +59,22 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
+    
+    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
+    this.itemDataNotif.type= "sale" 
+    this.itemDataNotif.action= "new"
+    this.itemDataNotif.status=  this.itemData.status
+    this.itemDataNotif.creatorName= this.loginService.getLoginName();
+    this.itemDataNotif.createDate= this.itemData.createDate;
+    this.itemDataNotif.createdBy= this.itemData.createdBy;
+
     this.featureService.createItemWithImages(itemData, this.postImages, 'posts')
     .then(() => {
       this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
-      loading.then(res=>{res.dismiss();}) 
+      loading.then(res=>{res.dismiss();})
+      this.itemDataNotif.createdBy= this.itemData.createdBy;
+      this.featureService.createItem("notifications",this.itemDataNotif)
       this.dismissModal();  // not needed inside catch to stay on same page while errors
     }).catch((err) => { 
       this.disableSubmit= false;

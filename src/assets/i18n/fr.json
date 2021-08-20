@@ -1,4 +1,9 @@
 {
+  "Settings": "Paramètres",
+  "Categories": "Catégories",
+  "MyProfile": "Mon profil",
+  "NotificationMessageNewItem": "a ajouté un nouvel item dans ",
+  "Notifications": "Notifications",
   "ExitMsg": "Voulez-vous fermer Parkondo?",
   "Welcome": "Bienvenu",
   "ContactDev": "Contacter le développeur",

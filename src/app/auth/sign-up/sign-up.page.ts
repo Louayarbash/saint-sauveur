@@ -130,7 +130,7 @@ export class SignUpPage implements OnInit {
 
       // No need to store in the navigation history the sign-in page with redirect params (it's justa a mandatory mid-step)
       // Navigate to profile and replace current url with profile
-      this.router.navigate(['start-menu'], { replaceUrl: true });
+      this.router.navigate(['/app/start-menu'], { replaceUrl: true });
     });
   }
 

@@ -6,20 +6,19 @@ import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../../components/components.module';
 
-import { FirebaseCreateItemModal } from './firebase-create-item.modal';
+import { UserProfilPage } from './firebase-user-details.page';
 import { FirebaseService } from '../../firebase-integration.service';
-//import { FirebaseItemDetailsResolver } from './firebase-item-details.resolver';
+import { FirebaseUserDetailsResolver } from './firebase-user-details.resolver';
 import { TranslateModule } from '@ngx-translate/core';
-//import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
-//import { SliderModal } from '../slider/slider.modal';
+import { FirebaseUpdateUserModal } from '../update/firebase-update-user.modal';
 
 const routes: Routes = [
   {
     path: '',
-    component: FirebaseCreateItemModal/* ,
+    component: UserProfilPage,
     resolve: {
-      data: FirebaseItemDetailsResolver
-    } */
+      data: FirebaseUserDetailsResolver
+    }
   }
 ];
 
@@ -33,13 +32,13 @@ const routes: Routes = [
     TranslateModule,
     ComponentsModule
   ],
-  /*declarations: [FirebaseCreateItemModal,FirebaseUpdateItemModal,SliderModal],*/
+  declarations: [UserProfilPage],
   providers: [
-    FirebaseService//,
-    //FirebaseItemDetailsResolver
-  ]/*,
+    FirebaseService,
+    FirebaseUserDetailsResolver
+  ] ,
   entryComponents: [
-    FirebaseUpdateItemModal,SliderModal
-  ]*/
+    FirebaseUpdateUserModal
+  ]  
 })
-export class FirebaseItemCreatePageModule {}
+export class FirebaseUserDetailsPageModule {}

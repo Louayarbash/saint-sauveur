@@ -1,7 +1,7 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
-import { FirebaseService } from '../../firebase-integration.service';
+//import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel} from '../firebase-item.model';
 import { Images } from '../../../type'
 import { LoginService } from '../../../services/login/login.service';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   selector: 'app-firebase-create-item',
   templateUrl: './firebase-create-item.modal.html'
 })
-export class FirebaseCreateItemModal implements OnInit {
+export class CreateProblemModal implements OnInit {
   //@Input() segmentValueSubject: ReplaySubject<string>;
   croppedImagepath = "";
   postImages : Images[] = [];
@@ -25,8 +25,8 @@ export class FirebaseCreateItemModal implements OnInit {
   deviceInfo: string;
   disableSubmit: boolean;
   constructor(
-    //private modalController: ModalController,
-    public firebaseService: FirebaseService,
+    private modalController: ModalController,
+    //public firebaseService: FirebaseService,
     private changeRef: ChangeDetectorRef,
     private loginService : LoginService,
     private featureService : FeatureService,
@@ -44,9 +44,9 @@ export class FirebaseCreateItemModal implements OnInit {
     });
   }
 
-  /*dismissModal() {
+  dismissModal() {
    this.modalController.dismiss();
-  } */
+  }
 
    async createItem() {
     this.disableSubmit= true;
@@ -66,7 +66,8 @@ export class FirebaseCreateItemModal implements OnInit {
     .then(() => {
       //this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.ThankYouForContactingUs, 3000);      
-      this.router.navigate(['start-menu']);  // not needed inside catch to stay on same page while errors
+      this.router.navigate(['/app/start-menu']);  // not needed inside catch to stay on same page while errors
+      this.dismissModal();
       loading.then(res=>{res.dismiss();}) 
     }).catch((err) => { 
       this.disableSubmit= false;

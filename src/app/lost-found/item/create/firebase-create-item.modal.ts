@@ -8,6 +8,7 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import firebase from 'firebase/app';
 import { ReplaySubject } from 'rxjs';
+import { NotificationItemModel } from '../../../services/feature/notification-item.model';   
 // import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
 
 @Component({
@@ -21,6 +22,7 @@ export class FirebaseCreateItemModal implements OnInit {
   postImages : Images[] = [];
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemDataNotif: NotificationItemModel= new NotificationItemModel();
   selectedPhoto: string;
   uploadedImage: any;
   // typeSelected: string;
@@ -60,8 +62,19 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.buildingId = this.loginService.getBuildingId();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
+
+    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
+    this.itemDataNotif.type= "lost-found" 
+    this.itemDataNotif.subType= this.itemData.type
+    this.itemDataNotif.action= "new"
+    this.itemDataNotif.status= this.itemData.status
+    this.itemDataNotif.creatorName= this.loginService.getLoginName();
+    this.itemDataNotif.createDate= this.itemData.createDate;
+    this.itemDataNotif.createdBy= this.itemData.createdBy;
+
     this.featureService.createItemWithImages(itemData, this.postImages, 'lost-found')
     .then(() => {
+      this.featureService.createItem("notifications",this.itemDataNotif)
       this.segmentValueSubject.next(this.createItemForm.value.type);
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();

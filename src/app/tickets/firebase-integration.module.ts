@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 
 //import { FirebaseCreateUserModal } from './user/create/firebase-create-user.modal';
 //import { FirebaseUpdateUserModal } from './user/update/firebase-update-user.modal';
-import { ChatModal } from './ticket/chat/chat.modal';
+//import { ChatModal } from './ticket/chat/chat.modal';
 //import { SelectUserImageModal } from './user/select-image/select-user-image.modal';
 
 
@@ -37,18 +37,18 @@ const firebaseRoutes: Routes = [
     RouterModule.forChild(firebaseRoutes),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule
-  ],
-  entryComponents: [
+  ]//,
+  //entryComponents: [
     //FirebaseCreateUserModal,
     //FirebaseUpdateUserModal,
     ///SelectUserImageModal,
-    ChatModal
-  ],
-  declarations: [
+    //ChatModal
+  //],
+  //declarations: [
     //FirebaseCreateUserModal,
     //FirebaseUpdateUserModal,
     //SelectUserImageModal,
-    ChatModal
-  ]
+    //ChatModal
+  //]
 })
 export class FirebaseIntegrationModule {}

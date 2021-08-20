@@ -11,6 +11,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { TicketDetailsResolver } from './ticket-details.resolver';
 import { TranslateModule } from '@ngx-translate/core';
 import { UpdateTicketModal } from "../update/update-ticket.modal";
+import { ChatModal } from '../../ticket/chat/chat.modal';
 
 const routes: Routes = [
   {
@@ -32,12 +33,13 @@ const routes: Routes = [
     TranslateModule,
     ComponentsModule
   ],
-  declarations: [TicketDetailsPage, UpdateTicketModal],
+  declarations: [TicketDetailsPage, UpdateTicketModal, ChatModal],
   providers: [
     FirebaseService,
     TicketDetailsResolver
   ],
   entryComponents: [
+    ChatModal,
     UpdateTicketModal
   ] 
 })
