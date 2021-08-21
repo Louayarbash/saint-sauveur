@@ -38,6 +38,8 @@ import { PageGuard } from './auth/page.guard';
 import { SignInGuard } from './auth/signin.guard';
 import { IntroGuard } from './auth/intro.guard';
 import { IonicStorageModule } from '@ionic/storage';
+//import { IonRouterOutlet } from '@ionic/angular';
+import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -87,7 +89,11 @@ export function createTranslateLoader(http: HttpClient) {
     AuthService,
     PageGuard,
     SignInGuard,
-    IntroGuard
+    IntroGuard,
+    //IonRouterOutlet
+  ],
+  entryComponents: [
+    CreateProblemModal
   ],
   bootstrap: [AppComponent]
 })

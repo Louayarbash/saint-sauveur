@@ -48,7 +48,7 @@ export class SignInGuard implements CanLoad {
               this.fcmService.initPushNotification();
             }
               this.authService.canAccessApp.next(true);
-              this.router.navigate(['start-menu'], { replaceUrl: true });
+              this.router.navigate(['/app/start-menu'], { replaceUrl: true });
             }
             else {
                 this.featureService.presentToast('cant acces the app from sign in guard', 2000);

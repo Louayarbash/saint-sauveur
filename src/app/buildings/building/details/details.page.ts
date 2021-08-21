@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { ModalController, IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 // import dayjs from 'dayjs';
-import { FirebaseService } from '../../firebase-integration.service';
+//import { FirebaseService } from '../../firebase-integration.service';
 import { BuildingModel } from '../building.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { UpdateBuildingModal } from '../update/update.modal';
@@ -37,7 +37,7 @@ export class BuildingDetailsPage implements OnInit {
   }
 
   constructor(
-    public firebaseService: FirebaseService,
+    //public firebaseService: FirebaseService,
     public modalController: ModalController,
     public router: Router,
     private route: ActivatedRoute,
@@ -107,9 +107,9 @@ export class BuildingDetailsPage implements OnInit {
   async inviteModal() {
     const modal = await this.modalController.create({
       component: InviteModal,
-      componentProps: {
+/*       componentProps: {
         'item': this.item
-      },
+      }, */
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });

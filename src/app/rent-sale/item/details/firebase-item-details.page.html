@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="rent-sale/listing"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsCreator">
@@ -18,7 +18,7 @@
         <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
           <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
             <ion-row class="slide-inner-row">
-                <app-image-shell [display]="'cover'" animation="gradient" class="showcase-image" [ngClass]="centered-image" [src]="image">
+                <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
                 <app-aspect-ratio [ratio]="{w:64, h:50}"> 
                 </app-aspect-ratio>
               </app-image-shell>

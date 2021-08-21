@@ -2,15 +2,16 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 //import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
 //import { FcmService } from '../app/services/fcm/fcm.service';
-import { LanguageService } from './language/language.service';
+//import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
 import { LoginService } from './services/login/login.service';
 import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
 import { Plugins, NetworkStatus } from '@capacitor/core';
+import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
 const { Network } = Plugins;
 
 //import { LoginService } from './services/login/login.service';
@@ -26,63 +27,12 @@ const { Network } = Plugins;
 })
 export class AppComponent {
   networkStatus: NetworkStatus;
-  appPages = [
-    {
-      title: 'Categories',
-      url: '/app/categories',
-      ionicIcon: 'list-outline'
-    },
-    {
-      title: 'Profile',
-      url: '/app/user',
-      ionicIcon: 'person-outline'
-    },
-   /*  {
-      title: 'Contact Card',
-      url: '/contact-card',
-      customIcon: './assets/custom-icons/side-menu/contact-card.svg'
-    }, */
-    {
-      title: 'Notifications',
-      url: '/app/notifications',
-      ionicIcon: 'notifications-outline'
-    }
-  ];
-  accountPages = [
-    {
-      title: 'Log In',
-      url: '/auth/sign-in',
-      ionicIcon: 'log-in-outline'
-    },
-    {
-      title: 'Sign Up',
-      url: '/auth/sign-up',
-      ionicIcon: 'person-add-outline'
-    },
-    {
-      title: 'Tutorial',
-      url: '/walkthrough',
-      ionicIcon: 'school-outline'
-    },
-    {
-      title: 'Getting Started',
-      url: '/getting-started',
-      ionicIcon: 'rocket-outline'
-    }/* ,
-    {
-      title: '404 page',
-      url: '/page-not-found',
-      ionicIcon: 'alert-circle-outline'
-    } */
-  ];
-  
-
-
   available_languages = [];
   translations: any;
   textDir = 'ltr';
   buildingName: string;
   userName: string;
+  
 
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
@@ -92,12 +42,14 @@ export class AppComponent {
   //  private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     //private fcmService : FcmService,
-    public languageService : LanguageService,
+    //public languageService : LanguageService,
     private featureService : FeatureService,
     private alertController: AlertController,
     private authService: AuthService,
     public router: Router,
-    private loginService : LoginService
+    private loginService : LoginService,
+    private modalController: ModalController//,
+   //private routerOutlet: IonRouterOutlet
     ) {      
     this.initializeApp();
 }
@@ -189,7 +141,7 @@ checkConnection(){
 
     this.platform.backButton.subscribeWithPriority(10, (processNextHandler) => {
       console.log('Back press handler!');
-      if (this.location.isCurrentPathEqualTo('/start-menu')) {
+      if (this.location.isCurrentPathEqualTo('/app/start-menu')) {
 
         // Show Exit Alert!
         console.log('Show Exit Alert!');
@@ -251,8 +203,6 @@ checkConnection(){
   }
 
   async signOut() {
-
-
     const alert = await this.alertController.create({
       header: this.featureService.translations.LogOutHeader,
       message: this.featureService.translations.LogOutMessage,
@@ -278,6 +228,18 @@ checkConnection(){
     });
 
     await alert.present();
+  }
+  async problemModal() {
+    const modal = await this.modalController.create({
+      component: CreateProblemModal,
+/*       componentProps: {
+        'item': this.item
+      }, */
+      swipeToClose: true//,
+     // presentingElement: this.routerOutlet.nativeEl
+    });
+
+    await modal.present();
   }
 
 

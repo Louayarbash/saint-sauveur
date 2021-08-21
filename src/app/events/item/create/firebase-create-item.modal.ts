@@ -11,6 +11,7 @@ import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import { counterRangeValidatorMinutes } from '../../../components/counter-input-minutes/counter-input.component';
 import { ReplaySubject } from 'rxjs';
+import { NotificationItemModel } from '../../../services/feature/notification-item.model';   
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -21,6 +22,7 @@ export class FirebaseCreateItemModal implements OnInit {
   @Input() segmentValueSubject: ReplaySubject<string>;
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemDataNotif: NotificationItemModel= new NotificationItemModel();
   files: Files[] = [];
   newName: string = "";
   nameChanging: boolean[] = [];
@@ -41,7 +43,6 @@ export class FirebaseCreateItemModal implements OnInit {
     private loginService : LoginService,
     private featureService : FeatureService
   ) { 
-    
   }
 
   ngOnInit() {
@@ -217,22 +218,32 @@ export class FirebaseCreateItemModal implements OnInit {
 
    createItem() {
     this.disableSubmit= true;
-      this.itemData.date = this.createItemForm.get('date').value;
-      this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
-      this.itemData.startDate = this.createItemForm.get('startDate').value;
-      this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
-      this.itemData.endDate = this.createItemForm.get('endDate').value;
-      this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
+    this.itemData.date = this.createItemForm.get('date').value;
+    this.itemData.dateTS = dayjs(this.createItemForm.get('date').value).unix();
+    this.itemData.startDate = this.createItemForm.get('startDate').value;
+    this.itemData.startDateTS = dayjs(this.createItemForm.get('startDate').value).unix();
+    this.itemData.endDate = this.createItemForm.get('endDate').value;
+    this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
     this.itemData.subject = this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
     this.itemData.buildingId = this.loginService.getBuildingId();
 
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
-    this.itemData.createdById = this.loginService.getLoginID();
+    this.itemData.createdBy = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
+
+    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
+    this.itemDataNotif.type= "events" 
+    this.itemDataNotif.action= "new"
+    this.itemDataNotif.status= "active"
+    this.itemDataNotif.creatorName= this.loginService.getLoginName();
+    this.itemDataNotif.createDate= this.itemData.createDate;
+    this.itemDataNotif.createdBy= this.itemData.createdBy;
+
     this.firebaseService.createItem(itemData,this.files)
     .then(() => {
+      this.featureService.createItem("notifications",this.itemDataNotif)
       this.segmentValueSubject.next('upcoming');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();

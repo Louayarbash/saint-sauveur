@@ -8,6 +8,7 @@ import { Files } from '../../../type'
 import { LoginService } from "../../../services/login/login.service"
 import { FeatureService } from "../../../services/feature/feature.service"
 import firebase from 'firebase/app';
+import { NotificationItemModel } from '../../../services/feature/notification-item.model';   
 
 @Component({
   selector: 'app-firebase-create-item',
@@ -16,6 +17,7 @@ import firebase from 'firebase/app';
 export class FirebaseCreateItemModal implements OnInit {
   createItemForm: FormGroup;
   itemData: FirebaseItemModel = new FirebaseItemModel();
+  itemDataNotif: NotificationItemModel= new NotificationItemModel();
   files: Files[] = [];
   newName: string = "";
   nameChanging: boolean[] = [];
@@ -141,11 +143,22 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.buildingId = this.loginService.getBuildingId();
     this.itemData.category = this.createItemForm.value.category;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
-    this.itemData.createdById = this.loginService.getLoginID();
+    this.itemData.createdBy = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
+
+    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
+    this.itemDataNotif.type= "publications" 
+    this.itemDataNotif.subType= this.itemData.category
+    this.itemDataNotif.action= "new"
+    this.itemDataNotif.status= "active"
+    this.itemDataNotif.creatorName= this.loginService.getLoginName();
+    this.itemDataNotif.createDate= this.itemData.createDate;
+    this.itemDataNotif.createdBy= this.itemData.createdBy;
+
     this.firebaseService.createItem(itemData, this.files)
     .then(() => {
+      this.featureService.createItem("notifications",this.itemDataNotif)
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       this.dismissModal();
       loading.then(res=>res.dismiss());  

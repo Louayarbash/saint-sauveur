@@ -30,7 +30,7 @@
 
         </ng-container>
       </div>
-      <ng-container *ngIf="emailFound">
+        <div [hidden]="!emailFound">
       <ion-item class="input-item">
         <ion-input autocapitalize type="text" placeholder="{{ 'Firstname' | translate }}" formControlName="firstname" clearInput></ion-input>
       </ion-item>
@@ -74,9 +74,9 @@
           </div>
         </ng-container>
       </div>
-    </ng-container>
+    </div>
     </ion-list>
-    <ng-container *ngIf="emailFound">
+    <div [hidden]="!emailFound">
     <ion-button class="signup-btn" type="submit" expand="block" [disabled]="!signup1Form.valid">{{ 'SignUp' | translate }}</ion-button>
     <div class="error-container" *ngIf="submitError">
       <div class="error-message">
@@ -89,7 +89,7 @@
         {{ 'AlreadyHaveAccount' | translate }}
       </ion-button>
     </ion-row>
-  </ng-container>
+  </div>
   </form>
 <!--   <ion-list class="inputs-list" lines="full">
     <ion-item class="input-item">

@@ -8,7 +8,6 @@ import { FirebaseListingPage } from './firebase-listing.page';
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
 import { TranslateModule } from '@ngx-translate/core';
-import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
 
 const routes: Routes = [
   {
@@ -27,16 +26,16 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     ComponentsModule,
-    TranslateModule,
+    TranslateModule,    
     RouterModule.forChild(routes)
   ],
-  declarations: [FirebaseListingPage,FirebaseCreateItemModal],
+  declarations: [FirebaseListingPage],
   providers: [
     FirebaseService,
     FirebaseListingResolver
-  ],
+  ]/* ,
   entryComponents: [
-    FirebaseCreateItemModal
-  ]
+    CreateTicketModal
+  ] */
 })
 export class FirebaseListingPageModule {}

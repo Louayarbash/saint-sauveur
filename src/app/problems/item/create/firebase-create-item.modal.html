@@ -4,7 +4,7 @@
   <ion-header>
     <ion-toolbar color="primary">
       <ion-buttons slot="end">
-        <ion-button [routerLink]="['/start-menu']">
+        <ion-button (click)="dismissModal()">
           <!-- <ion-back-button defaultHref="start-menu"></ion-back-button> -->
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>

@@ -1,7 +1,7 @@
   <ion-header>
     <ion-toolbar color="primary">
       <ion-buttons slot="end">
-        <ion-button [routerLink]="['/start-menu']">
+        <ion-button (click)="dismissModal()">
           <!-- <ion-back-button defaultHref="start-menu"></ion-back-button> -->
           <ion-icon slot="icon-only" name="close"></ion-icon>
         </ion-button>
@@ -53,7 +53,7 @@
           </ion-row> 
           <ion-row class="rowInvite">
             <ion-col>
-              <ion-button class="ion-no-margin btnInvite" expand="block" color="dark" type="submit" fill="solid" [disabled]="!emailsList" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
+              <ion-button class="ion-no-margin btnInvite" expand="block" color="dark" type="submit" fill="solid" [disabled]="disableSubmit || !emailsList" (click)="sendInvitations()">{{ 'Invite' | translate }}</ion-button>
             </ion-col>
           </ion-row>
     <!-- </ion-grid> -->

@@ -6,20 +6,21 @@ import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../../components/components.module';
 
-import { FirebaseCreateItemModal } from './firebase-create-item.modal';
+import { BuildingDetailsPage } from './details.page';
 import { FirebaseService } from '../../firebase-integration.service';
-//import { FirebaseItemDetailsResolver } from './firebase-item-details.resolver';
+import { BuildingDetailsResolver } from './details.resolver';
 import { TranslateModule } from '@ngx-translate/core';
-//import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
-//import { SliderModal } from '../slider/slider.modal';
+import { UpdateBuildingModal } from "../update/update.modal";
+//import { InviteModal } from "../invite/invite.modal";
+
 
 const routes: Routes = [
   {
     path: '',
-    component: FirebaseCreateItemModal/* ,
+    component: BuildingDetailsPage,
     resolve: {
-      data: FirebaseItemDetailsResolver
-    } */
+      data: BuildingDetailsResolver
+    }
   }
 ];
 
@@ -33,13 +34,14 @@ const routes: Routes = [
     TranslateModule,
     ComponentsModule
   ],
-  /*declarations: [FirebaseCreateItemModal,FirebaseUpdateItemModal,SliderModal],*/
+  declarations: [BuildingDetailsPage/*, InviteModal*/],
   providers: [
-    FirebaseService//,
-    //FirebaseItemDetailsResolver
-  ]/*,
+    FirebaseService,
+    BuildingDetailsResolver
+  ],
   entryComponents: [
-    FirebaseUpdateItemModal,SliderModal
-  ]*/
+    UpdateBuildingModal/*,
+    InviteModal*/
+  ] 
 })
-export class FirebaseItemCreatePageModule {}
+export class BuildingProfilPageModule {}

@@ -1,0 +1,37 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="notifications" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/notifications']">
+      <ion-icon name="notifications-outline"></ion-icon>
+      <ion-label>{{ 'Notifications' | translate }}</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="start-menu" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/start-menu']">
+      <ion-icon name="list-outline"></ion-icon>
+      <ion-label>{{ 'Categories' | translate }}</ion-label>
+    </ion-tab-button>
+    <ion-tab-button *ngIf="userId" color="main" [tab]="profil" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/profil', userId]">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>{{ 'MyProfile' | translate }}</ion-label>
+    </ion-tab-button>
+    <ion-tab-button *ngIf="isAdmin" [tab]="buildingProfil" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/buildingProfil', buildingId]">
+      <ion-icon name="settings-outline"></ion-icon>
+      <ion-label>{{ 'Settings' | translate }}</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
+
+<!-- <ion-tabs (ionTabsDidChange)="ionTabsDidChange($event)">
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="categories" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/categories']">
+      <ion-icon name="list-outline"></ion-icon>
+      <ion-label class="tab-title">Categories</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="user" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/user']">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label class="tab-title">Profile</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="notifications" [routerLinkActive]="['tab-selected']" [routerLink]="['/app/notifications']">
+      <ion-icon name="notifications-outline"></ion-icon>
+      <ion-label class="tab-title">Notifications</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs> -->

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { IonRouterOutlet, MenuController, ModalController } from '@ionic/angular';
 import { LoginService } from '../services/login/login.service';
+import { InviteModal } from '../buildings/building/invite/invite.modal';
 //import { AngularFireModule } from '@angular/fire';
 //import { environment } from '../../environments/environment';
 
@@ -26,20 +27,23 @@ export class StartMenuPage implements OnInit {
   enableTicket: boolean= false;
   enableSale: boolean= false;
   userIsGlobalAdmin: boolean= false;
+  
 
   constructor( 
     private loginService: LoginService,
-    public menu: MenuController
+    public menu: MenuController,
+    private modalController: ModalController,
+    private routerOutlet: IonRouterOutlet
   ) {
     //this.backButtonHandler = Plugins.App.addListener('backButton', Plugins.App.exitApp)    
     //console.log('start menu constructor');
-    this.menu.enable(true); 
+    //this.menu.enable(true); 
     
   }
 
   ngOnInit() {
-    console.log("oninit Louay");
-  
+   // this.menu.enable(true); 
+    console.log("oninit Louay");  
     this.loginService.currentUserInfo.subscribe(
       userInfo => {
         this.username = userInfo.firstname;
@@ -68,6 +72,19 @@ export class StartMenuPage implements OnInit {
     // this.userIsAdmin= this.loginService.isUserAdmin();
 
 
+  }
+
+  async inviteModal() {
+    const modal = await this.modalController.create({
+      component: InviteModal,
+/*       componentProps: {
+        'item': this.item
+      }, */
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
+    });
+
+    await modal.present();
   }
 
 }

@@ -7,7 +7,7 @@ export class FirebaseItemModel extends ShellModel {
   subject: string;
   details: string;
   buildingId: string;
-  createdById: string;
+  createdBy: string;
   createDate: firebase.firestore.FieldValue;  
   category:string;
   files: Array<Files> = [];
