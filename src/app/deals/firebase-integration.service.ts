@@ -81,7 +81,7 @@ export class FirebaseService {
     return this.getItem(itemId).pipe(concatMap(deal => { 
       if (deal && deal.createdBy) {
           const userInfoRequObservable = this.getUser(deal.createdBy).pipe(first());
-          const userInfoRespObservable = this.getUser(deal.responseBy).pipe(first());
+          const userInfoRespObservable = deal.responseBy ? this.getUser(deal.responseBy).pipe(first()) : of(null)
           return combineLatest([
           of(deal),
           userInfoRequObservable,
@@ -200,11 +200,11 @@ export class FirebaseService {
             tran.update(itemRef, { parkingInfo : itemData.parkingInfo, status: newStatus, responseBy:this.loginService.getLoginID()});
             //console.log("changed");
             this.featureService.presentToast(this.featureService.translations.RequestResponded, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
             this.featureService.presentToast(this.featureService.translations.RequestAlreadyResponded, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             //console.log("not changed");
             return Promise.reject(this.featureService.translations.RequestRespondedOrCanceled);
           }
@@ -225,14 +225,14 @@ export class FirebaseService {
             let newStatus = "canceled"; // newRequestCanceled
             tran.update(itemRef, {status: newStatus});            
             this.featureService.presentToast(this.featureService.translations.RequestCanceled, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('NewRequestCanceled!' + newStatus);
           }
           else if (oldStatus == "accepted"){
             let newStatus = "canceled"; // acceptedRequestCanceled
             tran.update(itemRef, {status: newStatus});            
             this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
           
@@ -254,12 +254,12 @@ export class FirebaseService {
             let newStatus = "new"; 
             tran.update(itemRef, {status: newStatus, responseBy:""});            
             this.featureService.presentToast(this.featureService.translations.RequestDealCanceled, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('Your deal is canceled!' + newStatus);
           }
           else {        
             this.featureService.presentToast(this.featureService.translations.RequestCantCancelDeal, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.reject('cant cancel this request!');
           } 
         });
@@ -281,11 +281,11 @@ export class FirebaseService {
             tran.update(itemRef, { /*parkingInfo : itemData.parkingInfo,*/ status: newStatus, responseBy:this.loginService.getLoginID()});
             //console.log("changed");
             this.featureService.presentToast(this.featureService.translations.OfferAccepted, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('Status changed to ' + newStatus);
           } else {
             this.featureService.presentToast(this.featureService.translations.OfferAlreadyAccepted, 2000);
-            this.router.navigate(['deal/listing']);
+            this.router.navigate(['app/start-menu/deal']);
             //console.log("not changed");
             return Promise.reject(this.featureService.translations.OfferAcceptedOrCanceled);
           }
@@ -307,14 +307,14 @@ public cancelOffer(itemData: ItemModel) {
           let newStatus = "canceled"; // newOfferCanceled
           tran.update(itemRef, {status: newStatus});            
           this.featureService.presentToast(this.featureService.translations.OfferCanceled, 2000);
-          this.router.navigate(['deal/listing']);
+          this.router.navigate(['app/start-menu/deal']);
           return Promise.resolve('NewOfferCanceled!' + newStatus);
         }
         else if (oldStatus == "accepted"){
           let newStatus = "canceled"; // acceptedOfferCanceled
           tran.update(itemRef, {status: newStatus});            
           this.featureService.presentToast(this.featureService.translations.OfferAcceptedCanceled, 2000);
-          this.router.navigate(['deal/listing']);
+          this.router.navigate(['app/start-menu/deal']);
           return Promise.resolve('Accepted offer canceled!' + newStatus);
         }
         
@@ -336,12 +336,12 @@ public cancelOfferDeal(itemData: ItemModel) {
           let newStatus = "new"; 
           tran.update(itemRef, {status: newStatus, responseBy:""});            
           this.featureService.presentToast(this.featureService.translations.OfferDealCanceled, 2000);
-          this.router.navigate(['deal/listing']);
+          this.router.navigate(['app/start-menu/deal']);
           return Promise.resolve('Your deal is canceled!' + newStatus);
         }
         else {        
           this.featureService.presentToast(this.featureService.translations.OfferCantCancelDeal, 2000);
-          this.router.navigate(['deal/listing']);
+          this.router.navigate(['app/start-menu/deal']);
           return Promise.reject('cant cancel this offer!');
         } 
       });

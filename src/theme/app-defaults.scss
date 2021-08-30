@@ -1,5 +1,9 @@
 @import "../theme/mixins/inputs/radio-tag";
 
+
+ion-footer{
+  background-color: white;
+}
 ion-title {
   font-weight: 400;
   letter-spacing: 0.4px;
@@ -133,7 +137,7 @@ ion-text.camera-btn{
 .DivLoading{
   margin: 20px 40px; 
   text-align: center;
-  // color: var(--ion-color-main);
+  color: var(--ion-color-main);
 }
 
 .radio-tags {

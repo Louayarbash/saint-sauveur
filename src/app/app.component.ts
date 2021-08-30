@@ -141,7 +141,7 @@ checkConnection(){
 
     this.platform.backButton.subscribeWithPriority(10, (processNextHandler) => {
       console.log('Back press handler!');
-      if (this.location.isCurrentPathEqualTo('/app/start-menu')) {
+      if (this.location.isCurrentPathEqualTo('/app/start-menu') || this.location.isCurrentPathEqualTo('/auth/sign-in') || this.location.isCurrentPathEqualTo('/auth/sign-up') || this.location.isCurrentPathEqualTo('/auth/sign-up-first-time'))   {
 
         // Show Exit Alert!
         console.log('Show Exit Alert!');

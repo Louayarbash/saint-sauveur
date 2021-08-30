@@ -7,7 +7,7 @@ import { FirebaseService } from '../../firebase-integration.service';
 import { AngularFirestore } from "@angular/fire/firestore";
 //import { Observable } from "rxjs";
 import { LoginService } from "../../../services/login/login.service";
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 //import { map, filter } from 'rxjs/operators';
 import { ChatModel } from '../chat/chat.model'
 import { combinedItemModel } from '../firebase-item.model';

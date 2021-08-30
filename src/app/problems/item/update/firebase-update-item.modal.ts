@@ -74,7 +74,7 @@ export class FirebaseUpdateItemModal implements OnInit {
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['problems/listing']);
+                this.router.navigate(['app/start-menu/problems']);
               },
               err => { 
                 console.log(err);

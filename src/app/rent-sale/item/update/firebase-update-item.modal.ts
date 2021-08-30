@@ -72,7 +72,7 @@ export class FirebaseUpdateItemModal implements OnInit {
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal(); // not needed inside catch to stay on same page while errors
-                this.router.navigate(['rent-sale/listing']);
+                this.router.navigate(['app/start-menu/rent-sale']);
               },
               err => { 
                 console.log(err);

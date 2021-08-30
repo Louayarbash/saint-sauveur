@@ -39,14 +39,20 @@
         <div class="listing-item" *ngFor="let item of newRequestsList" [ngClass]="{'accepted': (item.status == 'accepted'), 'new': (item.status == 'new'), 'expired': (item.status == 'expired'),'ended': (item.status == 'ended')}">
           <ion-row class="top-row">
             <ion-col class="info-col call-to-action-col" size="auto" *ngIf="item.type == 'offer'">
-              <h4 class="item-type-offer">
+<!--               <h4 class="item-type-offer">
                 {{ 'Offer' | translate }}
-              </h4>
+              </h4> -->
+              <ion-chip>
+                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+              </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
-            <h4 class="item-type-request">
+<!--             <h4 class="item-type-request">
               {{ 'Request' | translate }}
-            </h4>
+            </h4> -->
+            <ion-chip>
+              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+            </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="claim" [routerLink]="['/app/start-menu/deal/details', item.id]">
@@ -107,14 +113,20 @@
         <div class="listing-item" *ngFor="let item of newOffersList" [ngClass]="{'accepted': (item.status == 'accepted'), 'new': (item.status == 'new'), 'expired': (item.status == 'expired'),'ended': (item.status == 'ended')}">
           <ion-row class="top-row">
             <ion-col class="info-col call-to-action-col" size="auto" *ngIf="item.type == 'offer'">
-              <h4 class="item-type-offer">
+<!--               <h4 class="item-type-offer">
                 {{ 'Offer' | translate }}
-              </h4>
+              </h4> -->
+              <ion-chip>
+                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+              </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
-            <h4 class="item-type-request">
+<!--             <h4 class="item-type-request">
               {{ 'Request' | translate }}
-            </h4>
+            </h4> -->
+            <ion-chip>
+              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+            </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="claim" [routerLink]="['/app/start-menu/deal/details', item.id]">
@@ -176,14 +188,20 @@
         <div class="listing-item" *ngFor="let item of myRequestsList" [ngClass]="{'canceled': (item?.status == 'canceled'), 'accepted': (item?.status == 'accepted'), 'new': (item?.status == 'new'), 'expired': (item?.status == 'expired'),'started': (item?.status == 'started'), 'ended': (item?.status == 'ended')}">
           <ion-row class="top-row">
             <ion-col class="info-col call-to-action-col" *ngIf="item.type == 'offer'">
-              <h4 class="item-type-offer">
+<!--               <h4 class="item-type-offer">
                 {{ 'Offer' | translate }}
-              </h4>
+              </h4> -->
+              <ion-chip>
+                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+              </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
-            <h4 class="item-type-request">
+<!--             <h4 class="item-type-request">
               {{ 'Request' | translate }}
-            </h4>
+            </h4> -->
+            <ion-chip>
+              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+            </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="claim"  [routerLink]="['/app/start-menu/deal/details', item.id]">

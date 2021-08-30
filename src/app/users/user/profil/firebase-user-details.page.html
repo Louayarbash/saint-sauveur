@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="app/start-menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'MyProfile' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="userIsAdmin">
+    <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
       <ion-button (click)="openFirebaseUpdateModal()">
         {{ 'Edit' | translate }}
       </ion-button>
@@ -15,7 +15,7 @@
   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">
-        <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="user.photo" [alt]="'item image'">
+        <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="user?.photo" [alt]="'item image'">
         </app-image-shell>
       </app-aspect-ratio>
     </ion-col>

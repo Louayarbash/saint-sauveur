@@ -37,6 +37,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   parking3selected: boolean;
   selectOptions: any;
   userIsAdmin= this.loginService.isUserAdmin();
+  userIsGlobalAdmin= this.loginService.isUserGlobalAdmin();
   customAlertOptions: any = {
     header: this.featureService.translations.SelectParkingLevel,
     //subHeader: this.featureService.translations.OK,
@@ -89,8 +90,8 @@ export class FirebaseUpdateUserModal implements OnInit {
       phone: new FormControl(this.user.phone),
       birthdate: new FormControl(this.user.birthdate ? dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY') : null),
       language : new FormControl(this.user.language ? this.user.language : 'en', Validators.required),
-      email: new FormControl(this.user.email, Validators.compose([
-        Validators.required,
+      email: new FormControl({value: this.user.email, disabled: true}, Validators.compose([
+        /*Validators.required,*/
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       enableNotifications: new FormControl(this.user.enableNotifications),
@@ -207,7 +208,7 @@ export class FirebaseUpdateUserModal implements OnInit {
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['users/listing']);
+                this.router.navigate(['app/start-menu/users']);
               },
               err => { 
                 console.log(err);
@@ -229,7 +230,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.userData.lastname = this.updateUserForm.value.lastname;
     this.userData.birthdate = this.updateUserForm.value.birthdate ? dayjs(this.updateUserForm.value.birthdate).unix() : null; // save it in timestamp
     this.userData.phone = this.updateUserForm.value.phone;
-    this.userData.email = this.updateUserForm.value.email;
+    //this.userData.email = this.updateUserForm.value.email;
     // this.userData.building = this.updateUserForm.value.building;
     this.userData.code= this.updateUserForm.value.code;
     this.userData.type= this.updateUserForm.value.type;

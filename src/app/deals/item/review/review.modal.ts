@@ -32,11 +32,11 @@ export class ReviewModal implements OnInit {
   ratingSection : boolean;
   userRating : Observable<Array<any>>;
   // creatorRating : Observable<Array<any>>;
-  avgCreatorRating : Observable<any>;
+  avgRating : Observable<any>;
   // responderRating : Observable<Array<any>>;
-  avgRespoderRating : Observable<any>;
+  //avgRespoderRating : Observable<any>;
   loginId : string;
-  ratingType : string;
+  //ratedAs : string;
   currentUserId : string = this.loginService.getLoginID();
   currentUserName : string = this.loginService.getLoginName();
   otherUserName : string;
@@ -55,9 +55,9 @@ export class ReviewModal implements OnInit {
   }
 
   ngOnInit() {
-    console.log("subject",this.subject);
+    //console.log("subject",this.subject);
     this.otherUserName = this.item.createdBy == this.currentUserId ? this.item.userInfoResponder.firstname : this.item.userInfoCreator.firstname;
-    if((this.item.type == "offer") && (this.subject == "creator")){
+/*     if((this.item.type == "offer") && (this.subject == "creator")){
       this.ratingType = "dealOfferCreator";  
     }
     else if((this.item.type == "offer") && (this.subject == "responder")){
@@ -68,7 +68,7 @@ export class ReviewModal implements OnInit {
     }
     else if((this.item.type == "request") && (this.subject == "responder")){
       this.ratingType = "dealRequestResponder";
-    }
+    } */
     
     this.canRate = this.item.status == "ended" ? true : false;
     //console.log(this.item);
@@ -78,10 +78,10 @@ export class ReviewModal implements OnInit {
       review : new FormControl("")
     });
 
-    if(this.loginId == this.item.responseBy){
-      console.log("this.ratingSection1", this.ratingSection);
-      this.userRating = this.featureService.getUserRating(this.item.createdBy,this.item.type);
-      this.avgCreatorRating = this.userRating.pipe(map( arr => { 
+    const userId= this.loginId == this.item.responseBy ? this.item.createdBy : this.item.responseBy
+    //if(this.loginId == this.item.responseBy){
+      this.userRating = this.featureService.getUserRating(userId, this.item.type, this.subject);
+      this.avgRating = this.userRating.pipe(map( arr => { 
         const rating = arr.map(res => {return Number(res.stars)});
         return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'notRatedYet'
       }));
@@ -90,23 +90,19 @@ export class ReviewModal implements OnInit {
         this.ratingSection = res.length ? true : false; 
       })  
 
-    }
-    else if(this.loginId == this.item.createdBy && this.item.responseBy){
-      console.log("this.ratingSection2", this.ratingSection);
-      console.log(this.item.responseBy);
-      console.log(this.item.type);
-      this.userRating = this.featureService.getUserRating(this.item.responseBy,this.item.type);
+    //}
+/*     else if(this.loginId == this.item.createdBy && this.item.responseBy){
+      this.userRating = this.featureService.getUserRating(this.item.responseBy, this.item.type, this.subject);
       this.avgRespoderRating = this.userRating.pipe(map( arr => { 
         const rating = arr.map(res => {return Number(res.stars)});
         return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'notRatedYet'
       }));
 
       this.userRating.subscribe((res) => {
-        console.log("bingo",res);
         this.ratingSection = res.length ? true : false; 
       })  
 
-    }
+    } */
   }
 
   dismissModal() {
@@ -116,7 +112,7 @@ export class ReviewModal implements OnInit {
   reviewItem() {
     let ratingInfo = new RatingUser();
     ratingInfo.dealType = this.item.type;
-    ratingInfo.ratingType = this.ratingType;
+    ratingInfo.ratedAs = this.subject;
     ratingInfo.dealId = this.item.id;
     ratingInfo.userId = this.loginId;
     ratingInfo.review = this.reviewItemForm.value.review;

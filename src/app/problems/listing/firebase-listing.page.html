@@ -28,7 +28,7 @@
   <ng-container *ngIf="!items.isShell">
     <section [hidden]="segmentValue !== 'new'">
     <ng-container *ngIf="newList?.length > 0">
-      <ion-card class="itemCard" *ngFor="let item of newList" [routerLink]="['/app/start-menu/reportproblem/details', item.id]">
+      <ion-card class="itemCard" *ngFor="let item of newList" [routerLink]="['/app/start-menu/problems/details', item.id]">
         <app-aspect-ratio [ratio]="{w:64, h:50}">
           <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
         </app-aspect-ratio>
@@ -36,7 +36,7 @@
           <ion-icon name="build-outline" slot="end"></ion-icon>
           <ion-label>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-label>
         </ion-item> -->
-        <ion-card-header>
+        <ion-card-header color="main">
           <ion-card-subtitle>
             <!-- {{ item.description }} -->
           <!-- </ion-card-subtitle>
@@ -62,7 +62,7 @@
 </section>
 <section [hidden]="segmentValue !== 'archive'">
   <ng-container *ngIf="archiveList?.length > 0">
-    <ion-card class="itemCard" *ngFor="let item of archiveList" [routerLink]="['/app/start-menu/reportproblem/details', item.id]">
+    <ion-card class="itemCard" *ngFor="let item of archiveList" [routerLink]="['/app/start-menu/problems/details', item.id]">
       <app-aspect-ratio [ratio]="{w:64, h:50}">
         <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
       </app-aspect-ratio>
@@ -70,7 +70,7 @@
         <ion-icon name="build-outline" slot="end"></ion-icon>
         <ion-label>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-label>
       </ion-item> -->
-      <ion-card-header>
+      <ion-card-header color="main">
         <ion-card-subtitle>
           <!-- {{ item.description }} -->
         <!-- </ion-card-subtitle>

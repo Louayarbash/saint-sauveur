@@ -33,7 +33,7 @@
   <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'announcements'">
   <ng-container *ngIf="items?.length > 0">
-    <ion-card class="itemCard" button="true" *ngFor="let item of announcementsList" [routerLink]="['/app/start-menu/publication/details', item.id]">
+    <ion-card class="itemCard" button="true" *ngFor="let item of announcementsList" [routerLink]="['/app/start-menu/publications/details', item.id]">
       <ion-item *ngIf="item.subject" color="main">
         <ion-icon name="megaphone-outline" slot="start"></ion-icon>
         <ion-label>{{item.subject}}</ion-label>
@@ -55,7 +55,7 @@
     </section>
     <section [hidden]="segmentValue !== 'regulations'">
       <ng-container *ngIf="items?.length > 0">
-        <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/app/start-menu/publication/details', item.id]">
+        <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/app/start-menu/publications/details', item.id]">
           <ion-item *ngIf="item.subject" color="main">
             <ion-icon slot="start" name="newspaper-outline"></ion-icon>
             <ion-label>{{item.subject}}</ion-label>

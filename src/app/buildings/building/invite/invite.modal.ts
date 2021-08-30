@@ -65,17 +65,18 @@ export class InviteModal implements OnInit {
     if(this.emailsList){
       //let emailsListUpdated = this.emailsList.replace(/;/g,',');
       //console.log('after replace', this.emailsList);
-      let mailOptions = {
-          from: '"Parkondo App" <donotreply@parkondo.com>', // sender address
-          to: this.emailsList, // list of receivers
-          subject: "Invitation to join Parkondo App", // Subject line
-          text: this.InvitationMsg, // plain text body
-          html: "<b>" + this.InvitationMsg + "</b>" // html body
-      };
+       let options = {
+          //from: '"Parkondo App" <donotreply@parkondo.com>', // sender address
+          emailsList: this.emailsList, // list of receivers
+          //subject: "Invitation to join Parkondo App", // Subject line
+          invitationMsg: this.InvitationMsg, // plain text body
+          //html: "<b>" + this.InvitationMsg + "</b>" // html body
+
+      }; 
     
     this.afs.collection('invitations').add({...invitation})
     .then(() => {
-      this.featureService.sendNotificationEmail(mailOptions).
+      this.featureService.sendNotificationEmail(options).
        subscribe((data:any) => {
         console.log("data.json", data);
         console.log("JSON.stringify(data.json)", JSON.stringify(data));
@@ -93,7 +94,7 @@ export class InviteModal implements OnInit {
       err => {        
         this.disableSubmit= false;
         console.log("response error",err);
-        this.featureService.presentToast('Emails sent with errors' + err.error, 2000);
+        this.featureService.presentToast('Emails sent with errors', 2000);
       }, () => {
         this.disableSubmit= false;
         console.log("complete");

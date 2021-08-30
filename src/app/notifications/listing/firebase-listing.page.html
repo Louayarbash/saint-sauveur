@@ -8,17 +8,28 @@
     <ion-title>{{ 'Notifications' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content>  
 <ng-container *ngIf="items.isShell">
   <div class="DivLoading">
     <ion-spinner></ion-spinner>
   </div>
 </ng-container>
+<!-- <ion-refresher slot="fixed" (ionRefresh)="getUsersList($event)">
+  <ion-refresher-content
+    pullingIcon="arrow-down-outline" 
+      pullingText="Pull to refresh" 
+      refreshingSpinner="crescent"
+      refreshingText="Refreshing...">
+  </ion-refresher-content>
+</ion-refresher> -->
 <ng-container *ngIf="!items.isShell">
       <div  *ngIf="notificationsList?.length > 0">
-        <ion-item *ngFor="let item of notificationsList" [routerLink]="['/app/start-menu',item.type]">        
-      <ion-label>
-        <h3>{{ item.creatorName }} {{ 'NotificationMessageNewItem' | translate }} "{{ item.typeTranslation }}"</h3>
+        <ion-item *ngFor="let item of notificationsList" [routerLink]="['/app/start-menu',item.type]">   
+          <ion-icon name="notifications-outline" slot="start"></ion-icon>     
+      <ion-label style="white-space: pre-wrap !important;">
+        <h3 *ngIf="item.subType == 'request'">{{ item.creatorName }} {{ 'NotificationMessageNewDealRequest' | translate }} "{{ item.typeTranslation }}"</h3>
+        <h3 *ngIf="item.subType == 'offer'">{{ item.creatorName }} {{ 'NotificationMessageNewDealOffer' | translate }} "{{ item.typeTranslation }}"</h3>
+        <h3 *ngIf="item.type !== 'deal'">{{ item.creatorName }} {{ 'NotificationMessageNewItem' | translate }} "{{ item.typeTranslation }}"</h3>
         <p>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</p>
       </ion-label>
        

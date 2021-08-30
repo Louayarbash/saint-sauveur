@@ -10,11 +10,11 @@ import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 //import { CallNumber } from '@ionic-native/call-number/ngx';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ChatModal } from '../chat/chat.modal';
 import { ReviewModal } from '../review/review.modal';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+//import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -24,22 +24,23 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
   ],
 })
 
-export class FirebaseItemDetailsPage implements OnInit {
+export class FirebaseItemDetailsPage implements OnInit { 
+
   userIsCreator = false;
-  acceptOfferButtonHidden : boolean;
-  proposeButtonHidden : boolean;
-  cancelRequestDealButtonHidden : boolean;
-  cancelRequestButtonHidden : boolean;
-  acceptButtonHidden : boolean;
-  cancelOfferDealButtonHidden : boolean;
-  cancelOfferButtonHidden : boolean;
+  acceptOfferButtonHidden : boolean= false;
+  proposeButtonHidden : boolean= true;
+  cancelRequestDealButtonHidden : boolean= true;
+  cancelRequestButtonHidden : boolean= true;
+  acceptButtonHidden : boolean= true;
+  cancelOfferDealButtonHidden : boolean= true;
+  cancelOfferButtonHidden : boolean= true;
   creatorDetails : string;
   responderDetails : string;
-  userInfoCreatorBlock : boolean;
-  userInfoResponderBlock : boolean;
-  chatWithCreatorButton : boolean;
-  noteSection : boolean;
-  loginID : string;
+  userInfoCreatorBlock : boolean= false;
+  userInfoResponderBlock : boolean= false;
+  chatButton : boolean= false;
+  noteSection : boolean= false;
+  loginID : string= this.loginService.getLoginID();
   item: combinedItemModel;
   startTimeString : string;
   endTimeString : string;
@@ -54,17 +55,19 @@ export class FirebaseItemDetailsPage implements OnInit {
   userNameResponder : string;
   ratingFormCreator : FormGroup;
   ratingFormResponder : FormGroup;
-  rating : string = "1";
+  rating : string = "0";
   creatorRating : Observable<Array<any>>;
   avgCreatorRating : Observable<any>;
   responderRating : Observable<Array<any>>;
   avgResponderRating : Observable<any>;
-  notRatedYetCreator: boolean;
-  notRatedYetResponder : boolean;
+  isRatedCreator: boolean=false;
+  isRatedResponder : boolean=false;
   editDeal: boolean;
   typeIsRequest: boolean;
   parkingInfo: string;
   dealDetails: string;
+  buildingObservable: Observable<any>;
+  buildingSubscription: Subscription;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -79,24 +82,10 @@ export class FirebaseItemDetailsPage implements OnInit {
     private loginService : LoginService,
     private featureService : FeatureService,
     //private callNumber: CallNumber,
-    private socialSharing : SocialSharing,
+    //private socialSharing : SocialSharing,
     private routerOutlet: IonRouterOutlet
   ) { 
-    this.loginID = this.loginService.getLoginID();
-    this.proposeButtonHidden = true;
-    this.cancelRequestButtonHidden = true;
-    this.cancelRequestDealButtonHidden = true;
-    this.acceptButtonHidden = true;
-    this.cancelOfferButtonHidden = true;
-    this.cancelOfferDealButtonHidden = true;
-    this.userInfoCreatorBlock = false;
-    this.userInfoResponderBlock = false;
-    this.chatWithCreatorButton = false;
-    this.noteSection = false;
-    this.notRatedYetCreator = false;
-    this.notRatedYetResponder = false;
-    /*Offer */
-    this.acceptOfferButtonHidden = true;  
+
   }
 
   ngOnInit() {
@@ -144,48 +133,60 @@ export class FirebaseItemDetailsPage implements OnInit {
             this.startTimeMsg = dayjs(this.item.startDate).format("HH:mm");
             this.endTimeMsg = dayjs(this.item.endDate).format('HH:mm');
             this.userNameCreator = this.item.userInfoCreator.firstname + " " + this.item.userInfoCreator.lastname; 
-            this.userNameResponder = this.item.userInfoResponder.firstname + " " + this.item.userInfoResponder.lastname;
+            
+            this.userNameResponder = this.item.userInfoResponder ? this.item.userInfoResponder.firstname + " " + this.item.userInfoResponder.lastname : "N/A";
 
-            this.userInfoCreatorBlock = (this.loginID !== this.item.createdBy);
-            this.chatWithCreatorButton = (this.item.responseBy == this.loginID) ? true : false; 
+            this.userInfoCreatorBlock = true//(this.loginID !== this.item.createdBy);
+            this.chatButton = (this.item.responseBy) ? true : false; 
             //this.ratingCreatorButton = (this.item.status == "ended") ? true : false;
             //this.ratingResponderButton = (this.item.status == "ended") ? true : false;
-            this.userInfoResponderBlock = (this.loginID == this.item.createdBy) && (this.item.responseBy) ? true : false;
+            this.userInfoResponderBlock = /*(this.loginID == this.item.createdBy) &&*/ (this.item.responseBy) ? true : false;
             this.ratingFormCreator.get('rate').setValue(this.rating);
             this.ratingFormResponder.get('rate').setValue(this.rating);
             this.noteSection = this.item.note ? true : false;
             this.userIsCreator = this.item.createdBy == this.loginID ? true : false;
             if(this.item.createdBy){
               if(!this.typeIsRequest){
-                this.parkingInfo = this.featureService.translations.level + "(" + this.item.parkingInfo.level +"), " + "#" + this.item.parkingInfo.number;
+                this.parkingInfo = this.item.parkingInfo.level +"/" + this.item.parkingInfo.number;
               }
-              this.creatorRating = this.featureService.getUserRating(this.item.createdBy,this.item.type);
+              this.creatorRating = this.featureService.getUserRating(this.item.createdBy,this.item.type,'creator');
               this.avgCreatorRating = this.creatorRating.pipe(map( arr => { 
                 const rating = arr.map(res => {return Number(res.stars)});
                 let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
                 this.ratingFormCreator.get('rate').setValue(valueRating);
-                this.notRatedYetCreator = rating.length ? false : true;
-                return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'NotRatedYet'
+                console.log("rated creator", rating.length)
+                this.isRatedCreator = rating.length == 0 ? false : true;
+                return rating.length > 0 ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0"
               }));
+              this.avgCreatorRating.subscribe(res=>
+                console.log("louay123 creator",res)
+              )
             }
             if(this.item.responseBy){
               if(this.typeIsRequest){
-                this.parkingInfo = this.featureService.translations.level + "(" + this.item.parkingInfo.level +"), " + "#" + this.item.parkingInfo.number;
+                this.parkingInfo = this.item.parkingInfo.level + "/" + this.item.parkingInfo.number;
               }
-              this.responderRating = this.featureService.getUserRating(this.item.responseBy,this.item.type);
+              this.responderRating = this.featureService.getUserRating(this.item.responseBy,this.item.type,'responder');
               this.avgResponderRating = this.responderRating.pipe(map( arr => { 
                 const rating = arr.map(res => {return Number(res.stars)});
+                console.log("rated responder", rating.length)
                 let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
                 this.ratingFormResponder.get('rate').setValue(valueRating);
-                this.notRatedYetResponder = rating.length ? false : true;
-                return rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : 'NotRatedYet'
+                this.isRatedResponder = rating.length == 0 ? false : true;
+                return rating.length > 0 ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0"
               }));
+              this.avgResponderRating.subscribe(res=>
+                console.log("louay123 responder",res)
+              )
             }
           }
         }
       );
     });
   }
+/*   ngOnDestroy() {
+    this.buildingSubscription.unsubscribe()
+} */
   async openFirebaseUpdateModal() {
     //delete this.item.isShell;
     
@@ -236,17 +237,26 @@ export class FirebaseItemDetailsPage implements OnInit {
   }
 
   share(){
-  this.socialSharing.share("Following is the parking information: "+ "Parking level: " + this.item.parkingInfo.level + "Parking number: " + this.item.parkingInfo.number ).then(() => {}).catch(err => {})
+    
+  //this.socialSharing.share("Following is the parking information: "+ "Parking level: " + this.item.parkingInfo.level + "Parking number: " + this.item.parkingInfo.number ).then(() => {}).catch(err => {})
+  this.featureService.share({
+    title: 'Following is the parking information:',
+    text: "Parking level: " + this.item.parkingInfo.level + " \ " + "Parking number: " + this.item.parkingInfo.number,
+    //url: 'http://ionicframework.com/',
+    dialogTitle: 'Share parking info'
+  })
   }
 
    async proposeParking() {
+    console.log(this.item)
     let radioObject: any[];
     let userParking: { id: number; number: string; }[];
     let radioObjectFiltered : any[];
     let correctedParking : any[];
     userParking= this.loginService.getUserParking();
 
-      this.featureService.getItem('buildings', this.loginService.getBuildingId()).subscribe( async building => {
+      //this.buildingSubscription = 
+      this.featureService.getItem('buildings', this.loginService.getBuildingId()).subscribe( async (building) => {
       let levels = building.parkings;
       
       console.log("levels",levels);
@@ -268,10 +278,12 @@ export class FirebaseItemDetailsPage implements OnInit {
           correctedParking = radioObjectFiltered.map(parking => {return {id : parking.id, number : parking.number}}
           ) 
     }
-    if(radioObjectFiltered.length != radioObject.length){
-      this.featureService.presentToast("Parking info. updated",3000)
-      this.loginService.updateUserParking(correctedParking)
-    }
+    if(radioObjectFiltered && radioObject){
+      if(radioObjectFiltered.length != radioObject.length){
+        this.featureService.presentToast("Parking info. updated",3000)
+        this.loginService.updateUserParking(correctedParking)
+      }
+    
     let message = "";
     if(this.dateMsg == this.endDateMsg){
       message = this.featureService.getTranslationParams("ProposeParkingConfirmation",{date : this.dateMsg, startTime : this.startTimeMsg, endTime : this.endTimeMsg});
@@ -299,9 +311,29 @@ export class FirebaseItemDetailsPage implements OnInit {
            },            
          }
      ]
+    })
+
+    await alert.present();
+  }
+  else {
+    const alert = await this.alertController.create({
+      header: this.featureService.translations.Attention,
+      message: this.featureService.translations.NoParkingFound,
+      //cssClass: 'alertCancel',
+      buttons: [
+       {
+         text: this.featureService.translations.OK,
+          handler: ()=> {
+            this.router.navigate(['app/profil',this.loginService.getLoginID()]);
+           },            
+         }
+     ]
     });
     await alert.present();
-  });
+  }
+}
+  );
+
   }
 
   async cancelRequest(){
@@ -382,7 +414,7 @@ export class FirebaseItemDetailsPage implements OnInit {
       buttons: [
         {
          text:  this.featureService.translations.OK,
-         handler: (data:any)=> {
+         handler: ()=> {
            //this.item.parkingInfo = data;
            //console.log(data);
            this.firebaseService.acceptOffer(this.item);

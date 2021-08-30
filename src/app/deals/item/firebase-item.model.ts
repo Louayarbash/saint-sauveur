@@ -54,7 +54,7 @@ export class combinedItemModel extends ItemModel {
 
 export class RatingUser { 
   dealType : string;    
-  ratingType: string;
+  ratedAs: string;
   dealId : string;
   userId : string;
   userFirstname: any;

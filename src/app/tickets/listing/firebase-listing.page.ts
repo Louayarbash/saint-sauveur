@@ -110,7 +110,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
         ).subscribe(
           (state) => {
             this.items = state;
-            if(this.items.isShell == false){
+            if(!this.items.isShell){
               this.items.map( item => {
                 switch (item.status.toLowerCase()) {
                   case "active" : item.statusTranslation = this.featureService.translations.Active;

@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="reportproblem/listing"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="isUserGlobalAdmin">
+    <ion-buttons slot="end" *ngIf="isUserLouay">
         <ion-button (click)="openFirebaseUpdateModal()">
           {{ 'Edit' | translate }}
         </ion-button> 
@@ -50,10 +50,10 @@
           </ion-item> -->
         
           <ion-item-divider> 
-            <ion-label>{{ 'CreatorInfo' | translate}}</ion-label>
+            <ion-label>{{ 'CreatorDetails' | translate}}</ion-label>
           </ion-item-divider>
           <ion-item lines="none">    
-            <ion-label>{{ 'CreatorName' | translate}}</ion-label>
+            <ion-label>{{ 'Name' | translate}}</ion-label>
             <ion-text>{{(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null}}</ion-text>
           </ion-item>
             <ion-item lines="none">

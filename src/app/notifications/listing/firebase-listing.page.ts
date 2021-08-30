@@ -48,8 +48,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.menu.enable(true); 
     this.userIsAdmin = this.loginService.isUserAdmin();
-
+    //this.getUsersList(null)
     // Route data is a cold subscription, no need to unsubscribe?
+ 
     this.route.data.subscribe(
       (resolvedRouteData) => {
         this.listingDataStore = resolvedRouteData['data'];
@@ -63,7 +64,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           (state) => {
             this.items = state;
             this.notificationsList = this.items;
-            if(this.items.isShell == false){
+            //if (event) event.target.complete();
+            if(!this.items.isShell){
 
               this.items.map( item => {
          
@@ -75,6 +77,10 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   case "lost-found" : item.typeTranslation = this.featureService.translations.LostFoundMenu;
                   break;
                   case "publications" : item.typeTranslation = this.featureService.translations.PublicationsMenu;
+                  break;
+                  case "events" : item.typeTranslation = this.featureService.translations.EventsMenu;
+                  break;
+                  case "deal" : item.typeTranslation = this.featureService.translations.ParkingDealsMenu;
                   break;
                   default:
                     item.typeTranslation = item.typeTranslation;
@@ -93,9 +99,18 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           (error) => console.log(error),
           () => console.log('stateSubscription completed')
         );
-      },
-      (error) => console.log(error)
-    );
-  }
 
+/*         if (event)
+        setTimeout(() => {
+          console.log('Async operation has ended');
+          event.target.complete();
+        }, 2000); */
+        
+      },
+      (error) => { console.log(error) 
+/*       if (event)
+      event.target.complete(); */
+    }
+    )  
+  }  
 }

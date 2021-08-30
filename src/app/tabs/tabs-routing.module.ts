@@ -20,95 +20,95 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../start-menu/start-menu.module').then(m => m.StartMenuPageModule), canLoad: [PageGuard]
+            loadChildren: () => import('../start-menu/start-menu.module').then(m => m.StartMenuPageModule), canActivate: [PageGuard]
           },
           {
             path: 'sale',
-            loadChildren: () => import('../sale/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard],
+            loadChildren: () => import('../sale/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard],
           },
           {
             path: 'sale/details/:id',
-            loadChildren: () => import('../sale/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../sale/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'deal',
-            loadChildren: () => import('../deals/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../deals/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'deal/details/:id',
-            loadChildren: () => import('../deals/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../deals/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'rent-sale',
-            loadChildren: () => import('../rent-sale/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../rent-sale/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'rent-sale/details/:id',
-            loadChildren: () => import('../rent-sale/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../rent-sale/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'tickets',
-            loadChildren: () => import('../tickets/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../tickets/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'tickets/details/:id',
-            loadChildren: () => import('../tickets/ticket/details/ticket-details.module').then(m => m.TicketDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../tickets/ticket/details/ticket-details.module').then(m => m.TicketDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'lost-found',
-            loadChildren: () => import('../lost-found/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../lost-found/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'lost-found/details/:id',
-            loadChildren: () => import('../lost-found/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../lost-found/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
-            path: 'publication',
-            loadChildren: () => import('../publications/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            path: 'publications',
+            loadChildren: () => import('../publications/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
-            path: 'publication/details/:id',
-            loadChildren: () => import('../publications/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            path: 'publications/details/:id',
+            loadChildren: () => import('../publications/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'events',
-            loadChildren: () => import('../events/listing/firebase-listing.module').then(m => m.EventsListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../events/listing/firebase-listing.module').then(m => m.EventsListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'events/details/:id',
-            loadChildren: () => import('../events/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../events/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'buildings',
-            loadChildren: () => import('../buildings/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../buildings/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'buildings/invite',
-            loadChildren: () => import('../buildings/building/invite/invite.module').then(m => m.InvitePageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../buildings/building/invite/invite.module').then(m => m.InvitePageModule), canActivate: [PageGuard] 
           },
           {
             path: 'buildings/details/:id',
-            loadChildren: () => import('../buildings/building/details/details.module').then(m => m.BuildingDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../buildings/building/details/details.module').then(m => m.BuildingDetailsPageModule), canActivate: [PageGuard] 
           } ,
           {
             path: 'users',
-            loadChildren: () => import('../users/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../users/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'users/details/:id',
-            loadChildren: () => import('../users/user/details/firebase-user-details.module').then(m => m.FirebaseUserDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../users/user/details/firebase-user-details.module').then(m => m.FirebaseUserDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'problems',
-            loadChildren: () => import('../problems/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../problems/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'problems/details/:id',
-            loadChildren: () => import('../problems/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../problems/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'problems/create',
-            loadChildren: () => import('../problems/item/create/firebase-item-create.module').then(m => m.FirebaseItemCreatePageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../problems/item/create/firebase-item-create.module').then(m => m.FirebaseItemCreatePageModule), canActivate: [PageGuard] 
           }  
         ]
       },
@@ -117,7 +117,7 @@ const routes: Routes = [
         children: [
           {
             path: '',           
-            loadChildren: () => import('../users/user/profil/firebase-user-details.module').then(m => m.UserProfilPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../users/user/profil/firebase-user-details.module').then(m => m.UserProfilPageModule), canActivate: [PageGuard] 
           }          
         ]
       },
@@ -126,7 +126,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../buildings/building/profil/details.module').then(m => m.BuildingProfilPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../buildings/building/profil/details.module').then(m => m.BuildingProfilPageModule), canActivate: [PageGuard] 
           }          
         ]
       },
@@ -135,7 +135,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../notifications/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canLoad: [PageGuard] 
+            loadChildren: () => import('../notifications/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           }
         ]
       }

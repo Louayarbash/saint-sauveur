@@ -4,6 +4,7 @@ export class NotificationListingItemModel extends ShellModel {
 
   id : string;
   type: string;
+  subType: string;
   typeTranslation: string;
   creatorName : string;
   createdBy : string;
