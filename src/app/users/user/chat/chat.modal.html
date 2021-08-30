@@ -38,7 +38,7 @@
       <ion-grid>
       <ion-row class="ion-align-items-center">
         <ion-col size="10">
-          <ion-textarea auto-grow="true" spellcheck="true" [(ngModel)]="msgText" class="message-input ion-no-margin"></ion-textarea>
+          <ion-textarea rows="4" spellcheck="true" [(ngModel)]="msgText" class="message-input ion-no-margin"></ion-textarea>
         </ion-col>
         <ion-col size="2" class="msg-btn ion-text-center">
           <ion-button (click)="sendMessage()" fill="clear" color="dark" [disabled]="msgText === ''" class="msg-btn">

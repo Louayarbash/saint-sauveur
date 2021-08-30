@@ -55,6 +55,7 @@ export class UserProfilPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.menu.enable(true);
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
@@ -62,15 +63,20 @@ export class UserProfilPage implements OnInit {
       //const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = resolvedDataStores.relatedUsers;
       combinedDataStore.state.subscribe(
         (state) => {
+          
           // console.log(state);
           this.user = state;
+/*           console.log("isLoggedInUser",this.isLoggedInUser)
+          console.log("userIsAdmin",this.userIsAdmin)
+          console.log("user",this.user)
+          console.log("getLoginID",this.loginService.getLoginID()) */
 
           if (!this.user.isShell) {
           this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
           this.isLoggedInUser = this.loginService.getLoginID() == this.user.id ? true : false;
           this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
           this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
-          this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
+          //this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
           this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           this.enableNotifications = this.user.enableNotifications ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           
@@ -82,6 +88,16 @@ export class UserProfilPage implements OnInit {
             default:
               this.status = "Undefined";
       }
+      switch (this.user.role) {
+        case "user" : this.role = this.featureService.translations.RegularUser;
+        break;
+        case "admin" : this.role = this.featureService.translations.Admin;
+        break;
+        case "globalAdmin" : this.role = this.featureService.translations.GlobalAdmin;
+        break;
+        default:
+          this.role = "Undefined";
+  }
       if(this.user.parkings){
         this.parkingInfo= this.loginService.getParkingInfo(this.user.parkings);
       }

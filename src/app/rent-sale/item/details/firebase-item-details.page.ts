@@ -71,11 +71,11 @@ export class FirebaseItemDetailsPage implements OnInit {
             //let profile: string;
             if(this.item.object == 'locker'){
               //profile= 'images/locker.png'
-              this.photoSlider[0] = "./assets/sample-images/locker.jpeg"
+              this.photoSlider[0] = "./assets/sample-images/locker.png"
             }
             else if (this.item.object == 'parking'){
               //profile= 'images/parking.png'
-              this.photoSlider[0] = "./assets/sample-images/parking.jpeg"
+              this.photoSlider[0] = "./assets/sample-images/parking.png"
             }
             else { //profile= 'images/no_image.jpeg' 
               this.photoSlider[0] = "./assets/sample-images/no_image.jpeg"
@@ -208,5 +208,11 @@ export class FirebaseItemDetailsPage implements OnInit {
   body: 'How are you? Nice greetings from Leipzig',
   isHtml: true
 } */
+  }
+  copyEmail(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.email)
+  }
+  copyPhone(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.phone.toString())
   }
 }

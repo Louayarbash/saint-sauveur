@@ -115,7 +115,7 @@ export class UpdateBuildingModal implements OnInit {
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['buildings/listing']);
+                this.router.navigate(['app/start-menu/buildings']);
               },
               err => { 
                 console.log(err);

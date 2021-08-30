@@ -21,7 +21,7 @@
       </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="enablePublication">
-      <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/publication']">
+      <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/publications']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/annoucement.jpg'"></app-image-shell>
         </app-aspect-ratio>
@@ -113,7 +113,7 @@
         </ion-card-header>
       </ion-card>
     </ion-col>
-    <ion-col class="category-item" size="6">
+<!--     <ion-col class="category-item" size="6">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/users/details', userId]">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/userProfile.jpg'"></app-image-shell>
@@ -122,8 +122,8 @@
           <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'UserProfilMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
-    </ion-col>
-    <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
+    </ion-col> -->
+    <ion-col class="category-item" size="6" *ngIf="userIsLouay">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/problems']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/problems.jpg'"></app-image-shell>
@@ -133,7 +133,7 @@
         </ion-card-header>
       </ion-card>
     </ion-col>
-    <ion-col class="category-item" size="6" *ngIf="userIsGlobalAdmin">
+    <ion-col class="category-item" size="6" *ngIf="userIsLouay">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/buildings']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>

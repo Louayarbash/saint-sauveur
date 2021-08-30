@@ -235,7 +235,8 @@ export class FirebaseCreateItemModal implements OnInit {
         },
         {
           text: this.featureService.translations.Cancel,
-           handler: ()=> {          
+           handler: ()=> { 
+            this.disableSubmit= false;         
             },             
           }
       ]
@@ -259,17 +260,17 @@ export class FirebaseCreateItemModal implements OnInit {
     return radioNotNull != null;
   });
 
-  if(this.radioObjectFiltered.length == 1){
+  if(this.radioObjectFiltered?.length == 1){
     userParkingInfo = this.featureService.translations.Level + ": " + this.radioObjectFiltered[0].description + ' - #' + parkingInfo[0].number;
     this.createItemForm.get('parking').setValue(userParkingInfo);
     this.selectedParking =userParkingInfo;
     this.itemData.parkingInfo = {level: this.radioObjectFiltered[0].description, number: parkingInfo[0].number};
     this.hasMultipleParking = false;
   }
-  else if(this.radioObjectFiltered.length > 1){
+  else if(this.radioObjectFiltered?.length > 1){
     this.hasMultipleParking = true;
   }
-  else if(this.radioObjectFiltered.length == 0){
+  else if(this.radioObjectFiltered?.length == 0){
     this.featureService.presentToast(this.featureService.translations.NoParkingFound, 2000);
   }
 

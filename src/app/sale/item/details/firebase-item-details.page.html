@@ -53,21 +53,22 @@
           </ion-item>
         
           <ion-item-divider> 
-            <ion-label>{{ 'CreatorInfo' | translate}}</ion-label>
+            <ion-label>{{ 'CreatorDetails' | translate}}</ion-label>
           </ion-item-divider>
           <ion-item lines="none">    
-            <ion-label>{{ 'CreatorName' | translate}}</ion-label>
+            <ion-label>{{ 'Name' | translate}}</ion-label>
             <ion-text>{{(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null}}</ion-text>
           </ion-item>
             <ion-item lines="none">
+              
               <ion-label>{{ 'Email' | translate }}</ion-label>
               <ion-text>{{item.creatorDetails?.email}}</ion-text>
-              
+              <ion-icon slot="end" name="copy-outline" (click)="copyEmail()"></ion-icon>
             </ion-item>
-            <ion-item lines="none">
+            <ion-item lines="none" *ngIf="item.creatorDetails?.phone">              
               <ion-label >{{ 'Phone' | translate }}</ion-label>
-              <ion-text>{{item.creatorDetails?.phone}}</ion-text>
-                            
+              <ion-text> {{item.creatorDetails?.phone}} </ion-text>
+              <ion-icon slot="end" name="copy-outline" (click)="copyPhone()"></ion-icon>
             </ion-item>
             <!-- <div *ngIf="item?.description != ''"> -->
             <ion-item-divider>
@@ -86,7 +87,7 @@
         </ng-container>
         
     </ng-container>
-       <ion-fab vertical="top" horizontal="end" slot="fixed" >
+<!--        <ion-fab vertical="top" horizontal="end" slot="fixed" >
         <ion-fab-button color="main" size="small"> 
           <ion-icon name="person-circle-outline"></ion-icon>
         </ion-fab-button>
@@ -94,9 +95,9 @@
           <ion-fab-button (click)="sendEmail()">
             <ion-icon name="mail"></ion-icon>
           </ion-fab-button>
-<!--           <ion-fab-button (click)="sendEmail()">
+          <ion-fab-button (click)="sendEmail()">
             <ion-icon name="call"></ion-icon>
-          </ion-fab-button> -->
+          </ion-fab-button> 
         </ion-fab-list>
-      </ion-fab> 
+      </ion-fab>  -->
 </ion-content>

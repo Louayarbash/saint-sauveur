@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Router } from '@angular/router';
+import { /*CanLoad,*/ Router, CanActivate } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 // import { LoginService } from '../services/login/login.service';
@@ -16,7 +16,7 @@ const { SplashScreen } = Plugins;
 
 
 @Injectable()
-export class SignInGuard implements CanLoad {
+export class SignInGuard implements CanActivate {
 // a= new BehaviorSubject(true);
   constructor(
     //private splashScreen: SplashScreen,
@@ -27,7 +27,8 @@ export class SignInGuard implements CanLoad {
     private fcmService: FcmService
   ) {}
 
-    canLoad(){
+
+  canActivate()  {
     console.log("inside sign in guard");
     // return true;
      return this.authService.angularFire.authState.pipe(
@@ -62,7 +63,7 @@ export class SignInGuard implements CanLoad {
             }
           }
           )
-          .catch((err )=> { this.featureService.presentToast('problem while verifying building or user info. from sign in guard error: '+ err, 2000); return true;})
+          .catch((err )=> { this.featureService.presentToast('Problem while verifying building or user info.'+ err, 2000); return true;})
     }
     }
     )

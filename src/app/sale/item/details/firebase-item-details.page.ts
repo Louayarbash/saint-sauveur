@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { LoginService } from '../../../services/login/login.service';
 import { Images} from '../../../type'
+import { Plugins,ClipboardWrite } from '@capacitor/core';
+const { Clipboard, Device } = Plugins;
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -148,11 +150,11 @@ export class FirebaseItemDetailsPage implements OnInit {
     //return this.photoSlider;
   } */
 
-  sendEmail(){
+/*   sendEmail(){
     const email = {
       to: this.item.creatorDetails.email,
       subject: this.item.object,
-      body: 'How are you?',
+      body: 'Hello, Is this still available?',
       isHtml: true
     }
 
@@ -162,7 +164,7 @@ export class FirebaseItemDetailsPage implements OnInit {
         // Now we know we can send an email, calls hasClient and hasAccount
         // Not specifying an app will return true if at least one email client is configured
       }
-     });
+     }); */
 /* let email = {
   to: this.'max@mustermann.de',
   cc: 'erika@mustermann.de',
@@ -177,5 +179,11 @@ export class FirebaseItemDetailsPage implements OnInit {
   body: 'How are you? Nice greetings from Leipzig',
   isHtml: true
 } */
+ // }
+  copyEmail(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.email)
+  }
+  copyPhone(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.phone.toString())
   }
 }

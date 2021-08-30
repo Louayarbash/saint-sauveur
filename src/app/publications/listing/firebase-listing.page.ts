@@ -62,7 +62,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             this.items = state;
             console.log("this.item", this.items)
           
-            if(this.items.isShell == false) {
+            if(!this.items.isShell) {
 /*              this.items.map(item => {
                 item.date = dayjs(item.date).format('DD, MMM, YYYY');
                 item.startTimeCounter = dayjs(item.startDateTS * 1000).format('MM/DD/YYYY HH:mm:ss');

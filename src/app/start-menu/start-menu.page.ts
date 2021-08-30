@@ -26,7 +26,7 @@ export class StartMenuPage implements OnInit {
   enableRentSale: boolean= false;
   enableTicket: boolean= false;
   enableSale: boolean= false;
-  userIsGlobalAdmin: boolean= false;
+  userIsLouay: boolean= false;
   
 
   constructor( 
@@ -49,7 +49,7 @@ export class StartMenuPage implements OnInit {
         this.username = userInfo.firstname;
         this.userIsAdmin= this.loginService.isUserAdmin();
         //this.userIsAdmin2= userInfo.role;
-        this.userIsGlobalAdmin= this.loginService.isUserGlobalAdmin();
+        this.userIsLouay= this.loginService.isUserLouay();
       }
       );
       

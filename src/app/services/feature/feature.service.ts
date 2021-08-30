@@ -20,7 +20,7 @@ import { Plugins } from '@capacitor/core';
 import { Observable, fromEvent, merge, of } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
-const { Filesystem } = Plugins;
+const { Filesystem,Clipboard, Share } = Plugins;
 
 
 @Injectable({
@@ -621,8 +621,8 @@ getPublicationVoting(publicationId: string){
   return votingRef.valueChanges() as Observable<VotingPublication[]>;
 }
 
-getUserRating(userId: string, type: string){
-  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).where('dealType', '==', type).orderBy('createdDate'));
+getUserRating(userId: string, type: string, ratedAs: string){
+  const ratingRef = this.afs.collection('ratings' , ref => ref.where('ratedUserId', '==', userId).where('dealType', '==', type).where('ratedAs', '==', ratedAs).orderBy('createdDate'));
   return ratingRef.valueChanges();
 }
 
@@ -644,7 +644,7 @@ public updateItem(tableName: string, id: string, itemData: any): Promise<void> {
   return this.afs.collection(tableName).doc(id).update({...itemData});
 }
 
- sendNotificationEmail(mailOptions: any){
+ sendNotificationEmail(options: any){
   const headerDict = {
     'Content-Type': 'application/json'
   }
@@ -652,7 +652,7 @@ public updateItem(tableName: string, id: string, itemData: any): Promise<void> {
   const requestOptions = {                                                                                                                                                                                
     headers: new HttpHeaders(headerDict)
   };
-   return this.http.post('https://us-central1-parkondo.cloudfunctions.net/sendInvitationEmails', mailOptions, requestOptions);
+   return this.http.post('https://us-central1-parkondo.cloudfunctions.net/sendInvitationEmails', options, requestOptions);
 }
 
 async openLanguageChooser() {
@@ -748,4 +748,13 @@ async croppedImageToBase64(ImagePath) {
       return "data:image/jpeg;base64," + contents.data;
 
 }
+
+copyClipboard(text: string){    
+  Clipboard.write({string: text}).then(() =>
+    this.presentToast(this.translations.CopiedToClipboard, 2000)).catch(err => console.log(err))
+}
+  async share(data:any){
+  await Share.share(data).then().catch(err=> console.log(err));
+}
+
 }

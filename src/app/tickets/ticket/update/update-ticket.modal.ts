@@ -114,7 +114,7 @@ export class UpdateTicketModal implements OnInit {
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['tickets/listing']);
+                this.router.navigate(['app/start-menu/tickets']);
               },
               err => { 
                 console.log(err);

@@ -115,7 +115,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
           (state) => {
             console.log("itemData listing",this.items)
             this.items = state;
-            if(this.items.isShell == false){
+            if(!this.items.isShell){
               this.items.map(item => { 
                 if(item.images.length > 0){
                   let cover = item.images.find( res => res.isCover == true );

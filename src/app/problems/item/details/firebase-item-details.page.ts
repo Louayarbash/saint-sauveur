@@ -32,7 +32,7 @@ export class FirebaseItemDetailsPage implements OnInit {
     } 
   }; 
   //status : string;
-  isUserGlobalAdmin = false;
+  isUserLouay = false;
   postImages : Images[] = [];
 
    @HostBinding('class.is-shell') get isShell() {
@@ -72,7 +72,7 @@ export class FirebaseItemDetailsPage implements OnInit {
             //console.log("length === 0", this.photoSlider[0]);
             this.postImages = [];
           }
-          this.isUserGlobalAdmin = this.loginService.isUserGlobalAdmin();
+          this.isUserLouay = this.loginService.isUserLouay();
 /*           switch (this.item.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;

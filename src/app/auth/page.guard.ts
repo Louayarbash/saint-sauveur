@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Router } from '@angular/router';
+import { /*CanLoad,*/ Router, CanActivate } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { LoginService } from '../services/login/login.service';
 
 @Injectable()
-export class PageGuard implements CanLoad {
+export class PageGuard implements CanActivate {
 
   constructor(
     private authService: AuthService,
@@ -14,7 +14,7 @@ export class PageGuard implements CanLoad {
   ) {}
 
 
-  canLoad(){
+  canActivate() {
     console.log("inside page guard canAccessApp", this.authService.canAccessApp.value);
     return this.authService.canAccessApp.pipe(
       filter(res => res !== null),

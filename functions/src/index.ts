@@ -68,10 +68,6 @@ exports.onNewRequest = functions.firestore
     // Notification content
     const payload = {
       notification: {
-<<<<<<< HEAD
-          title: '',
-=======
->>>>>>> 91f5c365c9af60c4073acb4a4ab27dd0c147acd5
           body: `Someone in your building is asking for parking, check to see if you can help!`,
           //icon: 'https://goo.gl/Fz9nrQ',
           //click_action:"FCM_PLUGIN_ACTIVITY",
@@ -79,7 +75,7 @@ exports.onNewRequest = functions.firestore
       },
       data: {
         //actionId:"tap",
-        landing_page: "deal",
+        landing_page: "/app/start-menu/deal",
         id: id,
         //collapse_key:"com.enappd.IonicReactPush"
       }
@@ -154,8 +150,8 @@ exports.onNewRequest = functions.firestore
 }
 return
 });
-
-export const changeRequestStatusToStarted = functions.https.onRequest(async (req, res) => {
+//export const changeRequestStatusToStarted = functions.https.onRequest(async (req, res) => {
+export const changeRequestStatusToStarted = functions.https.onRequest(async (req: any, res: any) => {
     const payload = req.body as RequestTaskPayload
     try {
         //res.send("Hello from Firebase!");
@@ -167,7 +163,8 @@ export const changeRequestStatusToStarted = functions.https.onRequest(async (req
         res.status(500).send(error)
     }
 })
-export const changeRequestStatusToEnded = functions.https.onRequest(async (req, res) => {
+//export const changeRequestStatusToEnded = functions.https.onRequest(async (req, res) => {
+export const changeRequestStatusToEnded = functions.https.onRequest(async (req:any, res: any) => {
     const payload = req.body as RequestTaskPayload
     try {
         //res.send("Hello from Firebase!");
@@ -179,7 +176,7 @@ export const changeRequestStatusToEnded = functions.https.onRequest(async (req, 
         res.status(500).send(error)
     }
 })
-export const changeRequestStatusToExpired = functions.https.onRequest(async (req, res) => {
+export const changeRequestStatusToExpired = functions.https.onRequest(async (req: any, res: any) => {
     const payload = req.body as RequestTaskPayload
     try {
         ;
@@ -192,7 +189,7 @@ export const changeRequestStatusToExpired = functions.https.onRequest(async (req
         res.status(500).send(error)
     }
 })
-export const reminderToLeave = functions.https.onRequest(async (req, res) => {
+export const reminderToLeave = functions.https.onRequest(async (req: any, res:any) => {
   try {  
     
     let userId: any;
@@ -214,7 +211,7 @@ export const reminderToLeave = functions.https.onRequest(async (req, res) => {
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
-        landing_page: "deal"
+        landing_page: "/app/start-menu/deal"
       }
     }
 
@@ -306,7 +303,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
           click_action:"FCM_PLUGIN_ACTIVITY"
       },
       data: {
-        landing_page: "deal",
+        landing_page: "/app/start-menu/deal",
         id: id
       }
     }
@@ -405,7 +402,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
           click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
-          landing_page: "deal",
+          landing_page: "/app/start-menu/deal",
           id: id
         }
       }
@@ -533,7 +530,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
             click_action:"FCM_PLUGIN_ACTIVITY"
         },
         data: {
-          landing_page: "deal",
+          landing_page: "/app/start-menu/deal",
           id: id
         }
       }
@@ -567,10 +564,31 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
 });
 
 // sending invitations emails
-export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req, res) => {
+export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req: any, res: any) => {
     corsHandler(req, res, async() => {
     try {  
-      const mailOptions = req.body
+      const options = req.body
+
+      const mailOptions = {
+        from: '"Parkondo App" <donotreply@parkondo.com>', // sender address
+        to: options.emailsList, // list of receivers
+        subject: "Invitation to join Parkondo App", // Subject line
+        text: options.invitationMsg, // plain text body
+        html: "<b>" + options.invitationMsg + "</b><br><a href='https://play.google.com/store/apps/details?id=louay.arbash.parkondo'><b>Download on the Google Play (Android version)</b></a><br><a href='https://apps.apple.com/ca/app/parkondo/id1565989030'><b>Download on the App Store (Iphone version)</b></a>", // html body
+      /*   attachments: [
+        {
+          filename: android.png,
+          path: __dirname+/android.png,
+          cid: android
+        },
+        {
+          filename: apple.png,
+          path: __dirname+/apple.png, 
+          cid: apple
+        }
+        ] */
+    };
+
       const transporter = nodemailer.createTransport(
         /* {host: "smtp.gmail.com",
       // service: 'gmail',
