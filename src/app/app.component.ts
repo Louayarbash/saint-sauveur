@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 //import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
-import { TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService /*, LangChangeEvent*/ } from '@ngx-translate/core';
 //import { FcmService } from '../app/services/fcm/fcm.service';
 //import { LanguageService } from './language/language.service';
 import { FeatureService } from './services/feature/feature.service';
@@ -197,10 +197,14 @@ checkConnection(){
   async setLanguage() {
     this.translate.setDefaultLang('en');
     this.translate.use('en');
-    this.translate.onLangChange.subscribe((lang: any) => {
-      this.featureService.getTranslations(lang);
-    });
+    
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+       this.textDir = (event.lang === 'ar') ? 'rtl' : 'ltr';
+       
+       this.featureService.getTranslations(event);
+    });     
   }
+
 
   async signOut() {
     const alert = await this.alertController.create({

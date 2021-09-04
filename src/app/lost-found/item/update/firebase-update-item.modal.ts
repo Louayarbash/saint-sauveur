@@ -10,7 +10,7 @@ import { Images } from '../../../type'
 // import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 // import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
-// import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
+import { LoginService } from '../../../services/login/login.service';
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -33,7 +33,8 @@ export class FirebaseUpdateItemModal implements OnInit {
     public firebaseService: FirebaseService,
     public router: Router,
     private changeRef: ChangeDetectorRef,
-    private featureService : FeatureService
+    private featureService : FeatureService,
+    private loginService : LoginService
   ) { 
   }
 
@@ -119,7 +120,7 @@ updateItem() {
 
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'lost-found')
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'lost-found','images/lost-found/'+ this.loginService.getBuildingId() + '/')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     this.modalController.dismiss();

@@ -68,7 +68,7 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemDataNotif.createDate= this.itemData.createDate;
     this.itemDataNotif.createdBy= this.itemData.createdBy;
 
-    this.featureService.createItemWithImages(itemData, this.postImages, 'posts')
+    this.featureService.createItemWithImages(itemData, this.postImages, 'sales')
     .then(() => {
       this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);

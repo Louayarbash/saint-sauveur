@@ -36,7 +36,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     // private file: File,
     // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
-    private featureService : FeatureService,
+    private featureService : FeatureService
     // private actionSheetController: ActionSheetController
   ) { 
   }

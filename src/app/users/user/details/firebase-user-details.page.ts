@@ -70,9 +70,19 @@ export class FirebaseUserDetailsPage implements OnInit {
           this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
           this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
           //this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
-          this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
+          //this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           this.enableNotifications = this.user.enableNotifications ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           
+          switch (this.user.language) {
+            case "fr" : this.language = this.featureService.translations.Frensh;
+            break;
+            case "en" : this.language = this.featureService.translations.English;
+            break;
+            case "ar" : this.language = this.featureService.translations.Arabic;
+            break;
+            default:
+              this.status = "Undefined";
+      }
           switch (this.user.status) {
             case "active" : this.status = this.featureService.translations.Active;
             break;

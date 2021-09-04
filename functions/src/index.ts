@@ -61,6 +61,7 @@ exports.onNewRequest = functions.firestore
 
     const data = item.data();//.after.data();
     const /*let*/ id = item.id
+    
     if (data && data.status === "new"){
         //const id = data.id
         //const createdBy = data.createdBy;
@@ -68,6 +69,7 @@ exports.onNewRequest = functions.firestore
     // Notification content
     const payload = {
       notification: {
+          title:`New parking request`,
           body: `Someone in your building is asking for parking, check to see if you can help!`,
           //icon: 'https://goo.gl/Fz9nrQ',
           //click_action:"FCM_PLUGIN_ACTIVITY",
@@ -76,7 +78,9 @@ exports.onNewRequest = functions.firestore
       data: {
         //actionId:"tap",
         landing_page: "/app/start-menu/deal",
-        id: id,
+        header: "New parking request",
+        message: "Would you like to check if you can help?",
+        id: id
         //collapse_key:"com.enappd.IonicReactPush"
       }
     }

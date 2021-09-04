@@ -82,7 +82,7 @@ export class FirebaseService {
         if(files.length > 0){
         for (var i = 0; i < files.length; i++) {
           try {
-            let uploaded = await this.featureService.uploadToStorage(files[i].fileData, res.id, 'application/pdf', '.pdf', 'pdf/publication/');
+            let uploaded = await this.featureService.uploadToStorage(files[i].fileData, res.id, 'application/pdf', '.pdf', 'pdf/publications/'+ this.loginService.getBuildingId() + '/');
             console.log("createItem: state", uploaded.state);
             console.log("createItem: fileName", files[i].fileName);
             console.log("createItem: fullPath", uploaded.metadata.fullPath);
@@ -110,7 +110,7 @@ export class FirebaseService {
         
           if (files[i].filePath != ""){
           try {
-          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', 'pdf/publication/');
+          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', 'pdf/publications/' + this.loginService.getBuildingId() + '/');
           console.log("updateItem: state", uploaded.state);
           console.log("updateItem: fileName", files[i].fileName);
           console.log("updateItem: fullPath", uploaded.metadata.fullPath);

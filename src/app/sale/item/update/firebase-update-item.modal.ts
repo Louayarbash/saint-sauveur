@@ -10,6 +10,7 @@ import { Images } from '../../../type'
 // import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
 // import { File } from "@ionic-native/file/ngx";
 import { FeatureService } from '../../../services/feature/feature.service';
+import { LoginService } from '../../../services/login/login.service';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     // private imagePicker : ImagePicker,
     private changeRef: ChangeDetectorRef,
     private featureService : FeatureService,
+    private loginService : LoginService
     // private actionSheetController: ActionSheetController
   ) { 
   }
@@ -68,7 +70,7 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.featureService.deleteItem(this.item.images, this.item.id, 'posts')
+            this.featureService.deleteItem(this.item.images, this.item.id, 'sales')
             .then(
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
@@ -91,7 +93,7 @@ export class FirebaseUpdateItemModal implements OnInit {
         const loading = this.featureService.presentLoadingWithOptions(2000);
          if(this.postImages[index].storagePath !== '') {      
           this.item.images.splice(index,1);    
-          this.featureService.updateItemWithoutOptions(this.item, 'posts').then(()=> {
+          this.featureService.updateItemWithoutOptions(this.item, 'sales').then(()=> {
           const deletedimage = this.postImages.splice(index,1); 
           // this.changeRef.detectChanges();
           this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
@@ -127,7 +129,7 @@ updateItem() {
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'posts')
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'sales','images/sales/'+ this.loginService.getBuildingId() + '/')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     // loading.then(res=>{res.dismiss();})

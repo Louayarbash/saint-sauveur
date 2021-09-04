@@ -20,6 +20,7 @@ import { Plugins } from '@capacitor/core';
 import { Observable, fromEvent, merge, of } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
 
+
 const { Filesystem,Clipboard, Share } = Plugins;
 
 
@@ -52,7 +53,7 @@ export class FeatureService {
     public languageService : LanguageService,
     private crop: Crop
     // private Transporter: Transporter
-    //private loginService : LoginService
+    
     ) {
       this.online = merge(
         of(navigator.onLine),
@@ -350,6 +351,7 @@ getTranslations(lang: any) {
   .subscribe((translations) => { */
     // console.log("inside getTranslationss",translations);
     this.translations = lang.translations;
+    //console.log("lolo getTranslationss",this.translations);
   // });
 } 
 /* async DownloadAndOpenPDF(item: FirebaseListingItemModel ){
@@ -520,7 +522,7 @@ public createItemWithImages(itemData: any,itemImages: Images[], tableName: strin
     if( itemImages.length > 0 ){
     for (var i = 0; i < itemImages.length; i++) {
       try {
-        let uploaded = await this.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/' + tableName + '/');
+        let uploaded = await this.uploadToStorage(itemImages[i].photoData,res.id, 'image/jpeg', '.jpeg', 'images/' /*+ this.loginService.getBuildingId() */+ '/' + tableName + '/');
 
         if( uploaded.state === "success"){
           images.push({ isCover: itemImages[i].isCover, storagePath: uploaded.metadata.fullPath });
@@ -541,7 +543,7 @@ public createItemWithImages(itemData: any,itemImages: Images[], tableName: strin
 }
 
 
-public async updateItemWithImages(itemData: any, itemImages : Images[], tableName: string): Promise<void> {
+public async updateItemWithImages(itemData: any, itemImages : Images[], tableName: string, path:string): Promise<void> {
     
   let images : any[] = [];
   if( itemImages.length > 0 ){
@@ -549,7 +551,7 @@ public async updateItemWithImages(itemData: any, itemImages : Images[], tableNam
       if (itemImages[i].storagePath == '') {
 
         try {
-          const uploaded = await this.uploadToStorage(itemImages[i].photoData, itemData.id, 'image/jpeg', '.jpeg', 'images/posts/');
+          const uploaded = await this.uploadToStorage(itemImages[i].photoData, itemData.id, 'image/jpeg', '.jpeg', path);
 
           if( uploaded.state === 'success'){
             

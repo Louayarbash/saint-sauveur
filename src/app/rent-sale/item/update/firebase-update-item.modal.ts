@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { Images } from '../../../type'
 import { FeatureService } from '../../../services/feature/feature.service';
 import { counterRangeValidator } from '../../../components/counter-input/counter-input.component';
+import { LoginService } from '../../../services/login/login.service';
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -31,6 +32,7 @@ export class FirebaseUpdateItemModal implements OnInit {
     public router: Router,
     private changeRef: ChangeDetectorRef,
     private featureService : FeatureService,
+    private loginService : LoginService
     // private actionSheetController: ActionSheetController
   ) { 
   }
@@ -127,7 +129,7 @@ updateItem() {
   this.item.price = this.updateItemForm.value.price;
   this.item.status = this.updateItemForm.value.status;
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'rent-sale')
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'rent-sale','images/rent-sale/'+ this.loginService.getBuildingId() + '/')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     this.modalController.dismiss();// not needed inside catch to stay on same page while errors

@@ -37,7 +37,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
   }
 
   isUserAdmin(){
-    return this.getUserRole() !== "user" ? true : false; 
+    return this.getUserRole() == "admin" || "globalAdmin" ? true : false; 
   }
 
   isUserGlobalAdmin(){
@@ -252,7 +252,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
       this.featureService.getItem('buildings', userData.buildingId).subscribe(async item => {
         this.buildingInfo= item;
         this.buildingInfoSource.next( item );
-        if((item.status !== 'active') && this.userInfo.role !== 'admin'){
+        if((item.status !== 'active') && this.userInfo.role == 'user'){
           const alert = await this.alertController.create({
             header: this.featureService.translations.StatusInactiveHeader,
             message: this.featureService.translations.StatusInactiveMessage,

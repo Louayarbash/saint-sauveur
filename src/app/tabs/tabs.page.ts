@@ -18,7 +18,7 @@ export class TabsPage {
     this.loginService.currentUserInfo.subscribe(
       userInfo => {
         this.userId= userInfo.id;
-        this.isAdmin= userInfo.role == 'admin' ? true : false;
+        this.isAdmin= this.loginService.isUserAdmin();//userInfo.role == 'admin' || 'globalAdmin' ? true : false;
         this.buildingId= userInfo.buildingId;
       }
       );

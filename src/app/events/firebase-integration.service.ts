@@ -113,7 +113,7 @@ export class FirebaseService {
         
           if (files[i].filePath != ""){
           try {
-          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', this.storagePath);
+          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', this.storagePath + this.loginService.getBuildingId() + '/');
           console.log("updateItem: state", uploaded.state);
           console.log("updateItem: fileName", files[i].fileName);
           console.log("updateItem: fullPath", uploaded.metadata.fullPath);

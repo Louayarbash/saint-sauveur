@@ -11,6 +11,7 @@ import { LoginService } from '../../services/login/login.service';
 import { BuildingModel } from '../../buildings/building/building.model';
 import { UserModel } from '../../users/user/user.model';
 import firebase from 'firebase/app';
+import { FcmService } from '../../services/fcm/fcm.service';
 
 @Component({
   selector: 'app-sign-up1',
@@ -67,7 +68,8 @@ export class SignUp1Page implements OnInit {
     public loadingController: LoadingController,
     public location: Location,
     private featureService: FeatureService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private fcmService: FcmService
   ) {
     
     this.matching_passwords_group = new FormGroup({
@@ -215,6 +217,7 @@ export class SignUp1Page implements OnInit {
 
       this.loginService.initializeApp(uid).then(canAccessApp => {
         if(canAccessApp){
+          this.fcmService.initPushNotification();
           console.log("inside signUp 1 WithEmail canAccessApp true");
           this.authService.canAccessApp.next(true);
           // console.log(this.authService.canAccessApp.value);

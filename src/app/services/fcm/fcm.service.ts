@@ -5,8 +5,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 //import { FCM } from '@ionic-native/fcm/ngx';
 //import { AngularFireAuth } from '@angular/fire/auth';
-import { Platform, AlertController } from '@ionic/angular';
+import {  AlertController } from '@ionic/angular';
 import { LoginService } from "../login/login.service"
+import { FeatureService } from "../feature/feature.service"
 // import { mergeMapTo,mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {
@@ -30,7 +31,8 @@ export class FcmService {
     private loginService : LoginService,
     //private platform: Platform,
     private router : Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private featureService : FeatureService
   ) {
 
     // alert('Initializing HomePage test push notifications app comp');
@@ -71,11 +73,12 @@ export class FcmService {
 
     PushNotifications.addListener(
       'pushNotificationReceived',
-      (notification: PushNotification) => {
+      async (notification: PushNotification) => {
+        console.log(notification);
         //alert('Push received1: ' + JSON.stringify(notification));
-        //alert('Push received2: ' + JSON.stringify(notification.click_action));
-        //alert('Push received3: ' + JSON.stringify(notification.notification));
-        this.router.navigate(['app/start-menu/deal']);
+
+        this.navigateToURL(notification.data.header,notification.data.message,notification.data.landing_page);
+        
       },
     );
 
@@ -90,12 +93,8 @@ export class FcmService {
       'pushNotificationActionPerformed',
        (notification: PushNotificationActionPerformed) => {
         //alert('Push action performed1: ' + JSON.stringify(notification));
-        //alert('Push action performed2: ' + JSON.stringify(notification.actionId));
-        //alert('Push action performed3: ' + JSON.stringify(notification.notification.data.landing_page));
-        //alert('Push action performed: ' + JSON.stringify(notification.notification.data.actionId));
-        //alert('Push action performed landing page: ' + JSON.stringify(notification.notification.data.landing_page));
-        //alert('Push action performed id: ' + JSON.stringify(notification.notification.data.id));
-        this.router.navigate(['app/start-menu/deal']);
+
+        this.router.navigate([notification.notification.data.landing_page]);
       },
     );
   }
@@ -119,7 +118,7 @@ if(tokens){
 
 }
 else{
-  alert('update done ' + this.loginService.getUserTokens());
+  //alert('update done ' + this.loginService.getUserTokens());
     const docData = {
       tokens : [token]
       // userId: this.loginService.getLoginID(),
@@ -154,19 +153,19 @@ else{
       ); 
     }  */
 
-  async navigateToLisingRequests(header,message){
+  async navigateToURL(header: string,message: string,url: string){
     const alert = await this.alertController.create({
       header: header,
       message: message,
       buttons: [
          {
-          text: "OKAY",
+          text: this.featureService.translations.OK,
           handler: ()=> {
-            this.router.navigate(['app/start-menu/deal']);
+            this.router.navigate([url]);
           }
         },
         {
-          text: "Dismiss",
+          text: this.featureService.translations.Cancel,
            handler: ()=> {
             
             }, 

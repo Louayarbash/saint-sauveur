@@ -8,7 +8,8 @@ export class LanguageService {
    constructor() {
      this.languages.push(
       { name: 'English', code: 'en' },
-      { name: 'French', code: 'fr' }
+      { name: 'French', code: 'fr' },
+      { name: 'Arabic', code: 'ar' }
      );
    }
 

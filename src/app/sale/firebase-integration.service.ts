@@ -16,7 +16,7 @@ export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
   private buildingId = this.loginService.getBuildingId();
-  private tableName = "posts";
+  private tableName = "sales";
 
   constructor(
     private afs: AngularFirestore, 
