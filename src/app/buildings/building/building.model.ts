@@ -23,6 +23,7 @@ export class BuildingModel extends ShellModel {
   status: string= 'active';
   createdBy: string;
   createDate: firebase.firestore.FieldValue;
+  modificationDate: firebase.firestore.FieldValue;
 
   constructor() {
     super();

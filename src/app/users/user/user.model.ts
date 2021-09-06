@@ -19,6 +19,7 @@ export class UserModel extends ShellModel {
   tokens: string[];
   status: string;
   createDate : firebase.firestore.FieldValue;
+  modificationDate : firebase.firestore.FieldValue;
   createdBy: string;
   
   constructor() {

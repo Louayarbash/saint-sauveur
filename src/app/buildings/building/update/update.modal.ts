@@ -14,6 +14,7 @@ import { BuildingModel } from '../building.model';
 // import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { Parkings, Services} from '../../../type';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-update',
@@ -147,6 +148,7 @@ export class UpdateBuildingModal implements OnInit {
     this.item.enablePublication = this.updateItemForm.value.enablePublication;
     this.item.enableEvent = this.updateItemForm.value.enableEvent;
     this.item.enableDeal = this.updateItemForm.value.enableDeal;
+    this.item.modificationDate = firebase.firestore.FieldValue.serverTimestamp();
     // this.item.typeId = this.updateItemForm.value.typeId;
     //console.log(this.item);
     const {isShell, ...itemData} = this.item;

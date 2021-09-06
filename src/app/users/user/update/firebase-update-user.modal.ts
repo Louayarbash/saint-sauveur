@@ -10,6 +10,7 @@ import { Observable } from "rxjs";
 import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { ParkingInfo } from '../../../type';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-update-user',
@@ -239,6 +240,8 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.userData.language= this.updateUserForm.value.language;
     this.userData.enableNotifications= this.updateUserForm.value.enableNotifications;
     this.userData.status= this.updateUserForm.value.status;
+    this.userData.modificationDate = firebase.firestore.FieldValue.serverTimestamp();
+    
     this.selectedParking = [];
     
     if(this.updateUserForm.controls['parking1Level'].value !== '1000'){
