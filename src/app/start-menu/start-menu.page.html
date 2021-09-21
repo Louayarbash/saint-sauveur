@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="main">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -15,18 +15,28 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/parking.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'ParkingDealsMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'ParkingDealsMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
-    <ion-col class="category-item" size="6" *ngIf="enablePublication">
-      <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/publications']">
+    <ion-col class="category-item" size="6" *ngIf="enableAnnouncement">
+      <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/announcement']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/annoucement.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'PublicationsMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'AnnouncementMenu' | translate }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+    <ion-col class="category-item" size="6" *ngIf="enableRegulation">
+      <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/regulation']">
+        <app-aspect-ratio [ratio]="{w:1, h:1}">
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/regulation.jpg'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'RegulationMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -35,8 +45,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/sale.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'SaleMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'SaleMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -45,8 +55,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/events.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'EventsMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'EventsMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -55,8 +65,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/lostFound.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'LostFoundMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'LostFoundMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -65,8 +75,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/rentSale.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'RentSaleMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'RentSaleMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -75,8 +85,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/tickets.png'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'TicketsMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'TicketsMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -95,8 +105,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/users.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'UsersMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'UsersMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -108,12 +118,12 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/invite.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'Invite' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'Invite' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
-    <ion-col class="category-item" size="6">
+<!--     <ion-col class="category-item" size="6">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/users/details', userId]">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/userProfile.jpg'"></app-image-shell>
@@ -122,14 +132,14 @@
           <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'UserProfilMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
-    </ion-col>
+    </ion-col> -->
     <ion-col class="category-item" size="6" *ngIf="userIsLouay">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/problems']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/problems.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'Problems' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'Problems' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -138,8 +148,8 @@
         <app-aspect-ratio [ratio]="{w:1, h:1}">
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/buildingProfile.jpg'"></app-image-shell>
         </app-aspect-ratio>
-        <ion-card-header color="main">
-          <ion-card-subtitle class="ion-no-padding ion-text-center">{{ 'BuildingsMenu' | translate }}</ion-card-subtitle>
+        <ion-card-header color="primary">
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'BuildingsMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>

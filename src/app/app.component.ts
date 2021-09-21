@@ -200,8 +200,9 @@ checkConnection(){
     
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
        this.textDir = (event.lang === 'ar') ? 'rtl' : 'ltr';
-       
+       //console.log('psst');
        this.featureService.getTranslations(event);
+       this.featureService.currentLang = event.lang;
     });     
   }
 
@@ -246,5 +247,9 @@ checkConnection(){
     await modal.present();
   }
 
+
+  contactDeveloper(){
+    window.open("http://parkondo.com/#contact", "_blank");
+  }
 
 }

@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
 import { RatingUser } from '../../deals/item/firebase-item.model';
-import { VotingPublication } from '../../publications/item/firebase-item.model';
+import { VotingPublication } from '../../regulations/item/firebase-item.model';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Images } from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -33,6 +33,7 @@ export class FeatureService {
   buildingLevels: any;
   availableLanguages = [];
   online: Observable<boolean>; 
+  currentLang: string;
   // parking: Parkings[] =[{id: '1', description: 'P1', note: '', active: true}, {id: '2', description: 'P2', note: '', active: true}, {id: '3', description: 'P3', note: '', active: true}];
   // services: Services[]= [{id: '1', description: 'ElevatorBooking', active: true}, {id: '2', description: 'NewKeyRequest', active: true}];
 
@@ -63,6 +64,33 @@ export class FeatureService {
     }
   getCountryList() : any[] {
     return [
+      {"code": "DZ", "code3": "DZA", "name": "Algeria", "number": "012"},
+      {"code": "BE", "code3": "BEL", "name": "Belgium", "number": "056"},
+      {"code": "CA", "code3": "CAN", "name": "Canada", "number": "124"},
+      {"code": "EG", "code3": "EGY", "name": "Egypt", "number": "818"},
+      {"code": "FR", "code3": "FRA", "name": "France", "number": "250"},
+      {"code": "DE", "code3": "DEU", "name": "Germany", "number": "276"},
+      {"code": "IR", "code3": "IRN", "name": "Iran (Islamic Republic of)", "number": "364"},
+      {"code": "IQ", "code3": "IRQ", "name": "Iraq", "number": "368"},
+      {"code": "IT", "code3": "ITA", "name": "Italy", "number": "380"},
+      {"code": "LB", "code3": "LBN", "name": "Lebanon", "number": "422"},
+      {"code": "MX", "code3": "MEX", "name": "Mexico", "number": "484"},
+      {"code": "MA", "code3": "MAR", "name": "Morocco", "number": "504"},
+      {"code": "OM", "code3": "OMN", "name": "Oman", "number": "512"},
+      {"code": "QA", "code3": "QAT", "name": "Qatar", "number": "634"},
+      {"code": "SA", "code3": "SAU", "name": "Saudi Arabia", "number": "682"},
+      {"code": "SS", "code3": "SSD", "name": "South Sudan", "number": "728"},
+      {"code": "ES", "code3": "ESP", "name": "Spain", "number": "724"},
+      {"code": "SD", "code3": "SDN", "name": "Sudan (the)", "number": "729"},
+      {"code": "SE", "code3": "SWE", "name": "Sweden", "number": "752"},
+      {"code": "CH", "code3": "CHE", "name": "Switzerland", "number": "756"},
+      {"code": "SY", "code3": "SYR", "name": "Syrian Arab Republic", "number": "760"},
+      {"code": "TN", "code3": "TUN", "name": "Tunisia", "number": "788"},
+      {"code": "TR", "code3": "TUR", "name": "Turkey", "number": "792"},
+      {"code": "AE", "code3": "ARE", "name": "United Arab Emirates (the)", "number": "784"},
+      {"code": "US", "code3": "USA", "name": "United States of America (the)", "number": "840"}
+    ]; 
+/*     return [
       {"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},
       {"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"},
       {"code": "DZ", "code3": "DZA", "name": "Algeria", "number": "012"},
@@ -312,7 +340,7 @@ export class FeatureService {
       {"code": "ZM", "code3": "ZMB", "name": "Zambia", "number": "894"},
       {"code": "ZW", "code3": "ZWE", "name": "Zimbabwe", "number": "716"},
       {"code": "AX", "code3": "ALA", "name": "Åland Islands", "number": "248"}
-    ];
+    ]; */
     
   }
   getCountryName(code:string):string {
@@ -340,7 +368,8 @@ async presentLoadingWithOptions(duration) {
 async presentToast(message : string, duration : number){
   const toast = await this.toastController.create({
     message : message,
-    duration : duration
+    duration : duration,
+    position: 'middle'
   });
   await toast.present();  
 }
@@ -711,6 +740,7 @@ checkEmail(email: string): Observable<any> {
     })
   ); */
 }
+
 cropImage(imgPath) {
     
   const cropOptions: CropOptions = {

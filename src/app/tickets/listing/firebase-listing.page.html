@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      
+<ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <!-- <ion-searchbar placeholder="Search Favorites"></ion-searchbar> -->
     <ion-searchbar search-icon="undefined" class="items-searchbar" [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarTicketsRef' | translate }}"></ion-searchbar>
@@ -28,9 +31,10 @@
   <ng-container *ngIf="segmentValue == 'active'">
   <div *ngIf="activeList?.length > 0">
       <ion-card class="itemCardTicket" *ngFor="let item of activeList" [routerLink]="['/app/start-menu/tickets/details', item.id]">
-        <ion-item *ngIf="item.subject" color="main">
+        <ion-item *ngIf="item.subject" color="primary">
           <ion-icon name="build-outline" slot="end"></ion-icon>
-          <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+          <ion-label>{{ 'Ref' | translate }}{{ item.reference }}</ion-label>
+          <!-- <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label> -->
         </ion-item>
         <ion-card-header>
           <ion-card-subtitle>
@@ -41,7 +45,10 @@
             <ion-col class="ion-no-padding">
               <ion-text>{{ item.subjectTranslation }}</ion-text>
             </ion-col>
-            <ion-col class="ion-no-padding ion-text-right">
+            <ion-col *ngIf="ltr" class="ion-no-padding ion-text-right">
+              <ion-text>{{ item.statusTranslation }}</ion-text>
+            </ion-col>
+            <ion-col *ngIf="!ltr" class="ion-no-padding ion-text-left">
               <ion-text>{{ item.statusTranslation }}</ion-text>
             </ion-col>
           </ion-row>
@@ -57,9 +64,9 @@
 <ng-container *ngIf="segmentValue == 'archive'">
   <div *ngIf="archivedList?.length > 0">
       <ion-card class="itemCardTicket" *ngFor="let item of archivedList" [routerLink]="['/app/start-menu/tickets/details', item.id]">
-        <ion-item *ngIf="item.subject" color="main">
+        <ion-item *ngIf="item.subject" color="primary">
           <ion-icon name="build-outline" slot="start"></ion-icon>
-          <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+          <ion-label>{{ 'Ref' | translate }}{{ item.reference }}</ion-label>
         </ion-item>
         <ion-card-header>
           <ion-card-subtitle>
@@ -70,7 +77,10 @@
             <ion-col class="ion-no-padding">
               <ion-text>{{ item.subjectTranslation }}</ion-text>
             </ion-col>
-            <ion-col class="ion-no-padding ion-text-right">
+            <ion-col *ngIf="ltr" class="ion-no-padding ion-text-right">
+              <ion-text>{{ item.statusTranslation }}</ion-text>
+            </ion-col>
+            <ion-col *ngIf="!ltr" class="ion-no-padding ion-text-left">
               <ion-text>{{ item.statusTranslation }}</ion-text>
             </ion-col>
           </ion-row>
@@ -92,9 +102,10 @@
   </ng-container>
   <div *ngIf="ticketsList?.length > 0">
     <ion-card class="itemCardTicket" *ngFor="let item of ticketsList" [routerLink]="['/app/start-menu/tickets/details', item.id]">
-      <ion-item *ngIf="item.subject" color="main">
+      <ion-item *ngIf="item.subject" color="primary">
         <ion-icon name="build-outline" slot="start"></ion-icon>
-        <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label>
+        <ion-label>{{ 'Ref' | translate }}{{ item.reference }}</ion-label>
+        <!-- <ion-label>{{ '#Ref: '.concat(item.reference) }}</ion-label> -->
       </ion-item>
       <ion-card-header>
         <ion-card-subtitle>
@@ -105,7 +116,10 @@
           <ion-col class="ion-no-padding">
             <ion-text>{{ item.subjectTranslation }}</ion-text>
           </ion-col>
-          <ion-col class="ion-no-padding ion-text-right">
+          <ion-col *ngIf="ltr" class="ion-no-padding ion-text-right">
+            <ion-text>{{ item.statusTranslation }}</ion-text>
+          </ion-col>
+          <ion-col *ngIf="!ltr" class="ion-no-padding ion-text-left">
             <ion-text>{{ item.statusTranslation }}</ion-text>
           </ion-col>
         </ion-row>

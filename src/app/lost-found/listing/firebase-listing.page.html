@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'LostFound' | translate }}</ion-title>
   </ion-toolbar>
@@ -50,7 +52,7 @@
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
-  <ion-card-header color="main">
+  <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">{{ item.subject }}</ion-card-title>
   <ion-card-content *ngIf="item.details" class="ion-no-padding">
@@ -71,7 +73,7 @@
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
-  <ion-card-header color="main">
+  <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">{{ item.subject }}</ion-card-title>
   <ion-card-content *ngIf="item.details" class="ion-no-padding">
@@ -92,7 +94,7 @@
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
-  <ion-card-header color="main">
+  <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">{{ item.subject }}</ion-card-title>
   <ion-card-content *ngIf="item.details" class="ion-no-padding">
@@ -113,7 +115,7 @@
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
-    <ion-card-header color="main">
+    <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">{{ item.subject }}</ion-card-title>
   <ion-card-content *ngIf="item.details" class="ion-no-padding">

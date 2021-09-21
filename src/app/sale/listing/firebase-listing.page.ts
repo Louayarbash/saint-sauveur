@@ -27,6 +27,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -47,6 +48,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
     this.searchQuery = '';
 

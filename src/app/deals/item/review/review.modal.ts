@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,8 +18,7 @@ import firebase from 'firebase/app';
   selector: 'app-firebase-review-item',
   templateUrl: './review.modal.html',
   styleUrls: [
-    './styles/review.modal.scss',
-    './styles/review.shell.scss'
+    './styles/review.modal.scss'
   ],
 })
 export class ReviewModal implements OnInit {
@@ -28,8 +27,8 @@ export class ReviewModal implements OnInit {
   @Input() subject: string;
   reviewItemForm: FormGroup;
 
-  canRate : boolean;
-  ratingSection : boolean;
+  canRate : boolean=false;
+  ratingSection : boolean = false;
   userRating : Observable<Array<any>>;
   // creatorRating : Observable<Array<any>>;
   avgRating : Observable<any>;
@@ -50,8 +49,7 @@ export class ReviewModal implements OnInit {
     private featureService : FeatureService,
     private loginService : LoginService  
     ) { 
-      this.ratingSection = false;
-      this.canRate = false;
+
   }
 
   ngOnInit() {

@@ -27,7 +27,7 @@ export class CreateBuildingModal implements OnInit {
   nameChanging = [{ naming: false }, { naming: false }, { naming: false }];
   @ViewChild(IonContent, {static:true}) content: IonContent;
   customAlertOptions: any = {
-    header: this.featureService.translations.SelectTicketType,
+    header: this.featureService.translations.SelectCountry,
     //subHeader: this.featureService.translations.OK,
     //message: this.featureService.translations.YES,
     translucent: true,
@@ -65,7 +65,8 @@ export class CreateBuildingModal implements OnInit {
       enableRentSale: new FormControl(true),
       enableLostFound: new FormControl(true),
       enableTicket: new FormControl(true),
-      enablePublication: new FormControl(true),
+      enableAnnouncement: new FormControl(true),
+      enableRegulation: new FormControl(true),
       enableEvent: new FormControl(true),
       enableDeal: new FormControl(true),
       status: new FormControl('active',Validators.required)
@@ -101,8 +102,9 @@ export class CreateBuildingModal implements OnInit {
     this.itemData.enableRentSale = this.createItemForm.value.enableRentSale;
     this.itemData.enableLostFound = this.createItemForm.value.enableLostFound;
     this.itemData.enableTicket = this.createItemForm.value.enableTicket;
-    this.itemData.enablePublication = this.createItemForm.value.enablePublication;
-    this.itemData.enablePublication = this.createItemForm.value.enableEvent;
+    this.itemData.enableRegulation = this.createItemForm.value.enableRegulation;
+    this.itemData.enableAnnouncement = this.createItemForm.value.enableAnnouncement;
+    this.itemData.enableEvent = this.createItemForm.value.enableEvent;
     this.itemData.enableDeal = this.createItemForm.value.enableDeal;
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();

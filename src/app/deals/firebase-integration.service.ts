@@ -235,6 +235,13 @@ export class FirebaseService {
             this.router.navigate(['app/start-menu/deal']);
             return Promise.resolve('Accepted request canceled!' + newStatus);
           }
+          else if (oldStatus == "started"){
+            let newStatus = "canceled"; // acceptedRequestCanceled
+            tran.update(itemRef, {status: newStatus});            
+            this.featureService.presentToast(this.featureService.translations.RequestAcceptedCanceled, 2000);
+            this.router.navigate(['app/start-menu/deal']);
+            return Promise.resolve('Started request canceled!' + newStatus);
+          }
           
         });
     }).then(result => {
@@ -351,6 +358,4 @@ public cancelOfferDeal(itemData: ItemModel) {
     console.log("Transaction failure:", err);
   });
 }
-
-
 }

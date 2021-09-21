@@ -24,6 +24,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   archiveList: Array<FirebaseListingItemModel>;
   segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
   segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
+  ltr: boolean;
 
    @HostBinding('class.is-shell') get isShell() {
     return (this.items ) ? true : false;
@@ -43,6 +44,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
     console.log("oninit")
     this.userIsAdmin = this.loginService.isUserAdmin();

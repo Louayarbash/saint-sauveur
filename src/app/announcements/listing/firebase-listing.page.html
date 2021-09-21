@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'Announcements' | translate }}</ion-title>
+<!--     <ion-buttons slot="end" *ngIf="userIsAdmin">
+      <ion-button (click)="openFirebaseCreateModal()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+<!--  <ion-toolbar>
+   <ion-segment value="announcements" (ionChange)="segmentChanged($event)" color="main">
+    <ion-segment-button value="announcements">
+      <ion-label>{{ 'Announcements' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="regulations">
+      <ion-label>{{ 'Regulations' | translate }}</ion-label>
+    </ion-segment-button>
+</ion-segment> 
+</ion-toolbar>-->
+</ion-header>
+<ion-content>
+  <ng-container *ngIf="items.isShell">
+    <div class="DivLoading">
+      <ion-spinner></ion-spinner>
+<!--       <p>
+        Fetching data...
+      </p> -->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!items.isShell">
+  <!-- <section [hidden]="segmentValue !== 'announcements'"> -->
+  <ng-container *ngIf="items?.length > 0">
+    <ion-card class="itemCard" button="true" *ngFor="let item of announcementsList" [routerLink]="['/app/start-menu/announcement/details', item.id]">
+      <ion-item *ngIf="item.subject" color="primary">
+        <ion-icon name="megaphone-outline" slot="start"></ion-icon>
+        <ion-label>{{item.subject}}</ion-label>
+      </ion-item>
+      <ion-card-header *ngIf="item.details">
+        <ion-card-subtitle>{{ item.details }}</ion-card-subtitle>
+        <!-- <ion-card-title>{{ item.subject }}</ion-card-title>  -->
+      </ion-card-header>
+      <ion-card-content>
+        {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}
+      </ion-card-content>
+    </ion-card>
+    </ng-container>
+    <ng-container *ngIf="announcementsList?.length == 0">
+      <h3 class="empty-list-message">
+        {{ 'NoItemFound' | translate }}
+      </h3>
+    </ng-container>
+    <!-- </section> -->
+<!--     <section [hidden]="segmentValue !== 'regulations'">
+      <ng-container *ngIf="items?.length > 0">
+        <ion-card class="itemCard" button="true" *ngFor="let item of regulationsList" [routerLink]="['/app/start-menu/publications/details', item.id]">
+          <ion-item *ngIf="item.subject" color="primary">
+            <ion-icon slot="start" name="newspaper-outline"></ion-icon>
+            <ion-label>{{item.subject}}</ion-label>
+          </ion-item>
+          <ion-card-header *ngIf="item.details">
+            <ion-card-subtitle>{{ item.details }}</ion-card-subtitle>
+          
+          </ion-card-header>
+          <ion-card-content>
+            {{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy'}}
+          </ion-card-content>
+        </ion-card>
+        </ng-container>
+        <ng-container *ngIf="regulationsList?.length == 0">
+          <h3 class="empty-list-message">
+            {{ 'NoItemFound' | translate }}
+          </h3>
+        </ng-container>
+        </section> -->
+  </ng-container>
+          <ion-fab vertical="bottom" horizontal="end" slot="fixed"  *ngIf="userIsAdmin">
+            <ion-fab-button color="main" (click)="openFirebaseCreateModal()">
+              <ion-icon  name="add" ></ion-icon>
+            </ion-fab-button>
+          </ion-fab> 
+    </ion-content>

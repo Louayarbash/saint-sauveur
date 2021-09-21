@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Users' | translate }}<ion-text *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
   </ion-toolbar>
@@ -38,9 +40,14 @@
       {{ 'NoItemFound' | translate }}
     </h3>
   </ng-container>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+<!--   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="main" (click)="openFirebaseCreateModal()">
       <ion-icon  name="add" ></ion-icon>
     </ion-fab-button>
-  </ion-fab> 
+  </ion-fab>  -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="main" (click)="inviteModal()">
+      <ion-icon name="person-add-outline" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

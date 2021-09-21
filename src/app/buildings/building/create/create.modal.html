@@ -70,8 +70,12 @@
           <ion-toggle color="main" formControlName="enableLostFound"></ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-label>{{ 'PublicationsMenu' | translate }}</ion-label>
-          <ion-toggle color="main" formControlName="enablePublication"></ion-toggle>
+          <ion-label>{{ 'RegulationMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableRegulation"></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{ 'AnnouncementMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableAnnouncement"></ion-toggle>
         </ion-item>
         <ion-item>
           <ion-label>{{ 'EventsMenu' | translate }}</ion-label>
@@ -157,7 +161,7 @@
     </ng-container>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="disableSubmit || !createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="disableSubmit || !createItemForm.valid">{{ 'Save' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

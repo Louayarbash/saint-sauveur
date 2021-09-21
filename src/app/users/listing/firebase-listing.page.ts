@@ -7,9 +7,10 @@ import { switchMap, map } from 'rxjs/operators';
 
 import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
-import { FirebaseCreateUserModal } from '../user/create/firebase-create-user.modal';
-
+//import { FirebaseCreateUserModal } from '../user/create/firebase-create-user.modal';
+import { LoginService } from '../../services/login/login.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
+import { InviteModal } from '../../buildings/building/invite/invite.modal';
 
 @Component({
   selector: 'app-firebase-listing',
@@ -28,6 +29,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -37,7 +39,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public modalController: ModalController,
     private route: ActivatedRoute,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private loginService: LoginService
   ) { }
 
   ngOnDestroy(): void {
@@ -45,6 +48,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;   
     this.searchQuery = '';
 
     // Route data is a cold subscription, no need to unsubscribe?
@@ -107,12 +111,25 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     );
   }
 
-  async openFirebaseCreateModal() {
+/*   async openFirebaseCreateModal() {
     const modal = await this.modalController.create({
       component: FirebaseCreateUserModal,
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
+    await modal.present();
+  } */
+
+  async inviteModal() {
+    const modal = await this.modalController.create({
+      component: InviteModal,
+/*       componentProps: {
+        'item': this.item
+      }, */
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
+    });
+
     await modal.present();
   }
 

@@ -63,12 +63,20 @@ const routes: Routes = [
             loadChildren: () => import('../lost-found/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
-            path: 'publications',
-            loadChildren: () => import('../publications/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
+            path: 'announcement',
+            loadChildren: () => import('../announcements/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
           },
           {
-            path: 'publications/details/:id',
-            loadChildren: () => import('../publications/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
+            path: 'announcement/details/:id',
+            loadChildren: () => import('../announcements/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
+          },
+          {
+            path: 'regulation',
+            loadChildren: () => import('../regulations/listing/firebase-listing.module').then(m => m.FirebaseListingPageModule), canActivate: [PageGuard] 
+          },
+          {
+            path: 'regulation/details/:id',
+            loadChildren: () => import('../regulations/item/details/firebase-item-details.module').then(m => m.FirebaseItemDetailsPageModule), canActivate: [PageGuard] 
           },
           {
             path: 'events',

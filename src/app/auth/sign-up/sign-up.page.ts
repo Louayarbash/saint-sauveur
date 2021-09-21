@@ -1,8 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
-import { Location } from '@angular/common';
+//import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MenuController, LoadingController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { PasswordValidator } from '../../validators/password.validator';
 import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs';
@@ -28,30 +28,30 @@ export class SignUpPage implements OnInit {
   authRedirectResult: Subscription;
   buildingData: BuildingModel = new BuildingModel();
   userData: UserModel = new UserModel();
-
+  loading: any;
   validation_messages = {
     'name': [
-      { type: 'required', message: 'Name is required.' }
+      { type: 'required', message: "BuildingNameSignUp" }
     ],
     'firstname': [
-      { type: 'required', message: 'Firstname is required.' }
+      { type: 'required', message: "FirstnameRequired" }
     ],
     'lastname': [
-      { type: 'required', message: 'Lastname is required.' }
+      { type: 'required', message: "LastnameRequired" }
     ],
     'email': [
-      { type: 'required', message: 'Email is required.' },
-      { type: 'pattern', message: 'Enter a valid email.' }
+      { type: 'required', message: "EmailRequired" },
+      { type: 'pattern', message: "EnterValidEmail" }
     ],
     'password': [
-      { type: 'required', message: 'Password is required.' },
-      { type: 'minlength', message: 'Password must be at least 6 characters long.' }
+      { type: 'required', message: "PasswordIsRequired" },
+      { type: 'minlength', message: "PasswordMustBeAtLeast6charactersLong" }
     ],
     'confirm_password': [
-      { type: 'required', message: 'Confirm password is required' }
+      { type: 'required', message: "ConfirmPasswordIsRequired" }
     ],
     'matching_passwords': [
-      { type: 'areNotEqual', message: 'Password mismatch' }
+      { type: 'areNotEqual', message: "PasswordMismatch" }
     ]
   };
 
@@ -61,8 +61,8 @@ export class SignUpPage implements OnInit {
     public menu: MenuController,
     public authService: AuthService,
     private ngZone: NgZone,
-    public loadingController: LoadingController,
-    public location: Location,
+    //public loadingController: LoadingController,
+    //public location: Location,
     private featureService: FeatureService,
     private loginService: LoginService,
     private fcmService: FcmService
@@ -121,7 +121,10 @@ export class SignUpPage implements OnInit {
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
   redirectLoggedUserToMainMenuPage() {
-    this.dismissLoading();
+    //this.loading.dismissLoading();
+    this.loading.then(res=>{
+      res.dismiss();        
+    })
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
     // That's why we need to wrap the router navigation call inside an ngZone wrapper
@@ -143,18 +146,18 @@ export class SignUpPage implements OnInit {
     });
     await this.redirectLoader.present();
   } */
-  async presentLoading() {
+/*   async presentLoading() {
     this.redirectLoader = await this.loadingController.create({
       message: this.featureService.translations.SigninIn
     });
     await this.redirectLoader.present();
-  }
+  } */
 
-  async dismissLoading() {
+/*   async dismissLoading() {
     if (this.redirectLoader) {
       await this.redirectLoader.dismiss();
     }
-  }
+  } */
 
   resetSubmitError() {
     this.submitError = null;
@@ -171,12 +174,15 @@ export class SignUpPage implements OnInit {
   manageAuthWithProvidersErrors(errorMessage: string) {
     this.submitError = errorMessage;
     // remove auth-redirect param from url
-    this.location.replaceState(this.router.url.split('?')[0], '');
-    this.dismissLoading();
+    //this.location.replaceState(this.router.url.split('?')[0], '');
+    this.loading.then(res=>{
+      res.dismiss();        
+    })
+    //this.dismissLoading();
   }
 
   signUpWithEmail() {
-    this.presentLoading();
+    this.loading = this.featureService.presentLoadingWithOptions(5000);
     this.resetSubmitError();
     const values = this.signupForm.value;
     this.authService.signUpWithEmail(values.email, values.matching_passwords.password)
@@ -185,7 +191,10 @@ export class SignUpPage implements OnInit {
       this.createProfile(userId);
     })
     .catch(error => {
-      this.dismissLoading();
+      //this.dismissLoading();
+      this.loading.then(res=>{
+        res.dismiss();        
+      })
       this.submitError = error.message;
       this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
     });
@@ -214,29 +223,41 @@ export class SignUpPage implements OnInit {
         this.loginService.initializeApp(uid).then(canAccessApp => {
           if(canAccessApp){
             this.fcmService.initPushNotification();
-            console.log("inside signUp WithEmail canAccessApp true");
+            //console.log("inside signUp WithEmail canAccessApp true");
             this.authService.canAccessApp.next(true);
             // console.log(this.authService.canAccessApp.value);
             this.redirectLoggedUserToMainMenuPage();
           }
           else{
-            this.dismissLoading();
-            console.log("inside signUp WithEmail canAccessApp false");
+            //this.dismissLoading();
+            this.loading.then(res=>{
+              res.dismiss();        
+            })
+            //console.log("inside signUp WithEmail canAccessApp false");
             this.authService.canAccessApp.next(false);
             this.featureService.presentToast(this.featureService.translations.CantAccesApp, 2000)
           }
         }
         )
         .catch((err )=> {
-          this.dismissLoading();
+          //this.dismissLoading();
+          this.loading.then(res=>{
+            res.dismiss();        
+          })
           console.log(err);
           this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)});
       }).catch((err) => { 
-        this.dismissLoading();
+        //this.dismissLoading();
+        this.loading.then(res=>{
+          res.dismiss();        
+        })
         console.log(err);
         this.featureService.presentToast(this.featureService.translations.AddingUserErrors, 2000);}); 
     }).catch((err) => { 
-      this.dismissLoading();
+      //this.dismissLoading();
+      this.loading.then(res=>{
+        res.dismiss();        
+      })
       console.log(err);
       this.featureService.presentToast(this.featureService.translations.AddingBuildingErrors, 2000);});  
   }

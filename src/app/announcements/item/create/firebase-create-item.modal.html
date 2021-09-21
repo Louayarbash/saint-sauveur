@@ -1,0 +1,110 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="createItemForm" (ngSubmit)="createItem()">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'NewAnnouncement' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <!-- <section> -->
+       <!-- <ion-list lines="full"> -->
+<!--         <ion-item>
+          <ion-label>{{ 'Type' | translate }}</ion-label>
+          <ion-radio-group formControlName="category" (ionChange)="categoryChanged($event)">
+            <div class="radio-tags">
+              <ion-row>
+              <ion-col>
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'Announcement' | translate }}</ion-label>
+                  <ion-radio value="announcement"></ion-radio>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item class="radio-tag" lines="none">
+                  <ion-label class="tag-label">{{ 'Regulation' | translate }}</ion-label>
+                  <ion-radio value="regulation"></ion-radio>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+        </div>
+          </ion-radio-group>
+        </ion-item> -->
+        <ion-item>
+          <ion-label position="floating">{{ 'Subject' | translate }}</ion-label>
+          <ion-input autocapitalize type="text" formControlName="subject"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">{{ 'Details' | translate }}</ion-label>
+          <ion-textarea autocapitalize rows="6" cols="20" formControlName="details"></ion-textarea>
+        </ion-item>
+      <!-- <ng-container *ngIf="categorySelected == 'announcement'"> -->
+        <ion-item>
+          <ion-label>{{ 'EnableVoting' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="voting" (ionChange)="votingChanged($event)"></ion-toggle>
+        </ion-item>
+        <ion-item *ngIf="voting">
+          <ion-label position="floating">{{ 'VotingNote' | translate }}</ion-label>
+          <ion-input type="text" formControlName="votingMessage"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="voting">
+          <ion-label>{{ 'ShowResult' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="votingResult"></ion-toggle>
+        </ion-item>
+      <!-- </ng-container> -->
+        <ion-item>          
+          <!-- <ion-button class="change-image-btn" color="secondary" (click)="selectFile()" [disabled]="files.length >= 3"> -->
+          <ion-button (click)="selectFile()" [disabled]="files.length >= 5" color="main">PDF
+            <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      <!-- </ion-list>  -->
+    <!-- </section> -->
+    <!-- <section> -->
+      <ion-card class="itemCard"> 
+    <ion-row *ngFor="let file of files; let i = index;">
+      <ion-col size="8" class="ion-align-self-center">   
+        <!-- <ion-label position="floating">{{ 'ChangeName' | translate }}</ion-label> -->
+        <ion-input type="text" [value]="file.fileName"  #txtName [disabled]=true></ion-input>
+      </ion-col>
+      <ion-col size="4" >
+        <ion-button color="main" (click)="deleteFile(i)">          
+          <ion-icon class="btn-icon" slot="icon-only" name="trash"></ion-icon>      
+      </ion-button> 
+      <ion-button color="main" (click)="changeBtnStatus(txtName,btnChange,btnConfirm)"  #btnChange>          
+          <ion-icon name="pencil-outline"></ion-icon>
+          <!-- <ion-icon name="pencil-outline"></ion-icon> -->
+      </ion-button> 
+      <ion-button color="main" (click)="confirmChanging(i,txtName,btnChange,btnConfirm)" [disabled]=true  #btnConfirm >          
+          <ion-icon name="checkmark-outline"></ion-icon>
+      </ion-button> 
+      </ion-col>
+    </ion-row>
+<!-- </section> -->
+</ion-card> 
+</ion-content>
+  <ion-footer>
+    <ion-row *ngIf="createItemForm.errors?.nameChanging">
+      <ion-col>
+      <ion-text class="ion-padding-left validation">{{ 'PleaseConfirmNamingChange' | translate }}</ion-text>
+    </ion-col>
+    </ion-row>
+    <ng-container *ngIf="createItemForm.get('subject').invalid && (createItemForm.dirty || createItemForm.touched)">
+      <ion-row *ngIf="createItemForm.get('subject').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'SubjectRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="disableSubmit || !createItemForm.valid">{{ 'Create' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</form>

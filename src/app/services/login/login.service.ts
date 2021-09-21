@@ -37,7 +37,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
   }
 
   isUserAdmin(){
-    return this.getUserRole() == "admin" || "globalAdmin" ? true : false; 
+    return this.getUserRole() == "admin" || this.getUserRole() == "globalAdmin" ? true : false; 
   }
 
   isUserGlobalAdmin(){

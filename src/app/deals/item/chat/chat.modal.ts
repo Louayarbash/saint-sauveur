@@ -16,11 +16,7 @@ import { combinedItemModel } from '../firebase-item.model';
 @Component({
   //selector: 'app-firebase-chat',
   selector: 'app-firebase-chat',
-  templateUrl: './chat.modal.html',
-  styleUrls: [
-    './styles/chat.modal.scss',
-    './styles/chat.shell.scss'
-  ],
+  templateUrl: './chat.modal.html'
 })
 export class ChatModal implements OnInit {
   // "user" is passed in firebase-details.page

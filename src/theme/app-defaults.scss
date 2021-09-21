@@ -11,6 +11,15 @@ ion-title {
 
 .custom-alert{
   --min-width: 90% !important;
+/*   max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important; */
+
+}
+
+ion-select{
+  max-width: 100% !important;
+  width: 100% !important;
 }
 
 ion-searchbar {
@@ -113,6 +122,7 @@ ion-content {
 .createDate{
   font-style:italic;
   padding-left: 25px;
+  padding-right: 25px;
   font-size: small;
 }
 
@@ -181,7 +191,7 @@ ion-text.camera-btn{
   
   .other-message{
   background: var(--ion-color-medium-tint);
-  color:#ffffff;
+  //color:#ffffff;
   }
   
   .my-message{
@@ -189,18 +199,11 @@ ion-text.camera-btn{
   //color:#ffffff;
   }
   
-  .time-other{
-  font-style: italic;
-  color: #ffffff;
-  font-size:small;
-  float:right;
-  }
-  
-  .time-my-message{
+  .time-chat{
     font-style: italic;
     //color: #ffffff;
     font-size:small;
-    float:right;
+    float:right
   }
 
   .message-input{

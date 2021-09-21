@@ -14,10 +14,7 @@ import { ChatModel } from '../chat/chat.model'
 
 @Component({
   selector: 'app-firebase-update-user',
-  templateUrl: './chat.modal.html',
-  styleUrls: [
-    './styles/firebase-update-user.modal.scss'
-  ],
+  templateUrl: './chat.modal.html'
 })
 export class ChatModal implements OnInit {
   // "user" is passed in firebase-details.page
@@ -54,7 +51,7 @@ export class ChatModal implements OnInit {
   sendMessage(){
     let chatMsg : ChatModel = new ChatModel();
     chatMsg.channelId = "chatUsersPage_" + this.user.id;
-    chatMsg.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    chatMsg.createDate = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = this.loginId;
     chatMsg.text = this.msgText;
     //chatMsg.name = this.user.name;
@@ -64,7 +61,7 @@ export class ChatModal implements OnInit {
       this.msgText = '';
       setTimeout(() => {
         this.content.scrollToBottom(400);
-      },400); 
+      },200); 
     }
   }
 /*   sendMessage2(){

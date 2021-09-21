@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
@@ -65,10 +67,6 @@
               <ion-label>{{ 'Role' | translate }}</ion-label>
               <ion-text>{{ role }}</ion-text>
             </ion-item>
-            <ion-item *ngIf="user.status">    
-              <ion-label>{{ 'Status' | translate }}</ion-label>
-              <ion-text>{{ status }}</ion-text>
-            </ion-item>
             <ion-item *ngIf="enableNotifications">
               <ion-text slot="start">{{ 'EnableNotifications' | translate }}</ion-text>
               <ion-text slot="end">{{ enableNotifications }}</ion-text>
@@ -82,6 +80,10 @@
               <ion-label>{{ 'CreateDate' | translate }}</ion-label>
               <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
             </ion-item>
+            <ion-item *ngIf="user.status">    
+              <ion-label>{{ 'StatusAccount' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>
+            </ion-item>
             <ion-item *ngIf="isLoggedInUser">
               <ion-label>{{ 'SignOut' | translate }}</ion-label>  
                 <ion-icon (click)="signOut()" name="log-out-outline"></ion-icon>
@@ -91,4 +93,9 @@
 <!--       <ng-container *ngIf="user.createDate">
         <ion-text color="dark" class="ion-padding-left createDate">{{user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
       </ng-container> -->
+<!--       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="main" (click)="openChatModal()">
+          <ion-icon name="chatbubbles-outline" ></ion-icon>
+        </ion-fab-button>
+      </ion-fab>  -->
 </ion-content>

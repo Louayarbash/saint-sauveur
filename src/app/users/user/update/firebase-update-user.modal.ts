@@ -39,6 +39,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   selectOptions: any;
   userIsAdmin= this.loginService.isUserAdmin();
   userIsGlobalAdmin= this.loginService.isUserGlobalAdmin();
+  loggedEmail= this.loginService.getLoginEmail();
   customAlertOptions: any = {
     header: this.featureService.translations.SelectParkingLevel,
     //subHeader: this.featureService.translations.OK,
@@ -223,7 +224,7 @@ export class FirebaseUpdateUserModal implements OnInit {
     await alert.present();
   }
 
-  updateUser() {
+  async updateUser() {
 
     this.userData.id = this.user.id;
     this.userData.photo = this.selectedPhoto;// == this.emptyPhoto ? "" : this.selectedPhoto;
@@ -266,16 +267,49 @@ export class FirebaseUpdateUserModal implements OnInit {
     
     // console.log(this.selectedParking);
     const {isShell, ...userData} = this.userData;
-    this.firebaseService.updateUser(userData)
-    .then(() => {
-      // this.loginService.updateUserInfo(this.userData);
-      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
-      this.modalController.dismiss();
+    
+    if(this.userData.status !== "active"){
+      const alert = await this.alertController.create({
+        header:  this.featureService.translations.PleaseConfirm,
+        message: this.featureService.translations.InactiveUserConfirmation,
+        buttons: [
+          {
+            text: this.featureService.translations.No,
+            role: 'cancel',
+            handler: () => {}
+          },
+          {
+            text: this.featureService.translations.Yes,
+            handler:() => {
+                  this.firebaseService.updateUser(userData)
+                  .then(() => {
+                    // this.loginService.updateUserInfo(this.userData);
+                    this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
+                    this.modalController.dismiss();
+                  }
+                  ).catch((err)=> {
+                    this.featureService.presentToast(this.featureService.translations.UpdatingErrors, 2000);
+                    console.log(err)
+                  });
+                }                          
+          }
+        ]
+      });
+      await alert.present();
     }
-    ).catch((err)=> {
-      this.featureService.presentToast(this.featureService.translations.UpdatingErrors, 2000);
-      console.log(err)
-    });
+    else{
+      this.firebaseService.updateUser(userData)
+      .then(() => {
+        // this.loginService.updateUserInfo(this.userData);
+        this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully, 2000);
+        this.modalController.dismiss();
+      }
+      ).catch((err)=> {
+        this.featureService.presentToast(this.featureService.translations.UpdatingErrors, 2000);
+        console.log(err)
+      });
+    }
+
   }
   //LA_2019_11
   async selectImageSource(){

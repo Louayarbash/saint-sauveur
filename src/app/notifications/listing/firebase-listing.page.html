@@ -1,9 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
-     <ion-buttons slot="start">
-  <ion-menu-button></ion-menu-button>
-    <!--  <ion-back-button defaultHref="/app/start-menu"></ion-back-button>-->
-    </ion-buttons> 
+<!--      <ion-buttons slot="start">
+      <ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      <ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
+    </ion-buttons>  -->
     <!-- <ion-searchbar placeholder="Search Favorites"></ion-searchbar> -->
     <ion-title>{{ 'Notifications' | translate }}</ion-title>
   </ion-toolbar>
@@ -25,7 +26,7 @@
 <ng-container *ngIf="!items.isShell">
       <div  *ngIf="notificationsList?.length > 0">
         <ion-item *ngFor="let item of notificationsList" [routerLink]="['/app/start-menu',item.type]">   
-          <ion-icon name="notifications-outline" slot="start"></ion-icon>     
+          <ion-icon color="main" name="notifications-outline" slot="start"></ion-icon>     
       <ion-label style="white-space: pre-wrap !important;">
         <h3 *ngIf="item.subType == 'request'">{{ item.creatorName }} {{ 'NotificationMessageNewDealRequest' | translate }} "{{ item.typeTranslation }}"</h3>
         <h3 *ngIf="item.subType == 'offer'">{{ item.creatorName }} {{ 'NotificationMessageNewDealOffer' | translate }} "{{ item.typeTranslation }}"</h3>
@@ -33,7 +34,7 @@
         <p>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</p>
       </ion-label>
        
-            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            <ion-icon name="eye-outline" slot="end"></ion-icon>
             <!-- <img src="./assets/sample-images/categories/sale.jpg"> -->
       
         </ion-item>

@@ -18,6 +18,8 @@ import { DataStore } from '../../../shell/data-store';
 export class FirebaseItemDetailsPage implements OnInit {
   item: FirebaseItemModel;
   userIsAdmin = false;
+  ltr: boolean;
+
   constructor(
     public firebaseService: FirebaseService,
     public modalController: ModalController,
@@ -30,7 +32,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
