@@ -10,6 +10,7 @@ import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
 import { LoginService } from '../../services/login/login.service';
+import { FeatureService } from '../../services/feature/feature.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
 //import { Toast } from '@ionic-native/toast/ngx';
 //import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
@@ -54,7 +55,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public modalController: ModalController,
     private route: ActivatedRoute,
     private routerOutlet: IonRouterOutlet,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private featureService: FeatureService
     //private document: DocumentViewer,
     //private file:File,
     //private fileOpener:FileOpener
@@ -144,6 +146,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   //  item.coverPhotoData = '' ;} 
                   //  );
               } 
+
+              this.featureService.getItem("users",item.createdBy).subscribe(res=> {
+                item.creatorPhoto = res.photo
+                item.creatorName = res.firstname + " " + res.lastname
+             })
+
+
               });
               let lostList= this.items; 
               let foundList= this.items;

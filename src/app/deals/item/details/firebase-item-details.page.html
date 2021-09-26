@@ -16,7 +16,7 @@
 <ion-content>
   <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->
@@ -127,10 +127,8 @@
           </form>                    
           <ion-row *ngIf="!typeIsRequest && !userIsCreator && item.status == 'accepted'" class="ion-align-items-center ion-padding-bottom ion-border">
             <ion-col>
-              <ion-chip>  
               <ion-label>{{ 'ParkingInfo' | translate }}: {{ parkingInfo }}
               </ion-label>
-            </ion-chip>
             </ion-col>
             <ion-col>
               <ion-button class="ion-no-margin" size="small" color="main" (click)="share()">{{ 'Share' | translate }}<ion-icon name="share-social"></ion-icon></ion-button>

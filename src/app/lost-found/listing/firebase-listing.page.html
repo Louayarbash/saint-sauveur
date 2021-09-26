@@ -36,10 +36,10 @@
 </ion-segment>
 </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="content">
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->
@@ -48,7 +48,15 @@
   <ng-container *ngIf="!items.isShell">
   <section [hidden]="segmentValue !== 'lost'">
   <ng-container *ngIf="lostList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of lostList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
+    <div *ngFor="let item of lostList">
+      <ion-item lines="none">
+          <ion-avatar slot="start">
+          <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+          <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+          </ion-avatar>
+          <ion-label>{{item.creatorName}}</ion-label>
+      </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -60,6 +68,7 @@
   </ion-card-content>
 </ion-card-header>
 </ion-card>
+    </div>
 </ng-container>  
 <ng-container *ngIf="lostList?.length == 0">
   <h3  class="empty-list-message">
@@ -69,7 +78,15 @@
 </section>
 <section [hidden]="segmentValue !== 'found'">
   <ng-container *ngIf="foundList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of foundList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
+    <div *ngFor="let item of foundList">
+      <ion-item lines="none">
+              <ion-avatar slot="start">
+                <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+                <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+              </ion-avatar>
+              <ion-label>{{item.creatorName}}</ion-label>
+            </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -81,6 +98,7 @@
   </ion-card-content>
 </ion-card-header>
 </ion-card>
+    </div>
 </ng-container>
 <ng-container *ngIf="foundList?.length == 0">
   <h3  class="empty-list-message">
@@ -90,7 +108,15 @@
 </section>
 <section [hidden]="segmentValue !== 'stolen'">
   <ng-container *ngIf="stolenList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of stolenList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
+    <div *ngFor="let item of stolenList">
+      <ion-item lines="none">
+              <ion-avatar slot="start">
+                <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+                <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+              </ion-avatar>
+              <ion-label>{{item.creatorName}}</ion-label>
+            </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -102,6 +128,7 @@
   </ion-card-content>
 </ion-card-header>
 </ion-card>
+    </div>
 </ng-container>
 <ng-container *ngIf="stolenList?.length == 0">
   <h3  class="empty-list-message">
@@ -111,7 +138,15 @@
 </section>
 <section [hidden]="segmentValue !== 'myList'">
   <ng-container *ngIf="myList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
+    <div *ngFor="let item of myList">
+      <ion-item lines="none">
+              <ion-avatar slot="start">
+                <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+                <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+              </ion-avatar>
+              <ion-label>{{item.creatorName}}</ion-label>
+            </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/lost-found/details', item.id]">
   <app-aspect-ratio [ratio]="{w:50, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
@@ -123,6 +158,7 @@
   </ion-card-content>
 </ion-card-header>
 </ion-card>
+    </div>
 </ng-container>
 <ng-container *ngIf="myList?.length == 0">
   <h3  class="empty-list-message">

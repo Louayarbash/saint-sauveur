@@ -18,10 +18,14 @@ import { InviteModal } from '../../buildings/building/invite/invite.modal';
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
   searchQuery: string;
+  activeToggle: boolean = true;
   // showAgeFilter = false;
 
   searchSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
   searchFiltersObservable: Observable<any> = this.searchSubject.asObservable();
+
+/*   activeToggleSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
+  activeToggleFiltersObservable: Observable<any> = this.activeToggleSubject.asObservable(); */
 
   listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   stateSubscription: Subscription;
@@ -75,13 +79,13 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
             return dataSourceWithShellObservable.pipe(
               map(filteredItems => {
                 // Just filter items by name if there is a search query and they are not shell values
-                if (filters.query !== '' && !filteredItems.isShell) {
-                  const queryFilteredItems = filteredItems.filter(
-                    item =>
-                     
-                    (
-                      // item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
-                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()))
+                if (/*filters.query !== '' &&*/ !filteredItems.isShell) {
+                  //console.log(filters.query)
+                  //console.log(filters.toggle)
+                  const queryFilteredItems = filteredItems.filter(                    
+                    item =>                     
+                    (// item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
+                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()) && (item.status == (filters.toggle ? "active" : "inactive" ) ))
                   );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
@@ -134,8 +138,15 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   searchList() {
+    //console.log("louay",this.activeToggle)
     this.searchSubject.next({
-      query: this.searchQuery
+      query: this.searchQuery,
+      toggle: this.activeToggle
     });
   }
+/*   searchActiveToggle() {
+    this.activeToggleSubject.next({
+      query: this.activeToggle
+    });
+  } */
 }

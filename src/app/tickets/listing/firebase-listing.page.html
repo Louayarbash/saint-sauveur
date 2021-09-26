@@ -23,7 +23,7 @@
 <ion-content>
 <ng-container *ngIf="items.isShell">
   <div class="DivLoading">
-    <ion-spinner></ion-spinner>
+    <ion-spinner color="main"></ion-spinner>
   </div>
 </ng-container>
 <ng-container *ngIf="!items.isShell">
@@ -97,7 +97,7 @@
 <ng-container *ngIf="!userIsAdmin">
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
     </div>
   </ng-container>
   <div *ngIf="ticketsList?.length > 0">

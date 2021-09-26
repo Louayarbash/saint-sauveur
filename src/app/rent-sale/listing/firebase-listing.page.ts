@@ -161,6 +161,12 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                 default:
                   this.object = '';
               }
+
+              this.featureService.getItem("users",item.createdBy).subscribe(res=> {
+                item.creatorPhoto = res.photo
+                item.creatorName = res.firstname + " " + res.lastname
+             })
+             
               });
 
 

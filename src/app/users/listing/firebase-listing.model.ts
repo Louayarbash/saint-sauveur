@@ -7,6 +7,7 @@ export class FirebaseListingItemModel extends ShellModel {
   lastname: string;
   id: string;
   app :string;
+  status: string;
 
   constructor() {
     super();

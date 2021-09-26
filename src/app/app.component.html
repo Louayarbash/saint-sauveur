@@ -48,6 +48,16 @@
               <ion-label>{{ 'SignOut' | translate }}</ion-label>  
                 <ion-icon name="log-out-outline"></ion-icon>
             </ion-item>
+            <ion-item button *ngFor="let p of products" (click)="purchase(p)" detail="false">
+              <ion-label>{{ p?.title }}
+              <p>{{ p?.description }}</p>
+            </ion-label>
+            <ion-button slot="end">
+              {{ p?.price }} {{ p?.currency}}
+            </ion-button>            
+            </ion-item>
+            <ion-button expand="full" (click)="restore">Restore</ion-button>        
+            <ion-item> Is Pro: {{ isPro }}</ion-item>
           </ion-menu-toggle>
           </ion-list>
 <!--             <ion-list>

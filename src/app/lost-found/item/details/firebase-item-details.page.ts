@@ -177,4 +177,10 @@ export class FirebaseItemDetailsPage implements OnInit {
   isHtml: true
 } */
   }
+  copyEmail(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.email)
+  }
+  copyPhone(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.phone.toString())
+  }
 }

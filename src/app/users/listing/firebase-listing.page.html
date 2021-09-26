@@ -9,8 +9,12 @@
   </ion-toolbar>
   <ion-toolbar color="main">
     <ion-row>
-      <ion-col>
+      <ion-col size="10">
         <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarUsers' | translate }}"></ion-searchbar>
+      </ion-col>
+      <ion-col size="2">
+        <ion-label class="ion-text-nowrap">{{ 'Active' | translate }}</ion-label>
+        <ion-toggle [(ngModel)]="activeToggle" (ionChange)="searchList()"></ion-toggle>
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -18,7 +22,7 @@
 <ion-content>
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
     </div>
   </ng-container>
   <ng-container *ngIf="!items.isShell">
