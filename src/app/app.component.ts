@@ -13,10 +13,12 @@ import { Router } from '@angular/router';
 import { Plugins, NetworkStatus } from '@capacitor/core';
 import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
 import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2/ngx';
+//import firebase from 'firebase';
+//import firebase from 'firebase/app';
 
 const { Network } = Plugins;
-const PRODUCT_KEY = 'pro_version_subscription';
-const PRODUCT_KEY2 = 'pro_version2';
+const PRODUCT_KEY = 'pro_version';//'pro_version_subscription';
+//const PRODUCT_KEY2 = 'pro_version_subscription';
 
 //import { LoginService } from './services/login/login.service';
 
@@ -39,7 +41,14 @@ export class AppComponent {
   userName: string;
   products: IAPProduct[] = [];
   isPro: boolean;
-
+  proStatusUpdate: firebase.firestore.FieldValue;
+  proExpirationDate: firebase.firestore.FieldValue;
+  proStatus: string= 'N/A';
+  storeExpiryDate: string= "jjj";
+  storeLastRenewalDate= new Date(Date.now());
+  storeBillingPeriod: number = 0;
+  status: string = "status";
+  id: string;
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
     private translate: TranslateService,
@@ -123,8 +132,12 @@ checkConnection(){
     this.platform.ready().then(() => {
     console.log("app.component initialize app")
     //purchase product
-    this.registerProduct();
-    this.setupListeners();
+    
+    if (!this.platform.is("desktop")){
+      this.registerProduct();
+      this.setupListeners();
+    }
+    
     this.store.ready(()=> {
       this.products = this.store.products;
       this.changeDetectorRef.detectChanges();
@@ -143,6 +156,9 @@ checkConnection(){
         this.loginService.currentBuildingInfo.subscribe(
           buildingInfo => {
             this.buildingName= buildingInfo.name;
+            this.proStatusUpdate= buildingInfo.proStatusUpdate;
+            this.proExpirationDate= buildingInfo.proExpirationDate;
+            this.proStatus = buildingInfo.proStatus
           }
           );
         
@@ -271,8 +287,20 @@ checkConnection(){
   registerProduct(){
     this.store.register({
       id: PRODUCT_KEY,
+      type: this.store.CONSUMABLE,
+    },
+    
+    );
+/*     this.store.register(    {
+      id: PRODUCT_KEY2,
       type: this.store.PAID_SUBSCRIPTION,
-    });
+    }    
+    ); */
+
+    console.log(PRODUCT_KEY, this.store.get(PRODUCT_KEY))
+    //console.log(PRODUCT_KEY2, this.store.get(PRODUCT_KEY2))
+
+
 
 /*     this.store.register({
       id: PRODUCT_KEY2,
@@ -280,13 +308,20 @@ checkConnection(){
     });  */
 
     this.store.refresh()
-  
+
+    //this.id = this.store.get(PRODUCT_KEY).id;
+    //this.storeExpiryDate = this.store.get(PRODUCT_KEY).expiryDate?.toDateString();
+    //this.storeBillingPeriod= this.store.get(PRODUCT_KEY).billingPeriod;
+    //this.storeLastRenewalDate= this.store.get(PRODUCT_KEY).lastRenewalDate;
   }
   
   setupListeners(){
-    this.store.when('subscription').approved((p: IAPProduct) => {
+    this.store.when('product')
+    .approved((p: IAPProduct) => {
       if (p.id === PRODUCT_KEY) {
         this.isPro = true;
+        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proExpirationDate: /*firebase.firestore.FieldValue.serverTimestamp()*/"1",proStatusUpdate:/*firebase.firestore.FieldValue.serverTimestamp()*/"1", proStatus: "approved"})
+        console.log("approved", p.id)
       } 
       this.changeDetectorRef.detectChanges();
   
@@ -294,21 +329,36 @@ checkConnection(){
     })
     .verified((p: IAPProduct) => p.finish());
   
-    this.store.when(PRODUCT_KEY)
+/*     this.store.when(PRODUCT_KEY)
     .expired(()=> {
       console.log("expired")
+      this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{ proStatusUpdate:firebase.firestore.FieldValue.serverTimestamp(), proStatus: "expired"})
       this.isPro = false;
-    });
+      this.status = "expired"
+    }); */
 
     this.store.when(PRODUCT_KEY)    
-    .cancelled(()=> {
-      console.log("canceled")
+    .cancelled((product: IAPProduct)=> {
+      console.log("canceled", product)
+      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{/*ProExpirationDate: Date.now(),*/ proStatusUpdate:"2"/*firebase.firestore.FieldValue.serverTimestamp()*/, proStatus: "canceled"})
       this.isPro = false;
-    });
+      this.status = "canceled"
+    }); 
+
+    this.store.when('product')    
+    .updated((product: IAPProduct)=> {
+      console.log("updated", product)
+      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{ProExpirationDate: "3"/*new Date(new Date().setFullYear(new Date().getFullYear() + 1))*/ , proStatusUpdate:"3"/*firebase.firestore.FieldValue.serverTimestamp()*/, proStatus: "updated"})
+      this.isPro = false;
+      this.status = "updated" + product.expiryDate;
+    }); 
 
     this.store.when(PRODUCT_KEY)
-    .owned(()=> {
+    .owned((product: IAPProduct)=> {     
+      console.log("owned", product)       
+      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),res)
       this.isPro = true;
+      this.status = "owned"
     });
   
   }

@@ -111,6 +111,15 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
+  getExpirationDate(): any {
+    if(this.userInfo.proExpirationDate){
+      return this.userInfo.proExpirationDate
+    }
+    else {
+      return null
+    }
+  }
+
   getBuildingName(): string{
     if(this.buildingInfo.name){
       return this.buildingInfo.name;

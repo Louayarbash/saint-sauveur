@@ -83,9 +83,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   //console.log(filters.query)
                   //console.log(filters.toggle)
                   const queryFilteredItems = filteredItems.filter(                    
-                    item =>                     
-                    (// item.app.toLowerCase().includes(filters.query.toLowerCase()) || 
-                    item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()) && (item.status == (filters.toggle ? "active" : "inactive" ) ))
+                    item =>                                        
+                    (                    
+                      filters.query !== '' ? item.firstname.toLowerCase().concat(' ').concat(item.lastname.toLowerCase()).includes(filters.query.toLowerCase()) && (item.status == (filters.toggle ? "active" : "inactive" )) : item.status == (filters.toggle ? "active" : "inactive"  
+                      )
+                    )                    
                   );
                   // While filtering we strip out the isShell property, add it again
                   return Object.assign(queryFilteredItems, {isShell: filteredItems.isShell});
