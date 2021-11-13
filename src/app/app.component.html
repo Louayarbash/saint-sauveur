@@ -56,9 +56,9 @@
               {{ p?.price }} {{ p?.currency}}
             </ion-button>            
             </ion-item>
-            <ion-button expand="full" (click)="restore">Restore</ion-button>            
-            
-            <ion-item *ngIf="proExpirationDate"> proExpirationDate: {{ proExpirationDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-item>
+            <!-- <ion-button expand="full" (click)="restore">Restore</ion-button>             -->
+            <!-- <ion-item *ngIf="proFirstExpirationDate"> proFirstExpirationDate: {{ proFirstExpirationDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-item> -->
+            <ion-item *ngIf="proExpirationDate"> {{ 'proExpirationDate' | translate }} {{ proExpirationDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-item>
             
           </ion-menu-toggle>
           </ion-list>

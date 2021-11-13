@@ -7,6 +7,7 @@ import { FeatureService } from '../../services/feature/feature.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { ParkingInfo } from '../../type';
+import { Timestamp } from '@google-cloud/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -111,9 +112,18 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
-  getExpirationDate(): any {
-    if(this.userInfo.proExpirationDate){
-      return this.userInfo.proExpirationDate
+  getProExpirationDate(): Timestamp {
+    if(this.buildingInfo.proExpirationDate){
+      return this.buildingInfo.proExpirationDate
+    }
+    else {
+      return null
+    }
+  }  
+  
+  getProFirstExpirationDate(): Timestamp {
+    if(this.buildingInfo.proFirstExpirationDate){
+      return this.buildingInfo.proFirstExpirationDate
     }
     else {
       return null
@@ -212,7 +222,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
 
    async initializeApp(uid: string) : Promise<boolean> 
     {
-    console.log("initializeApp");
+    console.log("initializeApp", uid);
     try {
       
       const user= await this.afs.firestore.collection("users").doc(uid).get({source: 'server'});

@@ -30,18 +30,17 @@
   <ion-card class="itemCard">  
         <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
   <ion-row class="slider-row">
-        <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
-          <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
-            <ion-row class="slide-inner-row">
-                <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
-                <app-aspect-ratio [ratio]="{w:64, h:50}"> 
-                </app-aspect-ratio>
-              </app-image-shell>
-            </ion-row>
-          </ion-slide>
-        </ion-slides>
-      </ion-row>
-      
+    <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
+      <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
+        <ion-row class="slide-inner-row">
+          <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
+            <app-aspect-ratio [ratio]="{w:64, h:50}"> 
+              </app-aspect-ratio>
+          </app-image-shell>
+        </ion-row>
+      </ion-slide>
+    </ion-slides>
+  </ion-row>      
       <!-- <section> -->
 <!--           <ion-list-header lines="inset">
             <ion-label>Trending</ion-label>

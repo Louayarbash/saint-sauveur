@@ -14,7 +14,7 @@ import { Plugins, NetworkStatus } from '@capacitor/core';
 import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
 import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2/ngx';
 //import firebase from 'firebase';
-//import firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 const { Network } = Plugins;
 const PRODUCT_KEY = 'pro_version';//'pro_version_subscription';
@@ -49,6 +49,7 @@ export class AppComponent {
   storeBillingPeriod: number = 0;
   status: string = "status";
   id: string;
+  proFirstExpirationDate: firebase.firestore.FieldValue;
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
     private translate: TranslateService,
@@ -132,17 +133,17 @@ checkConnection(){
     this.platform.ready().then(() => {
     console.log("app.component initialize app")
     //purchase product
-    
+    console.log("platforms", this.platform.platforms())
+    console.log("platform desktop", this.platform.is("desktop"))
     if (!this.platform.is("desktop")){
       this.registerProduct();
       this.setupListeners();
+      this.store.ready(()=> {
+        this.products = this.store.products;
+        this.changeDetectorRef.detectChanges();
+      })
     }
-    
-    this.store.ready(()=> {
-      this.products = this.store.products;
-      this.changeDetectorRef.detectChanges();
-    })
-      
+          
     this.checkConnection();
       this.setLanguage();
       //this.statusBar.styleDefault();
@@ -157,7 +158,8 @@ checkConnection(){
           buildingInfo => {
             this.buildingName= buildingInfo.name;
             this.proStatusUpdate= buildingInfo.proStatusUpdate;
-            this.proExpirationDate= buildingInfo.proExpirationDate;
+            this.proExpirationDate= buildingInfo.proExpirationDate;            
+            this.proFirstExpirationDate = buildingInfo.proFirstExpirationDate;
             this.proStatus = buildingInfo.proStatus
           }
           );
@@ -319,9 +321,19 @@ checkConnection(){
     this.store.when('product')
     .approved((p: IAPProduct) => {
       if (p.id === PRODUCT_KEY) {
-        this.isPro = true;
-        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proExpirationDate: /*firebase.firestore.FieldValue.serverTimestamp()*/"1",proStatusUpdate:/*firebase.firestore.FieldValue.serverTimestamp()*/"1", proStatus: "approved"})
-        console.log("approved", p.id)
+        //this.isPro = true;
+       let nextExpirationDate: Date;
+       if (this.loginService.getProExpirationDate()) {        
+        nextExpirationDate = new Date(new Date(this.loginService.getProExpirationDate().toDate()).setFullYear(new Date(this.loginService.getProExpirationDate().toDate()).getFullYear() + 1))
+        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      }
+      else {
+        nextExpirationDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proFirstExpirationDate: nextExpirationDate, proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      }    
+        console.log("approved", p)
       } 
       this.changeDetectorRef.detectChanges();
   
@@ -329,7 +341,7 @@ checkConnection(){
     })
     .verified((p: IAPProduct) => p.finish());
   
-/*     this.store.when(PRODUCT_KEY)
+    /*this.store.when(PRODUCT_KEY)
     .expired(()=> {
       console.log("expired")
       this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{ proStatusUpdate:firebase.firestore.FieldValue.serverTimestamp(), proStatus: "expired"})
@@ -338,27 +350,30 @@ checkConnection(){
     }); */
 
     this.store.when(PRODUCT_KEY)    
-    .cancelled((product: IAPProduct)=> {
-      console.log("canceled", product)
-      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{/*ProExpirationDate: Date.now(),*/ proStatusUpdate:"2"/*firebase.firestore.FieldValue.serverTimestamp()*/, proStatus: "canceled"})
+    .cancelled((p: IAPProduct)=> {
+      console.log("canceled", p)
+      this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "canceled", productState: p.state})
+      this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})      
       this.isPro = false;
       this.status = "canceled"
     }); 
 
     this.store.when('product')    
-    .updated((product: IAPProduct)=> {
-      console.log("updated", product)
-      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{ProExpirationDate: "3"/*new Date(new Date().setFullYear(new Date().getFullYear() + 1))*/ , proStatusUpdate:"3"/*firebase.firestore.FieldValue.serverTimestamp()*/, proStatus: "updated"})
-      this.isPro = false;
-      this.status = "updated" + product.expiryDate;
+    .updated((p: IAPProduct)=> {
+      console.log("updated", p)            
+/*       this.isPro = false;
+      this.status = "updated" + p.expiryDate;
+      if(p.state == "finished"){
+      } */
     }); 
 
     this.store.when(PRODUCT_KEY)
-    .owned((product: IAPProduct)=> {     
-      console.log("owned", product)       
+    .owned((p: IAPProduct)=> {     
+      console.log("owned", p)       
       //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),res)
-      this.isPro = true;
-      this.status = "owned"
+      //this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      //this.isPro = true;
+      //this.status = "owned"
     });
   
   }

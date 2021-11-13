@@ -34,9 +34,10 @@
       </ion-avatar>
       <ion-label>{{ item.firstname?.concat(' ').concat(item.lastname) }}</ion-label>
       <!-- <ion-text color="medium" *ngIf="!items.isShell"> {{ ('#').concat(item.app) }}</ion-text> -->
-   
+      <ion-chip color="main" outline="true">
+        <ion-text>{{ item.status | translate }}</ion-text>
+      </ion-chip>
     </ion-item>
-
   </ion-list>
 </ng-container>
   <ng-container *ngIf="items?.length == 0">

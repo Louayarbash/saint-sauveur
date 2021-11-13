@@ -39,7 +39,6 @@ export class StartMenuPage implements OnInit {
     //this.backButtonHandler = Plugins.App.addListener('backButton', Plugins.App.exitApp)    
     //console.log('start menu constructor');
     //this.menu.enable(true); 
-    
   }
 
   ngOnInit() {

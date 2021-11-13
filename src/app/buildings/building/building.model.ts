@@ -25,7 +25,8 @@ export class BuildingModel extends ShellModel {
   createdBy: string;
   createDate: firebase.firestore.FieldValue;
   modificationDate: firebase.firestore.FieldValue;
-  proExpirationDate: firebase.firestore.FieldValue;
+  proExpirationDate: firebase.firestore.Timestamp;
+  proFirstExpirationDate: firebase.firestore.Timestamp;
   proStatusUpdate: firebase.firestore.FieldValue;
   proStatus: string;
 
