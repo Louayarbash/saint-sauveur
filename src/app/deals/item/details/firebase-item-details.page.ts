@@ -68,6 +68,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   dealDetails: string;
   buildingObservable: Observable<any>;
   buildingSubscription: Subscription;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -89,6 +90,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true; 
     this.ratingFormCreator = new FormGroup({
       rate: new FormControl(this.rating)
     });
@@ -154,7 +156,7 @@ export class FirebaseItemDetailsPage implements OnInit {
                 const rating = arr.map(res => {return Number(res.stars)});
                 let valueRating = rating.length ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0";
                 this.ratingFormCreator.get('rate').setValue(valueRating);
-                console.log("rated creator", rating.length)
+                //console.log("rated creator", rating.length)
                 this.isRatedCreator = rating.length == 0 ? false : true;
                 return rating.length > 0 ? (rating.reduce((total,val) => total + val ) / arr.length).toFixed(1) : "0"
               }));

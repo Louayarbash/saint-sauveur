@@ -28,7 +28,7 @@
         <ng-container *ngFor="let validation of validation_messages.email">
           <div class="error-message" *ngIf="signupForm.get('email').hasError(validation.type) && (signupForm.get('email').dirty || signupForm.get('email').touched)">
             <ion-icon name="information-circle-outline"></ion-icon>
-            <span>{{ validation.message }}</span>
+            <span>{{ validation.message | translate }}</span>
           </div>
         </ng-container>
       </div>
@@ -43,7 +43,7 @@
           <ng-container *ngFor="let validation of validation_messages.password">
             <div class="error-message" *ngIf="signupForm.get('matching_passwords').get('password').hasError(validation.type) && (signupForm.get('matching_passwords').get('password').dirty || signupForm.get('matching_passwords').get('password').touched)">
               <ion-icon name="information-circle-outline"></ion-icon>
-              <span>{{ validation.message }}</span>
+              <span>{{ validation.message | translate }}</span>
             </div>
           </ng-container>
         </div>
@@ -57,7 +57,7 @@
           <ng-container *ngFor="let validation of validation_messages.confirm_password">
             <div class="error-message" *ngIf="signupForm.get('matching_passwords').get('confirm_password').hasError(validation.type) && (signupForm.get('matching_passwords').get('confirm_password').dirty || signupForm.get('matching_passwords').get('confirm_password').touched)">
               <ion-icon name="information-circle-outline"></ion-icon>
-              <span>{{ validation.message }}</span>
+              <span>{{ validation.message | translate }}</span>
             </div>
           </ng-container>
         </div>
@@ -66,7 +66,7 @@
         <ng-container *ngFor="let validation of validation_messages.matching_passwords">
           <div class="error-message" *ngIf="signupForm.get('matching_passwords').hasError(validation.type) && (signupForm.get('matching_passwords').get('confirm_password').dirty || signupForm.get('matching_passwords').get('confirm_password').touched)">
             <ion-icon name="information-circle-outline"></ion-icon>
-            <span>{{ validation.message }}</span>
+            <span>{{ validation.message | translate }}</span>
           </div>
         </ng-container>
       </div>
@@ -118,6 +118,10 @@
       </ion-fab-button>
       <ion-fab-button (click)="changeLanguage('ar')">
         Ar
+        <!-- <ion-icon name="call"></ion-icon> -->
+      </ion-fab-button>
+      <ion-fab-button (click)="changeLanguage('es')">
+        Es
         <!-- <ion-icon name="call"></ion-icon> -->
       </ion-fab-button>
     </ion-fab-list>

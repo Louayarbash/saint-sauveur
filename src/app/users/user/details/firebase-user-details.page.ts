@@ -34,6 +34,7 @@ export class FirebaseUserDetailsPage implements OnInit {
   parkingInfo: ParkingInfo[] = [];
   status: string;
   enableNotifications: string;
+  ltr: boolean;
 
 
   @HostBinding('class.is-shell') get isShell() {
@@ -53,6 +54,7 @@ export class FirebaseUserDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<UserModel> = resolvedDataStores.user;
@@ -79,6 +81,8 @@ export class FirebaseUserDetailsPage implements OnInit {
             case "en" : this.language = this.featureService.translations.English;
             break;
             case "ar" : this.language = this.featureService.translations.Arabic;
+            break;
+            case "es" : this.language = this.featureService.translations.Spanish;
             break;
             default:
               this.status = "Undefined";

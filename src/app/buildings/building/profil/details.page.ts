@@ -26,7 +26,8 @@ export class BuildingDetailsPage implements OnInit {
   enableDeal: string;
   enableSale: string;
   enableLostFound: string;
-  enablePublication: string;
+  enableAnnouncement: string;
+  enableRegulation: string;
   enableEvent: string;
   enableRentSale: string;
   enableTicket: string;
@@ -65,7 +66,8 @@ export class BuildingDetailsPage implements OnInit {
           this.country = this.featureService.getCountryName(this.item.country);
           this.enableDeal = this.item.enableDeal ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableLostFound = this.item.enableLostFound ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
-          this.enablePublication = this.item.enablePublication ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
+          this.enableAnnouncement = this.item.enableAnnouncement ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
+          this.enableRegulation = this.item.enableRegulation ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableEvent = this.item.enableEvent ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableRentSale = this.item.enableRentSale ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
           this.enableSale = this.item.enableSale ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;

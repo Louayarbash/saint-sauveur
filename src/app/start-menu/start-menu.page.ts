@@ -21,7 +21,8 @@ export class StartMenuPage implements OnInit {
   userIsAdmin: boolean= false;
   enableDeal: boolean= false;
   enableLostFound: boolean= false;
-  enablePublication: boolean= false;
+  enableAnnouncement: boolean= false;
+  enableRegulation: boolean= false;
   enableEvent: boolean= false;
   enableRentSale: boolean= false;
   enableTicket: boolean= false;
@@ -38,12 +39,11 @@ export class StartMenuPage implements OnInit {
     //this.backButtonHandler = Plugins.App.addListener('backButton', Plugins.App.exitApp)    
     //console.log('start menu constructor');
     //this.menu.enable(true); 
-    
   }
 
   ngOnInit() {
    // this.menu.enable(true); 
-    console.log("oninit Louay");  
+    //console.log("oninit Louay");  
     this.loginService.currentUserInfo.subscribe(
       userInfo => {
         this.username = userInfo.firstname;
@@ -53,11 +53,12 @@ export class StartMenuPage implements OnInit {
       }
       );
       
-      this.loginService.currentBuildingInfo.subscribe(
+      this.loginService.currentBuildingInfo.subscribe( 
         buildingInfo => {
           this.enableDeal= buildingInfo.enableDeal;
           this.enableLostFound= buildingInfo.enableLostFound
-          this.enablePublication= buildingInfo.enablePublication;
+          this.enableAnnouncement= buildingInfo.enableAnnouncement;
+          this.enableRegulation= buildingInfo.enableRegulation;
           this.enableEvent= buildingInfo.enableEvent;
           this.enableRentSale= buildingInfo.enableRentSale;
           this.enableSale= buildingInfo.enableSale;

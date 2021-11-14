@@ -10,7 +10,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from '../../environments/environment';
 
-// import { FirebaseCreateUserModal } from './user/create/firebase-create-user.modal';
+import { FirebaseCreateUserModal } from './user/create/firebase-create-user.modal';
 // import { FirebaseUpdateUserModal } from './user/update/firebase-update-user.modal';
 import { ChatModal } from './user/chat/chat.modal';
 // import { SelectUserImageModal } from './user/select-image/select-user-image.modal';

@@ -14,10 +14,7 @@ import { ChatModel } from './chat.model'
 
 @Component({
   selector: 'app-firebase-update-user',
-  templateUrl: './chat.modal.html',
-  styleUrls: [
-    './styles/firebase-update-user.modal.scss'
-  ],
+  templateUrl: './chat.modal.html'
 })
 export class ChatModal implements OnInit {
   // "user" is passed in firebase-details.page
@@ -40,7 +37,7 @@ export class ChatModal implements OnInit {
   }
 
   ngOnInit() {
-    this.messages = this.afs.collection<ChatModel>('chatTicket',ref=> ref.where('channelId', '==' ,"chatTicketPage_" + this.item.id).orderBy('date')).valueChanges();
+    this.messages = this.afs.collection<ChatModel>('chatTicket',ref=> ref.where('channelId', '==' ,"chatTicketPage_" + this.item.id).orderBy('createDate')).valueChanges();
     setTimeout(() => {
       this.content.scrollToBottom(400);
     },400); 
@@ -54,7 +51,7 @@ export class ChatModal implements OnInit {
   sendMessage(){
     let chatMsg : ChatModel = new ChatModel();
     chatMsg.channelId = "chatTicketPage_" + this.item.id;
-    chatMsg.date = firebase.firestore.FieldValue.serverTimestamp();
+    chatMsg.createDate = firebase.firestore.FieldValue.serverTimestamp();
     chatMsg.userId = this.loginId;
     chatMsg.text = this.msgText;
     //chatMsg.name = this.user.name;

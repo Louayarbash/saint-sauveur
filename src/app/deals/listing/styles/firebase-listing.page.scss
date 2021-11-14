@@ -22,31 +22,29 @@
   --page-countdown-gutter: 3px;
 
   --page-expired-color: var(--ion-color-medium-tint);
-  --page-ends-soon-color: #FFAB6B;
+  --page-ends-soon-color: #e15b0e;
   --page-distant-end-color: #70DF70;
 
   --page-deal-color: var(--ion-color-medium);
   --page-deal-border-color: var(--ion-color-light-shade);
 
-  --page-color: #70DF70;
+  //--page-color: #70DF70;
   //Louay
-  --new-color: #FFAB6B;
+  --new-color: #e15b0e;
   --expired-color : var(--ion-color-medium-shade);
   --started-color : #f4344f;
   --ended-color : var(--ion-color-medium-shade);
-  --accepted-color: #20dc6a;
-
-
+  --accepted-color: #13743a;
 
   // Add custom colors to use with [color] property
-   @include ion-color('claim') {
+/*    @include ion-color('claim') {
     --ion-color-claim: #FFAB6B;
     --ion-color-claim-rgb: 255,171,107;
     --ion-color-claim-contrast: #ffffff;
     --ion-color-claim-contrast-rgb: 255,255,255;
     --ion-color-claim-shade: #e0965e;
     --ion-color-claim-tint: #ffb37a;
-  }
+  } */
   
 }
 
@@ -133,7 +131,9 @@
         padding-top: 10px;
         padding-bottom: 10px;
       }
-
+      .success{
+        --background: var(--accepted-color)
+      }
       .claim-button {
         --box-shadow: none;
         --border-radius: var(--app-fair-radius);
@@ -169,8 +169,7 @@
       color: var(--ion-color-medium-shade);
       font-size: 15px;       
       //padding-top: 8px;
-      padding-bottom: 8px;
-    
+      padding-bottom: 8px;    
       
       .item-name {
         margin: 0px;

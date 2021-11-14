@@ -7,8 +7,8 @@
 import admin = require('firebase-admin');
 import functions = require('firebase-functions');
 const { CloudTasksClient } = require('@google-cloud/tasks');
-const nodemailer = require('nodemailer');
-const cors = require("cors");
+import nodemailer = require('nodemailer');
+import cors = require("cors");
 const corsHandler = cors({origin: true});
 
 admin.initializeApp();
@@ -57,65 +57,25 @@ interface InfoDocumentData extends admin.firestore.DocumentData {
 
 exports.onNewRequest = functions.firestore
     .document('deals/{dealId}')
-    .onCreate(async item => {
-
-    const data = item.data();//.after.data();
-    const /*let*/ id = item.id
+    .onCreate(async (item, context) => {
     
-    if (data && data.status === "new"){
-        //const id = data.id
-        //const createdBy = data.createdBy;
+    const dealId = context.params.dealId;    
+
+    const itemData = item.data();//.after.data();
+    //const id = item.id
     
-    // Notification content
-    const payload = {
-      notification: {
-          title:`New parking request`,
-          body: `Someone in your building is asking for parking, check to see if you can help!`,
-          //icon: 'https://goo.gl/Fz9nrQ',
-          //click_action:"FCM_PLUGIN_ACTIVITY",
-          //collapse_key:"com.enappd.IonicReactPush"
-      },
-      data: {
-        //actionId:"tap",
-        landing_page: "/app/start-menu/deal",
-        header: "New parking request",
-        message: "Would you like to check if you can help?",
-        id: id
-        //collapse_key:"com.enappd.IonicReactPush"
-      }
+    if (itemData && itemData.status === "new"){
+    
+    if(itemData.type === "request"){
+      sendPushNotifications(itemData.createdBy,'all', dealId, itemData.buildingId, 'newRequestDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
     }
-
-    const usersRef = db.collection('users').where('buildingId', '==', data.buildingId);
-    // get the user's tokens and send notifications
-    const users = await usersRef.get();
-
-    /*const tokens = [];*/
-    //const tokens: string | any[] = [];
-    const tokens: string[] = [];
-
-    // send a notification to each device token
-    if(users.size > 0){
-      users.forEach(result => {
-        console.log("tokens",result.data().tokens);
-        if(result.data().tokens){
-          result.data().tokens.forEach((res: string) => {tokens.push( res )})
-        }
-      })
-      admin.messaging().sendToDevice(tokens, payload).then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
-    }
-
-
-    console.log("Louay tokens array",tokens);
+    else if(itemData.type === "offer"){
+      sendPushNotifications(itemData.createdBy,'all', dealId, itemData.buildingId, 'newOfferDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
+    }    
 
     /* 2 */
     /* Cretate task to change status to expired */
-    const dataFortask = data as InfoDocumentData;
+    const dataFortask = itemData as InfoDocumentData;
     const { expiresIn } = dataFortask;
       
     let expiresAtSeconds: number | undefined;
@@ -154,7 +114,7 @@ exports.onNewRequest = functions.firestore
 }
 return
 });
-//export const changeRequestStatusToStarted = functions.https.onRequest(async (req, res) => {
+
 export const changeRequestStatusToStarted = functions.https.onRequest(async (req: any, res: any) => {
     const payload = req.body as RequestTaskPayload
     try {
@@ -167,7 +127,6 @@ export const changeRequestStatusToStarted = functions.https.onRequest(async (req
         res.status(500).send(error)
     }
 })
-//export const changeRequestStatusToEnded = functions.https.onRequest(async (req, res) => {
 export const changeRequestStatusToEnded = functions.https.onRequest(async (req:any, res: any) => {
     const payload = req.body as RequestTaskPayload
     try {
@@ -198,56 +157,25 @@ export const reminderToLeave = functions.https.onRequest(async (req: any, res:an
     
     let userId: any;
     const taskPayload = req.body as RequestTaskPayload
-    const getItem= await admin.firestore().doc(taskPayload.docPath).get();
-    const item = getItem.data() as InfoDocumentData;
-    console.log("inside reminder item", item);
-    console.log("inside reminder taskPayload", taskPayload);
-    
+    const item= await admin.firestore().doc(taskPayload.docPath).get();
+    //const item = getItem.data() as InfoDocumentData;
+
+    const itemData = item.data() as InfoDocumentData;;    
+
     //res.send("Hello from Firebase!");
     //const createdBy = item.createdBy;
     
-    // Notification content
-    const payload = {
-      notification: {
-          title: '',
-          body: "Reminder: Time to move your car",
-          //icon: 'https://goo.gl/Fz9nrQ',
-          click_action:"FCM_PLUGIN_ACTIVITY"
-      },
-      data: {
-        landing_page: "/app/start-menu/deal"
-      }
-    }
-
-    if(item.type === "request"){
-      userId = item.createdBy ?  item.createdBy : null
+    if(itemData.type === "request"){
+      userId = itemData.createdBy ?  itemData.createdBy : null
     }
     else { 
-      userId = item.responseBy ?  item.responseBy : null
+      userId = itemData.responseBy ?  itemData.responseBy : null
     }
 
     if(userId){
     // ref to the device collection for the user
-    const devicesRef = db.collection('devices').where('userId', '==', userId).where('buildingId', '==', item.buildingId)
-    // get the user's tokens and send notifications
-    const devices = await devicesRef.get();
 
-    /*const tokens = [];*/
-    const tokens: string | any[] = [];
-
-    // send a notification to each device token
-    devices.forEach(result => {
-      const token = result.data().token;
-      tokens.push( token )
-    })
-    admin.messaging().sendToDevice(tokens, payload).then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-      res.status(500)
-      console.log('Error sending message:', error);
-    });
+    sendPushNotifications(userId, 'single', item.id,itemData.buildingId,'reminderToLeave').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
 
     }
     else res.status(500)
@@ -257,20 +185,11 @@ export const reminderToLeave = functions.https.onRequest(async (req: any, res:an
         res.status(500).send(error)
     }
 
-  }
-  )
+})
 
 exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdate(async item => {
-//export const onUpdateRequest = functions.firestore.document('/deals-requests/{id}').onUpdate(async item => {
     const before = item.before.data() as InfoDocumentData
     const after = item.after.data() as InfoDocumentData
-    //const data = item.data();//.after.data();
-    const /*let*/ id = item.before.id
-    //const id = data.id
-    //console.log("createdBy",data.createdBy);
-    //const responseBy = after.responseBy;
-    
-    //const createdBy = after.createdBy;
   
     // Canceled (by creator) (OK)
     if ((before.status === "new") && (after.status === "canceled") && (after.actionTaskExpired)){
@@ -283,7 +202,6 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
     else if ((before.status === "accepted" || before.status === "started") && (after.status === "canceled")){
     if ( after.actionTaskStarted ) { // before status === "accepted"
 
-            //const tasksClient = new CloudTasksClient()
             tasksClient.deleteTask({ name: after.actionTaskReminder });
             tasksClient.deleteTask({ name: after.actionTaskStarted });
             tasksClient.deleteTask({ name: after.actionTaskEnded });
@@ -291,59 +209,24 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
             const update : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskStarted : admin.firestore.FieldValue.delete() , actionTaskEnded : admin.firestore.FieldValue.delete() };
             await item.after.ref.update(update);
     } 
-    else if( after.actionTaskReminder ) { // before status === "started"
+    else if( after.actionTaskReminder ) { // deal started (before status === "started")
             tasksClient.deleteTask({ name: after.actionTaskReminder });
             tasksClient.deleteTask({ name: after.actionTaskEnded });
             
             const update : InfoDocumentData = { actionTaskReminder : admin.firestore.FieldValue.delete(), actionTaskEnded : admin.firestore.FieldValue.delete() };
             await item.after.ref.update(update);
     }
-    // Notification content
-    const payload = {
-      notification: {
-          title: '',
-          body: `Deal is canceled by the creator!`,
-          //icon: 'https://goo.gl/Fz9nrQ',
-          click_action:"FCM_PLUGIN_ACTIVITY"
-      },
-      data: {
-        landing_page: "/app/start-menu/deal",
-        id: id
-      }
-    }
-
-    //if(before.type = "request"){
-    //  userId = before.createdBy ? before.createdBy : null
-    // }
-    // else { 
-    // userId = before.responseBy? before.responseBy : null;
-    // }
+    else if( after.actionTaskEnded ) { // deal reminded
+      tasksClient.deleteTask({ name: after.actionTaskEnded });
+      
+      const update : InfoDocumentData = { actionTaskEnded : admin.firestore.FieldValue.delete() };
+      await item.after.ref.update(update);
+}
 
     if(before.createdBy){
-    // ref to the device collection for the user
-    const devicesRef = db.collection('devices').where('userId', '==', before.createdBy).where('buildingId', '==', before.buildingId)
-    // get the user's tokens and send notifications
-    const devices = await devicesRef.get();
-
-    /*const tokens = [];*/
-    const tokens: string | any[] = [];
-
-    // send a notification to each device token
-    devices.forEach(result => {
-      const token = result.data().token;
-      tokens.push( token )
-    })
-    admin.messaging().sendToDevice(tokens, payload).then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-    })
-    .catch((error) => {
-      console.log('Error sending message:', error);
-    });
-
+    sendPushNotifications(before.createdBy,'single', undefined,before.buildingId,'canceledCreator').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
     }
     else return
-
 
     }
     // canceled by responder (OK)
@@ -396,42 +279,10 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
         update = { actionTaskExpired }
       }
       await item.after.ref.update(update);
-
-    /* send notification to creater */
-    const payload = {
-      notification: {
-          title: '',
-          body: `Deal was canceled by the responder!`,
-          //icon: 'https://goo.gl/Fz9nrQ',
-          click_action:"FCM_PLUGIN_ACTIVITY"
-        },
-        data: {
-          landing_page: "/app/start-menu/deal",
-          id: id
-        }
-      }
   
       if(before.createdBy){
       // ref to the device collection for the user
-      const devicesRef = db.collection('devices').where('userId', '==', before.createdBy).where('buildingId', '==', before.buildingId)
-      // get the user's tokens and send notifications
-      const devices = await devicesRef.get();
-  
-      /*const tokens = [];*/
-      const tokens: string | any[] = [];
-  
-      // send a notification to each device token
-      devices.forEach(result => {
-        const token = result.data().token;
-        tokens.push( token )
-      })
-      admin.messaging().sendToDevice(tokens, payload).then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
+      sendPushNotifications(before.createdBy, 'single',undefined,before.buildingId,'canceledResponder').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
   
       }
       else return
@@ -524,42 +375,12 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
 
 /*send notification to creater*/
     
+      const requestType = before.type === "request" ? `requestAccepted`:`offerAccepted`
 
-       // Notification content
-       const message = {
-        notification: {
-            title: '',
-            body: before.type === "request" ? `Your request has been accepted`:`Your offer has been accepted`,
-            //icon: 'https://goo.gl/Fz9nrQ',
-            click_action:"FCM_PLUGIN_ACTIVITY"
-        },
-        data: {
-          landing_page: "/app/start-menu/deal",
-          id: id
-        }
-      }
 
       if(before.createdBy){
       // ref to the device collection for the user
-      const devicesRef = db.collection('devices').where('userId', '==',  before.createdBy).where('buildingId', '==', before.buildingId)
-      // get the user's tokens and send notifications
-      const devices = await devicesRef.get();
-  
-      /*const tokens = [];*/
-      const tokens: string | any[] = [];
-  
-      // send a notification to each device token
-      devices.forEach(result => {
-        const token = result.data().token;
-        tokens.push( token )
-      })
-      admin.messaging().sendToDevice(tokens, message).then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
+      sendPushNotifications(before.createdBy, 'single',undefined, before.buildingId, requestType).then(() => console.log('Notifications sent')).catch((err) => console.log(err)) 
   
       }
       else return
@@ -625,8 +446,7 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req: an
       user: 'donotreply@parkondo.com',
       pass: 'Lakecomo82'
     }
-  }
-
+    }
     );
   
     const info = await transporter.sendMail(mailOptions);
@@ -637,7 +457,276 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req: an
         console.error(error)
         res.status(500).send(error)
     }
-  }
+   }
   );
 })
 
+async function sendPushNotifications(userId: string, type: string, itemId?: string, buildingId?: string, chanel?: string) {
+//let titleEN = '', titleFR = '', titleAR = '', titleES = '';
+//let bodyEN = '', bodyFR = '', bodyAR = '', bodyES= '';
+let landing_page = '';
+let headerEN = '', headerFR = '', headerAR = '', headerES = ''
+let messageEN = '', messageFR = '', messageAR = '', messageES = '';
+
+  switch (chanel) {    
+    case "newRequestDeal" :
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'New parking request'
+    messageEN = 'Would you like to check if you can help ?'
+        
+    headerFR = 'Nouvelle demande de stationnement'
+    messageFR = 'Voulez-vous vérifier si vous pouvez aider ?'
+
+    headerAR = 'طلب موقف جديد'
+    messageAR = 'هل ترغب في التحقق مما إذا كان بإمكانك المساعدة ؟'
+
+    headerES = 'Nueva solicitud de estacionamiento'    
+    messageES = 'Le gustaría comprobar si puede ayudar ?'
+    
+    break;
+    
+    case "newOfferDeal" :       
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'New parking offer'
+    messageEN = 'Would you like to check the offer ?'
+    
+    headerFR = 'Nouvelle offre de stationnement'
+    messageFR = 'Voulez-vous vérifier l\'offre ?'
+    
+    headerAR = 'عرض موقف جديد'
+    messageAR = 'هل ترغب في الاضطلاع على العرض ؟'
+    
+    headerES = 'Alguien está ofreciendo un estacionamiento'
+    messageES = 'Quieres consultar la oferta ?'
+
+    break;    
+    case "reminderToLeave" : 
+
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'Reminder'
+    messageEN = 'Time to move your car!'
+    
+    headerFR = 'Rappel'
+    messageFR = 'Il est temps de déplacer votre voiture !'
+    
+    headerAR = 'تذكير'
+    messageAR = 'حان الوقت لتحريك سيارتك!'
+    
+    headerES = 'Recordatorio'
+    messageES = 'Es hora de mover tu coche!'
+
+    break;    
+    case "canceledCreator" : 
+
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'Deal is canceled'
+    messageEN = 'Deal is canceled by creator!'
+    
+    headerFR = 'L\'accord est annulé'
+    messageFR = 'L\'offre est annulée par le créateur !'
+    
+    headerAR = 'تم إلغاء الصفقة'
+    messageAR = 'تم إلغاء الصفقة من قبل المنشئ!'
+    
+    headerES = 'La oferta está cancelada'
+    messageES = 'El creador canceló la oferta.'
+
+    break;    
+  case "canceledResponder" : 
+
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'Deal canceled'
+    messageEN = 'Your deal is canceled by responder!'
+    
+    headerFR = 'Accord annulé'
+    messageFR = 'L\'accord est annulé par le répondeur!'
+    
+    headerAR = 'صفقة ملغاة'
+    messageAR = 'تم إلغاء الصفقة من قبل المجيب!'
+    
+    headerES = 'Acuerdo cancelado'
+    messageES = 'El respondedor cancela la oferta!'
+
+    break;    
+  case "requestAccepted" : 
+
+    landing_page = '/app/start-menu/deal'
+    
+    headerEN = 'Request accepted!'
+    messageEN = 'Your request is accepted!'
+    
+    headerFR = 'Demande acceptée!'
+    messageFR = 'Ta demande est acceptée!'
+    
+    headerAR = 'طلب مقبول'
+    messageAR = 'تم قبول طلبك!'
+    
+    headerES = 'Petición aceptada!'
+    messageES = 'Su solicitud es aceptada!'
+
+    break;
+  case "offerAccepted" : 
+
+    landing_page = '/app/start-menu/deal'
+
+    headerEN = 'Offer accepted'
+    messageEN = 'Your offer is accepted!'
+    
+    headerFR = 'Offre acceptée'
+    messageFR = 'Votre offre est acceptée'
+    
+    headerAR = 'غرض مقبول'
+    messageAR = 'تم قبول عرضك'
+    
+    headerES = 'Oferta aceptada'
+    messageES = 'Su oferta es aceptada'
+
+    break;    
+  default:
+  }
+  
+  const payloadEN = {
+    notification: {
+        title: headerEN,
+        body: messageEN
+    },
+    data: {      
+      landing_page: landing_page,
+      header: headerEN,
+      message: messageEN
+    }
+  }
+
+  const payloadFR = {
+    notification: {
+        title: headerFR,
+        body: messageFR
+    },
+    data: {      
+      landing_page: landing_page,
+      header: headerFR,
+      message: messageFR
+    }
+  }
+
+  const payloadAR = {
+    notification: {
+        title: headerAR,
+        body: messageAR
+    },
+    data: {      
+      landing_page: landing_page,
+      header: headerAR,
+      message: messageAR
+    }
+  }
+
+  const payloadES = {
+    notification: {
+        title: headerES,
+        body: messageES
+    },
+    data: {      
+      landing_page: landing_page,
+      header: headerES,
+      message: messageES
+    }
+  }
+  
+  const tokensEN: string[] = [];
+  const tokensFR: string[] = [];
+  const tokensAR: string[] = [];
+  const tokensES: string[] = [];
+  //let users : any
+  if(type === 'single'){
+    const userRef = db.collection('users').doc(userId);    
+    const user = await userRef.get();
+    if (user.exists) {
+      if(user.data()?.tokens){
+        if((user.data()?.language === 'en')){        
+          user.data()?.tokens.forEach((token: string) => {tokensEN.push( token )})        
+      }
+      else if(user.data()?.language === 'fr'){        
+          user.data()?.tokens.forEach((token: string) => {tokensFR.push( token )})      
+      }
+      else if(user.data()?.language === 'ar'){        
+          user.data()?.tokens.forEach((token: string) => {tokensAR.push( token )})        
+      }
+      else if(user.data()?.language === 'es'){        
+          user.data()?.tokens.forEach((token: string) => {tokensES.push( token )})        
+      }
+      }      
+    }    
+  }
+  else if(type === 'all'){
+    const usersRef = db.collection('users').where('buildingId', '==', buildingId);  
+    const users = await usersRef.get(); 
+  //const usersRef = db.collection('users').where('buildingId', '==', buildingId);
+  
+  if(users.size > 0){
+    users.forEach(user => {
+
+    if(user.data().tokens){
+
+    if((user.data().language === 'en') && (user.id !== userId)){      
+        user.data().tokens.forEach((token: string) => {tokensEN.push( token )})      
+    }
+   
+    else if((user.data().language === 'fr') && (user.id !== userId)){     
+        user.data().tokens.forEach((token: string) => {tokensFR.push( token )})    
+    }
+    
+    else if((user.data().language === 'ar') && (user.id !== userId)){      
+        user.data().tokens.forEach((token: string) => {tokensAR.push( token )})
+      }
+    
+    else if((user.data().language === 'es') && (user.id !== userId)){      
+        user.data().tokens.forEach((token: string) => {tokensES.push( token )})
+      }
+    }
+    }
+    )
+  }
+}
+    if (tokensEN.length > 0){
+      admin.messaging().sendToDevice(tokensEN, payloadEN).then((response) => {
+        console.log('Successfully sent message EN:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message EN:', error);
+      });
+    }
+
+    if (tokensFR.length > 0){
+    admin.messaging().sendToDevice(tokensFR, payloadFR).then((response) => {
+      console.log('Successfully sent message FR:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message FR:', error);
+    });
+    }
+
+    if (tokensAR.length > 0){
+    admin.messaging().sendToDevice(tokensAR, payloadAR).then((response) => {
+      console.log('Successfully sent message AR:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message AR:', error);
+    });
+    }
+
+    if (tokensES.length > 0){
+    admin.messaging().sendToDevice(tokensES, payloadES).then((response) => {
+      console.log('Successfully sent message ES:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message ES:', error);
+    });
+  }    
+  //throw new Error('Function not implemented.');
+}

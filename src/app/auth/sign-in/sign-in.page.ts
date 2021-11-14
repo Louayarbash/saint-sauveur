@@ -24,17 +24,17 @@ export class SignInPage implements OnInit {
   submitError: string;
   redirectLoader: HTMLIonLoadingElement;
   authRedirectResult: Subscription;
-
-  validation_messages = {
+  loading: any;
+  validation_messages= {
     'email': [
-      { type: 'required', message: 'Email is required.' },
-      { type: 'pattern', message: 'Enter a valid email.' }
-    ],
+      { type: 'required', message: "EmailRequired" },
+      { type: 'pattern', message: "EnterValidEmail" }
+    ], 
     'password': [
-      { type: 'required', message: 'Password is required.' },
-      { type: 'minlength', message: 'Password must be at least 6 characters long.' }
+      { type: 'required', message: "PasswordIsRequired" },
+      { type: 'minlength', message: "PasswordMustBeAtLeast6charactersLong" }
     ]
-  };
+  }; 
   username: string;
 
   constructor(
@@ -102,12 +102,25 @@ export class SignInPage implements OnInit {
   ngOnInit(): void {
     console.log('sign in oninit');
     this.menu.enable(false);
+/*     this.validation_messages = {
+      'email': [
+        { type: 'required', message: this.featureService.translations.EmailRequired },
+        { type: 'pattern', message: this.featureService.translations.EnterValidEmail }
+      ],
+      'password': [
+        { type: 'required', message: this.featureService.translations.PasswordIsRequired },
+        { type: 'minlength', message: this.featureService.translations.PasswordMustBeAtLeast6charactersLong }
+      ]
+    }; */
   }
 
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
   async redirectLoggedUserToMainMenuPage() {
-    await this.dismissLoading();
+    //await this.dismissLoading();
+    await this.loading.then(res=>{
+      res.dismiss();        
+    })
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
     // That's why we need to wrap the router navigation call inside an ngZone wrapper
@@ -124,21 +137,23 @@ export class SignInPage implements OnInit {
     });
   }
 
-  async presentLoading(/*authProvider?: string*/) {
+  //async presentLoading(/*authProvider?: string*/) {
     // const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
-    this.redirectLoader = await this.loadingController.create({
-      message: "Signin in ..."
+    //this.redirectLoader = await this.loadingController.create({
+      //message: "Signin in ..."
       // message: authProvider ? 'Signing in with ' + authProviderCapitalized : 'Signin in ...'
-    });
-    await this.redirectLoader.present();
-  }
+    //});
+   // await this.redirectLoader.present();
+  //}
 
-   async dismissLoading() {
-    if (this.redirectLoader) {
+   //async dismissLoading() {
+    // console.log("dissmiss 100")
+    //if (this.redirectLoader) {
+      //console.log("dissmiss 2")
       // console.log('Bonga');
-       return this.redirectLoader.dismiss();
-    }
-  }
+    //   return this.redirectLoader.dismiss();
+    //}
+  //}
 
   // Before invoking auth provider redirect flow, present a loading indicator and add a flag to the path.
   // The precense of the flag in the path indicates we should wait for the auth redirect to complete.
@@ -152,7 +167,10 @@ export class SignInPage implements OnInit {
     this.submitError = errorMessage;
     // remove auth-redirect param from url
     this.location.replaceState(this.router.url.split('?')[0], '');
-    this.dismissLoading();
+    //this.dismissLoading();
+    this.loading.then(res=>{
+      res.dismiss();        
+    })
   }
 
   resetSubmitError() {
@@ -160,7 +178,7 @@ export class SignInPage implements OnInit {
   }
 
   signInWithEmail() {
-    this.presentLoading();
+    this.loading = this.featureService.presentLoadingWithOptions(5000);
     this.resetSubmitError();
     //console.log(this.loginForm.value['email']);
     //console.log(this.loginForm.value['password']);
@@ -184,10 +202,14 @@ export class SignInPage implements OnInit {
           this.redirectLoggedUserToMainMenuPage();
         }
         else{
-          this.dismissLoading().then(()=>{
+          this.loading.then(res=>{
+            res.dismiss();
             this.authService.canAccessApp.next(false);
-            this.featureService.presentToast('cant acces the app', 2000)
+            this.featureService.presentToast(this.featureService.translations.ProblemAccessingParkondo, 2000)          
           })
+/*           this.dismissLoading().then(()=>{
+
+          }) */
           
           console.log("inside signInWithEmail canAccessApp false", this.authService.canAccessApp.value);
           
@@ -195,14 +217,20 @@ export class SignInPage implements OnInit {
         }
       }
       )
-      .catch((err )=> {
-        this.dismissLoading();
-        this.featureService.presentToast('problem while verifying building or user info. error: '+ err, 2000)});
+      .catch(()=> {
+        //this.dismissLoading();
+        this.loading.then(res=>{
+          res.dismiss();        
+        })
+        this.featureService.presentToast(this.featureService.translations.ProblemVerifyingBuildinOrUserInfo , 2000)});
     })
     .catch(error => {
       console.log(error);
       this.submitError = error.message;
-      this.dismissLoading();
+      //this.dismissLoading();
+      this.loading.then(res=>{
+        res.dismiss();        
+      })
     });
   }
 

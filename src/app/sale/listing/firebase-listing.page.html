@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
     </ion-buttons>
     <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar>
   </ion-toolbar>
@@ -16,10 +17,10 @@
       </ion-segment>
       </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="content">
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->
@@ -28,25 +29,40 @@
   <ng-container *ngIf="!items.isShell">
     <section [hidden]="segmentValue !== 'sale'">
     <ng-container *ngIf="saleList?.length > 0">
-<ion-card button="true" class="itemCard" *ngFor="let item of saleList" [routerLink]="['/app/start-menu/sale/details', item.id]">
+      <div *ngFor="let item of saleList">
+<ion-item lines="none">
+        <ion-avatar slot="start">
+          <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+          <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+        </ion-avatar>
+        <ion-label>{{item.creatorName}}</ion-label>
+      </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/sale/details', item.id]">
   <app-aspect-ratio [ratio]="{w:64, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
 
-  <ion-card-header color="main">
+  <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">  
       <ion-row>
       <ion-col class="ion-no-padding">
         <ion-text>{{item.object}}</ion-text>        
       </ion-col>
-      <ion-col  class="ion-no-padding ion-text-right">
-        <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text>
+      <ion-col *ngIf="!ltr" class="ion-no-padding ion-text-left">        
+        <!-- <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text> -->
+        <ion-text>{{item.price}}</ion-text>
+      </ion-col>
+      <ion-col *ngIf="ltr" class="ion-no-padding ion-text-right">
+        <!-- <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text> -->
+        <ion-text>{{item.price}}</ion-text>
       </ion-col>
     </ion-row>
     </ion-card-title>
   </ion-card-header>
 </ion-card>
+
+</div> 
 </ng-container>
 <ng-container *ngIf="saleList?.length == 0">
   <h3 class="empty-list-message">
@@ -56,13 +72,20 @@
 </section>
 <section [hidden]="segmentValue !== 'myList'">
   <ng-container *ngIf="myList?.length > 0">
-
-<ion-card button="true" class="itemCard" *ngFor="let item of myList" [routerLink]="['/app/start-menu/sale/details', item.id]">
+    <div *ngFor="let item of myList">
+      <ion-item lines="none">
+              <ion-avatar slot="start">
+                <!-- <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"> -->
+                <app-image-shell class="user-image" animation="spinner" [display]="'cover'" [src]="item.creatorPhoto" [alt]="'item image'"></app-image-shell>
+              </ion-avatar>
+              <ion-label>{{item.creatorName}}</ion-label>
+            </ion-item>
+<ion-card button="true" class="itemCardWithPhoto" *ngFor="let item of myList" [routerLink]="['/app/start-menu/sale/details', item.id]">
   <app-aspect-ratio [ratio]="{w:64, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>
 
-  <ion-card-header color="main">
+  <ion-card-header color="primary">
     <ion-card-subtitle>{{ item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy' }}</ion-card-subtitle>
     <ion-card-title style="font-size:20px">  
       <ion-row>
@@ -70,14 +93,19 @@
         <ion-text>{{item.object}}</ion-text>
             
       </ion-col>
-      <ion-col  class="ion-no-padding ion-text-right">
-        <ion-text>{{item.price ? '$'.concat(item.price) : null}}</ion-text>
+      <ion-col *ngIf="ltr" class="ion-no-padding ion-text-right">
+        <ion-text>{{item.price}}</ion-text>
+            
+      </ion-col>
+      <ion-col *ngIf="!ltr" class="ion-no-padding ion-text-left">
+        <ion-text>{{item.price}}</ion-text>
             
       </ion-col>
     </ion-row>
     </ion-card-title>
   </ion-card-header>
 </ion-card>
+</div>
 </ng-container>
 <ng-container *ngIf="myList?.length == 0">
   <h3 class="empty-list-message">

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
-
 import { ModalController, AlertController, IonRouterOutlet} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { /*Observable, ReplaySubject,*/ Observable, ReplaySubject, Subscription} from 'rxjs';
@@ -38,6 +37,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   items: Array<FirebaseListingItemModel> & ShellModel;
 
   type : string;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -57,7 +57,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     this.stateSubscription.unsubscribe();
   }
    ngOnInit() {
-
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true; 
     this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
 
     this.route.data.subscribe(

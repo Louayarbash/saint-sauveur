@@ -17,12 +17,18 @@ export class BuildingModel extends ShellModel {
   enableRentSale: boolean= true;
   enableLostFound: boolean= true;
   enableTicket: boolean= true;
-  enablePublication: boolean= true;
+  enableAnnouncement: boolean= true;
+  enableRegulation: boolean= true;
   enableEvent: boolean= true;
   enableDeal: boolean= true;
   status: string= 'active';
   createdBy: string;
   createDate: firebase.firestore.FieldValue;
+  modificationDate: firebase.firestore.FieldValue;
+  proExpirationDate: firebase.firestore.Timestamp;
+  proFirstExpirationDate: firebase.firestore.Timestamp;
+  proStatusUpdate: firebase.firestore.FieldValue;
+  proStatus: string;
 
   constructor() {
     super();

@@ -271,7 +271,7 @@ export class FirebaseUpdateItemModal implements OnInit {
          console.log("after",this.item);
          this.featureService.updateItemWithoutOptions(this.item, 'events').then(()=> {
           this.files.splice(index,1); 
-          this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);}
+          this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);}
           ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
           }
           ).catch(err => console.log("Error in deletePhoto DB: ",err));

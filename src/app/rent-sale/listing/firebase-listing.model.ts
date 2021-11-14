@@ -4,7 +4,8 @@ import { Images } from '../../type';
 export class FirebaseListingItemModel extends ShellModel {
 
   id: string;
-  //coverPhoto: string;
+  creatorPhoto: string;
+  creatorName: string;
   type: string;
   createdBy : string;
   createDate : number;

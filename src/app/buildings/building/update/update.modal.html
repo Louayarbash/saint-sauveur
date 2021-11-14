@@ -25,7 +25,7 @@
         <ion-row class="ion-align-items-center">
       <ion-col>
       <ion-item lines=“none”>
-        <ion-label >{{ 'Country' | translate }}</ion-label>
+        <ion-label  position="floating">{{ 'Country' | translate }}</ion-label>
         <ion-select interface="alert" [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="country" color="main">
           <ion-select-option *ngFor="let country of countryList" [value]="country.code3">{{ country.name | translate }}</ion-select-option>
           <!-- <ion-select-option value="1000">{{ 'Other' | translate }}</ion-select-option> -->
@@ -69,8 +69,12 @@
         <ion-toggle color="main" formControlName="enableLostFound"></ion-toggle>
       </ion-item>
       <ion-item>
-          <ion-label>{{ 'PublicationsMenu' | translate }}</ion-label>
-          <ion-toggle color="main" formControlName="enablePublication"></ion-toggle>
+          <ion-label>{{ 'AnnouncementMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableAnnouncement"></ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-label>{{ 'RegulationMenu' | translate }}</ion-label>
+          <ion-toggle color="main" formControlName="enableRegulation"></ion-toggle>
         </ion-item>
         <ion-item>
           <ion-label>{{ 'EventsMenu' | translate }}</ion-label>
@@ -93,7 +97,7 @@
       <ng-container *ngIf="enableDeal">
         <ion-item class="sub-item" lines="none" [ngClass]="{ 'disabledItem': !parking.active }" *ngFor="let parking of parkings; let indexOfelement=index;">
           <ion-checkbox slot="start" [disabled]="indexOfelement==0 || (indexOfelement==1 && parkings[2].active) || (indexOfelement==2 && !parkings[1].active)" [checked]="parking.active" color="main" (ionChange)="parkingsStatusChanged($event, indexOfelement, txtName, btnChange, btnConfirm)"></ion-checkbox>
-          <ion-label>{{ 'Parking' | translate }} - {{ parking.id }} </ion-label>
+          <ion-label>{{ 'Level' | translate }} - {{ parking.id }} </ion-label>
           <ion-input [ngClass]="{ 'disabledItem': !parking.active }" type="text" #txtName [value]="parking.description" [disabled]="true"></ion-input>
           <ion-button [hidden]="!parking.active" color="main" (click)="changeBtnStatus(indexOfelement, txtName, btnChange, btnConfirm)" #btnChange>          
             <ion-icon name="pencil-outline"></ion-icon>
@@ -159,7 +163,7 @@
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>
       </ion-col> -->
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Save' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

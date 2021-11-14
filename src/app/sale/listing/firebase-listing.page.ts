@@ -7,6 +7,7 @@ import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingItemModel } from './firebase-listing.model';
 import { FirebaseCreateItemModal } from '../item/create/firebase-create-item.modal';
 import { LoginService } from '../../services/login/login.service';
+import { FeatureService } from '../../services/feature/feature.service';
 import { DataStore, ShellModel } from '../../shell/data-store';
 
 @Component({
@@ -27,6 +28,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -37,7 +39,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
     public modalController: ModalController,
     private route: ActivatedRoute,
     private routerOutlet: IonRouterOutlet,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private featureService: FeatureService
   ) { 
 
   }
@@ -47,6 +50,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.segmentValueSubjectObservable.subscribe(newTabValue=> this.segmentValue= newTabValue);
     this.searchQuery = '';
 
@@ -123,7 +129,11 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   //  console.log(err); 
                    // item.coverPhotoData = '' ;} 
                    // );
-              } 
+              }
+               this.featureService.getItem("users",item.createdBy).subscribe(res=> {
+                 item.creatorPhoto = res.photo
+                 item.creatorName = res.firstname + " " + res.lastname
+              })
               });
      
               let saleList= this.items;

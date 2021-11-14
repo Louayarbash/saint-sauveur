@@ -28,6 +28,7 @@ export class TicketDetailsPage implements OnInit {
   userIsCreator: boolean;
   userIsAdmin: boolean;
   canModify: boolean = false;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -45,7 +46,7 @@ export class TicketDetailsPage implements OnInit {
 
   ngOnInit() {
 
-
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseCombinedTicketModel> = resolvedDataStores.user;

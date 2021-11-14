@@ -40,6 +40,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   ticketsList: Array<FirebaseListingItemModel>;
   activeList: Array<FirebaseListingItemModel>;
   archivedList: Array<FirebaseListingItemModel>;
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return (this.items && this.items.isShell) ? true : false;
@@ -59,6 +60,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.userIsAdmin = this.loginService.isUserAdmin();
     this.searchQuery = '';
 

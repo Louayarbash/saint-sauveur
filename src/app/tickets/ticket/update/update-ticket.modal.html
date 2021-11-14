@@ -26,7 +26,7 @@
             </ion-item>
             <ion-card *ngIf="bookingSection">
               <ion-item>
-                <ion-label>Date</ion-label>
+                <ion-label>{{ 'Date' | translate }}</ion-label>
                 <ion-text>{{ date }}</ion-text> 
      
               </ion-item>
@@ -101,7 +101,7 @@
         <ion-button expand="block" color="primary" fill="outline" (click)="deleteItem()">{{ 'Delete' | translate }}</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Save' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

@@ -1,8 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
     </ion-buttons>
+    <ion-title>{{ 'Problems' | translate }}</ion-title>
     <!-- <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarPosts' | translate }}"></ion-searchbar> -->
   </ion-toolbar>
     <ion-toolbar *ngIf="(!items.isShell) && (items?.length > 0)">
@@ -19,7 +21,7 @@
 <ion-content>
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->

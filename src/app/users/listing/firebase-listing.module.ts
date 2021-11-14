@@ -11,6 +11,7 @@ import { FirebaseService } from '../firebase-integration.service';
 import { FirebaseListingResolver } from './firebase-listing.resolver';
 import { TranslateModule } from '@ngx-translate/core';
 import { FirebaseCreateUserModal } from "../user/create/firebase-create-user.modal";
+import { InviteModal } from '../../buildings/building/invite/invite.modal';
 
 const routes: Routes = [
   {
@@ -38,7 +39,8 @@ const routes: Routes = [
     FirebaseListingResolver
   ],
   entryComponents: [
-    FirebaseCreateUserModal
+    //FirebaseCreateUserModal,
+    InviteModal
   ]
 })
 export class FirebaseListingPageModule {}

@@ -35,6 +35,7 @@ export class UserProfilPage implements OnInit {
   parkingInfo: ParkingInfo[] = [];
   status: string;
   enableNotifications: string;
+  ltr: boolean;
 
 
   @HostBinding('class.is-shell') get isShell() {
@@ -55,7 +56,7 @@ export class UserProfilPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
+ 
     this.menu.enable(true);
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];

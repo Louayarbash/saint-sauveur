@@ -1,8 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">  
-      <ion-back-button defaultHref="app/start-menu"></ion-back-button>
-    </ion-buttons>
+<!--     <ion-buttons slot="start">  
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+  
+    </ion-buttons> -->
     <ion-title>{{ 'MyProfile' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
       <ion-button (click)="openFirebaseUpdateModal()">
@@ -12,6 +14,12 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <ng-container *ngIf="user.isShell">
+    <div class="DivLoading">
+      <ion-spinner color="main"></ion-spinner>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!user.isShell">
   <ion-row class="user-info-row">
     <ion-col class="user-image-col" size="5">
       <app-aspect-ratio [ratio]="{w: 1, h: 1}">
@@ -26,7 +34,7 @@
       </h2>
     </ion-col>
     </ion-row>
-      <section>
+    <ion-card class="itemCard">
           <!-- <ion-list> -->
             <ion-item *ngIf="user.email">
               <ion-label>{{ 'Email' | translate }}</ion-label>
@@ -61,10 +69,7 @@
               <ion-label>{{ 'Role' | translate }}</ion-label>
               <ion-text>{{ role }}</ion-text>
             </ion-item>
-            <ion-item *ngIf="user.status">    
-              <ion-label>{{ 'Status' | translate }}</ion-label>
-              <ion-text>{{ status }}</ion-text>
-            </ion-item>
+
             <ion-item *ngIf="enableNotifications">
               <ion-text slot="start">{{ 'EnableNotifications' | translate }}</ion-text>
               <ion-text slot="end">{{ enableNotifications }}</ion-text>
@@ -78,13 +83,18 @@
               <ion-label>{{ 'CreateDate' | translate }}</ion-label>
               <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
             </ion-item>
+            <ion-item *ngIf="user.status">    
+              <ion-label>{{ 'StatusAccount' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>
+            </ion-item>
             <ion-item *ngIf="isLoggedInUser">
               <ion-label>{{ 'SignOut' | translate }}</ion-label>  
                 <ion-icon (click)="signOut()" name="log-out-outline"></ion-icon>
             </ion-item>
           <!-- </ion-list> -->
-        </section>
+        </ion-card>
 <!--       <ng-container *ngIf="user.createDate">
         <ion-text color="dark" class="ion-padding-left createDate">{{user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
       </ng-container> -->
+    </ng-container>
 </ion-content>

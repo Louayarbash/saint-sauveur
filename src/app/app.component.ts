@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Location } from '@angular/common';
 //import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -12,7 +12,13 @@ import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
 import { Plugins, NetworkStatus } from '@capacitor/core';
 import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
+import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2/ngx';
+//import firebase from 'firebase';
+import firebase from 'firebase/app';
+
 const { Network } = Plugins;
+const PRODUCT_KEY = 'pro_version';//'pro_version_subscription';
+//const PRODUCT_KEY2 = 'pro_version_subscription';
 
 //import { LoginService } from './services/login/login.service';
 
@@ -25,6 +31,7 @@ const { Network } = Plugins;
     './side-menu/styles/side-menu.responsive.scss'
   ]
 })
+
 export class AppComponent {
   networkStatus: NetworkStatus;
   available_languages = [];
@@ -32,8 +39,17 @@ export class AppComponent {
   textDir = 'ltr';
   buildingName: string;
   userName: string;
-  
-
+  products: IAPProduct[] = [];
+  isPro: boolean;
+  proStatusUpdate: firebase.firestore.FieldValue;
+  proExpirationDate: firebase.firestore.FieldValue;
+  proStatus: string= 'N/A';
+  storeExpiryDate: string= "jjj";
+  storeLastRenewalDate= new Date(Date.now());
+  storeBillingPeriod: number = 0;
+  status: string = "status";
+  id: string;
+  proFirstExpirationDate: firebase.firestore.FieldValue;
   /* LA_ add for cordova platform splashScreen statusBar*/
   constructor(
     private translate: TranslateService,
@@ -48,8 +64,9 @@ export class AppComponent {
     private authService: AuthService,
     public router: Router,
     private loginService : LoginService,
-    private modalController: ModalController//,
-   //private routerOutlet: IonRouterOutlet
+    private modalController: ModalController,
+    private store: InAppPurchase2,
+    private changeDetectorRef: ChangeDetectorRef
     ) {      
     this.initializeApp();
 }
@@ -84,6 +101,8 @@ async getStatus() {
   } catch (e) { console.log("Error", e) }
 }
 
+
+
 checkConnection(){
   this.featureService.online.subscribe(res => { console.log("status changed", res); if(!res) {
     this.alertController.create({
@@ -113,7 +132,18 @@ checkConnection(){
    async initializeApp() {    
     this.platform.ready().then(() => {
     console.log("app.component initialize app")
-
+    //purchase product
+    console.log("platforms", this.platform.platforms())
+    console.log("platform desktop", this.platform.is("desktop"))
+    if (!this.platform.is("desktop")){
+      this.registerProduct();
+      this.setupListeners();
+      this.store.ready(()=> {
+        this.products = this.store.products;
+        this.changeDetectorRef.detectChanges();
+      })
+    }
+          
     this.checkConnection();
       this.setLanguage();
       //this.statusBar.styleDefault();
@@ -127,6 +157,10 @@ checkConnection(){
         this.loginService.currentBuildingInfo.subscribe(
           buildingInfo => {
             this.buildingName= buildingInfo.name;
+            this.proStatusUpdate= buildingInfo.proStatusUpdate;
+            this.proExpirationDate= buildingInfo.proExpirationDate;            
+            this.proFirstExpirationDate = buildingInfo.proFirstExpirationDate;
+            this.proStatus = buildingInfo.proStatus
           }
           );
         
@@ -200,8 +234,9 @@ checkConnection(){
     
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
        this.textDir = (event.lang === 'ar') ? 'rtl' : 'ltr';
-       
+       //console.log('psst');
        this.featureService.getTranslations(event);
+       this.featureService.currentLang = event.lang;
     });     
   }
 
@@ -246,5 +281,113 @@ checkConnection(){
     await modal.present();
   }
 
+
+  contactDeveloper(){
+    window.open("http://parkondo.com/#contact", "_blank");
+  }
+
+  registerProduct(){
+    this.store.register({
+      id: PRODUCT_KEY,
+      type: this.store.CONSUMABLE,
+    },
+    
+    );
+/*     this.store.register(    {
+      id: PRODUCT_KEY2,
+      type: this.store.PAID_SUBSCRIPTION,
+    }    
+    ); */
+
+    console.log(PRODUCT_KEY, this.store.get(PRODUCT_KEY))
+    //console.log(PRODUCT_KEY2, this.store.get(PRODUCT_KEY2))
+
+
+
+/*     this.store.register({
+      id: PRODUCT_KEY2,
+      type: this.store.PAID_SUBSCRIPTION,
+    });  */
+
+    this.store.refresh()
+
+    //this.id = this.store.get(PRODUCT_KEY).id;
+    //this.storeExpiryDate = this.store.get(PRODUCT_KEY).expiryDate?.toDateString();
+    //this.storeBillingPeriod= this.store.get(PRODUCT_KEY).billingPeriod;
+    //this.storeLastRenewalDate= this.store.get(PRODUCT_KEY).lastRenewalDate;
+  }
+  
+  setupListeners(){
+    this.store.when('product')
+    .approved((p: IAPProduct) => {
+      if (p.id === PRODUCT_KEY) {
+        //this.isPro = true;
+       let nextExpirationDate: Date;
+       if (this.loginService.getProExpirationDate()) {        
+        nextExpirationDate = new Date(new Date(this.loginService.getProExpirationDate().toDate()).setFullYear(new Date(this.loginService.getProExpirationDate().toDate()).getFullYear() + 1))
+        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      }
+      else {
+        nextExpirationDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proFirstExpirationDate: nextExpirationDate, proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      }    
+        console.log("approved", p)
+      } 
+      this.changeDetectorRef.detectChanges();
+  
+      return p.verify();
+    })
+    .verified((p: IAPProduct) => p.finish());
+  
+    /*this.store.when(PRODUCT_KEY)
+    .expired(()=> {
+      console.log("expired")
+      this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{ proStatusUpdate:firebase.firestore.FieldValue.serverTimestamp(), proStatus: "expired"})
+      this.isPro = false;
+      this.status = "expired"
+    }); */
+
+    this.store.when(PRODUCT_KEY)    
+    .cancelled((p: IAPProduct)=> {
+      console.log("canceled", p)
+      this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "canceled", productState: p.state})
+      this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})      
+      this.isPro = false;
+      this.status = "canceled"
+    }); 
+
+    this.store.when('product')    
+    .updated((p: IAPProduct)=> {
+      console.log("updated", p)            
+/*       this.isPro = false;
+      this.status = "updated" + p.expiryDate;
+      if(p.state == "finished"){
+      } */
+    }); 
+
+    this.store.when(PRODUCT_KEY)
+    .owned((p: IAPProduct)=> {     
+      console.log("owned", p)       
+      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),res)
+      //this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+      //this.isPro = true;
+      //this.status = "owned"
+    });
+  
+  }
+  
+  purchase(product: IAPProduct){
+    this.store.order(product).then(p=> {
+  
+    }, e => {
+      this.featureService.presentToast("error" + e, 2000);
+    });
+  }
+  
+  restore() {
+    this.store.refresh();
+  }
 
 }

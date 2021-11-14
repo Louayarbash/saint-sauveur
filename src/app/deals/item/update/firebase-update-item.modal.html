@@ -15,7 +15,7 @@
 
         <!-- <ion-list lines="full"> -->
           <ion-item>
-            <ion-label>Date</ion-label>
+            <ion-label>{{ 'Date' | translate }}</ion-label>
             <ion-input class="ion-text-end" type="text" formControlName="date"></ion-input>
           </ion-item>
           <ion-item>
@@ -31,7 +31,7 @@
             <ion-input class="ion-text-end" type="text" formControlName="NoPlaces"></ion-input>
           </ion-item> -->
             <ion-item>
-              <ion-label position="floating">Note</ion-label>
+              <ion-label position="floating">{{ 'Note' | translate }}</ion-label>
               <ion-textarea autocapitalize rows="6" cols="20" formControlName="note"></ion-textarea>
             </ion-item>
         <!-- </ion-list> -->
@@ -40,7 +40,7 @@
   <ion-footer>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Update' | translate }}</ion-button>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateItemForm.valid && updateItemForm.dirty)">{{ 'Save' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>

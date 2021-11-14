@@ -1,9 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="end">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+    <ion-buttons slot="start">
+      <!-- <ion-back-button defaultHref="/app/start-menu"></ion-back-button> -->
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'ParkingRequests' | translate }} </ion-title>
+    <ion-title>{{ 'ParkingDeals' | translate }} </ion-title>
 <!-- - {{ loginId }}{{ loginName }}    <ion-buttons slot="end">
       <ion-button (click)="chooseType()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -27,7 +29,7 @@
   <ion-content class="deals-requests-listing-content">
     <ng-container *ngIf="items.isShell">
       <div class="DivLoading">
-        <ion-spinner></ion-spinner>
+        <ion-spinner color="main"></ion-spinner>
   <!--       <p>
           Fetching data...
         </p> -->
@@ -43,7 +45,7 @@
                 {{ 'Offer' | translate }}
               </h4> -->
               <ion-chip>
-                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+                <ion-label class="ion-text-nowrap" color="main">{{ 'Offer' | translate }}</ion-label>
               </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
@@ -51,13 +53,13 @@
               {{ 'Request' | translate }}
             </h4> -->
             <ion-chip>
-              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+              <ion-label class="ion-text-nowrap" color="main">{{ 'Request' | translate }}</ion-label>
             </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
-              <ion-button class="claim-button" expand="block" color="claim" [routerLink]="['/app/start-menu/deal/details', item.id]">
+              <ion-button class="claim-button" expand="block" color="main" [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ 'Details' | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">									 
@@ -117,7 +119,7 @@
                 {{ 'Offer' | translate }}
               </h4> -->
               <ion-chip>
-                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+                <ion-label class="ion-text-nowrap" color="main">{{ 'Offer' | translate }}</ion-label>
               </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
@@ -125,13 +127,13 @@
               {{ 'Request' | translate }}
             </h4> -->
             <ion-chip>
-              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+              <ion-label class="ion-text-nowrap" color="main">{{ 'Request' | translate }}</ion-label>
             </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
-              <ion-button class="claim-button" expand="block" color="claim" [routerLink]="['/app/start-menu/deal/details', item.id]">
+              <ion-button class="claim-button" expand="block" color="main" [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ 'Details' | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="item?.status !== 'new'" class="call-to-action-col">
@@ -192,7 +194,7 @@
                 {{ 'Offer' | translate }}
               </h4> -->
               <ion-chip>
-                <ion-label color="main">{{ 'Offer' | translate }}</ion-label>
+                <ion-label  class="ion-text-nowrap" color="main">{{ 'Offer' | translate }}</ion-label>
               </ion-chip>
           </ion-col>
           <ion-col class="info-col" *ngIf="item.type == 'request'">
@@ -200,31 +202,31 @@
               {{ 'Request' | translate }}
             </h4> -->
             <ion-chip>
-              <ion-label color="main">{{ 'Request' | translate }}</ion-label>
+              <ion-label class="ion-text-nowrap" color="main">{{ 'Request' | translate }}</ion-label>
             </ion-chip>
         </ion-col>
             <ion-col *ngIf="((item?.startTimeCounter | appTimeDifference) > 0) && (item?.status == 'new')" class="call-to-action-col">
-              <ion-button class="claim-button" expand="block" color="claim"  [routerLink]="['/app/start-menu/deal/details', item.id]">
+              <ion-button class="claim-button" expand="block" color="main"  [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ item?.status | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="(item?.status == 'accepted')" class="call-to-action-col">
-              <ion-button class="claim-button" expand="block" color="success"  [routerLink]="['/app/start-menu/deal/details', item.id]">
+              <ion-button class="claim-button success" expand="block" [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ item?.status | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="(item?.status == 'started')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="danger"  [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ item?.status | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="(item?.status == 'ended')" class="call-to-action-col">
               <ion-button class="claim-button" expand="block" color="medium"  [routerLink]="['/app/start-menu/deal/details', item.id]">
                 <span class="button-cta">{{ item?.status | translate }}</span>
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                <ion-icon slot="end" name="eye-outline"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col *ngIf="(item?.status == 'expired') || (item?.status == 'canceled')" class="call-to-action-col">

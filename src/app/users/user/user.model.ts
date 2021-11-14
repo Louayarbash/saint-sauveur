@@ -1,5 +1,7 @@
 import { ShellModel } from '../../shell/data-store';
 
+//import { firebase } from '@firebase/app';
+
 export class UserModel extends ShellModel {
   id: string;
   photo: string;
@@ -18,8 +20,11 @@ export class UserModel extends ShellModel {
   enableNotifications: boolean;
   tokens: string[];
   status: string;
-  createDate : firebase.firestore.FieldValue;
+  createDate : firebase.firestore.FieldValue
+  modificationDate : firebase.firestore.FieldValue;
+  proExpirationDate : firebase.firestore.FieldValue;
   createdBy: string;
+
   
   constructor() {
     super();

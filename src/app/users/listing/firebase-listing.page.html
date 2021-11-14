@@ -1,14 +1,20 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/app/start-menu"></ion-back-button>
+      <ion-back-button defaultHref="/app/start-menu" *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button defaultHref="/app/start-menu" *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Users' | translate }}<ion-text *ngIf="!items.isShell"> {{ ('(').concat(items?.length).concat(')') }}</ion-text></ion-title>
   </ion-toolbar>
   <ion-toolbar color="main">
     <ion-row>
-      <ion-col>
+      <ion-col size="10">
         <ion-searchbar search-icon="undefined" class="items-searchbar" animated [(ngModel)]="searchQuery" (ionChange)="searchList()" placeholder="{{ 'SearchBarUsers' | translate }}"></ion-searchbar>
+      </ion-col>
+      <ion-col size="2">
+        <ion-label class="ion-text-nowrap">{{ 'Active' | translate }}</ion-label>
+        <ion-toggle [(ngModel)]="activeToggle" (ionChange)="searchList()"></ion-toggle>
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -16,7 +22,7 @@
 <ion-content>
   <ng-container *ngIf="items.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
     </div>
   </ng-container>
   <ng-container *ngIf="!items.isShell">
@@ -28,9 +34,10 @@
       </ion-avatar>
       <ion-label>{{ item.firstname?.concat(' ').concat(item.lastname) }}</ion-label>
       <!-- <ion-text color="medium" *ngIf="!items.isShell"> {{ ('#').concat(item.app) }}</ion-text> -->
-   
+      <ion-chip color="main" outline="true">
+        <ion-text>{{ item.status | translate }}</ion-text>
+      </ion-chip>
     </ion-item>
-
   </ion-list>
 </ng-container>
   <ng-container *ngIf="items?.length == 0">
@@ -38,9 +45,14 @@
       {{ 'NoItemFound' | translate }}
     </h3>
   </ng-container>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+<!--   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="main" (click)="openFirebaseCreateModal()">
       <ion-icon  name="add" ></ion-icon>
     </ion-fab-button>
-  </ion-fab> 
+  </ion-fab>  -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="main" (click)="inviteModal()">
+      <ion-icon name="person-add-outline" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

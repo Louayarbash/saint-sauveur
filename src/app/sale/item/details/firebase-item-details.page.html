@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      
+<ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsCreator">
@@ -17,7 +20,7 @@
 </div> -->
   <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->
@@ -27,18 +30,17 @@
   <ion-card class="itemCard">  
         <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
   <ion-row class="slider-row">
-        <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
-          <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
-            <ion-row class="slide-inner-row">
-                <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
-                <app-aspect-ratio [ratio]="{w:64, h:50}"> 
-                </app-aspect-ratio>
-              </app-image-shell>
-            </ion-row>
-          </ion-slide>
-        </ion-slides>
-      </ion-row>
-      
+    <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
+      <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
+        <ion-row class="slide-inner-row">
+          <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
+            <app-aspect-ratio [ratio]="{w:64, h:50}"> 
+              </app-aspect-ratio>
+          </app-image-shell>
+        </ion-row>
+      </ion-slide>
+    </ion-slides>
+  </ion-row>      
       <!-- <section> -->
 <!--           <ion-list-header lines="inset">
             <ion-label>Trending</ion-label>

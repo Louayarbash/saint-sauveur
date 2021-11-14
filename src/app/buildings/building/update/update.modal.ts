@@ -14,6 +14,7 @@ import { BuildingModel } from '../building.model';
 // import { LoginService } from '../../../services/login/login.service';
 import { FeatureService } from '../../../services/feature/feature.service';
 import { Parkings, Services} from '../../../type';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-firebase-update',
@@ -32,7 +33,7 @@ export class UpdateBuildingModal implements OnInit {
   enableTicket= false;
   enableDeal= false;
     customAlertOptions: any = {
-    header: this.featureService.translations.SelectTicketType,
+    header: this.featureService.translations.SelectCountry,
     //subHeader: this.featureService.translations.OK,
     //message: this.featureService.translations.YES,
     translucent: true,
@@ -77,7 +78,8 @@ export class UpdateBuildingModal implements OnInit {
       enableRentSale: new FormControl(this.item.enableRentSale),
       enableLostFound: new FormControl(this.item.enableLostFound),
       enableTicket: new FormControl(this.item.enableTicket),
-      enablePublication: new FormControl(this.item.enablePublication),
+      enableAnnouncement: new FormControl(this.item.enableAnnouncement),
+      enableRegulation: new FormControl(this.item.enableRegulation),
       enableEvent: new FormControl(this.item.enableEvent),
       enableDeal: new FormControl(this.item.enableDeal),
       status: new FormControl(this.item.status, Validators.required)
@@ -144,9 +146,11 @@ export class UpdateBuildingModal implements OnInit {
     this.item.enableRentSale = this.updateItemForm.value.enableRentSale;
     this.item.enableLostFound = this.updateItemForm.value.enableLostFound;
     this.item.enableTicket = this.updateItemForm.value.enableTicket;
-    this.item.enablePublication = this.updateItemForm.value.enablePublication;
+    this.item.enableAnnouncement = this.updateItemForm.value.enableAnnouncement;
+    this.item.enableRegulation = this.updateItemForm.value.enableRegulation;
     this.item.enableEvent = this.updateItemForm.value.enableEvent;
     this.item.enableDeal = this.updateItemForm.value.enableDeal;
+    this.item.modificationDate = firebase.firestore.FieldValue.serverTimestamp();
     // this.item.typeId = this.updateItemForm.value.typeId;
     //console.log(this.item);
     const {isShell, ...itemData} = this.item;

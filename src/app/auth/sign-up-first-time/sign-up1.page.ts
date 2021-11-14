@@ -29,30 +29,30 @@ export class SignUp1Page implements OnInit {
   authRedirectResult: Subscription;
   buildingData: BuildingModel = new BuildingModel();
   userData: UserModel = new UserModel();
-
+  loading: any;
   validation_messages = {
     'firstname': [
-      { type: 'required', message: this.featureService.translations.FirstnameRequired }
+      { type: 'required', message: "FirstnameRequired" }
     ],
     'lastname': [
-      { type: 'required', message: this.featureService.translations.LastnameRequired }
+      { type: 'required', message: "LastnameRequired" }
     ],
     'email': [
-      { type: 'required', message: this.featureService.translations.EmailRequired },
-      { type: 'pattern', message: this.featureService.translations.EnterValidEmail }
+      { type: 'required', message: "EmailRequired" },
+      { type: 'pattern', message: "EnterValidEmail" }
     ],
 /*     'invitationCode': [
       { type: 'required', message: this.featureService.translations.InvitationCodeRequired }
     ], */
     'password': [
-      { type: 'required', message: this.featureService.translations.PasswordIsRequired },
-      { type: 'minlength', message: this.featureService.translations.PasswordMustBeAtLeast6charactersLong }
+      { type: 'required', message: "PasswordIsRequired" },
+      { type: 'minlength', message: "PasswordMustBeAtLeast6charactersLong" }
     ],
     'confirm_password': [
-      { type: 'required', message: this.featureService.translations.ConfirmPasswordIsRequired }
+      { type: 'required', message: "ConfirmPasswordIsRequired" }
     ],
     'matching_passwords': [
-      { type: 'areNotEqual', message: this.featureService.translations.PasswordMismatch }
+      { type: 'areNotEqual', message: "PasswordMismatch" }
     ]
   };
   // emailIsValid: boolean;
@@ -126,7 +126,10 @@ export class SignUp1Page implements OnInit {
   // Once the auth provider finished the authentication flow, and the auth redirect completes,
   // hide the loader and redirect the user to the profile page
   redirectLoggedUserToMainMenuPage() {
-    this.dismissLoading();
+    //this.dismissLoading();
+    this.loading.then(res=>{
+      res.dismiss();        
+    })
 
     // As we are calling the Angular router navigation inside a subscribe method, the navigation will be triggered outside Angular zone.
     // That's why we need to wrap the router navigation call inside an ngZone wrapper
@@ -149,7 +152,7 @@ export class SignUp1Page implements OnInit {
     });
     await this.redirectLoader.present();
   } */
-  async presentLoading() {
+/*   async presentLoading() {
     // const authProviderCapitalized = authProvider[0].toUpperCase() + authProvider.slice(1);
     this.redirectLoader = await this.loadingController.create({
       message: this.featureService.translations.SigninIn
@@ -162,7 +165,7 @@ export class SignUp1Page implements OnInit {
     if (this.redirectLoader) {
       await this.redirectLoader.dismiss();
     }
-  }
+  } */
 
   resetSubmitError() {
     this.submitError = null;
@@ -180,11 +183,15 @@ export class SignUp1Page implements OnInit {
     this.submitError = errorMessage;
     // remove auth-redirect param from url
     this.location.replaceState(this.router.url.split('?')[0], '');
-    this.dismissLoading();
+    //this.dismissLoading();
+    this.loading.then(res=>{
+      res.dismiss();        
+    })
   }
 
   signUpUserWithEmail() {
-    this.presentLoading();
+    //this.presentLoading();
+    this.loading = this.featureService.presentLoadingWithOptions(5000);
     this.resetSubmitError();
     const values = this.signup1Form.value;
     this.authService.signUpWithEmail(values.email, values.matching_passwords.password)
@@ -193,7 +200,10 @@ export class SignUp1Page implements OnInit {
         this.createUserProfile(userId);
       })
       .catch(error => {
-        this.dismissLoading();
+        //this.dismissLoading();
+        this.loading.then(res=>{
+          res.dismiss();        
+        })
         this.submitError = error.message;
         this.featureService.presentToast(this.featureService.translations.SignUpProblem, 2000)
       });
@@ -218,26 +228,35 @@ export class SignUp1Page implements OnInit {
       this.loginService.initializeApp(uid).then(canAccessApp => {
         if(canAccessApp){
           this.fcmService.initPushNotification();
-          console.log("inside signUp 1 WithEmail canAccessApp true");
+          //console.log("inside signUp 1 WithEmail canAccessApp true");
           this.authService.canAccessApp.next(true);
           // console.log(this.authService.canAccessApp.value);
           this.redirectLoggedUserToMainMenuPage();
         }
         else{
-          this.dismissLoading();
-          console.log("inside signUp 1 WithEmail canAccessApp false");
+          //this.dismissLoading();
+          this.loading.then(res=>{
+            res.dismiss();        
+          })
+          //console.log("inside signUp 1 WithEmail canAccessApp false");
           this.authService.canAccessApp.next(false);
           this.featureService.presentToast(this.featureService.translations.CantAccesApp, 2000)
         }
       }
       )
       .catch((err )=> {
-        this.dismissLoading();
+        //this.dismissLoading();
+        this.loading.then(res=>{
+          res.dismiss();        
+        })
         console.log(err);
         this.featureService.presentToast(this.featureService.translations.InitializingAppProblem, 2000)}
       );
     }).catch((err) => { 
-      this.dismissLoading();
+      //this.dismissLoading();
+      this.loading.then(res=>{
+        res.dismiss();        
+      })
       console.log(err);
       this.featureService.presentToast(this.featureService.translations.AddingErrors, 2000);}); 
   }
@@ -253,10 +272,10 @@ export class SignUp1Page implements OnInit {
     this.featureService.checkEmail(this.signup1Form.value.email)
     // .toPromise().then((result)=> {
       .subscribe((result: any[])=> { 
-      console.log(result, /*result.lenght*/); 
+      //console.log(result, /*result.lenght*/); 
       if(result.length > 0) { 
         this.buildingId = result[0].buildingId;
-        console.log("result", result.length); 
+        //console.log("result", result.length); 
         // this.emailIsValid= true; 
         this.emailFound= true;
         this.featureService.presentToast(this.featureService.translations.EmailFound, 2000);

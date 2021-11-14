@@ -2,7 +2,8 @@ import { ShellModel } from '../../shell/data-store';
 import { Images } from '../../type';
 
 export class FirebaseListingItemModel extends ShellModel {
-
+  creatorPhoto: string;
+  creatorName: string;
   id: string;
   type: string;
   subject: string;

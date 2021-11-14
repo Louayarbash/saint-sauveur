@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      <ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsAdmin">
@@ -14,7 +15,7 @@
 <ion-content>
   <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
     </div>
   </ng-container>
   <ng-container *ngIf="!item.isShell">
@@ -81,9 +82,14 @@
               <ion-toggle color="main" [checked]="item.enableLostFound" disabled slot="end"></ion-toggle>
             </ion-item>
             <ion-item>
-              <ion-text slot="start">{{ 'PublicationsMenu' | translate }}</ion-text>
-              <ion-text slot="end">{{ enablePublication }}</ion-text>
-              <ion-toggle [checked]="item.enablePublication" color="main" disabled slot="end"></ion-toggle>
+              <ion-text slot="start">{{ 'AnnouncementMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableAnnouncement }}</ion-text>
+              <ion-toggle [checked]="item.enableAnnouncement" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-text slot="start">{{ 'RegulationMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ Regulation }}</ion-text>
+              <ion-toggle [checked]="item.Regulation" color="main" disabled slot="end"></ion-toggle>
             </ion-item>
             <ion-item>
               <ion-text slot="start">{{ 'EventsMenu' | translate }}</ion-text>
@@ -108,7 +114,7 @@
             </ion-item>
             <ng-container *ngIf="item.enableDeal">
               <ion-item class="sub-item" lines="none" *ngFor="let parking of parkings">
-                <ion-text>{{ 'Parking' | translate }} - {{ parking.id }} </ion-text> 
+                <ion-text>{{ 'Level' | translate }} - {{ parking.id }} </ion-text> 
                 <ion-text slot="end">{{ parking.description }}</ion-text>
               </ion-item>
             </ng-container>

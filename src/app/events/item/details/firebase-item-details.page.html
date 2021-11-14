@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button  *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button  *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
     <ion-buttons slot="end" *ngIf="userIsAdmin">
@@ -14,7 +16,7 @@
 <ion-content>
     <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
-      <ion-spinner></ion-spinner>
+      <ion-spinner color="main"></ion-spinner>
 <!--       <p>
         Fetching data...
       </p> -->
@@ -28,7 +30,7 @@
         <ion-text>{{ item.subject }}</ion-text>               
          </ion-item>
          <ion-item *ngIf="item.dateTS">    
-          <ion-label>Date</ion-label>
+          <ion-label>{{ 'Date' | translate }}</ion-label>
           {{item.dateTS * 1000 | date:'dd, MMM, yyyy'}}
         </ion-item>
       <ion-item *ngIf="item.startDateTS">    

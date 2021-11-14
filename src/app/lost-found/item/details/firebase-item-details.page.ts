@@ -34,6 +34,7 @@ export class FirebaseItemDetailsPage implements OnInit {
   status : string;
   userIsCreator = false;
   postImages : Images[] = [];
+  ltr: boolean;
 
   @HostBinding('class.is-shell') get isShell() {
     return ((this.item && this.item.isShell)/* || (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
@@ -51,6 +52,8 @@ export class FirebaseItemDetailsPage implements OnInit {
     }
 
   ngOnInit() {
+    this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.route.data.subscribe((resolvedRouteData) => {    
       const resolvedDataStores = resolvedRouteData['data'];
       const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;
@@ -173,5 +176,11 @@ export class FirebaseItemDetailsPage implements OnInit {
   body: 'How are you? Nice greetings from Leipzig',
   isHtml: true
 } */
+  }
+  copyEmail(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.email)
+  }
+  copyPhone(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.phone.toString())
   }
 }

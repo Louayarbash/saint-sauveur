@@ -13,22 +13,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-      <section *ngIf="canRate">
-        <ion-list lines="full" class="ion-no-padding">
-            <ion-item>
-              <ion-label>{{ 'Rating' | translate }}</ion-label>
-              <app-rating-input formControlName="rate" max="5"></app-rating-input>
-            </ion-item>    
-            <ion-item>
-              <ion-label position="floating">{{ 'Review' | translate }}</ion-label>
-              <ion-textarea autocapitalize rows="6" cols="20" formControlName="review"></ion-textarea>
-            </ion-item>
-<!--             <ion-item>
-              <ion-label>{{ 'UsersRating' | translate }}</ion-label>
-            </ion-item>    -->
-        </ion-list>
-      </section>
-      <ion-grid>
+    <ion-grid>
       <ion-row>
         <ion-col>
            <div class="ion-text-center">
@@ -50,7 +35,7 @@
           <ion-row>
             <ion-col  class="header my-message ion-padding">
             <b>{{ rating.userFirstname }}</b> ({{ rating.stars }} {{ 'Of' | translate }} 5 {{ 'Stars' | translate }})
-            <div class="time-my-message" text-right *ngIf="rating.review == ''">
+            <div class="time-chat" text-right *ngIf="rating.review == ''">
               {{rating.createdDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
             </div>
           </ion-col>
@@ -58,7 +43,7 @@
           <ion-row *ngIf="rating.review != ''">
           <ion-col class="message other-message ion-padding-bottom" >
             <div class="ion-padding">{{rating.review}}</div>
-            <div class="time-my-message" text-right><br>
+            <div class="time-chat" text-right><br>
               {{rating.createdDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}
             </div>            
           </ion-col>
@@ -69,6 +54,22 @@
       <h3 *ngIf="!ratingSection" class="empty-list-message">
         {{ 'NoItemFound' | translate }}
       </h3>
+      <section *ngIf="canRate">
+        <ion-list lines="full" class="ion-no-padding">
+            <ion-item>
+              <ion-label>{{ 'Rating' | translate }}</ion-label>
+              <app-rating-input formControlName="rate" max="5"></app-rating-input>
+            </ion-item>    
+            <ion-item>
+              <ion-label position="floating">{{ 'Review' | translate }}</ion-label>
+              <ion-textarea autocapitalize rows="6" cols="20" formControlName="review"></ion-textarea>
+            </ion-item>
+<!--             <ion-item>
+              <ion-label>{{ 'UsersRating' | translate }}</ion-label>
+            </ion-item>    -->
+        </ion-list>
+      </section>
+
   </ion-content>
   <ion-footer>
     <ion-row>

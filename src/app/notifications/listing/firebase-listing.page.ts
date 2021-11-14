@@ -25,6 +25,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<NotificationListingItemModel> & ShellModel;
   notificationsList: Array<NotificationListingItemModel>;
+  //ltr: boolean;
 
 
   @HostBinding('class.is-shell') get isShell() {
@@ -46,6 +47,8 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    //this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
+
     this.menu.enable(true); 
     this.userIsAdmin = this.loginService.isUserAdmin();
     //this.getUsersList(null)
@@ -76,7 +79,9 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
                   break;
                   case "lost-found" : item.typeTranslation = this.featureService.translations.LostFoundMenu;
                   break;
-                  case "publications" : item.typeTranslation = this.featureService.translations.PublicationsMenu;
+                  case "announcement" : item.typeTranslation = this.featureService.translations.AnnouncementMenu;
+                  break;
+                  case "regulation" : item.typeTranslation = this.featureService.translations.RegulationMenu;
                   break;
                   case "events" : item.typeTranslation = this.featureService.translations.EventsMenu;
                   break;

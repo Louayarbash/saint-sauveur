@@ -40,7 +40,7 @@ import { IntroGuard } from './auth/intro.guard';
 import { IonicStorageModule } from '@ionic/storage';
 //import { IonRouterOutlet } from '@ionic/angular';
 import { CreateProblemModal } from './problems/item/create/firebase-create-item.modal';
-
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -90,6 +90,7 @@ export function createTranslateLoader(http: HttpClient) {
     PageGuard,
     SignInGuard,
     IntroGuard,
+    InAppPurchase2
     //IonRouterOutlet
   ],
   entryComponents: [
