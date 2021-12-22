@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="louay.arbash.parkondo">
+    package="louay.arbash.saintsauveur">
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,8 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="louay.arbash.parkondo.MainActivity"
-            android:label="Parkondo"
+            android:name="louay.arbash.saintsauveur.MainActivity"
+            android:label="Saintsauveur"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask">
 

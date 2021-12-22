@@ -6,14 +6,13 @@ export const environment = {
   production: false,
   
   firebase:   {
-    apiKey: 'AIzaSyBCvvDFnPEKABrn8EMgiTvOmVV5Gm7Etvw',
-    authDomain: 'parkondo.firebaseapp.com',
-    databaseURL: 'https://parkondo.firebaseio.com',
-    projectId: 'parkondo',
-    storageBucket: 'parkondo.appspot.com',
-    messagingSenderId: '373200357220',
-    appId: '1:373200357220:web:aaf7ddbcf978fff9b6dc71',
-    measurementId: 'G-DQJTP89WRH'
+    apiKey: "AIzaSyAdlSZ7rrdugIIwjcnPgT1UMVgFH--2PgM",
+    authDomain: "saintsauveur-9f346.firebaseapp.com",
+    projectId: "saintsauveur-9f346",
+    storageBucket: "saintsauveur-9f346.appspot.com",
+    messagingSenderId: "843684139957",
+    appId: "1:843684139957:web:03c7a2ecabc67c479d3ffc",
+    measurementId: "G-E9GLYJZ1DZ"
   }  
  /* {
     apiKey: 'AIzaSyC5QK355uuknu0_ldVxFqqNqgp9oJi_eLc',

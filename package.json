@@ -1,12 +1,12 @@
 {
-  "name": "parkondo",
+  "name": "saint-sauveur",
   "description": "Let's interacte with your building",
   "version": "1.0.0",
   "author": "Elio",
   "contributors": [
     "louay.arbash@gmail.com"
   ],
-  "homepage": "https://parkondo.com/",
+  "homepage": "https://en.wikipedia.org/wiki/Saint_Sauveur_Cathedral",
   "private": true,
   "scripts": {
     "ng": "ng",

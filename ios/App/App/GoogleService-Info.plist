@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>373200357220-q99rb6oubusk406p5mn5o8vlp5ujjulo.apps.googleusercontent.com</string>
+	<string>843684139957-6c8r2ho3ohsbgdtagntmqo8lkqgak2rg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.373200357220-q99rb6oubusk406p5mn5o8vlp5ujjulo</string>
+	<string>com.googleusercontent.apps.843684139957-6c8r2ho3ohsbgdtagntmqo8lkqgak2rg</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDdKvUGyNqTHwTxkzwm7I7gxjUQB8rhpKc</string>
+	<string>AIzaSyBk_FWQ6_1j3Ml4rjCu9Kz9l8hC_0zu5mA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>373200357220</string>
+	<string>843684139957</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>louay.arbash.parkondo</string>
+	<string>saint.sauveur.montreal</string>
 	<key>PROJECT_ID</key>
-	<string>parkondo</string>
+	<string>saintsauveur-9f346</string>
 	<key>STORAGE_BUCKET</key>
-	<string>parkondo.appspot.com</string>
+	<string>saintsauveur-9f346.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:373200357220:ios:91e17fd9befb33c1b6dc71</string>
-	<key>DATABASE_URL</key>
-	<string>https://parkondo.firebaseio.com</string>
+	<string>1:843684139957:ios:00a3acc7aaadda8b9d3ffc</string>
 </dict>
 </plist>
