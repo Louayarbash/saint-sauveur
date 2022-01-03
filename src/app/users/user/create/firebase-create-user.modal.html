@@ -49,23 +49,7 @@
           <ion-label  position="floating">{{ 'Building' | translate }}</ion-label>
           <ion-input type="text" formControlName="building"></ion-input>
         </ion-item> -->
-          <ion-grid class="ion-no-margin ion-no-padding">          
-          <ion-row>
-          <ion-col>
-            <ion-item> 
-          <ion-label position="floating">{{ 'Apartment' | translate }}</ion-label>
-          <ion-input type="text" formControlName="apartment"></ion-input>
-            </ion-item> 
-        </ion-col>
-        <ion-col>
-          <ion-item> 
-          <ion-label position="floating">{{ 'DoorCode' | translate }}</ion-label>
-          <ion-input type="text" formControlName="code"></ion-input>
-          </ion-item> 
-        </ion-col>
-        </ion-row>
-      
-      </ion-grid>
+
     
 <!--         <ion-grid>
           <ion-row class="ion-justify-content-between">
@@ -82,30 +66,7 @@
           </ion-row>
         </ion-grid> -->
 
-<ion-grid class="ion-no-margin ion-no-padding">          
-  <ion-row class="ion-align-items-center">
-    <ion-col>
-      <ion-item>
-        <ion-radio-group formControlName="type" size="6">
-          <ion-row class="radio-tags">
-            <ion-col class="ion-margin-end">
-            <ion-item class="radio-tag" lines="none">
-              <ion-label class="tag-label">{{ 'Owner' | translate }}</ion-label>
-              <ion-radio value="owner"></ion-radio>
-            </ion-item>
-          </ion-col>
-            <ion-col>
-              <ion-item class="radio-tag" lines="none">
-                <ion-label class="tag-label">{{ 'Tenant' | translate }}</ion-label>
-                <ion-radio value="tenant"></ion-radio>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-radio-group>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+
 <ion-grid class="ion-no-margin ion-no-padding">          
   <ion-row class="ion-align-items-center">
     <ion-col>
@@ -174,76 +135,9 @@
 <ion-item-divider lines="none" >
   <ion-label>{{ 'Parking' | translate }}</ion-label>
   </ion-item-divider>
-  <ion-grid class="ion-no-margin ion-no-padding">          
-    <ion-row class="ion-align-items-center">
-<ion-col size="4">
 
-    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking1Level" (ionChange)="parking1Changed($event)">
-      <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
-      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
-    </ion-select>
 
-  </ion-col>
-  <ion-col *ngIf="parking1selected" size="4"> 
-      <ion-item>
-        <ion-label>{{ 'Number' | translate }}:</ion-label>
-      <ion-input type="text" formControlName="parking1Number"></ion-input>
-      </ion-item>
-  </ion-col>
-    <ion-col *ngIf="parking1selected" size="4">
-        <ion-icon color="main" name="add-outline" *ngIf="!showHideParking2" (click)="showHideParkingValidate2()"></ion-icon>
-  </ion-col>
-   </ion-row>
-  </ion-grid>
-  <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking2">          
-  <ion-row class="ion-align-items-center">
-  <ion-col size="4">
 
-    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking2Level" (ionChange)="parking2Changed($event)">
-      <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
-      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
-    </ion-select>
-
-  </ion-col>
-<ion-col *ngIf="parking2selected" size="4">
-    <ion-item>
-      <ion-label>{{ 'Number' | translate }}:</ion-label>
-    <ion-input type="text" formControlName="parking2Number"></ion-input>
-  </ion-item>
-</ion-col>
-<ion-col *ngIf="parking2selected" size="4">
-  <ion-row >
-    <ion-col *ngIf="showHideParking2" size="6">
-        <ion-icon color="main" name="trash-outline" (click)="showHideParkingValidate2()"></ion-icon>
-  </ion-col>
-  <ion-col *ngIf="!showHideParking3" size="6">
-      <ion-icon color="main" name="add-outline" (click)="showHideParkingValidate3()"></ion-icon>
-  </ion-col>
-  </ion-row>
-</ion-col>
- </ion-row>
-  </ion-grid>
-  <ion-grid class="ion-no-margin ion-no-padding" *ngIf="showHideParking3">          
-  <ion-row class="ion-align-items-center">
-<ion-col size="4">
-
-    <ion-select [interfaceOptions]="customAlertOptions" [okText]="'OK' | translate" [cancelText]="'Cancel' | translate" formControlName="parking3Level" (ionChange)="parking3Changed($event)">
-      <ion-select-option *ngFor="let level of buildingParkings" [value]="level.id">{{ level.description }}</ion-select-option>
-      <ion-select-option value="1000">{{ 'NotApplicable' | translate }}</ion-select-option>
-    </ion-select>
-
-</ion-col>
-<ion-col *ngIf="parking3selected" size="4">
-    <ion-item>
-      <ion-label>{{ 'Number' | translate }}:</ion-label>
-    <ion-input type="text" formControlName="parking3Number"></ion-input>
-  </ion-item>
-</ion-col>
-<ion-col *ngIf="parking3selected" size="4">
-    <ion-icon color="main" name="trash-outline" *ngIf="showHideParking3" (click)="showHideParkingValidate3()"></ion-icon>
-</ion-col>
-</ion-row>
-</ion-grid>
 <ion-grid class="ion-no-margin ion-no-padding">          
   <ion-row class="ion-align-items-center">
     <ion-col>
@@ -272,27 +166,7 @@
     </section>
   </ion-content>
   <ion-footer>
-    <ng-container *ngIf="createUserForm.get('parking1Number').invalid && (createUserForm.dirty || createUserForm.touched)">
-      <ion-row *ngIf="createUserForm.get('parking1Number').errors.required">
-        <ion-col>
-        <ion-text class="ion-padding-left validation">{{ 'Parking1NameRequired' | translate }}</ion-text>
-        </ion-col>
-      </ion-row>
-    </ng-container>
-    <ng-container *ngIf="createUserForm.get('parking2Number').invalid && (createUserForm.dirty || createUserForm.touched)">
-      <ion-row *ngIf="createUserForm.get('parking2Number').errors.required">
-        <ion-col>
-        <ion-text class="ion-padding-left validation">{{ 'Parking2NameRequired' | translate }}</ion-text>
-        </ion-col>
-      </ion-row>
-    </ng-container>
-    <ng-container *ngIf="createUserForm.get('parking3Number').invalid && (createUserForm.dirty || createUserForm.touched)">
-      <ion-row *ngIf="createUserForm.get('parking3Number').errors.required">
-        <ion-col>
-        <ion-text class="ion-padding-left validation">{{ 'Parking3NameRequired' | translate }}</ion-text>
-        </ion-col>
-      </ion-row>
-    </ng-container>
+
     <ng-container *ngIf="createUserForm.get('firstname').invalid && (createUserForm.dirty || createUserForm.touched)">
       <ion-row *ngIf="createUserForm.get('firstname').errors.required">
         <ion-col>

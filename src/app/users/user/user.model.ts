@@ -7,12 +7,7 @@ export class UserModel extends ShellModel {
   photo: string;
   firstname: string;
   lastname: string;
-  buildingId: string;
-  apartment: string;
-  parkings: any[];
-  type: string;
   role: string;
-  code: string;
   email: string;
   phone: number;
   birthdate: number;
@@ -22,9 +17,7 @@ export class UserModel extends ShellModel {
   status: string;
   createDate : firebase.firestore.FieldValue
   modificationDate : firebase.firestore.FieldValue;
-  proExpirationDate : firebase.firestore.FieldValue;
   createdBy: string;
-
   
   constructor() {
     super();

@@ -48,19 +48,7 @@
             <ion-item *ngIf="user.phone">
               <ion-label>{{ 'Phone' | translate }}</ion-label>
               <ion-text>{{ user.phone }}</ion-text>
-            </ion-item>
-            <ion-item *ngIf="user.apartment">
-              <ion-label>{{ 'Apartment' | translate }}</ion-label>
-              <ion-text>{{ user.apartment }}</ion-text>
-            </ion-item>
-            <ion-item *ngIf="user.code">    
-              <ion-label>{{ 'DoorCode' | translate }}</ion-label>
-              <ion-text>{{ user.code }}</ion-text>
-            </ion-item>
-            <ion-item *ngIf="user.type">    
-              <ion-label>{{ 'Type' | translate }}</ion-label>
-              <ion-text>{{ type }}</ion-text>
-            </ion-item>
+            </ion-item>        
             <ion-item *ngIf="user.language">
               <ion-label>{{ 'Language' | translate }}</ion-label>
               <ion-text>{{ language }}</ion-text>
@@ -74,15 +62,7 @@
               <ion-text slot="start">{{ 'EnableNotifications' | translate }}</ion-text>
               <ion-text slot="end">{{ enableNotifications }}</ion-text>
               <ion-toggle [checked]="user.enableNotifications" color="main" disabled slot="end"></ion-toggle>
-            </ion-item>
-            <ion-item *ngFor="let parking of parkingInfo; let index = index;">    
-              <ion-label>{{ 'Parking' | translate }} {{ index + 1}} </ion-label>
-              {{ parking.description }}/#{{ parking.number }}
-            </ion-item>
-            <ion-item *ngIf="user.createDate">    
-              <ion-label>{{ 'CreateDate' | translate }}</ion-label>
-              <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
-            </ion-item>
+            </ion-item>            
             <ion-item *ngIf="user.status">    
               <ion-label>{{ 'StatusAccount' | translate }}</ion-label>
               <ion-text>{{ status }}</ion-text>
