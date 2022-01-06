@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UserModel } from '../../users/user/user.model';
-import { BuildingModel } from '../../buildings/building/building.model';
+import { BuildingModel } from '../../churchs/church/building.model';
 import { AuthService } from '../../auth/auth.service';
 import { FeatureService } from '../../services/feature/feature.service';
 import { BehaviorSubject } from 'rxjs';
 import { AlertController } from '@ionic/angular';
-import { ParkingInfo } from '../../type';
+//import { ParkingInfo } from '../../type';
 import { Timestamp } from '@google-cloud/firestore';
 
 @Injectable({
@@ -72,14 +72,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
-  getApaNumber(): string{
-    if(this.userInfo.apartment){
-      return this.userInfo.apartment;
-    }
-    else {
-      return 'N/A'
-    }
-  }
+
 
   getLoginID(): string{
     if(this.userInfo.id){
@@ -103,16 +96,9 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     return this.authService.getUserId()
   }
  */
-  getBuildingId(): string{
-    if(this.userInfo.buildingId){
-      return this.userInfo.buildingId;
-    }
-    else {
-      return null
-    }
-  }
 
-  getProExpirationDate(): Timestamp {
+
+/*   getProExpirationDate(): Timestamp {
     if(this.buildingInfo.proExpirationDate){
       return this.buildingInfo.proExpirationDate
     }
@@ -128,16 +114,16 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     else {
       return null
     }
-  }
+  } */
 
-  getBuildingName(): string{
+   getBuildingName(): string{
     if(this.buildingInfo.name){
       return this.buildingInfo.name;
     }
     else {
       return null
     }
-  }
+  } 
 
   notificationsAllowed(): boolean{
     if(this.userInfo.enableNotifications){
@@ -148,23 +134,14 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
-  getBuildingParkings(){
+/*   getBuildingParkings(){
     if(this.buildingInfo.parkings){
       return this.buildingInfo.parkings;
     }
     else {
       return null;
     }
-  }
-
-  getUserParking(){
-    if(this.userInfo.parkings){
-      return this.userInfo.parkings;
-    }
-    else {
-      return null;
-    }
-  }
+  } */
 
   updateUserParking(parkings : any){
     this.afs.collection("users").doc(this.getLoginID()).update({parkings : parkings})
@@ -188,23 +165,9 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
     }
   }
 
-  getUserParkingInfo(){
-    if(this.getUserParking()){
-      let parkingInfo: ParkingInfo[] = this.getUserParking().map((userParking) => {     
-        let parkingCheck = this.getBuildingParkings().find((buildingParking) => { return buildingParking.id == userParking.id });
-          if(parkingCheck){
-            return { id: userParking.id, number: userParking.number, description: parkingCheck.description, active: parkingCheck.active };
-          }
-        });
-        parkingInfo= parkingInfo.filter(function (res) {
-          return res != null;
-      });
-      return parkingInfo;
-    }
-    else return null
-  }
 
-  getParkingInfo(userParkings: any[]){
+
+/*   getParkingInfo(userParkings: any[]){
     if(userParkings){
       let parkingInfo: ParkingInfo[] = userParkings.map((userParking) => {     
         let parkingCheck = this.getBuildingParkings().find((buildingParking) => { return buildingParking.id == userParking.id });
@@ -218,7 +181,7 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
       return parkingInfo;
     }
     else return null
-  }
+  } */
 
    async initializeApp(uid: string) : Promise<boolean> 
     {
@@ -264,37 +227,12 @@ currentBuildingInfo = this.buildingInfoSource.asObservable();
         }
     });
     this.userInfoSource.next( userData );
-      const building= await this.afs.firestore.collection("buildings").doc(this.userInfo.buildingId).get({source: 'server'});
-      console.log(building.data());
-      let buildingData= building.data() as BuildingModel;
-      this.buildingInfo= buildingData;
-      this.featureService.getItem('buildings', userData.buildingId).subscribe(async item => {
-        this.buildingInfo= item;
-        this.buildingInfoSource.next( item );
-        if((item.status !== 'active') && this.userInfo.role == 'user'){
-          const alert = await this.alertController.create({
-            header: this.featureService.translations.StatusInactiveHeader,
-            message: this.featureService.translations.StatusInactiveMessage,
-            buttons: [
-              {
-                text: this.featureService.translations.OK,
-                handler: ()=> {
-                  this.signOut();
-                }
-              }
-            ]
-          });
-      
-          await alert.present();
-        }
-      });
 
-      this.buildingInfoSource.next( buildingData );
-      console.log(this.userInfo.status == 'active' && this.buildingInfo.status =='active');
-      console.log(this.userInfo.status);
-      console.log(this.buildingInfo.status);
+      //console.log(this.userInfo.status == 'active';
+      //console.log(this.userInfo.status);
+      //console.log(this.buildingInfo.status);
       
-      return  (this.userInfo.status == 'active' && this.buildingInfo.status =='active');
+      return this.userInfo.status == 'active';
     } 
     catch (err) {
       console.log(err);

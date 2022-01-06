@@ -19,7 +19,6 @@ export class TabsPage {
       userInfo => {
         this.userId= userInfo.id;
         this.isAdmin= this.loginService.isUserAdmin();//userInfo.role == 'admin' || 'globalAdmin' ? true : false;
-        this.buildingId= userInfo.buildingId;
       }
       );
   }

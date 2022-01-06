@@ -1,12 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,ChangeDetectorRef} from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { Validators, FormGroup, FormControl, ValidatorFn,ValidationErrors } from '@angular/forms';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
 import { FirebaseItemModel } from '../firebase-item.model';
-import { FeatureService } from "../../../services/feature/feature.service"
-import { Files } from '../../../type'
-import { Chooser } from '@ionic-native/chooser/ngx';
+// import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+import { Observable } from "rxjs";
+import { Images } from '../../../type'
+// import { ImagePicker,ImagePickerOptions } from '@ionic-native/image-picker/ngx';
+// import { File } from "@ionic-native/file/ngx";
+import { FeatureService } from '../../../services/feature/feature.service';
+import { LoginService } from '../../../services/login/login.service';
+
 
 @Component({
   selector: 'app-firebase-update-item',
@@ -14,109 +19,43 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 })
 
 export class FirebaseUpdateItemModal implements OnInit {
-  // "user" is passed in firebase-details.page
+
   @Input() item: FirebaseItemModel;
+  @Input() postImages: Images[];
 
   updateItemForm: FormGroup;
-  files : Files[] = [];
-  newName : string = "";
-  nameChanging : boolean[] = [];
-  voting: boolean;
+  //postImages : PhotosArray[] = [];
+  myStoredProfileImage : Observable<any>;
+  profileUrl: Observable<string | null>;
 
   constructor(
     private modalController: ModalController,
+    private alertController: AlertController,
     public firebaseService: FirebaseService,
     public router: Router,
+    // private camera: Camera,
+    // private file: File,
+    // private imagePicker : ImagePicker,
+    private changeRef: ChangeDetectorRef,
     private featureService : FeatureService,
-    private alertController : AlertController,
-    private chooser : Chooser
-  ) { }
+    private loginService : LoginService
+    // private actionSheetController: ActionSheetController
+  ) { 
+  }
 
   ngOnInit() {
+    console.log("postimages",this.postImages)
     this.updateItemForm = new FormGroup({
-      subject: new FormControl(this.item.subject, Validators.required),
-      details: new FormControl(this.item.details),
-      voting: new FormControl(this.item.voting),
-      votingResult: new FormControl(this.item.votingResult),
-      votingMessage: new FormControl(this.item.votingMessage)
-    },
-    {validators: this.changingNameValidator}
-    );
-
-    this.voting= this.item.voting;
-    
-    if(this.item.files){
-      if(this.item.files.length > 0){
-      //this.getPics(this.item.imagesFullPath);
-      //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} ); 
-      this.files = [{fileName:"" , filePath:"", fileData:"", storagePath : ""}];
-      this.item.files.map((res,index)=>{
-          let file : Files = {fileName:"",filePath:"", fileData:"", storagePath:""};
-          file.fileName = res.fileName;
-          file.storagePath = res.storagePath;
-          this.files[index] = file;       
-      });
-      //loading.then(res=>{res.dismiss();});
-    }
-  } 
+      object: new FormControl(this.item.object, Validators.required),
+      description: new FormControl(this.item.description),
+      status: new FormControl(this.item.status, Validators.required)
+    }); 
   }
-  changingNameValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
 
-    return !(this.nameChanging.length == 0) ? { 'nameChanging': true } : null;
-  };
-
-  votingChanged(ev:any) {
-    // console.log(ev);
-    this.voting = ev.detail.checked;
-  }
-  
   dismissModal() {
    this.modalController.dismiss();
   }
 
-  selectFile(){
-    this.chooser.getFile("application/pdf")
-   .then(file => {
-     let fileUpload : Files = {fileData:"",fileName:"",filePath:"", storagePath:""};
-     let extention = file.name.slice(file.name.length-4);
-     console.log("extention", extention);
-     console.log(file ? file.name.slice(0,file.name.length-4) : 'canceled');
-     if(extention == ".pdf"){    
-     fileUpload.fileData = file.dataURI;
-     fileUpload.fileName = file.name.slice(0,file.name.length-4);
-     fileUpload.filePath = file.uri;
-     console.log("file.uri",file); 
-     this.files.push(fileUpload);        
-     }
-     else{
-       this.featureService.presentToast(this.featureService.translations.OnlyPDfAllowed,2000);
-     }
-     console.log(this.files);
-     console.log("this.files.length",this.files.length);
-     }).catch((error: any) => console.error(error));
-   }
-   
-   confirmChanging(index,txtName,btnChange,btnConfirm){
-     this.nameChanging.shift();
-     console.log(this.nameChanging.length)
-     this.updateItemForm.updateValueAndValidity();
-     console.log(txtName);
-     txtName.disabled = true;
-     btnChange.disabled = false;
-     btnConfirm.disabled = true;
-     this.files[index].fileName = txtName.value;
-     //this.item.fileFullPath[index].fileName = txtName.value;
-     // this.featureService.presentToast(this.featureService.translations.,2000);
-     console.log("files after changing name",this.files);
-   }
-   changeBtnStatus(txtName,btnChange,btnConfirm){
-     txtName.disabled = false;
-     btnChange.disabled = true;
-     btnConfirm.disabled = false;
-     this.nameChanging.push(true);
-     console.log(this.nameChanging.length);
-     this.updateItemForm.updateValueAndValidity();
-   }
   async deleteItem() {
     const alert = await this.alertController.create({
       header: this.featureService.translations.PleaseConfirm,
@@ -130,7 +69,7 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.featureService.deleteItem(this.item.files, this.item.id, 'announcements')
+            this.featureService.deleteItem(this.item.images, this.item.id, 'sales')
             .then(
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
@@ -149,48 +88,69 @@ export class FirebaseUpdateItemModal implements OnInit {
     await alert.present();
   }
 
-  updateItem() {
-
-     //if(this.item.category == 'announcement'){
-      this.item.voting = this.updateItemForm.value.voting;
-      this.item.votingMessage = this.updateItemForm.value.votingMessage;
-      this.item.votingResult = this.updateItemForm.value.votingResult;
-    // }
-
-    this.item.subject = this.updateItemForm.value.subject;
-    this.item.details = this.updateItemForm.value.details;
-    this.item.voting = this.updateItemForm.value.voting;
-    this.item.votingResult = this.updateItemForm.value.votingResult;
-    const {isShell, ...itemData} = this.item;
-    this.firebaseService.updateItem(itemData as FirebaseItemModel, this.files)
-    .then(() => {
-      this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
-      this.modalController.dismiss();
-    }
-    ).catch((err)=> {
-      this.featureService.presentToast(this.featureService.translations.UpdatingErrors,2000);
-      console.log(err)
-    });
-  }
-  deleteFile(index : number){ 
-        //const loading = this.featureService.presentLoadingWithOptions(2000).then( res => {return res;} );
-         if(this.files[index].storagePath !== "") {         
-         this.featureService.deleteFromStorage(this.files[index].storagePath).then(res=> {
-         console.log("before",this.item);
-         this.item.files.splice(index,1);
-         console.log("after",this.item);
-         this.featureService.updateItemWithoutOptions(this.item, 'announcements').then(()=> {
-          this.files.splice(index,1); 
-          this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);}
-          ).catch(err=>{console.log("Error in deletePhoto Storage:",err)});  
-          }
-          ).catch(err => console.log("Error in deletePhoto DB: ",err));
-        console.log("files after delete",this.files);
+  deletePhoto(index : number){
+        const loading = this.featureService.presentLoadingWithOptions(2000);
+         if(this.postImages[index].storagePath !== '') {      
+          this.item.images.splice(index,1);    
+          this.featureService.updateItemWithoutOptions(this.item, 'sales').then(()=> {
+          const deletedimage = this.postImages.splice(index,1); 
+          // this.changeRef.detectChanges();
+          this.featureService.presentToast(this.featureService.translations.PhotoRemoved,2000);
+          this.featureService.deleteFromStorage(deletedimage[0].storagePath).then().catch( err => console.log("Error in deletePhoto Storage: ",err));
+        }).catch( err => console.log("Error in deletePhoto DB: ",err));  
       }
       else{
-        this.files.splice(index,1);
+        this.postImages.splice(index,1);
+        // this.changeRef.detectChanges();
       }
-      //loading.then(res=>{res.dismiss();})
+      loading.then(res=>{res.dismiss();})
+      this.changeRef.detectChanges();
 }
-  //END
+
+makeCover(index: number){
+  this.postImages[index].isCover = true;
+  this.postImages.forEach( (item, i) => {
+    if(i === index) {
+      item.isCover = true;
+    }
+    else {
+      item.isCover = false;
+    }
+  });
+  this.updateItemForm.markAsDirty();
+}
+
+updateItem() {
+  this.item.object = this.updateItemForm.value.object;
+  this.item.description = this.updateItemForm.value.description;
+  this.item.status =  this.updateItemForm.value.status;
+  //const {...itemData} = this.item;
+  // const loading = this.featureService.presentLoadingWithOptions(2000);
+  const {isShell, ...itemData} = this.item;
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'sales','images/announcement/')
+  .then(() => {
+    this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
+    // loading.then(res=>{res.dismiss();})
+    this.modalController.dismiss(); // not needed inside catch to stay on same page while errors
+  }
+  ).catch((err)=> {
+    this.featureService.presentToast(this.featureService.translations.UpdatingErrors,2000);
+    // loading.then(res=>{res.dismiss();})
+    console.log(err)
+  });
+}
+
+doReorder(ev: any) {
+
+  const draggedItem = this.postImages.splice(ev.detail.from, 1)[0];  
+  this.postImages.splice(ev.detail.to, 0, draggedItem);  
+  this.updateItemForm.markAsDirty();
+
+  ev.detail.complete();
+}
+
+selectImageSource() {
+  return this.featureService.selectImageSource(3, this.postImages.length, this.postImages, this.updateItemForm)
+}
+
 }

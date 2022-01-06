@@ -63,7 +63,7 @@ export class SignInGuard implements CanActivate {
             }
           }
           )
-          .catch((err )=> { this.featureService.presentToast('Problem while verifying building or user info.'+ err, 2000); return true;})
+          .catch((err )=> { this.featureService.presentToast('Problem while verifying user info.'+ err, 2000); return true;})
     }
     }
     )

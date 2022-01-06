@@ -41,7 +41,7 @@ export class FirebaseService {
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     console.log("getListingDataSource")
     //let CoverPic : any;
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.loginService.getBuildingId()).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
     public getListingStore(dataSource: Observable<Array<FirebaseListingItemModel>>): DataStore<Array<FirebaseListingItemModel>> {
@@ -113,7 +113,7 @@ export class FirebaseService {
         
           if (files[i].filePath != ""){
           try {
-          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', this.storagePath + this.loginService.getBuildingId() + '/');
+          let uploaded = await this.featureService.uploadToStorage(files[i].fileData, itemData.id, 'application/pdf', '.pdf', this.storagePath + '/');
           console.log("updateItem: state", uploaded.state);
           console.log("updateItem: fileName", files[i].fileName);
           console.log("updateItem: fullPath", uploaded.metadata.fullPath);

@@ -1,0 +1,51 @@
+
+:host {
+  --page-margin: var(--app-fair-margin);
+  --page-background: var(--app-background);
+  --page-background-shade: var(--app-background-shade); 
+}
+
+/* ion-select{
+  width: 100%;
+  max-width: 100%;
+}  */
+
+.create-user-content {
+  --background: var(--page-background);
+
+  .select-user-image-row {
+    --ion-grid-column-padding: 0px;
+
+    padding: var(--page-margin);
+    background-color: var(--page-background-shade);
+
+    .user-image-col {
+      margin: 0px auto;
+      position: relative;
+
+      .user-image {
+        border-radius: 50%;
+        border: solid 3px var(--ion-color-lightest);
+      }
+    }
+
+    .change-image-btn {
+      --border-radius: 50%;
+      --padding-start: 0px;
+      --padding-end: 0px;
+
+      position: absolute;
+      right: 0px;
+      bottom: var(--page-margin);
+      z-index: 3;
+      width: 4ch;
+      height: 4ch;
+      margin: 0px;
+
+      .btn-icon {
+        font-size: 26px;
+      }
+    }
+  }
+
+}

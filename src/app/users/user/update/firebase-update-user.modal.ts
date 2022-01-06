@@ -28,7 +28,7 @@ export class FirebaseUpdateUserModal implements OnInit {
   myStoredProfileImage: Observable<any>;
   updateUserForm: FormGroup;
   userData: UserModel = new UserModel();
-  buildingParkings = this.loginService.getBuildingParkings();
+  //buildingParkings = this.loginService.getBuildingParkings();
   selectedParking = [];
   selectedPhoto: string;
   showHideParking2: boolean;
@@ -79,15 +79,6 @@ export class FirebaseUpdateUserModal implements OnInit {
       firstname: new FormControl(this.user.firstname,Validators.required),
       lastname: new FormControl(this.user.lastname,Validators.required),
       // building: new FormControl(this.user.building,Validators.required),
-      apartment : new FormControl(this.user.apartment),
-      parking1Level : new FormControl("1000"),
-      parking1Number : new FormControl(),
-      parking2Level : new FormControl("1000"),
-      parking2Number : new FormControl(),
-      parking3Level : new FormControl("1000"),
-      parking3Number : new FormControl(),
-      code : new FormControl(this.user.code),
-      type : new FormControl(this.user.type ? this.user.type : 'owner', Validators.required),
       role : new FormControl(this.user.role ? this.user.role : 'user', Validators.required),
       phone: new FormControl(this.user.phone),
       birthdate: new FormControl(this.user.birthdate ? dayjs.unix(this.user.birthdate).format('DD/MMMM/YYYY') : null),
@@ -147,46 +138,7 @@ export class FirebaseUpdateUserModal implements OnInit {
 
   }
 
-  parking1Changed(ev:any) {
-    if(ev.detail.value !== '1000'){
-      this.updateUserForm.controls['parking1Number'].setValidators(Validators.required);
-      this.parking1selected = true;
-    }
-    else{
-      this.parking1selected = false;
-      this.updateUserForm.controls['parking1Number'].setValidators(null);
-    }
 
-    this.updateUserForm.controls['parking1Number'].updateValueAndValidity();
-
-  }
-
-  parking2Changed(ev:any) {
-    if(ev.detail.value !== '1000'){
-      this.updateUserForm.controls['parking2Number'].setValidators(Validators.required);
-      this.parking2selected = true;
-    }
-    else{
-      this.parking2selected = false;
-      this.updateUserForm.controls['parking2Number'].setValidators(null);
-    }
-    
-    this.updateUserForm.controls['parking2Number'].updateValueAndValidity();
-    
-  }
-
-  parking3Changed(ev:any) {
-
-    if(ev.detail.value !== '1000'){
-      this.updateUserForm.controls['parking3Number'].setValidators(Validators.required);
-      this.parking3selected = true;
-    }
-    else {
-      this.parking3selected = false;
-      this.updateUserForm.controls['parking3Number'].setValidators(null);
-    }
-    this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
-  }
 
   dismissModal() {
    this.modalController.dismiss();
@@ -234,36 +186,13 @@ export class FirebaseUpdateUserModal implements OnInit {
     this.userData.phone = this.updateUserForm.value.phone;
     //this.userData.email = this.updateUserForm.value.email;
     // this.userData.building = this.updateUserForm.value.building;
-    this.userData.code= this.updateUserForm.value.code;
-    this.userData.type= this.updateUserForm.value.type;
+
     this.userData.role= this.updateUserForm.value.role;
-    this.userData.apartment= this.updateUserForm.value.apartment;
+
     this.userData.language= this.updateUserForm.value.language;
     this.userData.enableNotifications= this.updateUserForm.value.enableNotifications;
     this.userData.status= this.updateUserForm.value.status;
     this.userData.modificationDate = firebase.firestore.FieldValue.serverTimestamp();
-    
-    this.selectedParking = [];
-    
-    if(this.updateUserForm.controls['parking1Level'].value !== '1000'){
-      this.selectedParking.push({ 
-      id: this.updateUserForm.controls['parking1Level'].value , 
-      number : this.updateUserForm.value.parking1Number});
-    }
-        
-    if(this.updateUserForm.controls['parking2Level'].value !== '1000'){
-      this.selectedParking.push({ 
-        id: this.updateUserForm.controls['parking2Level'].value , 
-        number : this.updateUserForm.value.parking2Number});
-    }
-        
-    if(this.updateUserForm.controls['parking3Level'].value !== '1000'){
-      this.selectedParking.push({ 
-        id: this.updateUserForm.controls['parking3Level'].value , 
-        number : this.updateUserForm.value.parking3Number});
-    }
-
-    this.userData.parkings = this.selectedParking.length ? this.selectedParking : null;
     
     // console.log(this.selectedParking);
     const {isShell, ...userData} = this.userData;
@@ -386,41 +315,6 @@ export class FirebaseUpdateUserModal implements OnInit {
       });
       await actionSheet.present();
   }
-  showHideParkingValidate2(){
-    this.showHideParking2 = this.showHideParking2 ? false : true;
-    this.showHideParking3 = false;
-    this.updateUserForm.markAsDirty();
-    if(this.showHideParking2 === false){
-     this.updateUserForm.controls['parking2Level'].setValue("1000");  
-     this.updateUserForm.controls['parking2Number'].setValue("");
-     this.updateUserForm.controls['parking2Number'].setValidators(null);
-     this.updateUserForm.controls['parking2Number'].updateValueAndValidity();
-     
-     this.updateUserForm.controls['parking3Level'].setValue("1000");
-     this.updateUserForm.controls['parking3Number'].setValue("");
-     this.updateUserForm.controls['parking3Number'].setValidators(null);
-     this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
-   } else {
-    setTimeout(() => {
-      this.content.scrollToBottom(400);
-    },400); 
-  }
-   
-   }
-   showHideParkingValidate3(){
-     this.showHideParking3 = this.showHideParking3 ? false : true;
-     this.updateUserForm.markAsDirty();
-    if(this.showHideParking3 === false){
-       this.updateUserForm.controls['parking3Level'].setValue('1000');
-       this.updateUserForm.controls['parking3Number'].setValue('');
-       this.updateUserForm.controls['parking3Number'].setValidators(null);
-       this.updateUserForm.controls['parking3Number'].updateValueAndValidity();
-     }
-    else {
-      setTimeout(() => {
-        this.content.scrollToBottom(400);
-      }, 400); 
-    }
-   }
+
 
 }

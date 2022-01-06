@@ -1,0 +1,192 @@
+<!-- This is the proper way if you have submit button outside your ion-content form (typically in the ion-header or ion-footer) -->
+<!-- (ref: https://github.com/ionic-team/ionic/issues/16661) -->
+<form class="ion-page" [formGroup]="updateUserForm" (ngSubmit)="updateUser()">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{ 'Update' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="update-user-content">
+    <ion-row class="select-user-image-row">
+      <ion-col class="user-image-col" size="5">
+        <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+          <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="selectedPhoto" [alt]="'user image'"></app-image-shell>
+        </app-aspect-ratio>
+        <ion-button class="change-image-btn" color="main" (click)="selectImageSource()">
+          <ion-icon class="btn-icon" slot="icon-only" name="camera"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <section>
+      <ion-list lines="full">
+        <ion-item >
+          <ion-label position="floating">{{ 'FirstName' | translate }}</ion-label>
+          <!-- <ion-input autocapitalize="words" formControlName="firstname"></ion-input> -->
+          <ion-input autocapitalize formControlName="firstname"></ion-input>
+        </ion-item>
+        <ion-item >
+          <ion-label  position="floating">{{ 'LastName' | translate }}</ion-label>
+          <ion-input autocapitalize type="text" formControlName="lastname"></ion-input>
+        </ion-item>
+        <ion-item >
+            <ion-label position="floating">{{ 'Email' | translate }}</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+        <ion-item >
+          <ion-label position="floating">{{ 'DateOfBirth' | translate }}</ion-label>
+          <ion-datetime display-format="DD, MMMM, YYYY" picker-format="DD MMMM YYYY" formControlName="birthdate"></ion-datetime>
+        </ion-item>
+        <ion-item >
+          <ion-label position="floating">{{ 'Phone' | translate }}</ion-label>
+          <ion-input inputmode="tel" type="tel" formControlName="phone"></ion-input>
+        </ion-item>
+<!--         <ion-item >
+          <ion-label  position="floating">{{ 'Building' | translate }}</ion-label>
+          <ion-input type="text" formControlName="building"></ion-input>
+        </ion-item> -->
+   
+    
+
+
+<ion-grid class="ion-no-margin ion-no-padding">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="language" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'English' | translate }}</ion-label>
+              <ion-radio value="en"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col class="ion-margin-end">
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Frensh' | translate }}</ion-label>
+                <ion-radio value="fr"></ion-radio>
+              </ion-item>
+            </ion-col>
+            <ion-col class="ion-margin-end">
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Spanish' | translate }}</ion-label>
+                <ion-radio value="es"></ion-radio>
+              </ion-item>
+            </ion-col>
+            <ion-col >
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Arabic' | translate }}</ion-label>
+                <ion-radio value="ar"></ion-radio>
+              </ion-item>
+            </ion-col>
+
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid class="ion-no-margin ion-no-padding" *ngIf="userIsAdmin && !userIsGlobalAdmin">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-radio-group formControlName="role" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'RegularUser' | translate }}</ion-label>
+              <ion-radio value="user"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'Admin' | translate }}</ion-label>
+                <ion-radio value="admin"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-item>
+  <ion-label>{{ 'EnableNotifications' | translate }}</ion-label>
+  <ion-toggle color="main" formControlName="enableNotifications"></ion-toggle>
+</ion-item>
+
+
+<ion-grid class="ion-no-margin ion-no-padding" *ngIf="((!userIsGlobalAdmin) && (user.email == loggedEmail)) || ((userIsGlobalAdmin) && (user.email != loggedEmail)) ">          
+  <ion-row class="ion-align-items-center">
+    <ion-col>
+      <ion-item>
+        <ion-label class="parkingLabel ion-text-wrap">{{ 'StatusAccount' | translate }}</ion-label> 
+        <ion-radio-group formControlName="status" size="6">
+          <ion-row class="radio-tags">
+            <ion-col class="ion-margin-end">
+            <ion-item class="radio-tag" lines="none">
+              <ion-label class="tag-label">{{ 'Active' | translate }}</ion-label>
+              <ion-radio value="active"></ion-radio>
+            </ion-item>
+          </ion-col>
+            <ion-col>
+              <ion-item class="radio-tag" lines="none">
+                <ion-label class="tag-label">{{ 'InActive' | translate }}</ion-label>
+                <ion-radio value="inactive"></ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-radio-group>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+      </ion-list>
+    </section>
+
+  </ion-content>
+
+  <ion-footer>
+   
+    <ng-container *ngIf="updateUserForm.get('firstname').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('firstname').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'FirstnameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateUserForm.get('lastname').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('lastname').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'LastnameRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateUserForm.get('email').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('email').errors.required">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'EmailRequired' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="updateUserForm.get('email').invalid && (updateUserForm.dirty || updateUserForm.touched)">
+      <ion-row *ngIf="updateUserForm.get('email').errors">
+        <ion-col>
+        <ion-text class="ion-padding-left validation">{{ 'EmailInvalid' | translate }}</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row>
+<!--       <ion-col>
+        <ion-button expand="block" color="primary" fill="outline" (click)="deleteUser()">{{ 'Delete' | translate }}</ion-button>
+      </ion-col> -->
+      <ion-col>
+        <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="!(updateUserForm.valid && updateUserForm.dirty)">{{ 'Save' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</form>

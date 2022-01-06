@@ -1,23 +1,18 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { ModalController, AlertController, IonRouterOutlet } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
-
+import { Component, OnInit, HostBinding, ChangeDetectorRef} from '@angular/core';
+import { ModalController,  IonRouterOutlet} from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../../firebase-integration.service';
-import { FirebaseItemModel, VotingPublication } from '../firebase-item.model';
+import { FirebaseItemModel, FirebaseCombinedItemModel } from '../firebase-item.model';
 // import { FirebaseListingItemModel } from '../../listing/firebase-listing.model';
 import { FirebaseUpdateItemModal } from '../update/firebase-update-item.modal';
-
+import { SliderModal } from '../slider/slider.modal';
 import { DataStore, ShellModel } from '../../../shell/data-store';
-// import { Observable } from 'rxjs';
-// import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { FeatureService } from "../../../services/feature/feature.service"
-import { LoginService } from "../../../services/login/login.service"
-import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { FeatureService } from '../../../services/feature/feature.service';
+import { LoginService } from '../../../services/login/login.service';
+import { Images} from '../../../type'
+//import { Plugins,ClipboardWrite } from '@capacitor/core';
+//const { Clipboard, Device } = Plugins;
 
 @Component({
   selector: 'app-firebase-item-details',
@@ -26,30 +21,38 @@ import { map } from 'rxjs/operators';
 
 
 export class FirebaseItemDetailsPage implements OnInit {
-  item: FirebaseItemModel;
-  publicationVoting: Observable<Array<VotingPublication>>;
-  countVotingObservable: Observable<{countVotingYes: number, countVotingNo: number, countVotingAbstention: number}>;
-  countVotingYes: number;
-  countVotingNo: number;
-  countVotingAbstention: number;
-  userIsAdmin = false;
+  online: any;
+  noImage = 'images/no_image.jpeg';
+  item: FirebaseCombinedItemModel;
+  profileUrl: Observable<string | null>;
+  sliderUrl: Observable<string | null>;
+  photoSlider : any[] = [''];  
+  
+  photoSliderEmpty : any[];
+  slidesOptions = {
+      zoom: {
+      toggle: true // Disable zooming to prevent weird double tap zomming on slide images
+    } 
+  }; 
+  status : string;
+  userIsCreator = false;
+  postImages : Images[] = [];
+  lan: string;
   ltr: boolean;
 
-  @HostBinding('class.is-shell') get isShell() {
-    return (this.item && this.item.isShell) ? true : false;
-  }
+   @HostBinding('class.is-shell') get isShell() {
+    return ((this.item && this.item.isShell) /*|| (this.relatedUsers && this.relatedUsers.isShell)*/) ? true : false;
+  } 
 
   constructor(
     public firebaseService: FirebaseService,
     public modalController: ModalController,
+    public router: Router,
     private route: ActivatedRoute,
-    private file:File,
-    private fileOpener:FileOpener,
-    private transfer : FileTransfer,
     private featureService : FeatureService,
-    private alertController: AlertController,
-    private loginService: LoginService,
-    private routerOutlet: IonRouterOutlet
+    private loginService : LoginService,
+    private routerOutlet: IonRouterOutlet,
+    //private changeRef: ChangeDetectorRef,
   ) { 
     }
 
@@ -57,114 +60,134 @@ export class FirebaseItemDetailsPage implements OnInit {
     this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;    
 
 
-
-
-    this.userIsAdmin = this.loginService.isUserAdmin();
+    //this.online = this.featureService.online;
     this.route.data.subscribe((resolvedRouteData) => {
       const resolvedDataStores = resolvedRouteData['data'];
-      const combinedDataStore: DataStore<FirebaseItemModel> = resolvedDataStores.item;
+      const combinedDataStore: DataStore<FirebaseCombinedItemModel> = resolvedDataStores.item;
+      //const relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>> = resolvedDataStores.relatedUsers;
       combinedDataStore.state.subscribe(
-         async (state) => {
+         (state) => {
+           console.log("itemData-details", state)
           this.item = state;
-          if(this.item.createDate && this.item.voting){
-          //console.log('1',this.item.createDate);
-          //console.log("2", this.item.id)
-          this.publicationVoting = this.featureService.getPublicationVoting(this.item.id);
-          this.countVotingObservable = this.publicationVoting.pipe(map( arr => { 
-          let votingYes = arr.filter(res => res.voting == 'yes')
-          let votingNo = arr.filter(res => res.voting == 'no')
-          let votingAbstention = arr.filter(res => res.voting == 'abstention')
-           //console.log("Yes",votingYes)
-           //console.log("No",votingNo)
-           return { 
-             countVotingYes: votingYes.length ? votingYes.length : 0, 
-             countVotingNo: votingNo.length ? votingNo.length : 0 ,
-             countVotingAbstention: votingAbstention.length ? votingAbstention.length : 0 
-            } 
-          }));
-        this.countVotingObservable.subscribe(res => { this.countVotingNo = res.countVotingNo; this.countVotingYes = res.countVotingYes ; this.countVotingAbstention = res.countVotingAbstention })
-      
-      }
-/*       if(this.item.createDate){
-        this.userIsCreator = this.item.createdById == this.loginService.getLoginID() ? true : false;    
-      } */
-        } 
+          if((this.item.images.length !== 0) && !(this.item.isShell)){
+            console.log("length !== 0",this.item.photos.length);
+            this.photoSlider = this.item.photos.map(res => {return res.photoData});
+            this.postImages = this.item.photos;
+          }
+          else if((this.item.images.length == 0) && !(this.item.isShell)){
+            //this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
+            this.photoSlider[0] = "./assets/sample-images/no_image.jpeg"
+            //console.log("length === 0", this.photoSlider[0]);
+            this.postImages = [];
+          }
+          this.userIsCreator = this.item.createdBy == this.loginService.getLoginID() ? true : false;
+/*           switch (this.item.status) {
+            case "active" : this.status = this.featureService.translations.Active;
+            break;
+            case "inactive" : this.status = this.featureService.translations.InActive;
+            break;
+            case "sold" : this.status = this.featureService.translations.Sold;
+            break;
+            default:
+              this.status = "";
+          } */
+/*           else if(!(this.item.isShell)){
+            this.getPic(this.noImage).subscribe(a=>{this.photoSlider[0] = a});
+            console.log("length === 0 - 2", this.photoSlider[0]);
+          } */
+        }
       );
+        /*relatedUsersDataStore.state.subscribe(
+        (state) => {
+          this.relatedUsers = state;
+        }
+        ); */
     });
   }
+
   async openFirebaseUpdateModal() {
+
+    const {photos, creatorDetails, ...itemData} = this.item; // Remove photos and creatorDetails from the item object
+
+    //let itemToUpdate : FirebaseItemModel;
+    // delete this.item.photos;
+    // delete this.item.isShell;
+    //let itemToEdit = <FirebaseItemModel>this.item;
+    //console.log("before modal, ",itemToEdit);
     const modal = await this.modalController.create({
       component: FirebaseUpdateItemModal,
       componentProps: {
-        'item': this.item as FirebaseItemModel
+        'item': itemData as FirebaseItemModel,
+        'postImages' : this.postImages as Images[]
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
   }
-  async openPDF(i:number){
-    console.log(i);
-    let filePath : string;
-    /* try {
-      
-    } catch (error) {
-      
-    } */
-      
-      await this.firebaseService.afstore.ref(this.item.files[i].storagePath).getDownloadURL()
-      .toPromise()
-      .then((a)=>{  console.log('getDownloadURL',a); filePath = a;}).catch(err=>{console.log('Error:',err); });
-    const fileTransfer = this.transfer.create();
-    fileTransfer.download(filePath, this.file.dataDirectory + 'file.pdf').then((entry) => {
-      console.log('download complete: ' + entry.toURL());
-      let url = entry.toURL();
-      this.fileOpener.open(url,'application/pdf');
-    }, (error) => {
-      console.log('error: ' + error);
-    }).catch(err => console.log(err));
 
+  async openSliderModal(){
+    const modal = await this.modalController.create({
+      component: SliderModal, 
+      componentProps: {
+        'photoSlider' : this.photoSlider
+      },
+      swipeToClose: true, 
+      presentingElement: this.routerOutlet.nativeEl,
+      cssClass: 'sliderModal'
+      
+    });
+    await modal.present();
+  }
+
+  getPic(picPath : string): Observable<any>{
+    const ref = this.firebaseService.afstore.ref(picPath);
+    return ref.getDownloadURL();
+  }
+/*     getPics(imagesFullPath : string[]){
+    this.photoSlider = [""];
+    for (let index = 0; index < imagesFullPath.length; index++) {
+     this.firebaseService.afstore.ref(imagesFullPath[index]).getDownloadURL().toPromise().then(DownloadURL => { this.photoSlider[index] = DownloadURL } );
     }
-    async vote(voting: string){
-      
-      let votingInfo = new VotingPublication();
-      votingInfo.publicationId = this.item.id;
-      votingInfo.buildingId = this.loginService.getBuildingId();
-      votingInfo.userId = this.loginService.getLoginID();
-      votingInfo.voting = voting;
-      votingInfo.createdDate = firebase.firestore.FieldValue.serverTimestamp();
+    console.log('photoSlider',this.photoSlider);
+    //ref.getDownloadURL().subscribe(DownloadURL=>{console.log("DownloadURL:",DownloadURL)});
+    //return this.photoSlider;
+  } */
 
+/*   sendEmail(){
+    const email = {
+      to: this.item.creatorDetails.email,
+      subject: this.item.object,
+      body: 'Hello, Is this still available?',
+      isHtml: true
+    }
 
-      let message = '';
-      if(voting == 'no'){
-        message = this.featureService.translations.VotingConfirmationMessageNo;
+    this.featureService.emailComposer.isAvailable().then((available: boolean) => {
+      if(available) {
+        this.featureService.emailComposer.open(email)
+        // Now we know we can send an email, calls hasClient and hasAccount
+        // Not specifying an app will return true if at least one email client is configured
       }
-      else if(voting == 'yes'){
-        message = this.featureService.translations.VotingConfirmationMessageYes;
-      }
-      else if(voting == 'abstention'){
-        message = this.featureService.translations.VotingConfirmationMessageAbstention;
-      }
-      
-
-      const alert = await this.alertController.create({
-        header: this.featureService.translations.PleaseConfirm,
-        message: message,
-        buttons: [
-          {
-           text: this.featureService.translations.OK,
-           handler: ()=> {
-            this.featureService.vote(votingInfo)
-           }
-         },
-         {
-           text: this.featureService.translations.Cancel,
-            handler: ()=> {
-             }, 
-           }
-       ]
-      });
-      await alert.present();
-      
-     }
+     }); */
+/* let email = {
+  to: this.'max@mustermann.de',
+  cc: 'erika@mustermann.de',
+  bcc: ['john@doe.com', 'jane@doe.com'],
+  attachments: [
+    'file://img/logo.png',
+    'res://icon.png',
+    'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
+    'file://README.pdf'
+  ],
+  subject: 'Cordova Icons',
+  body: 'How are you? Nice greetings from Leipzig',
+  isHtml: true
+} */
+ // }
+  copyEmail(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.email)
+  }
+  copyPhone(){    
+    this.featureService.copyClipboard(this.item.creatorDetails.phone.toString())
+  }
 }

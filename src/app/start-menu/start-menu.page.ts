@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonRouterOutlet, MenuController, ModalController } from '@ionic/angular';
 import { LoginService } from '../services/login/login.service';
-import { InviteModal } from '../buildings/building/invite/invite.modal';
+import { InviteModal } from '../churchs/church/invite/invite.modal';
 //import { AngularFireModule } from '@angular/fire';
 //import { environment } from '../../environments/environment';
 
@@ -16,18 +16,17 @@ import { InviteModal } from '../buildings/building/invite/invite.modal';
 })
 export class StartMenuPage implements OnInit {
   userId: string;
-  buildingId: string;
   username: string;
   userIsAdmin: boolean= false;
   enableDeal: boolean= false;
-  enableLostFound: boolean= false;
   enableAnnouncement: boolean= false;
-  enableRegulation: boolean= false;
   enableEvent: boolean= false;
-  enableRentSale: boolean= false;
   enableTicket: boolean= false;
   enableSale: boolean= false;
   userIsLouay: boolean= false;
+  enableReservation: boolean= false;
+  enablePriest: boolean= false;
+  enableDonate: boolean= false;
   
 
   constructor( 
@@ -55,12 +54,11 @@ export class StartMenuPage implements OnInit {
       
       this.loginService.currentBuildingInfo.subscribe( 
         buildingInfo => {
-          this.enableDeal= buildingInfo.enableDeal;
-          this.enableLostFound= buildingInfo.enableLostFound
+          this.enableReservation= buildingInfo.enableReservation;
+          this.enablePriest= buildingInfo.enablePriest;
+          this.enableDonate= buildingInfo.enableDonate;
           this.enableAnnouncement= buildingInfo.enableAnnouncement;
-          this.enableRegulation= buildingInfo.enableRegulation;
           this.enableEvent= buildingInfo.enableEvent;
-          this.enableRentSale= buildingInfo.enableRentSale;
           this.enableSale= buildingInfo.enableSale;
           this.enableTicket= buildingInfo.enableTicket;
         }
@@ -68,7 +66,6 @@ export class StartMenuPage implements OnInit {
     console.log('start menu OnInit');
     this.menu.enable(true);
     this.userId = this.loginService.getLoginID();
-    this.buildingId = this.loginService.getBuildingId();
     // this.username= this.loginService.getLoginName();
     // this.userIsAdmin= this.loginService.isUserAdmin();
 

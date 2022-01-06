@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+<ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
+    </ion-buttons>
+    <ion-title>{{ 'Details' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin || isLoggedInUser">
+      <ion-button (click)="openFirebaseUpdateModal()">
+        {{ 'Edit' | translate }}
+      </ion-button>
+<!--       <ion-button (click)="openChatModal()">
+        {{ 'Contact' | translate }}
+      </ion-button> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  
+  <ion-row class="user-info-row">
+    <ion-col class="user-image-col" size="5">
+      <app-aspect-ratio [ratio]="{w: 1, h: 1}">
+        <app-image-shell [display]="'cover'" class="user-image" animation="spinner" [src]="user?.photo" [alt]="'item image'">
+        </app-image-shell>
+      </app-aspect-ratio>
+    </ion-col>
+    <ion-col class="user-details-col" size="12">
+      <h2 class="user-name">
+        <ion-text>{{user.firstname?.concat(' ').concat(user.lastname)}}</ion-text>
+        
+      </h2>
+    </ion-col>
+    </ion-row>
+      <section>
+          <!-- <ion-list> -->
+            <ion-item *ngIf="user.email">
+              <ion-label>{{ 'Email' | translate }}</ion-label>
+              <ion-text>{{ user.email }}</ion-text>                  
+            </ion-item>
+            <ion-item *ngIf="user.birthdate">    
+              <ion-label>{{ 'DateOfBirth' | translate }}</ion-label>
+              <ion-text>{{ birthdate }}</ion-text>
+                 
+            </ion-item>
+            <ion-item *ngIf="user.phone">
+              <ion-label>{{ 'Phone' | translate }}</ion-label>
+              <ion-text>{{ user.phone }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.createDate">    
+              <ion-label>{{ 'CreateDate' | translate }}</ion-label>
+              <ion-text>{{ user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a' }}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="user.status">    
+              <ion-label>{{ 'StatusAccount' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>
+            </ion-item>
+
+          <!-- </ion-list> -->
+        </section>
+<!--       <ng-container *ngIf="user.createDate">
+        <ion-text color="dark" class="ion-padding-left createDate">{{user.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+      </ng-container> -->
+<!--       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="main" (click)="openChatModal()">
+          <ion-icon name="chatbubbles-outline" ></ion-icon>
+        </ion-fab-button>
+      </ion-fab>  -->
+</ion-content>

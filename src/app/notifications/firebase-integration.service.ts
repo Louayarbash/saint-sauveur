@@ -16,7 +16,7 @@ export class FirebaseService {
   // Select User Image Modal
   //private avatarsDataStore: DataStore<Array<UserImageModel>>;
   private tableName = "notifications";
-  private buildingId = this.loginService.getBuildingId();
+
 
   constructor(
     private afs: AngularFirestore,
@@ -26,8 +26,8 @@ export class FirebaseService {
     Firebase User Listing Page
   */
   public getListingDataSource(): Observable<Array<NotificationListingItemModel>> {
-    console.log("this.buildingId",this.buildingId)
-    return this.afs.collection<NotificationListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).limit(75).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
+
+    return this.afs.collection<NotificationListingItemModel>(this.tableName, ref => ref.limit(75).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
   }
 
   public getListingStore(dataSource: Observable<Array<NotificationListingItemModel>>): DataStore<Array<NotificationListingItemModel>> {

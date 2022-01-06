@@ -1,31 +1,64 @@
 import { ShellModel } from '../../shell/data-store';
-import { Files } from '../../type'
+import { Images } from '../../type';
+import { UserModel } from '../../users/user/user.model';
 
 
-export class FirebaseItemModel extends ShellModel {  
-  id:string;
-  subject: string;
-  details: string;
+
+/* export class FirebaseSkillModel extends ShellModel {
+  id: string;
+  name: string;
+
+  constructor() {
+    super();
+  }
+} */
+
+export class FirebasePhotoModel /*extends ShellModel*/ {
+  //photo: string;
+  isCover : boolean;
+  photoData : string;
+  storagePath : string;
+  constructor() {
+    //super();
+  }
+}
+
+export class FirebaseItemModel extends ShellModel {
+  id : string;
+  object : string;
+  description : string;
+  price : string;
+  createdBy : string;
+  createDate : firebase.firestore.FieldValue;
+  images : Array<Images> = [];
+  status : string;
   buildingId: string;
-  createdBy: string;
-  createDate: firebase.firestore.FieldValue;  
-  //category:string;
-  files: Array<Files> = [];
-  // fields for announcement
-  voting: boolean;
-  votingMessage: string;
-  votingResult: boolean;
-  //fullPathFromStore:string;
-  
+
   constructor() {
     super();
   }
 }
+/* export class FirebaseCombinedSkillModel extends FirebaseItemModel {
+  skills: Array<FirebaseSkillModel> = [
+    new FirebaseSkillModel(),
+    new FirebaseSkillModel(),
+    new FirebaseSkillModel()
+  ];
 
-export class VotingPublication {     
-  publicationId: string;  
-  buildingId: string;
-  userId: string;
-  voting: string; 
-  createdDate: firebase.firestore.FieldValue;
+  constructor() {
+    super();
+  }
+} */
+
+export class FirebaseCombinedItemModel extends FirebaseItemModel {
+  photos: Array<Images> = [
+    new FirebasePhotoModel(),
+    new FirebasePhotoModel(),
+    new FirebasePhotoModel()
+  ];
+  creatorDetails : UserModel;
+
+  constructor() {
+    super();
+  }
 }

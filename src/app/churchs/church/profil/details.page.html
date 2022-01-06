@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color="primary">
+<!--     <ion-buttons slot="start">  
+      <ion-back-button defaultHref="app/start-menu"></ion-back-button>
+    </ion-buttons> -->
+    <ion-title>{{ 'Settings' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="userIsAdmin">
+      <ion-button (click)="updateModal()">
+        {{ 'Edit' | translate }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ng-container *ngIf="item.isShell">
+    <div class="DivLoading">
+      <ion-spinner color="main"></ion-spinner>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!item.isShell">
+      <ion-card class="itemCard">
+        <ion-item-divider>
+          <ion-icon name="business" slot="start"></ion-icon>
+          <ion-label>{{ 'BuildingInfo' | translate }}</ion-label>
+          </ion-item-divider>
+        <ion-item >        
+        <ion-label>{{ 'BuildingName' | translate }}</ion-label>
+        <ion-text>{{ item.name }}</ion-text>                  
+         </ion-item>
+         <ion-item >        
+          <ion-label>{{ 'Country' | translate }}</ion-label>
+          <ion-text>{{ country }}</ion-text>                  
+           </ion-item>
+           <ion-item >        
+            <ion-label>{{ 'City' | translate }}</ion-label>
+            <ion-text>{{ item.city }}</ion-text>                  
+             </ion-item>
+         <ion-item >        
+          <ion-label>{{ 'Address' | translate }}</ion-label>
+          <ion-text>{{ item.address }}</ion-text>    
+           </ion-item>
+           <ion-item>        
+            <ion-label>{{ 'PostalCode' | translate }}</ion-label>
+            <ion-text>{{ item.postalCode }}</ion-text>                
+             </ion-item>
+             <ion-item>
+              <ion-label slot="start">{{ 'Details' | translate }}</ion-label>      
+              <ion-textarea slot="start" rows="6" cols="20" readonly [value]="item.details"></ion-textarea>
+            </ion-item>
+<!--             <ion-item lines="inset" *ngIf="item.status" >        
+              <ion-label>{{ 'Status' | translate }}</ion-label>
+              <ion-text>{{ status }}</ion-text>                      
+               </ion-item> -->
+          </ion-card>
+<!--           <ion-card class="itemCard" *ngIf="item.details">
+            <ion-card-header>
+              <ion-card-title>{{ 'Details' | translate }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>
+            </ion-card-content>
+          </ion-card> -->
+          <ion-card class="itemCard">
+            <ion-item-divider>
+              <ion-icon name="settings-outline" slot="start"></ion-icon>
+              <ion-label>{{ 'ServicesManagement' | translate }}</ion-label>
+              </ion-item-divider>
+            <ion-item>
+              <ion-text slot="start">{{ 'SaleMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableSale }}</ion-text>
+              <ion-toggle color="main" [checked]="item.enableSale" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-text slot="start">{{ 'RentSaleMenu' | translate }}</ion-text>
+              <ion-text slot="end"> {{ enableRentSale }}</ion-text>
+              <ion-toggle color="main" [checked]="item.enableRentSale" disabled slot="end"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-text slot="start">{{ 'AnnouncementMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableAnnouncement }}</ion-text>
+              <ion-toggle [checked]="item.enableAnnouncement" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
+   
+            <ion-item>
+              <ion-text slot="start">{{ 'EventsMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableEvent }}</ion-text>
+              <ion-toggle [checked]="item.enableEvent" color="main" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-text slot="start">{{ 'TicketsMenu' | translate }}</ion-text>
+              <ion-text slot="end">{{ enableTicket }}</ion-text>
+              <ion-toggle color="main" [checked]="item.enableTicket" disabled slot="end"></ion-toggle>
+            </ion-item>
+            <ng-container *ngIf="item.enableTicket">
+                  <ion-item class="sub-item" *ngFor="let service of services">
+                    <ion-checkbox [checked]="service.active" color="main" disabled="true" slot="start"></ion-checkbox>
+                    <ion-text [ngClass]="{ 'disabledItem': !service.active }">{{ service.description | translate }}</ion-text>
+                  </ion-item>
+            </ng-container>
+
+
+          </ion-card>
+          <ion-card class="itemCard"> 
+          <ion-item lines="none" *ngIf="item.status" >        
+            <ion-label>{{ 'Status' | translate }}</ion-label>
+            <ion-text>{{ status }}</ion-text>                      
+             </ion-item>
+            </ion-card>
+          <ng-container *ngIf="item.createDate">
+          <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+          </ng-container>
+        </ng-container>
+<!--            <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+            <ion-fab-button color="main" (click)="inviteModal()">
+              <ion-icon name="person-add-outline" ></ion-icon>
+            </ion-fab-button>
+          </ion-fab> -->
+</ion-content>

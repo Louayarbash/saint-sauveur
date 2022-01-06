@@ -70,7 +70,7 @@ export class FirebaseUserDetailsPage implements OnInit {
           this.userIsAdmin = this.loginService.isUserAdmin() ? true : false;
           this.isLoggedInUser = this.loginService.getLoginID() == this.user.id ? true : false;
           this.birthdate = dayjs(this.user.birthdate * 1000).format('DD, MMM, YYYY');
-          this.type = this.user.type === 'owner' ? this.featureService.translations.Owner : this.featureService.translations.Tenant;
+          
           //this.role = this.user.role === 'user' ? this.featureService.translations.RegularUser : this.featureService.translations.Admin;
           //this.language = this.user.language === 'fr' ? this.featureService.translations.Frensh : this.featureService.translations.English;
           this.enableNotifications = this.user.enableNotifications ? this.featureService.translations.Enabled : this.featureService.translations.Disabled;
@@ -105,10 +105,7 @@ export class FirebaseUserDetailsPage implements OnInit {
         default:
           this.role = "Undefined";
   }
-      if(this.user.parkings){
-        this.parkingInfo= this.loginService.getParkingInfo(this.user.parkings);
-      }
-      else this.parkingInfo = [];
+
     }
     });
   });

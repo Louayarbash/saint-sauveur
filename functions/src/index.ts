@@ -43,7 +43,7 @@ interface InfoDocumentData extends admin.firestore.DocumentData {
     status?: string
     responseBy? : string
     createdBy? : string
-    buildingId? : string 
+    //buildingId? : string 
     actionTaskReminder?: admin.firestore.FieldValue//string
     actionTaskStarted?: admin.firestore.FieldValue//string
     actionTaskEnded?: admin.firestore.FieldValue//string
@@ -67,10 +67,10 @@ exports.onNewRequest = functions.firestore
     if (itemData && itemData.status === "new"){
     
     if(itemData.type === "request"){
-      sendPushNotifications(itemData.createdBy,'all', dealId, itemData.buildingId, 'newRequestDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
+      sendPushNotifications(itemData.createdBy,'all', dealId, 'newRequestDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
     }
     else if(itemData.type === "offer"){
-      sendPushNotifications(itemData.createdBy,'all', dealId, itemData.buildingId, 'newOfferDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
+      sendPushNotifications(itemData.createdBy,'all', dealId, 'newOfferDeal').then(() => console.log('Notifications sent')).catch((err) => console.log('Notifications sending prob. ', err))
     }    
 
     /* 2 */
@@ -175,7 +175,7 @@ export const reminderToLeave = functions.https.onRequest(async (req: any, res:an
     if(userId){
     // ref to the device collection for the user
 
-    sendPushNotifications(userId, 'single', item.id,itemData.buildingId,'reminderToLeave').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
+    sendPushNotifications(userId, 'single', item.id,'reminderToLeave').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
 
     }
     else res.status(500)
@@ -224,7 +224,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
 }
 
     if(before.createdBy){
-    sendPushNotifications(before.createdBy,'single', undefined,before.buildingId,'canceledCreator').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
+    sendPushNotifications(before.createdBy,'single', undefined,'canceledCreator').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
     }
     else return
 
@@ -282,7 +282,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
   
       if(before.createdBy){
       // ref to the device collection for the user
-      sendPushNotifications(before.createdBy, 'single',undefined,before.buildingId,'canceledResponder').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
+      sendPushNotifications(before.createdBy, 'single',undefined,'canceledResponder').then(() => console.log('Notifications sent')).catch((err) => console.log(err))
   
       }
       else return
@@ -380,7 +380,7 @@ exports.onUpdateRequest = functions.firestore.document('deals/{dealId}').onUpdat
 
       if(before.createdBy){
       // ref to the device collection for the user
-      sendPushNotifications(before.createdBy, 'single',undefined, before.buildingId, requestType).then(() => console.log('Notifications sent')).catch((err) => console.log(err)) 
+      sendPushNotifications(before.createdBy, 'single',undefined, requestType).then(() => console.log('Notifications sent')).catch((err) => console.log(err)) 
   
       }
       else return
@@ -461,7 +461,7 @@ export const sendInvitationEmails = functions.https.onRequest(/*async*/ (req: an
   );
 })
 
-async function sendPushNotifications(userId: string, type: string, itemId?: string, buildingId?: string, chanel?: string) {
+async function sendPushNotifications(userId: string, type: string, itemId?: string, chanel?: string) {
 //let titleEN = '', titleFR = '', titleAR = '', titleES = '';
 //let bodyEN = '', bodyFR = '', bodyAR = '', bodyES= '';
 let landing_page = '';
@@ -664,7 +664,7 @@ let messageEN = '', messageFR = '', messageAR = '', messageES = '';
     }    
   }
   else if(type === 'all'){
-    const usersRef = db.collection('users').where('buildingId', '==', buildingId);  
+    const usersRef = db.collection('users')
     const users = await usersRef.get(); 
   //const usersRef = db.collection('users').where('buildingId', '==', buildingId);
   

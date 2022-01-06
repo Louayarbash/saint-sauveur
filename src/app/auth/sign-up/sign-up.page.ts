@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs';
 import { FeatureService } from '../../services/feature/feature.service';
 import { LoginService } from '../../services/login/login.service';
-import { BuildingModel } from '../../buildings/building/building.model';
+import { BuildingModel } from '../../churchs/church/building.model';
 import { UserModel } from '../../users/user/user.model';
 import firebase from 'firebase/app';
 import { FcmService } from '../../services/fcm/fcm.service';
@@ -30,9 +30,6 @@ export class SignUpPage implements OnInit {
   userData: UserModel = new UserModel();
   loading: any;
   validation_messages = {
-    'name': [
-      { type: 'required', message: "BuildingNameSignUp" }
-    ],
     'firstname': [
       { type: 'required', message: "FirstnameRequired" }
     ],
@@ -201,9 +198,6 @@ export class SignUpPage implements OnInit {
   }
 
   createProfile(uid: string){
-    this.buildingData.name= this.signupForm.value.name;
-    this.buildingData.createDate= firebase.firestore.FieldValue.serverTimestamp();
-    this.buildingData.createdBy = uid;
     this.userData.firstname= this.signupForm.value.firstname;
     this.userData.lastname= this.signupForm.value.lastname;
     this.userData.email= this.signupForm.value.email;
@@ -212,9 +206,6 @@ export class SignUpPage implements OnInit {
     this.userData.status= 'active';
     this.userData.photo= '../../assets/sample-images/avatar.png';
     this.userData.enableNotifications= true;
-    this.featureService.createItem('buildings', this.buildingData)
-    .then((building: any) => {
-      this.userData.buildingId= building.id
       this.featureService.createItem('users', this.userData, uid)
       .then(() => {
         // this.redirectLoggedUserToStartMenu();
@@ -252,14 +243,7 @@ export class SignUpPage implements OnInit {
           res.dismiss();        
         })
         console.log(err);
-        this.featureService.presentToast(this.featureService.translations.AddingUserErrors, 2000);}); 
-    }).catch((err) => { 
-      //this.dismissLoading();
-      this.loading.then(res=>{
-        res.dismiss();        
-      })
-      console.log(err);
-      this.featureService.presentToast(this.featureService.translations.AddingBuildingErrors, 2000);});  
+        this.featureService.presentToast(this.featureService.translations.AddingUserErrors, 2000);});
   }
 
   openLanguageChooser(){

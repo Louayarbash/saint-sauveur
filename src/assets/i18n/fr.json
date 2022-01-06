@@ -73,7 +73,7 @@
   "PasswordMustBeAtLeast6charactersLong": "Le mot de passe doit contenir au moins 6 caractères.",
   "ConfirmPasswordIsRequired": "Confirmation du mot de passe est requis",
   "PasswordMismatch": "Non concordance des mots de passe",
-  "CreateNewBuildingProfile": "Créer un nouveau profil de bâtiment",
+  "CreateNewBuildingProfile": "Créer un nouveau profil",
   "ForgotPassword": "Mot de passe oublié",
   "FirstTimeLogin": "Première connexion (personne invitée)",
   "SignUpUser": "Inscription utilisateur invité",

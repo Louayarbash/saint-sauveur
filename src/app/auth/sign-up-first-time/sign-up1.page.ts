@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs';
 import { FeatureService } from '../../services/feature/feature.service';
 import { LoginService } from '../../services/login/login.service';
-import { BuildingModel } from '../../buildings/building/building.model';
+import { BuildingModel } from '../../churchs/church/building.model';
 import { UserModel } from '../../users/user/user.model';
 import firebase from 'firebase/app';
 import { FcmService } from '../../services/fcm/fcm.service';
@@ -211,7 +211,6 @@ export class SignUp1Page implements OnInit {
 
   createUserProfile(uid: string){
 
-    this.userData.buildingId= this.buildingId;
     this.userData.firstname= this.signup1Form.value.firstname;
     this.userData.lastname= this.signup1Form.value.lastname;
     this.userData.email= this.signup1Form.value.email;

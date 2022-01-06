@@ -19,7 +19,7 @@ export class FirebaseService {
   // User Details Page
   private combinedUserDataStore: DataStore<UserModel>;
   // private relatedUsersDataStore: DataStore<Array<FirebaseListingItemModel>>;
-  private buildingId = this.loginService.getBuildingId();
+
   private tableName = "users";
 
   // Select User Image Modal
@@ -33,7 +33,7 @@ export class FirebaseService {
   */
   public getListingDataSource(): Observable<Array<FirebaseListingItemModel>> {
     // return this.afs.collection<FirebaseListingItemModel>('users').valueChanges({ idField: 'id' });
-    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.where('buildingId', '==', this.buildingId).orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
+    return this.afs.collection<FirebaseListingItemModel>(this.tableName, ref => ref.orderBy('createDate', 'desc')).valueChanges({ idField: 'id' })
 /*      .pipe(
        map(actions => actions.map(user => {
           const age = this.calcUserAge(user.birthdate);

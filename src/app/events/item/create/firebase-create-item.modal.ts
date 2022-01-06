@@ -226,14 +226,12 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemData.endDateTS = dayjs(this.createItemForm.get('endDate').value).unix();
     this.itemData.subject = this.createItemForm.value.subject;
     this.itemData.details = this.createItemForm.value.details;
-    this.itemData.buildingId = this.loginService.getBuildingId();
 
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
     const loading = this.featureService.presentLoadingWithOptions(2000);
     const {isShell, ...itemData} = this.itemData;
 
-    this.itemDataNotif.buildingId= this.loginService.getBuildingId();
     this.itemDataNotif.type= "events" 
     this.itemDataNotif.action= "new"
     this.itemDataNotif.status= "active"

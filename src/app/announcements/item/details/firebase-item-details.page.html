@@ -1,18 +1,23 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
+      
+<ion-back-button *ngIf="ltr" icon="arrow-back"></ion-back-button>
 <ion-back-button *ngIf="!ltr" icon="arrow-forward"></ion-back-button>
+
     </ion-buttons>
     <ion-title>{{ 'Details' | translate }}</ion-title>
-    <ion-buttons slot="end" *ngIf="userIsAdmin">
-      <ion-button (click)="openFirebaseUpdateModal()">
-        {{ 'Edit' | translate }} 
-      </ion-button> 
+    <ion-buttons slot="end" *ngIf="userIsCreator">
+        <ion-button (click)="openFirebaseUpdateModal()">
+          {{ 'Edit' | translate }}
+        </ion-button> 
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+<!--   <div *ngIf="!(online | async)">
+    <b>Please check your internet connection, then try again</b>
+</div> -->
   <ng-container *ngIf="item.isShell">
     <div class="DivLoading">
       <ion-spinner color="main"></ion-spinner>
@@ -22,78 +27,70 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!item.isShell">
-  <ion-card class="itemCard">
-    <ion-card-content class="ion-no-padding">
-      <ion-item *ngIf="item.subject" >        
-        <ion-label>{{ 'Subject' | translate }}</ion-label>
-        <ion-text>{{ item?.subject }}</ion-text>
-         </ion-item>
-    <ion-list *ngIf="item.details">
-    <ion-item>
-      <ion-label>{{ 'Details' | translate }}</ion-label>
-    </ion-item>
-    <ion-item  lines="none">
-      <ion-textarea class="ion-no-padding" rows="6" [value]="item.details" readonly></ion-textarea>             
-       </ion-item>
-      </ion-list>   
-      <ion-list *ngIf="item.files?.length > 0">
-        <ion-item>
-          <ion-label>{{ 'Files' | translate }}</ion-label>
-        </ion-item>
-        <ion-item *ngFor="let file of item.files; let i = index;" lines="none">
-          <ion-label>{{ file.fileName }}</ion-label>
-          <ion-button color="main" (click)="openPDF(i)">
-            <ion-icon name="open-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-          </ion-list>    
-        </ion-card-content>
-        </ion-card>
-        <!-- <ion-card *ngIf="item.category == 'announcement' && item.voting" class="itemCard"> -->
-          <ion-card *ngIf="item.voting" class="itemCard">
-        <ion-card-content>
-          <!--<ion-item lines="none">
-            <ion-label>{{ 'EnableVoting' | translate }}</ion-label>
-            <ion-toggle color="main" [(ngModel)]="item.voting" disabled></ion-toggle>
-          </ion-item> -->
-        <ng-container *ngIf="item.votingMessage">
-          <ion-item>
-            <ion-label>{{ 'VotingNote' | translate }}</ion-label>
-          </ion-item>
+  <ion-card class="itemCard">  
+        <!-- <app-image-shell [mode]="'cover'" animation= "spinner" class="showcase-image" [ngClass]="{'centered-image': (image.type === 'square'), 'fill-image': (image.type === 'fill')}" [src]="image"> -->
+  <ion-row class="slider-row">
+    <ion-slides class="details-slides" pager="true" [options]="slidesOptions">
+      <ion-slide *ngFor="let image of photoSlider" (click)="openSliderModal()">
+        <ion-row class="slide-inner-row">
+          <app-image-shell [display]="'cover'" animation="spinner" class="showcase-image" [ngClass]="centered-image" [src]="image">
+            <app-aspect-ratio [ratio]="{w:64, h:50}"> 
+              </app-aspect-ratio>
+          </app-image-shell>
+        </ion-row>
+      </ion-slide>
+    </ion-slides>
+  </ion-row>      
+      <!-- <section> -->
+<!--           <ion-list-header lines="inset">
+            <ion-label>Trending</ion-label>
+          </ion-list-header> -->
           <ion-item lines="none">
-            <ion-input type="text" [(ngModel)]="item.votingMessage" readonly></ion-input>
+            <ion-label>{{ 'Object' | translate }}</ion-label>
+            <ion-text>{{ item?.object }}</ion-text>             
           </ion-item>
+        
+          <ion-item-divider> 
+            <ion-label>{{ 'CreatorDetails' | translate}}</ion-label>
+          </ion-item-divider>
+          <ion-item lines="none">    
+            <ion-label>{{ 'Name' | translate}}</ion-label>
+            <ion-text>{{(item.creatorDetails?.firstname) ? item.creatorDetails?.firstname.concat(' ').concat(item.creatorDetails?.lastname) : null}}</ion-text>
+          </ion-item>
+            <ion-item lines="none">
+              
+              <ion-label>{{ 'Email' | translate }}</ion-label>
+              <ion-text>{{item.creatorDetails?.email}}</ion-text>
+              <ion-icon slot="end" name="copy-outline" (click)="copyEmail()"></ion-icon>
+            </ion-item>
+            <!-- <div *ngIf="item?.description != ''"> -->
+            <ion-item-divider>
+              <ion-label>{{ 'Description' | translate }}</ion-label>
+            </ion-item-divider>
+     <!--        <ion-item lines="none">
+              <ion-label>{{ 'Description' | translate }}</ion-label>
+            </ion-item> -->
+            <ion-item>
+              <ion-textarea rows="6" [value]="item.description" readonly class="ion-no-padding"></ion-textarea>
+            </ion-item>
+          <!-- </div> -->
+        </ion-card>   
+        <ng-container *ngIf="item.createDate">
+          <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
         </ng-container>
-          <!-- <ion-item lines="none">
-            <ion-label>{{ 'ShowResult' | translate }}</ion-label>
-            <ion-toggle color="main" [(ngModel)]="item.votingResult" disabled></ion-toggle>
-          </ion-item> -->
-          <ion-row class="ion-justify-content-center">
-          <ion-col size="auto">
-            <ion-button color="main" (click)="vote('yes')">{{ 'VotingYes' | translate }}</ion-button>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-button color="main" (click)="vote('no')">{{ 'VotingNo' | translate }}</ion-button>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-button color="main" (click)="vote('abstention')">{{ 'VotingAbstention' | translate }}</ion-button>
-          </ion-col>
-          </ion-row>
-          <ion-row class="ion-justify-content-center">
-          <ion-col size="auto">
-            {{ 'TotalYES' | translate }}: {{ countVotingYes }}
-          </ion-col>
-          <ion-col size="auto">
-            {{ 'TotalNO' | translate }}: {{ countVotingNo }}
-          </ion-col>
-          <ion-col size="auto">
-            {{ 'TotalAbstention' | translate }}: {{ countVotingAbstention }}
-          </ion-col>
-          </ion-row>
-      </ion-card-content>
-      </ion-card>
-      <ng-container *ngIf="item.createDate">
-      <ion-text color="dark" class="ion-padding-left createDate">{{item.createDate?.seconds * 1000 | date:'dd, MMM, yyyy hh:mm a'}}</ion-text>
+        
     </ng-container>
-  </ng-container>
+<!--        <ion-fab vertical="top" horizontal="end" slot="fixed" >
+        <ion-fab-button color="main" size="small"> 
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start">
+          <ion-fab-button (click)="sendEmail()">
+            <ion-icon name="mail"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="sendEmail()">
+            <ion-icon name="call"></ion-icon>
+          </ion-fab-button> 
+        </ion-fab-list>
+      </ion-fab>  -->
 </ion-content>

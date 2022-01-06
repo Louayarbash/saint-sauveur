@@ -73,7 +73,7 @@
   "PasswordMustBeAtLeast6charactersLong": "Password must be at least 6 characters long",
   "ConfirmPasswordIsRequired": "Confirm password is required",
   "PasswordMismatch": "Password mismatch",
-  "CreateNewBuildingProfile": "Create new building profile",
+  "CreateNewBuildingProfile": "Create user profile",
   "ForgotPassword": "Forgot password?",
   "FirstTimeLogin": "First time login as invited user",
   "SignUpUser": "Sign Up invited user",

@@ -73,7 +73,7 @@
 "PasswordMustBeAtLeast6charactersLong": "الرقم السري يجب الا يقل عن 6 احرف على الاقل",
 "ConfirmPasswordIsRequired": "الرجاء تأكيد كلمة المرور",
 "PasswordMismatch": "كلمة المرور غير متطابقة",
-"CreateNewBuildingProfile": "إنشاء ملف مبنى جديد",
+"CreateNewBuildingProfile": "مستخدم جديد",
 "ForgotPassword": "هل نسيت كلمة السر؟",
 "FirstTimeLogin": "الدخول لأول مرة كمدعو",
 "SignUpUser": "تسجيل المستخدم المدعو",

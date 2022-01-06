@@ -54,7 +54,6 @@ export class CreateProblemModal implements OnInit {
     this.itemData.status = 'active';
     this.itemData.createDate = firebase.firestore.FieldValue.serverTimestamp();
     this.itemData.createdBy = this.loginService.getLoginID();
-    this.itemData.buildingId = this.loginService.getBuildingId();
     this.itemData.deviceInfo = this.platform.platforms();  
     let deviceInfo  = await Plugins.Device.getInfo();
     this.itemData.deviceInfo2 = deviceInfo;  

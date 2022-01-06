@@ -3,8 +3,8 @@ import { ToastController,LoadingController, ActionSheetController, AlertControll
 import { TranslateService } from '@ngx-translate/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from "@angular/fire/storage";
-import { RatingUser } from '../../deals/item/firebase-item.model';
-import { VotingPublication } from '../../regulations/item/firebase-item.model';
+//import { RatingUser } from '../../deals/item/firebase-item.model';
+//import { VotingPublication } from '../../regulations/item/firebase-item.model';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Images } from '../../type';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -642,14 +642,14 @@ public uploadToStorage(itemDataPhoto: string, id: string, contentType: string, e
   return this.afstore.ref(storagePath + `${id}/${name}`).putString(itemDataPhoto, 'data_url', { contentType: contentType });
 }
 
-vote(votingInfo: VotingPublication){
+vote(votingInfo/*: VotingPublication*/){
   const votingPath = `votings/${votingInfo.publicationId}_${votingInfo.userId}`;
   return this.afs.doc(votingPath).set({...votingInfo}); 
 }
 
 getPublicationVoting(publicationId: string){
   const votingRef = this.afs.collection('votings' , ref => ref.where('publicationId', '==', publicationId));
-  return votingRef.valueChanges() as Observable<VotingPublication[]>;
+  return votingRef.valueChanges() as Observable<any[]>;//as Observable<VotingPublication[]>;
 }
 
 getUserRating(userId: string, type: string, ratedAs: string){
@@ -657,7 +657,7 @@ getUserRating(userId: string, type: string, ratedAs: string){
   return ratingRef.valueChanges();
 }
 
-setUserRating(ratingInfo: RatingUser){
+setUserRating(ratingInfo/*: RatingUser*/){
   const ratingPath = `ratings/${ratingInfo.dealId}_${ratingInfo.userId}`;
   return this.afs.doc(ratingPath).set({...ratingInfo});
 }

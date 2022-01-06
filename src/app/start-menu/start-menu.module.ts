@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { StartMenuPage } from './start-menu.page';
-import { InviteModal } from "../buildings/building/invite/invite.modal";
+import { InviteModal } from "../churchs/church/invite/invite.modal";
 
 const categoriesRoutes: Routes = [
   {

@@ -37,7 +37,7 @@ export class AppComponent {
   available_languages = [];
   translations: any;
   textDir = 'ltr';
-  buildingName: string;
+  //buildingName: string;
   userName: string;
   products: IAPProduct[] = [];
   isPro: boolean;
@@ -136,8 +136,6 @@ checkConnection(){
     console.log("platforms", this.platform.platforms())
     console.log("platform desktop", this.platform.is("desktop"))
     if (!this.platform.is("desktop")){
-      this.registerProduct();
-      this.setupListeners();
       this.store.ready(()=> {
         this.products = this.store.products;
         this.changeDetectorRef.detectChanges();
@@ -156,11 +154,7 @@ checkConnection(){
         );
         this.loginService.currentBuildingInfo.subscribe(
           buildingInfo => {
-            this.buildingName= buildingInfo.name;
-            this.proStatusUpdate= buildingInfo.proStatusUpdate;
-            this.proExpirationDate= buildingInfo.proExpirationDate;            
-            this.proFirstExpirationDate = buildingInfo.proFirstExpirationDate;
-            this.proStatus = buildingInfo.proStatus
+            //this.buildingName= buildingInfo.name;
           }
           );
         
@@ -317,7 +311,7 @@ checkConnection(){
     //this.storeLastRenewalDate= this.store.get(PRODUCT_KEY).lastRenewalDate;
   }
   
-  setupListeners(){
+/*   setupListeners(){
     this.store.when('product')
     .approved((p: IAPProduct) => {
       if (p.id === PRODUCT_KEY) {
@@ -325,13 +319,13 @@ checkConnection(){
        let nextExpirationDate: Date;
        if (this.loginService.getProExpirationDate()) {        
         nextExpirationDate = new Date(new Date(this.loginService.getProExpirationDate().toDate()).setFullYear(new Date(this.loginService.getProExpirationDate().toDate()).getFullYear() + 1))
-        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
-        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+        //this.featureService.updateItem('church',{proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        //his.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
       }
       else {
         nextExpirationDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-        this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proFirstExpirationDate: nextExpirationDate, proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
-        this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
+        //this.featureService.updateItem('church',{proFirstExpirationDate: nextExpirationDate, proExpirationDate: nextExpirationDate, proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "finished", productState: p.state})
+        //this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), proExpirationDate: nextExpirationDate, date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
       }    
         console.log("approved", p)
       } 
@@ -349,45 +343,7 @@ checkConnection(){
       this.status = "expired"
     }); */
 
-    this.store.when(PRODUCT_KEY)    
-    .cancelled((p: IAPProduct)=> {
-      console.log("canceled", p)
-      this.featureService.updateItem('buildings',this.loginService.getBuildingId(),{proStatusUpdate: firebase.firestore.FieldValue.serverTimestamp(), proStatus: "canceled", productState: p.state})
-      this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})      
-      this.isPro = false;
-      this.status = "canceled"
-    }); 
 
-    this.store.when('product')    
-    .updated((p: IAPProduct)=> {
-      console.log("updated", p)            
-/*       this.isPro = false;
-      this.status = "updated" + p.expiryDate;
-      if(p.state == "finished"){
-      } */
-    }); 
 
-    this.store.when(PRODUCT_KEY)
-    .owned((p: IAPProduct)=> {     
-      console.log("owned", p)       
-      //this.featureService.updateItem('buildings',this.loginService.getBuildingId(),res)
-      //this.featureService.createItem("proActions",{ buildingId: this.loginService.getBuildingId(), date: firebase.firestore.FieldValue.serverTimestamp(), productState: p.state})
-      //this.isPro = true;
-      //this.status = "owned"
-    });
-  
-  }
-  
-  purchase(product: IAPProduct){
-    this.store.order(product).then(p=> {
-  
-    }, e => {
-      this.featureService.presentToast("error" + e, 2000);
-    });
-  }
-  
-  restore() {
-    this.store.refresh();
-  }
 
 }

@@ -5,10 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+
 import { ComponentsModule } from '../components/components.module';
 
 const firebaseRoutes: Routes = [
   {
+    //path: 'listing',
     path: '',
     loadChildren: () => import('./listing/firebase-listing.module').then(m => m.FirebaseListingPageModule)
   },
@@ -28,17 +30,17 @@ const firebaseRoutes: Routes = [
     RouterModule.forChild(firebaseRoutes),
     //AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireStorageModule
-  ]//,
-  //entryComponents: [
-    //FirebaseCreateItemModal,
-    //FirebaseUpdateItemModal
-    //SelectItemImageModal
-  //],
-  // declarations: [
-    // FirebaseCreateItemModal,
-    // FirebaseUpdateItemModal
-    //SelectItemImageModal
-  // ]
+    AngularFireStorageModule,
+    
+  ]/*,
+  entryComponents: [
+    FirebaseCreateItemModal,
+    FirebaseUpdateItemModal,
+    SelectItemImageModal
+  ],
+  declarations: [
+    FirebaseUpdateItemModal,
+    SelectItemImageModal
+  ]*/
 })
 export class FirebaseIntegrationModule {}
