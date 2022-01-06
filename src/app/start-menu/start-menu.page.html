@@ -16,17 +16,17 @@
           <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/announcement.jpg'"></app-image-shell>
         </app-aspect-ratio>
         <ion-card-header color="primary">
-          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'SaleMenu' | translate }}</ion-card-subtitle>
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'AnnouncementMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
     <ion-col class="category-item" size="6" *ngIf="enableEvent">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/events']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/events.jpg'"></app-image-shell>
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/mass.jpg'"></app-image-shell>
         </app-aspect-ratio>
         <ion-card-header color="primary">
-          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'EventsMenu' | translate }}</ion-card-subtitle>
+          <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'MassMenu' | translate }}</ion-card-subtitle>
         </ion-card-header>
       </ion-card>
     </ion-col>
@@ -63,7 +63,7 @@
     <ion-col class="category-item" size="6" *ngIf="enableDonate">
       <ion-card button="true" class="itemCard" [routerLink]="['/app/start-menu/donates']">
         <app-aspect-ratio [ratio]="{w:1, h:1}">
-          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/donate.jpg'"></app-image-shell>
+          <app-image-shell [display]="'cover'" animation="spinner" [src]="'./assets/sample-images/categories/donate.png'"></app-image-shell>
         </app-aspect-ratio>
         <ion-card-header color="primary">
           <ion-card-subtitle class="ion-no-padding ion-text-center ion-text-nowrap">{{ 'DonateMenu' | translate }}</ion-card-subtitle>

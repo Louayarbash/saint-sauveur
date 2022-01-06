@@ -223,6 +223,7 @@ checkConnection(){
   }
 
   async setLanguage() {
+    console.log("setLan Louay");
     this.translate.setDefaultLang('en');
     this.translate.use('en');
     
