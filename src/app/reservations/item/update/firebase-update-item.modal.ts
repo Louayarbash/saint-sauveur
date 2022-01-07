@@ -129,7 +129,7 @@ updateItem() {
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'sales','images/reservations/')
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'reservations','images/reservations/')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     // loading.then(res=>{res.dismiss();})

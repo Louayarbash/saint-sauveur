@@ -37,7 +37,7 @@
         </ion-avatar>
         <ion-label>{{item.creatorName}}</ion-label>
       </ion-item>
-<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/sale/details', item.id]">
+<ion-card button="true" class="itemCardWithPhoto" [routerLink]="['/app/start-menu/announcements/details', item.id]">
   <app-aspect-ratio [ratio]="{w:64, h:50}">
     <app-image-shell animation="spinner" [display]="'cover'" [src]="item.coverPhotoData" [alt]="'item image'"></app-image-shell>
   </app-aspect-ratio>

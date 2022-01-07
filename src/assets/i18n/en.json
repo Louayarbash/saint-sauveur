@@ -1,4 +1,8 @@
 { 
+  "MassMenu": "Masses",
+  "ReservationsMenu": "Special events",
+  "PriestMenu": "Priests",
+  "DonateMenu": "Donations",
   "Note": "Note",
   "VotingAbstention" : "Abstention",
   "VotingMessage": "Kindly vote on above subject",
@@ -190,7 +194,7 @@
   "UpdateTicket" : "Update ticket",
   "NewTicket" : "New ticket",
   "NoItemFound": "Nothing to see here yet",
-  "NewPostSale" : "New - object for sale",				  
+  "NewPostSale" : "New",				  
   "ItemsForSale" : "Items for sale",
   "SearchBarPosts" : "Search items by object...",
   "AddedSuccessfully" : "Added successfully",

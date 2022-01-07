@@ -106,13 +106,6 @@
         </ion-col>
       </ion-row>
     </ng-container>
-    <ng-container *ngIf="createItemForm.get('price').invalid && (createItemForm.dirty || createItemForm.touched)">
-      <ion-row *ngIf="createItemForm.get('price').errors.required">
-        <ion-col>
-        <ion-text class="ion-padding-left validation">{{ 'PriceRequired' | translate }}</ion-text>
-        </ion-col>
-      </ion-row>
-    </ng-container>
     <ion-row>
       <ion-col>
         <ion-button expand="block" color="main" type="submit" fill="solid" [disabled]="disableSubmit || !(createItemForm.valid)">{{ 'CREATE' | translate }}</ion-button>

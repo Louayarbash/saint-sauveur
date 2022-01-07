@@ -39,7 +39,6 @@ export class FirebaseCreateItemModal implements OnInit {
     this.createItemForm = new FormGroup({
       object: new FormControl('', Validators.required),
       description : new FormControl(''),
-      price : new FormControl('',[Validators.required, Validators.pattern('^[0-9]*$')]),
       status : new FormControl('active')
     });
   }
@@ -65,9 +64,9 @@ export class FirebaseCreateItemModal implements OnInit {
     this.itemDataNotif.createDate= this.itemData.createDate;
     this.itemDataNotif.createdBy= this.itemData.createdBy;
 
-    this.featureService.createItemWithImages(itemData, this.postImages, 'announcement')
+    this.featureService.createItemWithImages(itemData, this.postImages, 'announcements')
     .then(() => {
-      this.segmentValueSubject.next('myList');
+      //this.segmentValueSubject.next('myList');
       this.featureService.presentToast(this.featureService.translations.AddedSuccessfully, 2000);
       loading.then(res=>{res.dismiss();})
       this.itemDataNotif.createdBy= this.itemData.createdBy;

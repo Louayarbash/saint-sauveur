@@ -25,7 +25,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   segmentValueSubject: ReplaySubject<string> = new ReplaySubject<string>(1);
   segmentValueSubjectObservable: Observable<string> = this.segmentValueSubject.asObservable();
   saleList: Array<FirebaseListingItemModel>;
-  myList: Array<FirebaseListingItemModel>;
+  //myList: Array<FirebaseListingItemModel>;
   // Use Typescript intersection types to enable docorating the Array of firebase models with a shell model
   // (ref: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
   items: Array<FirebaseListingItemModel> & ShellModel;
@@ -138,15 +138,15 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
               });
      
               let saleList= this.items;
-              let myList= this.items;
+              //let myList= this.items;
 
 
               this.saleList = saleList.filter(item => item.status === 'active');
-              this.myList = myList.filter(item => item.createdBy === this.loginService.getLoginID());
+              //this.myList = myList.filter(item => item.createdBy === this.loginService.getLoginID());
             }
             else {
               this.saleList = this.items;
-              this.myList = this.items;
+              //this.myList = this.items;
             }
           },
           (error) => console.log(error),

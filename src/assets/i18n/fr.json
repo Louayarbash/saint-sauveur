@@ -1,4 +1,8 @@
 {
+  "MassMenu": "Les Messes",
+  "ReservationsMenu": "Événements spéciaux",
+  "PriestMenu": "Prêtres",
+  "DonateMenu": "Les dons",
   "Note": "Note",
   "VotingAbstention" : "Abstention",
   "VotingMessage": "Veuillez voter sur le sujet ci-dessus",
@@ -190,7 +194,7 @@
   "UpdateTicket" : "Modifier",
   "NewTicket" : "Nouvelle demande de service",
   "NoItemFound": "Il n'y a rien ici à voir",
-  "NewPostSale" : "Nouvel item pour vendre",
+  "NewPostSale" : "Nouvel item",
   "ItemsForSale" : "Objets pour vendre",
   "SearchBarPosts" : "Rechercher par objet...",
   "AddedSuccessfully" : "Ajout réussit",

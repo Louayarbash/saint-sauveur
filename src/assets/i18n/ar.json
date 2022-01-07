@@ -1,4 +1,8 @@
 {
+"MassMenu": "القداديس الالهية",
+"ReservationsMenu": "مناسبات خاصة",
+"PriestMenu": "كهنة الرعية",
+"DonateMenu": "التبرعات",
 "Note": "ملاحظة",
 "VotingAbstention" : "الامتناع",
 "VotingMessage": "الرجاء التصويت على هذا الموضوع",
@@ -191,7 +195,7 @@
 "UpdateTicket": "تعديل الطلب",
 "NewTicket": "طلب جديد",
 "NoItemFound": "لا شيء لتراه هنا حتى الآن",
-"NewPostSale": "جديد - سلع للبيع",
+"NewPostSale": "جديد",
 "ItemsForSale": "سلع للبيع",
 "SearchBarPosts": "البحث عن العناصر حسب السلعة ...",
 "AddedSuccessfully": "تمت الاضافة بنجاح",

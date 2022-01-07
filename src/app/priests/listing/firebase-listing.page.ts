@@ -17,6 +17,7 @@ import { InviteModal } from '../../churchs/church/invite/invite.modal';
   templateUrl: './firebase-listing.page.html'
 })
 export class FirebaseListingPage implements OnInit, OnDestroy {
+  userIsAdmin = false;
   searchQuery: string;
   activeToggle: boolean = true;
   // showAgeFilter = false;
@@ -52,6 +53,7 @@ export class FirebaseListingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userIsAdmin = this.loginService.isUserAdmin();
     this.ltr= this.loginService.getUserLanguage() == 'ar' ? false : true;   
     this.searchQuery = '';
 

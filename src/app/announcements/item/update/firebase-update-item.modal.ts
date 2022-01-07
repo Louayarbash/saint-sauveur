@@ -69,12 +69,12 @@ export class FirebaseUpdateItemModal implements OnInit {
         {
           text: this.featureService.translations.Yes,
           handler: () => {
-            this.featureService.deleteItem(this.item.images, this.item.id, 'sales')
+            this.featureService.deleteItem(this.item.images, this.item.id, 'announcements')
             .then(
               () => {
                 this.featureService.presentToast(this.featureService.translations.DeletedSuccessfully,2000);
                 this.dismissModal();
-                this.router.navigate(['app/start-menu/announcement']);
+                this.router.navigate(['app/start-menu/announcements']);
               },
               err => { 
                 console.log(err);
@@ -127,7 +127,7 @@ updateItem() {
   //const {...itemData} = this.item;
   // const loading = this.featureService.presentLoadingWithOptions(2000);
   const {isShell, ...itemData} = this.item;
-  this.featureService.updateItemWithImages(itemData, this.postImages, 'sales','images/announcement/')
+  this.featureService.updateItemWithImages(itemData, this.postImages, 'announcements','images/announcement/')
   .then(() => {
     this.featureService.presentToast(this.featureService.translations.UpdatedSuccessfully,2000);
     // loading.then(res=>{res.dismiss();})

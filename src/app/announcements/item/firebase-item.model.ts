@@ -27,7 +27,6 @@ export class FirebaseItemModel extends ShellModel {
   id : string;
   object : string;
   description : string;
-  price : string;
   createdBy : string;
   createDate : firebase.firestore.FieldValue;
   images : Array<Images> = [];

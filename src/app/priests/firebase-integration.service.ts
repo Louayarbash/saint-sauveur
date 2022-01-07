@@ -171,7 +171,7 @@ export class FirebaseService {
   */
   public createUser(userData: any): Promise<DocumentReference>  {
     // this.loginService.signup(logincredential);
-    return this.afs.collection('users').add({...userData});
+    return this.afs.collection('priests').add({...userData});
   }
 
   /*
@@ -198,11 +198,11 @@ export class FirebaseService {
       // console.log(!(this.loginService.notificationsAllowed()));
       this.fcmService.initPushNotification();
     }
-    return this.afs.collection('users').doc(userData.id).update({...userData});
+    return this.afs.collection('priests').doc(userData.id).update({...userData});
   }
 
   public deleteUser(userKey: string): Promise<void> {
-    return this.afs.collection('users').doc(userKey).delete();
+    return this.afs.collection('priests').doc(userKey).delete();
   }
 
   /*
@@ -234,7 +234,7 @@ export class FirebaseService {
 
   // Get data of a specific User
   private getUser(userId: string): Observable<UserModel> {
-    return this.afs.doc<UserModel>('users/' + userId)
+    return this.afs.doc<UserModel>('priests/' + userId)
     .snapshotChanges()
     .pipe(
       map(a => {

@@ -15,7 +15,7 @@ import { FeatureService } from '../services/feature/feature.service';
 export class FirebaseService {
   private listingDataStore: DataStore<Array<FirebaseListingItemModel>>;
   private combinedItemDataStore: DataStore<FirebaseCombinedItemModel>;
-  private tableName = "announcements";
+  private tableName = "reservations";
 
   constructor(
     private afs: AngularFirestore, 
